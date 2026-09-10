@@ -1,0 +1,6 @@
+{
+  "name": "الحمد",
+  "description": "تطبيق هادئ لاستشعار نعم الله وتدبرها، نعمةٌ كلَّ يوم بدون ضغط أو سلاسل.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

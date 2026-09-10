@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-serif: 'Amiri', serif;
+    --font-sans: 'IBM Plex Sans Arabic', sans-serif;
+    --font-quran: 'Amiri Quran', 'Amiri', serif;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    direction: rtl;
+    background-color: #15152A;
+    color: #EDEDF5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-sans, .font-ibm {
+  font-family: var(--font-sans);
+}
+
+.font-quran {
+  font-family: var(--font-quran);
+}
+
+/* Text Size Scaling */
+.text-scale-normal {
+  font-size: 1rem;
+}
+
+.text-scale-large {
+  font-size: 1.125rem;
+}
+
+.text-scale-large h1 {
+  font-size: 2.75rem;
+}
+
+.text-scale-xlarge {
+  font-size: 1.25rem;
+}
+
+.text-scale-xlarge h1 {
+  font-size: 3.25rem;
+}
+
+/* Hide scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleUp {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-scale-up {
+  animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

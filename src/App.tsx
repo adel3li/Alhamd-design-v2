@@ -1,0 +1,206 @@
+import React, { useState } from 'react';
+import { StoreProvider, useStore } from './lib/store';
+import { TopBar } from './components/layout/TopBar';
+import { BottomTabBar, TabId } from './components/layout/BottomTabBar';
+import { DesktopNavBar } from './components/layout/DesktopNavBar';
+import { HomeScreen } from './components/screens/HomeScreen';
+import { JournalScreen } from './components/screens/JournalScreen';
+import { ConsistencyScreen } from './components/screens/ConsistencyScreen';
+import { SettingsScreen } from './components/screens/SettingsScreen';
+import { OnboardingScreen } from './components/screens/OnboardingScreen';
+import { ReflectionModal } from './components/screens/ReflectionModal';
+import { TasbihModal } from './components/screens/TasbihModal';
+import { AboutModal } from './components/screens/AboutModal';
+import { ContentReviewModal } from './components/screens/ContentReviewModal';
+import { PrivacyPolicyModal } from './components/screens/PrivacyPolicyModal';
+import { SpotlightTour } from './components/common/SpotlightTour';
+
+const MainAppContent: React.FC = () => {
+  const {
+    todayBlessing,
+    todayInspiration,
+    entries,
+    userBlessings,
+    completedDays,
+    tasbihCount,
+    theme,
+    textSize,
+    notificationsEnabled,
+    notificationTime,
+    analyticsConsent,
+    onboardingCompleted,
+    tourCompleted,
+    isCompletedToday,
+    completeOnboarding,
+    completeTour,
+    markTodayCompleted,
+    incrementTasbih,
+    resetTasbih,
+    addJournalEntry,
+    deleteJournalEntry,
+    addUserBlessing,
+    deleteUserBlessing,
+    toggleFavoriteUserBlessing,
+    setNotificationsEnabled,
+    setNotificationTime,
+    setAnalyticsConsent,
+    triggerHaptic
+  } = useStore();
+
+  const [activeTab, setActiveTab] = useState<TabId>('home');
+  const [isReflecting, setIsReflecting] = useState(false);
+  const [isTasbihOpen, setIsTasbihOpen] = useState(false);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
+  const [isReviewOpen, setIsReviewOpen] = useState(false);
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
+
+  // If user hasn't completed onboarding yet, render full Onboarding screen
+  if (!onboardingCompleted) {
+    return (
+      <OnboardingScreen
+        onComplete={completeOnboarding}
+        notificationsEnabled={notificationsEnabled}
+        onToggleNotifications={setNotificationsEnabled}
+        analyticsConsent={analyticsConsent}
+        onToggleAnalytics={setAnalyticsConsent}
+      />
+    );
+  }
+
+  const handleReflectionComplete = (journalText?: string) => {
+    markTodayCompleted();
+    if (journalText) {
+      addJournalEntry(journalText);
+    }
+    setIsReflecting(false);
+  };
+
+  const textScaleClass = textSize === 'large' 
+    ? 'text-scale-large' 
+    : textSize === 'xlarge' 
+    ? 'text-scale-xlarge' 
+    : 'text-scale-normal';
+
+  const themeClass = theme === 'light' ? 'bg-[#F4F5FA] text-[#1E1E38]' : 'bg-[#15152A] text-[#EDEDF5]';
+
+  return (
+    <div className={`min-h-screen ${themeClass} ${textScaleClass} font-sans flex flex-col selection:bg-[#C8A951]/30 transition-colors duration-200`} dir="rtl">
+      {/* Desktop Header Navigation (≥900px) */}
+      <div className="hidden md:block">
+        <DesktopNavBar
+          activeTab={activeTab}
+          onChangeTab={setActiveTab}
+          onOpenAbout={() => setIsAboutOpen(true)}
+        />
+      </div>
+
+      {/* Mobile Top Bar (<900px) */}
+      <div className="block md:hidden">
+        <TopBar
+          onOpenCalendar={() => setActiveTab('consistency')}
+          onOpenAbout={() => setIsAboutOpen(true)}
+        />
+      </div>
+
+      {/* Main Screen Content View */}
+      <main className="flex-1 w-full flex flex-col items-center">
+        {activeTab === 'home' && (
+          <HomeScreen
+            blessing={todayBlessing}
+            inspiration={todayInspiration}
+            isCompletedToday={isCompletedToday}
+            tasbihCount={tasbihCount}
+            onStartReflection={() => setIsReflecting(true)}
+            onOpenTasbih={() => setIsTasbihOpen(true)}
+          />
+        )}
+
+        {activeTab === 'journal' && (
+          <JournalScreen
+            entries={entries}
+            userBlessings={userBlessings}
+            onDeleteEntry={deleteJournalEntry}
+            onAddUserBlessing={addUserBlessing}
+            onDeleteUserBlessing={deleteUserBlessing}
+            onToggleFavoriteBlessing={toggleFavoriteUserBlessing}
+          />
+        )}
+
+        {activeTab === 'consistency' && (
+          <ConsistencyScreen
+            completedDays={completedDays}
+            notificationsEnabled={notificationsEnabled}
+            notificationTime={notificationTime}
+            onToggleNotifications={setNotificationsEnabled}
+            onChangeNotificationTime={setNotificationTime}
+          />
+        )}
+
+        {activeTab === 'settings' && (
+          <SettingsScreen />
+        )}
+      </main>
+
+      {/* Mobile Bottom Tab Bar */}
+      <div className="block md:hidden">
+        <BottomTabBar
+          activeTab={activeTab}
+          onChangeTab={setActiveTab}
+        />
+      </div>
+
+      {/* 5-Step Reflection Modal */}
+      {isReflecting && (
+        <ReflectionModal
+          blessing={todayBlessing}
+          onClose={() => setIsReflecting(false)}
+          onComplete={handleReflectionComplete}
+          triggerHaptic={triggerHaptic}
+        />
+      )}
+
+      {/* Tasbih Modal */}
+      {isTasbihOpen && (
+        <TasbihModal
+          onClose={() => setIsTasbihOpen(false)}
+          tasbihCount={tasbihCount}
+          onIncrementTasbih={incrementTasbih}
+          onResetTasbih={resetTasbih}
+          triggerHaptic={triggerHaptic}
+        />
+      )}
+
+      {/* About Modal */}
+      {isAboutOpen && (
+        <AboutModal
+          onClose={() => setIsAboutOpen(false)}
+          onOpenContentReview={() => setIsReviewOpen(true)}
+          onOpenPrivacyPolicy={() => setIsPrivacyOpen(true)}
+        />
+      )}
+
+      {/* Content & Scientific Review Status Modal */}
+      {isReviewOpen && (
+        <ContentReviewModal onClose={() => setIsReviewOpen(false)} />
+      )}
+
+      {/* Privacy Policy Modal */}
+      {isPrivacyOpen && (
+        <PrivacyPolicyModal onClose={() => setIsPrivacyOpen(false)} />
+      )}
+
+      {/* 4-Step Spotlight Feature Tour on First App Launch */}
+      {!tourCompleted && activeTab === 'home' && (
+        <SpotlightTour onComplete={completeTour} />
+      )}
+    </div>
+  );
+};
+
+export default function App() {
+  return (
+    <StoreProvider>
+      <MainAppContent />
+    </StoreProvider>
+  );
+}

@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Inter", "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif;
+  --font-amiri: "Amiri", serif;
+  
+  --color-brand-background: #f8fafc;
+  --color-brand-surface: #ffffff;
+  --color-brand-primary: #4f46e5;
+  --color-brand-accent: #f59e0b;
+  --color-brand-textPrimary: #0f172a;
+  --color-brand-textSecondary: #64748b;
+  --color-brand-quranBg: #f1f5f9;
+  --color-brand-success: #10b981;
+  
+  --color-brand-dark-background: #0f172a;
+  --color-brand-dark-surface: #1e293b;
+  --color-brand-dark-primary: #6366f1;
+  --color-brand-dark-accent: #fbbf24;
+  --color-brand-dark-textPrimary: #f8fafc;
+  --color-brand-dark-textSecondary: #94a3b8;
+  --color-brand-dark-quranBg: #334155;
+  --color-brand-dark-success: #34d399;
+}
+
+body {
+  @apply bg-brand-background dark:bg-brand-dark-background text-brand-textPrimary dark:text-brand-dark-textPrimary font-sans;
+}
+
+html.text-size-large {
+  font-size: 112.5%;
+}
