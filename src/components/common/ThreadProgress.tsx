@@ -28,21 +28,27 @@ export const ThreadProgress: React.FC<ThreadProgressProps> = ({
       aria-valuemax={totalSteps}
     >
       {/* Background track */}
-      <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[2px] bg-[#2E2E4A]/80 rounded-full" />
+      <div
+        className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-[2px] rounded-full"
+        style={{ backgroundColor: 'var(--border-hairline)' }}
+      />
 
       {/* Active filling thread growing leftward from the right dot */}
       <div
-        className="absolute right-0 top-1/2 -translate-y-1/2 h-[2.5px] bg-gradient-to-l from-[#E4C368] via-[#C8A951] to-[#E4C368]/50 rounded-full transition-all duration-500 ease-out"
-        style={{ width: `${percentage}%` }}
+        className="absolute right-0 top-1/2 -translate-y-1/2 h-[2px] rounded-full transition-all duration-500 ease-out"
+        style={{ width: `${percentage}%`, backgroundColor: 'var(--accent-stroke)' }}
       />
 
       {/* Origin dot on the RIGHT */}
-      <div className="relative z-10 w-[7px] h-[7px] rounded-full bg-[#E4C368] shadow-[0_0_8px_rgba(228,195,104,0.8)]" />
+      <div
+        className="relative z-10 w-[7px] h-[7px] rounded-full"
+        style={{ backgroundColor: 'var(--accent-stroke)' }}
+      />
 
       {/* Leading indicator glow at the head of the growing thread */}
       <div
-        className="absolute top-1/2 -translate-y-1/2 w-[5px] h-[5px] rounded-full bg-[#E4C368] transition-all duration-500"
-        style={{ right: `calc(${percentage}% - 2.5px)` }}
+        className="absolute top-1/2 -translate-y-1/2 w-[5px] h-[5px] rounded-full transition-all duration-500"
+        style={{ right: `calc(${percentage}% - 2.5px)`, backgroundColor: 'var(--accent-stroke)' }}
       />
     </div>
   );

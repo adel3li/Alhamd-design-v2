@@ -229,12 +229,12 @@ export const JournalScreen: React.FC<JournalScreenProps> = ({
                   <GlassCard
                     key={entry.id}
                     id={`journal-card-${entry.id}`}
-                    padding="p-5"
+                    padding="p-5 sm:p-6"
                     className="relative group transition-all"
                   >
                     {/* Top Row: Gold-outlined blessing chip */}
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold text-[#EDEDF5] border border-[#C8A951] bg-[#C8A951]/5 shadow-sm">
+                    <div className="flex items-center justify-between mb-3.5">
+                      <span className="inline-block px-3.5 py-1 rounded-full text-xs font-semibold text-[#EDEDF5] border border-[#C8A951] bg-[#C8A951]/5 shadow-sm">
                         {entry.shortTitle ? `نعمة ${entry.shortTitle}` : entry.categoryLabel}
                       </span>
 
@@ -249,18 +249,18 @@ export const JournalScreen: React.FC<JournalScreenProps> = ({
                         title="حذف"
                         aria-label="حذف التأمل"
                       >
-                        <Trash2 size={15} />
+                        <Trash2 size={16} />
                       </button>
                     </div>
 
                     {/* Entry Reflection Text */}
-                    <p className="text-sm sm:text-base text-[#EDEDF5] leading-relaxed font-sans mb-3">
+                    <p className="text-base sm:text-lg text-[#EDEDF5] leading-[1.9] font-sans mb-3.5">
                       {entry.text}
                     </p>
 
                     {/* Bottom Row: Time Stamp */}
                     <div className="flex items-center gap-1.5 text-xs text-[#AEAECB]/80 pt-1">
-                      <Clock size={13} />
+                      <Clock size={14} />
                       <span>{formatTimestampArabicTime(entry.createdAt)}</span>
                     </div>
                   </GlassCard>
@@ -277,19 +277,19 @@ export const JournalScreen: React.FC<JournalScreenProps> = ({
           {/* Add New Personal Blessing Button */}
           <button
             onClick={() => setIsComposeOpen(true)}
-            className="w-full py-3.5 px-5 rounded-2xl bg-[#6C63FF] hover:bg-[#594DFF] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#6C63FF]/20 transition-all active:scale-98"
+            className="w-full py-4 px-5 rounded-2xl bg-[#6C63FF] hover:bg-[#594DFF] text-white font-bold text-base flex items-center justify-center gap-2 shadow-lg shadow-[#6C63FF]/20 transition-all active:scale-98"
           >
-            <Plus size={18} />
+            <Plus size={20} />
             <span>دوّن نعمة جديدة</span>
           </button>
 
           {filteredUserBlessings.length === 0 ? (
             <GlassCard className="text-center py-12 px-6">
               <Sparkles size={36} className="text-[#C8A951]/60 mx-auto mb-3" strokeWidth={1.5} />
-              <h3 className="text-base font-serif font-bold text-[#EDEDF5] mb-1">
+              <h3 className="text-lg font-serif font-bold text-[#EDEDF5] mb-1">
                 لم تدوّن نِعَمًا شخصية بعد
               </h3>
-              <p className="text-xs text-[#AEAECB] max-w-xs mx-auto">
+              <p className="text-sm text-[#AEAECB] max-w-xs mx-auto">
                 اضغط على الزر أعلاه لتدوين نعمة خاصة بك والإجابة عن أسئلة الاستشعار الثلاثة.
               </p>
             </GlassCard>
@@ -297,16 +297,16 @@ export const JournalScreen: React.FC<JournalScreenProps> = ({
             filteredUserBlessings.map(blessing => (
               <GlassCard
                 key={blessing.id}
-                padding="p-5"
+                padding="p-5 sm:p-6"
                 className="space-y-4 relative group"
               >
                 {/* Header: Title + Category + Actions */}
                 <div className="flex items-start justify-between">
-                  <div className="space-y-1">
-                    <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-medium text-[#C8A951] bg-[#C8A951]/10 border border-[#C8A951]/30">
+                  <div className="space-y-1.5">
+                    <span className="inline-block px-3 py-0.5 rounded-full text-xs font-medium text-[#C8A951] bg-[#C8A951]/10 border border-[#C8A951]/30">
                       {blessing.category}
                     </span>
-                    <h3 className="text-lg font-serif font-bold text-[#EDEDF5]">
+                    <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#EDEDF5]">
                       {blessing.title}
                     </h3>
                   </div>
@@ -319,7 +319,7 @@ export const JournalScreen: React.FC<JournalScreenProps> = ({
                       }`}
                       title={blessing.isFavorite ? 'إلغاء التفضيل' : 'تفضيل'}
                     >
-                      <Star size={16} fill={blessing.isFavorite ? '#E4C368' : 'none'} />
+                      <Star size={18} fill={blessing.isFavorite ? '#E4C368' : 'none'} />
                     </button>
                     <button
                       onClick={() => {
@@ -330,37 +330,37 @@ export const JournalScreen: React.FC<JournalScreenProps> = ({
                       className="p-1.5 text-[#AEAECB]/50 hover:text-red-400 transition-colors"
                       title="حذف"
                     >
-                      <Trash2 size={16} />
+                      <Trash2 size={18} />
                     </button>
                   </div>
                 </div>
 
                 {/* 3 Prompts Content */}
-                <div className="space-y-2.5 text-xs text-[#C7C4D8] border-t border-[#2E2E4A]/80 pt-3">
+                <div className="space-y-3 text-sm sm:text-base text-[#C7C4D8] border-t border-[#2E2E4A]/80 pt-4">
                   {blessing.prompt1 && (
-                    <div className="space-y-0.5">
-                      <span className="text-[11px] font-semibold text-[#AEAECB] block">متى شعرتَ بها آخر مرة؟</span>
-                      <p className="leading-relaxed bg-black/20 p-2 rounded-lg">{blessing.prompt1}</p>
+                    <div className="space-y-1">
+                      <span className="text-xs font-bold text-[#AEAECB] block">متى شعرتَ بها آخر مرة؟</span>
+                      <p className="leading-[1.9] bg-black/20 p-3 rounded-xl">{blessing.prompt1}</p>
                     </div>
                   )}
 
                   {blessing.prompt2 && (
-                    <div className="space-y-0.5">
-                      <span className="text-[11px] font-semibold text-[#AEAECB] block">لو غابت هذه النعمة... ماذا يتغيّر؟</span>
-                      <p className="leading-relaxed bg-black/20 p-2 rounded-lg">{blessing.prompt2}</p>
+                    <div className="space-y-1">
+                      <span className="text-xs font-bold text-[#AEAECB] block">لو غابت هذه النعمة... ماذا يتغيّر؟</span>
+                      <p className="leading-[1.9] bg-black/20 p-3 rounded-xl">{blessing.prompt2}</p>
                     </div>
                   )}
 
                   {blessing.prompt3 && (
-                    <div className="space-y-0.5">
-                      <span className="text-[11px] font-semibold text-[#E4C368] block">علامَ تحمد الله الآن؟</span>
-                      <p className="leading-relaxed bg-black/20 p-2 rounded-lg text-[#EDEDF5] font-medium">{blessing.prompt3}</p>
+                    <div className="space-y-1">
+                      <span className="text-xs font-bold text-[#E4C368] block">علامَ تحمد الله الآن؟</span>
+                      <p className="leading-[1.9] bg-black/20 p-3 rounded-xl text-[#EDEDF5] font-medium">{blessing.prompt3}</p>
                     </div>
                   )}
                 </div>
 
                 {/* Timestamp */}
-                <div className="flex items-center justify-between text-[11px] text-[#AEAECB]/60 pt-1">
+                <div className="flex items-center justify-between text-xs text-[#AEAECB]/70 pt-1">
                   <span>أضيفت في {formatTimestampArabicTime(blessing.createdAt)}</span>
                 </div>
               </GlassCard>

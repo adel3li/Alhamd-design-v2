@@ -4,13 +4,19 @@ import { toArabicNumerals } from './arabic';
  * Native Arabic Hijri date formatter using Islamic calendar
  */
 export function getFormattedHijriDate(date: Date = new Date()): string {
+  const normalizeHijriSuffix = (formatted: string) => {
+    // Strip any trailing هـ or ه that Intl.DateTimeFormat may already include, then append a single هـ
+    const cleaned = formatted.replace(/\s*هـ?\s*$/u, '').trim();
+    return `${cleaned} هـ`;
+  };
+
   try {
     const formatter = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura', {
       day: 'numeric',
       month: 'long',
       year: 'numeric'
     });
-    return formatter.format(date) + ' هـ';
+    return normalizeHijriSuffix(formatter.format(date));
   } catch {
     // Fallback if umalqura subtag not supported
     try {
@@ -19,7 +25,7 @@ export function getFormattedHijriDate(date: Date = new Date()): string {
         month: 'long',
         year: 'numeric'
       });
-      return formatter.format(date) + ' هـ';
+      return normalizeHijriSuffix(formatter.format(date));
     } catch {
       return 'اليوم المبارك';
     }

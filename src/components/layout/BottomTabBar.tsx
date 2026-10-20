@@ -1,8 +1,39 @@
 import React from 'react';
-import { Home, BookOpen, Calendar, Settings } from 'lucide-react';
+import { Home, BookOpen, Calendar } from 'lucide-react';
 import { APP_STRINGS } from '../../constants/strings';
 
-export type TabId = 'home' | 'journal' | 'consistency' | 'settings';
+export type TabId = 'home' | 'journal' | 'consistency' | 'tasbih' | 'settings';
+
+export const TasbihIcon: React.FC<{ size?: number; strokeWidth?: number; className?: string }> = ({
+  size = 22,
+  strokeWidth = 1.7,
+  className = ''
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={strokeWidth}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    {/* Imam bead & tassel at top */}
+    <path d="M12 2v3" />
+    <circle cx="12" cy="6.5" r="1.3" fill="currentColor" stroke="none" />
+    {/* Prayer beads arranged in a circle */}
+    <circle cx="16.5" cy="8" r="1.25" />
+    <circle cx="18.5" cy="12.2" r="1.25" />
+    <circle cx="17" cy="16.6" r="1.25" />
+    <circle cx="13.8" cy="19.5" r="1.25" />
+    <circle cx="10.2" cy="19.5" r="1.25" />
+    <circle cx="7" cy="16.6" r="1.25" />
+    <circle cx="5.5" cy="12.2" r="1.25" />
+    <circle cx="7.5" cy="8" r="1.25" />
+  </svg>
+);
 
 interface BottomTabBarProps {
   activeTab: TabId;
@@ -19,7 +50,7 @@ export const BottomTabBar: React.FC<BottomTabBarProps> = ({
     { id: 'home' as TabId, label: APP_STRINGS.tabs.home, icon: Home },
     { id: 'journal' as TabId, label: APP_STRINGS.tabs.journal, icon: BookOpen },
     { id: 'consistency' as TabId, label: APP_STRINGS.tabs.consistency, icon: Calendar },
-    { id: 'settings' as TabId, label: APP_STRINGS.tabs.settings, icon: Settings }
+    { id: 'tasbih' as TabId, label: APP_STRINGS.tabs.tasbih, icon: TasbihIcon }
   ];
 
   return (
@@ -38,7 +69,7 @@ export const BottomTabBar: React.FC<BottomTabBarProps> = ({
               key={tab.id}
               id={`tab-btn-${tab.id}`}
               onClick={() => onChangeTab(tab.id)}
-              className="relative flex flex-col items-center justify-center flex-1 min-h-[52px] py-1 transition-all group"
+              className="relative flex flex-col items-center justify-center flex-1 min-h-[52px] py-1 transition-all group cursor-pointer"
               aria-selected={isActive}
             >
               {/* Active Tab Accent Bar above the icon (as in ref-01) */}

@@ -108,6 +108,7 @@ export interface AppState {
   notificationsEnabled: boolean;
   theme: ThemeMode;
   textSize: TextSize;
+  fontSize: number; // Numeric root font size in px (range 12 - 24, default 15)
   firstLaunchDate: string | null;
   welcomeSeen: boolean;
   analyticsConsent: boolean | null;
@@ -129,6 +130,7 @@ export interface StoreContextType extends AppState {
   setAnalyticsConsent: (consent: boolean) => void;
   setTheme: (theme: ThemeMode) => void;
   setTextSize: (size: TextSize) => void;
+  setFontSize: (size: number) => void;
   setNotificationTime: (time: string) => void;
   setNotificationsEnabled: (enabled: boolean) => void;
   addJournalEntry: (entry: string | { blessingId?: string; shortTitle?: string; categoryLabel?: string; text: string; date?: string }) => JournalEntry;
@@ -153,6 +155,7 @@ export interface BackupPayloadV2 {
   settings: {
     theme: ThemeMode;
     textSize: TextSize;
+    fontSize?: number;
     notificationTime: string;
     notificationsEnabled: boolean;
     onboardingComplete: boolean;

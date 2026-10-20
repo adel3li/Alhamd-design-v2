@@ -1,6 +1,6 @@
 import React from 'react';
 import { Home, BookOpen, Calendar, Settings } from 'lucide-react';
-import { TabId } from './BottomTabBar';
+import { TabId, TasbihIcon } from './BottomTabBar';
 import { BrandMark } from '../common/BrandMark';
 import { APP_STRINGS } from '../../constants/strings';
 
@@ -19,7 +19,7 @@ export const DesktopNavBar: React.FC<DesktopNavBarProps> = ({
     { id: 'home' as TabId, label: APP_STRINGS.tabs.home, icon: Home },
     { id: 'journal' as TabId, label: APP_STRINGS.tabs.journal, icon: BookOpen },
     { id: 'consistency' as TabId, label: APP_STRINGS.tabs.consistency, icon: Calendar },
-    { id: 'settings' as TabId, label: APP_STRINGS.tabs.settings, icon: Settings }
+    { id: 'tasbih' as TabId, label: APP_STRINGS.tabs.tasbih, icon: TasbihIcon }
   ];
 
   return (
@@ -41,7 +41,7 @@ export const DesktopNavBar: React.FC<DesktopNavBarProps> = ({
                 key={tab.id}
                 id={`desktop-tab-${tab.id}`}
                 onClick={() => onChangeTab(tab.id)}
-                className={`flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-medium transition-all ${
+                className={`flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-medium transition-all cursor-pointer ${
                   isActive
                     ? 'bg-[#25232E] text-[#E4C368] shadow-sm border border-[#C8A951]/30 font-semibold'
                     : 'text-[#AEAECB] hover:text-white hover:bg-white/5'
@@ -54,12 +54,26 @@ export const DesktopNavBar: React.FC<DesktopNavBarProps> = ({
           })}
         </nav>
 
-        {/* Left side: Avatar button opens About */}
-        <div className="flex items-center gap-3">
+        {/* Left side: Settings + Avatar button */}
+        <div className="flex items-center gap-2.5">
+          <button
+            id="desktop-btn-settings"
+            onClick={() => onChangeTab('settings')}
+            className={`w-10 h-10 rounded-full border flex items-center justify-center shadow-sm transition-all cursor-pointer ${
+              activeTab === 'settings'
+                ? 'bg-[#25232E] border-[#C8A951] text-[#E4C368]'
+                : 'bg-[#1E1E38] hover:bg-[#25232E] border-[#2E2E4A] text-[#C7C4D8] hover:text-[#E4C368]'
+            }`}
+            title="الإعدادات"
+            aria-label="الإعدادات"
+          >
+            <Settings size={18} strokeWidth={activeTab === 'settings' ? 2.2 : 1.8} />
+          </button>
+
           <button
             id="desktop-btn-about"
             onClick={onOpenAbout}
-            className="w-10 h-10 rounded-full bg-[#1E1E38] hover:bg-[#25232E] border border-[#2E2E4A] flex items-center justify-center text-[#EDEDF5] font-serif font-bold text-base shadow-sm transition-all"
+            className="w-10 h-10 rounded-full bg-[#1E1E38] hover:bg-[#25232E] border border-[#2E2E4A] flex items-center justify-center text-[#EDEDF5] font-serif font-bold text-base shadow-sm transition-all cursor-pointer"
             title="عن التطبيق"
           >
             ح

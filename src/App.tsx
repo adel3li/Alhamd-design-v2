@@ -57,13 +57,15 @@ const MainAppContent: React.FC = () => {
   // If user hasn't completed onboarding yet, render full Onboarding screen
   if (!onboardingCompleted) {
     return (
-      <OnboardingScreen
-        onComplete={completeOnboarding}
-        notificationsEnabled={notificationsEnabled}
-        onToggleNotifications={setNotificationsEnabled}
-        analyticsConsent={analyticsConsent}
-        onToggleAnalytics={setAnalyticsConsent}
-      />
+      <div className={theme === 'light' ? 'theme-light bg-[#F4EDE3] text-[#2A1F19]' : 'theme-dark bg-[#15152A] text-[#EDEDF5]'}>
+        <OnboardingScreen
+          onComplete={completeOnboarding}
+          notificationsEnabled={notificationsEnabled}
+          onToggleNotifications={setNotificationsEnabled}
+          analyticsConsent={analyticsConsent}
+          onToggleAnalytics={setAnalyticsConsent}
+        />
+      </div>
     );
   }
 
@@ -81,7 +83,9 @@ const MainAppContent: React.FC = () => {
     ? 'text-scale-xlarge' 
     : 'text-scale-normal';
 
-  const themeClass = theme === 'light' ? 'bg-[#F4F5FA] text-[#1E1E38]' : 'bg-[#15152A] text-[#EDEDF5]';
+  const themeClass = theme === 'light' 
+    ? 'theme-light bg-[#F4EDE3] text-[#2A1F19]' 
+    : 'theme-dark bg-[#15152A] text-[#EDEDF5]';
 
   return (
     <div className={`min-h-screen ${themeClass} ${textScaleClass} font-sans flex flex-col selection:bg-[#C8A951]/30 transition-colors duration-200`} dir="rtl">
@@ -97,7 +101,8 @@ const MainAppContent: React.FC = () => {
       {/* Mobile Top Bar (<900px) */}
       <div className="block md:hidden">
         <TopBar
-          onOpenCalendar={() => setActiveTab('consistency')}
+          onOpenSettings={() => setActiveTab('settings')}
+          isSettingsActive={activeTab === 'settings'}
           onOpenAbout={() => setIsAboutOpen(true)}
         />
       </div>
@@ -111,7 +116,7 @@ const MainAppContent: React.FC = () => {
             isCompletedToday={isCompletedToday}
             tasbihCount={tasbihCount}
             onStartReflection={() => setIsReflecting(true)}
-            onOpenTasbih={() => setIsTasbihOpen(true)}
+            onOpenTasbih={() => setActiveTab('tasbih')}
           />
         )}
 
@@ -133,6 +138,16 @@ const MainAppContent: React.FC = () => {
             notificationTime={notificationTime}
             onToggleNotifications={setNotificationsEnabled}
             onChangeNotificationTime={setNotificationTime}
+          />
+        )}
+
+        {activeTab === 'tasbih' && (
+          <TasbihModal
+            inline={true}
+            tasbihCount={tasbihCount}
+            onIncrementTasbih={incrementTasbih}
+            onResetTasbih={resetTasbih}
+            triggerHaptic={triggerHaptic}
           />
         )}
 
@@ -159,7 +174,7 @@ const MainAppContent: React.FC = () => {
         />
       )}
 
-      {/* Tasbih Modal */}
+      {/* Tasbih Modal (fallback if triggered as modal) */}
       {isTasbihOpen && (
         <TasbihModal
           onClose={() => setIsTasbihOpen(false)}

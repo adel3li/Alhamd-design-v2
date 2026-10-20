@@ -1,5 +1,14 @@
 import React, { useState, useMemo } from 'react';
-import { ChevronRight, ChevronLeft, Bell } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Bell, Sparkles, Flame, TrendingUp } from 'lucide-react';
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid
+} from 'recharts';
 import { GlassCard } from '../common/GlassCard';
 import { generateMonthCalendar } from '../../lib/hijri';
 import { toArabicNumerals, formatArabicTime } from '../../lib/arabic';
@@ -11,6 +20,8 @@ interface ConsistencyScreenProps {
   onToggleNotifications: (enabled: boolean) => void;
   onChangeNotificationTime: (time: string) => void;
 }
+
+const ARABIC_WEEKDAYS_SHORT = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
 
 export const ConsistencyScreen: React.FC<ConsistencyScreenProps> = ({
   completedDays,
@@ -32,6 +43,59 @@ export const ConsistencyScreen: React.FC<ConsistencyScreenProps> = ({
     return calendarData.days.filter(d => completedDays.includes(d.isoDate)).length;
   }, [calendarData.days, completedDays]);
 
+  // Compute total blessings reflected upon, consecutive days streak, and 7-day Recharts data
+  const reflectionStats = useMemo(() => {
+    const uniqueSet = new Set(completedDays);
+    const totalBlessings = uniqueSet.size;
+
+    const toIso = (d: Date) => d.toISOString().split('T')[0];
+
+    const getStreakAtDate = (targetDate: Date): number => {
+      let streak = 0;
+      const cursor = new Date(targetDate);
+      while (uniqueSet.has(toIso(cursor))) {
+        streak++;
+        cursor.setDate(cursor.getDate() - 1);
+      }
+      return streak;
+    };
+
+    // Current consecutive days (starts from today if completed, otherwise from yesterday)
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    const currentStreak = uniqueSet.has(toIso(today))
+      ? getStreakAtDate(today)
+      : uniqueSet.has(toIso(yesterday))
+      ? getStreakAtDate(yesterday)
+      : 0;
+
+    // Build last 7 days chart data (chronological from 6 days ago to today)
+    const sortedAll = Array.from(uniqueSet).sort();
+    const chartData = [];
+
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+      const iso = toIso(d);
+      const cumulativeCount = sortedAll.filter(dateStr => dateStr <= iso).length;
+      const dayStreak = uniqueSet.has(iso) ? getStreakAtDate(d) : 0;
+
+      chartData.push({
+        name: i === 0 ? 'اليوم' : ARABIC_WEEKDAYS_SHORT[d.getDay()],
+        total: cumulativeCount,
+        streak: dayStreak,
+      });
+    }
+
+    return {
+      totalBlessings,
+      currentStreak,
+      chartData,
+    };
+  }, [completedDays]);
+
   // Weekday letters from Saturday to Friday: س ح ن ث ر خ ج (as in ref-04-calendar.png)
   const weekdayLetters = ['س', 'ح', 'ن', 'ث', 'ر', 'خ', 'ج'];
 
@@ -46,6 +110,151 @@ export const ConsistencyScreen: React.FC<ConsistencyScreenProps> = ({
           وردٌ هادئ تحاسب به نفسك — لا سباق، ولا مقارنة بأحد.
         </p>
       </div>
+
+      {/* Simple Reflection Statistics Section with Recharts */}
+      <GlassCard padding="p-5 sm:p-6" className="space-y-5">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <TrendingUp size={17} className="text-[#C8A951]" />
+            <h2 className="text-sm sm:text-base font-bold text-[#EDEDF5]">
+              إحصائيات التدبر
+            </h2>
+          </div>
+          <span className="text-[11px] text-[#AEAECB]">آخر ٧ أيام</span>
+        </div>
+
+        {/* Summary Metric Cards: Total Blessings & Consecutive Days */}
+        <div className="grid grid-cols-2 gap-3">
+          <div
+            className="rounded-2xl p-4 border flex items-center gap-3"
+            style={{
+              backgroundColor: 'var(--bg-sunken)',
+              borderColor: 'var(--border-hairline)',
+            }}
+          >
+            <div className="w-10 h-10 rounded-full bg-[#C8A951]/15 border border-[#C8A951]/30 flex items-center justify-center text-[#E4C368] shrink-0">
+              <Sparkles size={18} />
+            </div>
+            <div className="text-right">
+              <span className="text-xl sm:text-2xl font-bold text-[#EDEDF5] block leading-tight">
+                {toArabicNumerals(reflectionStats.totalBlessings)}
+              </span>
+              <span className="text-xs text-[#AEAECB]">إجمالي النعم المتدبَّرة</span>
+            </div>
+          </div>
+
+          <div
+            className="rounded-2xl p-4 border flex items-center gap-3"
+            style={{
+              backgroundColor: 'var(--bg-sunken)',
+              borderColor: 'var(--border-hairline)',
+            }}
+          >
+            <div className="w-10 h-10 rounded-full bg-[#6C63FF]/15 border border-[#6C63FF]/30 flex items-center justify-center text-[#6C63FF] shrink-0">
+              <Flame size={18} />
+            </div>
+            <div className="text-right">
+              <span className="text-xl sm:text-2xl font-bold text-[#EDEDF5] block leading-tight">
+                {toArabicNumerals(reflectionStats.currentStreak)}{' '}
+                <span className="text-xs font-normal text-[#AEAECB]">
+                  {reflectionStats.currentStreak === 1 ? 'يوم' : 'أيام'}
+                </span>
+              </span>
+              <span className="text-xs text-[#AEAECB]">أيام التدبر المتتالية</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Recharts Area Chart */}
+        <div className="w-full h-44 pt-1" dir="ltr">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart
+              data={reflectionStats.chartData}
+              margin={{ top: 8, right: 10, left: -24, bottom: 0 }}
+            >
+              <defs>
+                <linearGradient id="totalBlessingsGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="var(--accent-stroke)" stopOpacity={0.35} />
+                  <stop offset="95%" stopColor="var(--accent-stroke)" stopOpacity={0.0} />
+                </linearGradient>
+                <linearGradient id="streakDaysGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="var(--cta-bg)" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="var(--cta-bg)" stopOpacity={0.0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid
+                strokeDasharray="3 3"
+                vertical={false}
+                stroke="var(--border-hairline)"
+                opacity={0.6}
+              />
+              <XAxis
+                dataKey="name"
+                tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                allowDecimals={false}
+                tickFormatter={(val) => toArabicNumerals(val)}
+                tick={{ fill: 'var(--text-muted)', fontSize: 11 }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <Tooltip
+                content={({ active, payload, label }) => {
+                  if (!active || !payload || !payload.length) return null;
+                  return (
+                    <div
+                      dir="rtl"
+                      className="rounded-xl px-3 py-2 border text-xs shadow-lg space-y-1"
+                      style={{
+                        backgroundColor: 'var(--bg-raised)',
+                        borderColor: 'var(--border-hairline)',
+                        color: 'var(--text-primary)',
+                      }}
+                    >
+                      <div className="font-bold border-b pb-1 mb-1" style={{ borderColor: 'var(--border-hairline)' }}>
+                        {label}
+                      </div>
+                      <div className="flex items-center justify-between gap-3">
+                        <span style={{ color: 'var(--text-muted)' }}>إجمالي النعم:</span>
+                        <span className="font-bold" style={{ color: 'var(--accent-text)' }}>
+                          {toArabicNumerals(Number(payload[0]?.value ?? 0))}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between gap-3">
+                        <span style={{ color: 'var(--text-muted)' }}>الأيام المتتالية:</span>
+                        <span className="font-bold" style={{ color: 'var(--text-primary)' }}>
+                          {toArabicNumerals(Number(payload[1]?.value ?? 0))}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                }}
+              />
+              <Area
+                type="monotone"
+                dataKey="total"
+                name="إجمالي النعم"
+                stroke="var(--accent-stroke)"
+                strokeWidth={2.2}
+                fillOpacity={1}
+                fill="url(#totalBlessingsGrad)"
+              />
+              <Area
+                type="monotone"
+                dataKey="streak"
+                name="الأيام المتتالية"
+                stroke="var(--cta-bg)"
+                strokeWidth={2}
+                fillOpacity={1}
+                fill="url(#streakDaysGrad)"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      </GlassCard>
 
       {/* Calendar Card (Matches ref-04-calendar.png) */}
       <GlassCard padding="p-6" className="space-y-6">
@@ -101,7 +310,7 @@ export const ConsistencyScreen: React.FC<ConsistencyScreenProps> = ({
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all ${
                     day.isToday
-                      ? 'border-2 border-[#6C63FF] bg-[#6C63FF]/20 text-white font-bold shadow-[0_0_10px_rgba(108,99,255,0.4)]'
+                      ? 'border-2 border-[#6C63FF] bg-[#6C63FF]/15 text-[#EDEDF5] font-bold'
                       : 'text-[#EDEDF5]'
                   }`}
                 >

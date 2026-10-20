@@ -11,19 +11,19 @@ export const BrandMark: React.FC<BrandMarkProps> = ({
   showThread = true,
   className = ''
 }) => {
-  // Proportions vs font size S:
+  // Exact design system proportions vs font size S:
   // thread thickness: 0.02 * S (min 1.5px)
-  // dot diameter: 0.075 * S (min 4px)
-  // gap: 0.20 * S (approx 4-8px)
-  const threadHeight = Math.max(1.75, size * 0.04);
-  const dotSize = Math.max(4.5, size * 0.12);
-  const gap = Math.max(4, size * 0.18);
+  // dot diameter: 0.075 * S (min 4px) on the RIGHT end
+  // gap: 0.20 * S
+  const threadHeight = Math.max(1.5, size * 0.025);
+  const dotSize = Math.max(4, size * 0.075);
+  const gap = Math.max(4, size * 0.2);
 
   return (
     <div className={`inline-flex flex-col items-center select-none ${className}`} dir="rtl">
       <span
-        style={{ fontSize: `${size}px`, lineHeight: 1.05 }}
-        className="font-serif font-bold tracking-tight text-[#EDEDF5] dark:text-[#EDEDF5] text-inherit"
+        style={{ fontSize: `${size}px`, lineHeight: 1, color: 'var(--text-primary)' }}
+        className="font-serif font-bold tracking-tight"
       >
         الحمد
       </span>
@@ -32,15 +32,22 @@ export const BrandMark: React.FC<BrandMarkProps> = ({
           className="relative w-full flex items-center"
           style={{ marginTop: `${gap}px`, height: `${dotSize}px` }}
         >
-          {/* The thread line */}
+          {/* The signature dot on the RIGHT end (first child in RTL flex row) */}
           <div
-            className="flex-1 bg-gradient-to-l from-[#C8A951] via-[#C8A951]/70 to-transparent rounded-full"
-            style={{ height: `${threadHeight}px` }}
+            className="rounded-full flex-shrink-0"
+            style={{
+              width: `${dotSize}px`,
+              height: `${dotSize}px`,
+              backgroundColor: 'var(--accent-stroke)'
+            }}
           />
-          {/* The signature dot on the RIGHT end */}
+          {/* The thread line spanning leftward */}
           <div
-            className="rounded-full bg-[#E4C368] shadow-[0_0_8px_rgba(228,195,104,0.7)] flex-shrink-0"
-            style={{ width: `${dotSize}px`, height: `${dotSize}px` }}
+            className="flex-1 rounded-full"
+            style={{
+              height: `${threadHeight}px`,
+              backgroundColor: 'var(--accent-stroke)'
+            }}
           />
         </div>
       )}

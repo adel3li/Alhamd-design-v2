@@ -5,16 +5,61 @@
     --font-serif: 'Amiri', serif;
     --font-sans: 'IBM Plex Sans Arabic', sans-serif;
     --font-quran: 'Amiri Quran', 'Amiri', serif;
+
+    /* Default: Layl (Dark Mode) Tokens */
+    --bg-ground: #15152A;
+    --bg-deep: #111126;
+    --bg-deepest: #0C0C1C;
+    --bg-glass: #1E1E38;
+    --bg-raised: #25232E;
+    --bg-sunken: #1B1B33;
+    --border-hairline: #2E2E4A;
+    --text-primary: #EDEDF5;
+    --text-secondary: #C7C4D8;
+    --text-muted: #AEAECB;
+    --accent-text: #E4C368;
+    --accent-stroke: #C8A951;
+    --cta-bg: #6C63FF;
+    --cta-pressed: #594DFF;
+    --danger: #E5837A;
+    --ayah-color: #E4C368;
+    --ayah-border: rgba(185, 87, 59, 0.14);
+    --card-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+    --raised-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  }
+
+  .theme-light {
+    /* Nahar (Light Mode) Tokens from App Icon Palette */
+    --bg-ground: #F4EDE3;
+    --bg-deep: #EDE3D4;
+    --bg-deepest: #E6DAC8;
+    --bg-glass: #FBF8F3;
+    --bg-raised: #FFFFFF;
+    --bg-sunken: #EFE6D9;
+    --border-hairline: #DCCFBE;
+    --text-primary: #2A1F19;
+    --text-secondary: #4A3B32;
+    --text-muted: #6B5A4E;
+    --accent-text: #9E4A30;
+    --accent-stroke: #B9573B;
+    --cta-bg: #B9573B;
+    --cta-pressed: #8F4229;
+    --danger: #A63D30;
+    --ayah-color: #2A1F19;
+    --ayah-border: rgba(185, 87, 59, 0.35);
+    --card-shadow: 0 12px 32px rgba(42, 31, 25, 0.08);
+    --raised-shadow: 0 16px 40px rgba(42, 31, 25, 0.12);
   }
 
   body {
     font-family: var(--font-sans);
     direction: rtl;
-    background-color: #15152A;
-    color: #EDEDF5;
+    background-color: var(--bg-ground);
+    color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
 }
 
@@ -30,25 +75,177 @@
   font-family: var(--font-quran);
 }
 
-/* Text Size Scaling */
-.text-scale-normal {
-  font-size: 1rem;
+/* Semantic Role Remapping for Nahar (Light Mode) */
+.theme-light .bg-\[\#15152A\] { background-color: #F4EDE3 !important; }
+.theme-light .bg-\[\#15152A\]\/92 { background-color: rgba(244, 237, 227, 0.94) !important; }
+.theme-light .bg-\[\#15152A\]\/90 { background-color: rgba(244, 237, 227, 0.92) !important; }
+.theme-light .bg-\[\#15152A\]\/85 { background-color: rgba(244, 237, 227, 0.88) !important; }
+.theme-light .bg-\[\#15152A\]\/80 { background-color: #EFE6D9 !important; }
+
+.theme-light .bg-\[\#111126\] { background-color: #EDE3D4 !important; }
+.theme-light .bg-\[\#0C0C1C\] { background-color: #E6DAC8 !important; }
+
+.theme-light .bg-\[\#1E1E38\],
+.theme-light .bg-\[\#1E1E38\]\/90,
+.theme-light .bg-\[\#1E1E38\]\/80 {
+  background-color: #FBF8F3 !important;
 }
 
-.text-scale-large {
-  font-size: 1.125rem;
+.theme-light .bg-\[\#25232E\],
+.theme-light .bg-\[\#25232E\]\/85 {
+  background-color: #FFFFFF !important;
 }
 
-.text-scale-large h1 {
-  font-size: 2.75rem;
+.theme-light .from-\[\#1E1E38\] {
+  --tw-gradient-from: #FFFFFF var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
 }
 
+.theme-light .to-\[\#25232E\],
+.theme-light .to-\[\#17172E\] {
+  --tw-gradient-to: #EFE6D9 var(--tw-gradient-to-position) !important;
+}
+
+.theme-light .bg-white\/5,
+.theme-light .bg-white\/10 {
+  background-color: #FBF8F3 !important;
+}
+
+.theme-light .border-white\/10 {
+  border-color: #DCCFBE !important;
+}
+
+.theme-light .bg-\[\#1B1B33\],
+.theme-light .bg-black\/20 {
+  background-color: #EFE6D9 !important;
+}
+
+.theme-light .hover\:bg-\[\#25232E\]:hover {
+  background-color: #EFE6D9 !important;
+}
+
+.theme-light .bg-\[\#2E2E4A\] {
+  background-color: #DCCFBE !important;
+}
+
+/* Text Colors in Nahar */
+.theme-light .text-\[\#EDEDF5\] { color: #2A1F19 !important; }
+.theme-light .hover\:text-\[\#EDEDF5\]:hover,
+.theme-light .hover\:text-white:hover,
+.theme-light .group:hover .group-hover\:text-white {
+  color: #2A1F19 !important;
+}
+
+.theme-light .text-\[\#C7C4D8\] { color: #4A3B32 !important; }
+.theme-light .text-\[\#AEAECB\] { color: #6B5A4E !important; }
+.theme-light .text-\[\#AEAECB\]\/80 { color: rgba(107, 90, 78, 0.85) !important; }
+.theme-light .text-\[\#AEAECB\]\/60 { color: rgba(107, 90, 78, 0.75) !important; }
+.theme-light .text-\[\#AEAECB\]\/50 { color: rgba(107, 90, 78, 0.65) !important; }
+.theme-light .placeholder-\[\#AEAECB\]\/40::placeholder,
+.theme-light .placeholder-\[\#AEAECB\]\/50::placeholder {
+  color: #6B5A4E !important;
+  opacity: 0.75;
+}
+
+/* Accent Text & Highlights: Gold -> Ink Terracotta (#9E4A30) / Terracotta (#B9573B) */
+.theme-light .text-\[\#E4C368\],
+.theme-light .text-\[\#C8A951\] {
+  color: #9E4A30 !important;
+}
+
+.theme-light .hover\:text-\[\#E4C368\]:hover {
+  color: #B9573B !important;
+}
+
+/* Quranic Ayah text returns to Ink (#2A1F19) in Nahar as in the Mushaf */
+.theme-light .ayah-text {
+  color: #2A1F19 !important;
+}
+
+/* Primary Buttons & Rings: Violet (#6C63FF) -> Terracotta (#B9573B) */
+.theme-light .bg-\[\#6C63FF\] {
+  background-color: #B9573B !important;
+  color: #FFFFFF !important;
+}
+.theme-light .hover\:bg-\[\#594DFF\]:hover {
+  background-color: #8F4229 !important;
+}
+.theme-light .text-\[\#6C63FF\] {
+  color: #9E4A30 !important;
+}
+.theme-light .border-\[\#6C63FF\] {
+  border-color: #B9573B !important;
+}
+.theme-light .border-\[\#6C63FF\]\/30,
+.theme-light .border-\[\#6C63FF\]\/40,
+.theme-light .border-\[\#6C63FF\]\/50 {
+  border-color: rgba(185, 87, 59, 0.4) !important;
+}
+.theme-light .bg-\[\#6C63FF\]\/15,
+.theme-light .bg-\[\#6C63FF\]\/20 {
+  background-color: rgba(185, 87, 59, 0.14) !important;
+}
+
+/* Gold fills & badges -> Terracotta fills & badges in Nahar */
+.theme-light .bg-\[\#E4C368\],
+.theme-light .bg-\[\#C8A951\] {
+  background-color: #B9573B !important;
+  color: #FFFFFF !important;
+}
+.theme-light .bg-\[\#C8A951\]\/10,
+.theme-light .bg-\[\#C8A951\]\/15,
+.theme-light .bg-\[\#E4C368\]\/10,
+.theme-light .bg-\[\#E4C368\]\/15,
+.theme-light .bg-\[\#E4C368\]\/20 {
+  background-color: rgba(185, 87, 59, 0.14) !important;
+}
+.theme-light .bg-\[\#C8A951\]\/5 {
+  background-color: rgba(185, 87, 59, 0.08) !important;
+}
+
+/* Borders & Dividers: #2E2E4A -> #DCCFBE */
+.theme-light .border-\[\#2E2E4A\],
+.theme-light .border-\[\#2E2E4A\]\/80,
+.theme-light .border-\[\#2E2E4A\]\/50,
+.theme-light .border-\[\#2E2E4A\]\/40 {
+  border-color: #DCCFBE !important;
+}
+.theme-light .border-\[\#C8A951\],
+.theme-light .border-\[\#E4C368\] {
+  border-color: #B9573B !important;
+}
+.theme-light .border-\[\#C8A951\]\/30,
+.theme-light .border-\[\#C8A951\]\/40,
+.theme-light .border-\[\#C8A951\]\/50,
+.theme-light .border-\[\#E4C368\]\/30 {
+  border-color: rgba(185, 87, 59, 0.4) !important;
+}
+.theme-light .focus\:border-\[\#C8A951\]:focus {
+  border-color: #B9573B !important;
+}
+
+/* Global Typography Scale driven by numeric --app-font-size (12px – 24px, default 16px) */
+html {
+  font-size: var(--app-font-size, 16px);
+}
+
+/* Convert fixed arbitrary pixel labels to proportional rem units so they scale with numeric font size */
+.text-\[10px\] {
+  font-size: 0.6875rem !important;
+  line-height: 1.6 !important;
+}
+
+.text-\[11px\] {
+  font-size: 0.75rem !important;
+  line-height: 1.65 !important;
+}
+
+/* Text Size Scaling Containers (root html already applies --app-font-size) */
+.text-scale-normal,
+.text-scale-large,
 .text-scale-xlarge {
-  font-size: 1.25rem;
-}
-
-.text-scale-xlarge h1 {
-  font-size: 3.25rem;
+  font-size: 1rem;
 }
 
 /* Hide scrollbar */
@@ -78,3 +275,4 @@
 .animate-scale-up {
   animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+

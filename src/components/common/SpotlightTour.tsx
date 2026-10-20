@@ -33,9 +33,9 @@ export const SpotlightTour: React.FC<SpotlightTourProps> = ({ onComplete }) => {
       description: 'قبس نبوي شريف يُعينك على التفكر والذكر، مع إمكانية مشاركته كبطاقة أنيقة.'
     },
     {
-      targetId: 'card-home-tasbih',
+      targetId: 'tab-btn-tasbih',
       title: 'المسبحة وسجل الحمد',
-      description: 'مسبحة إلكترونية هادئة مع تسجيل تأملاتك اليومية المحفوظة بأمان على جهازك وحدك.'
+      description: 'مسبحة إلكترونية هادئة في الشريط السفلي مع تسجيل تأملاتك اليومية المحفوظة بأمان على جهازك وحدك.'
     }
   ];
 

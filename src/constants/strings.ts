@@ -10,6 +10,7 @@ export const APP_STRINGS = {
     home: 'الرئيسية',
     journal: 'سجل الحمد',
     consistency: 'المداومة',
+    tasbih: 'المسبحة',
     settings: 'الإعدادات'
   },
 

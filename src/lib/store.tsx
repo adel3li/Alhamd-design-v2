@@ -79,6 +79,17 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     return (localStorage.getItem('alhamd_text_size') as TextSize) || 'normal';
   });
 
+  const [fontSize, setFontSizeState] = useState<number>(() => {
+    const saved = localStorage.getItem('alhamd_font_size_v2');
+    if (saved) {
+      const parsed = parseFloat(saved);
+      if (!isNaN(parsed) && parsed >= 12 && parsed <= 24) {
+        return parsed;
+      }
+    }
+    return 16;
+  });
+
   const [notificationsEnabled, setNotificationsEnabledState] = useState<boolean>(() => {
     const val = localStorage.getItem('alhamd_notif_enabled');
     return val !== 'false';
@@ -161,22 +172,27 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   useEffect(() => {
     const root = document.documentElement;
     if (theme === 'light') {
-      root.classList.remove('dark');
-      root.classList.add('light');
+      root.classList.remove('dark', 'theme-dark');
+      root.classList.add('light', 'theme-light');
     } else {
-      root.classList.remove('light');
-      root.classList.add('dark');
+      root.classList.remove('light', 'theme-light');
+      root.classList.add('dark', 'theme-dark');
     }
     localStorage.setItem('alhamd_theme', theme);
   }, [theme]);
 
-  // Synchronize Text Size
+  // Synchronize numeric Font Size & legacy Text Size class
   useEffect(() => {
     const root = document.documentElement;
+    root.style.setProperty('--app-font-size', `${fontSize}px`);
+    root.style.fontSize = `${fontSize}px`;
+    localStorage.setItem('alhamd_font_size_v2', String(fontSize));
+
     root.classList.remove('text-size-normal', 'text-size-large', 'text-size-xlarge');
-    root.classList.add(`text-size-${textSize}`);
-    localStorage.setItem('alhamd_text_size', textSize);
-  }, [textSize]);
+    const derivedSize: TextSize = fontSize >= 20 ? 'xlarge' : fontSize >= 18 ? 'large' : 'normal';
+    root.classList.add(`text-size-${derivedSize}`);
+    localStorage.setItem('alhamd_text_size', derivedSize);
+  }, [fontSize]);
 
   // Save changes to localStorage
   useEffect(() => {
@@ -221,8 +237,18 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setThemeState(newTheme);
   }, []);
 
+  const setFontSize = useCallback((size: number) => {
+    const clamped = Math.min(24, Math.max(12, Math.round(size * 2) / 2));
+    setFontSizeState(clamped);
+    const derivedSize: TextSize = clamped >= 20 ? 'xlarge' : clamped >= 18 ? 'large' : 'normal';
+    setTextSizeState(derivedSize);
+  }, []);
+
   const setTextSize = useCallback((size: TextSize) => {
     setTextSizeState(size);
+    if (size === 'normal') setFontSizeState(16);
+    else if (size === 'large') setFontSizeState(18);
+    else if (size === 'xlarge') setFontSizeState(20);
   }, []);
 
   const setNotificationTime = useCallback((time: string) => {
@@ -349,6 +375,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       settings: {
         theme,
         textSize,
+        fontSize,
         notificationTime,
         notificationsEnabled,
         onboardingComplete,
@@ -359,7 +386,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       personalBlessings: userBlessings
     };
     return JSON.stringify(payload, null, 2);
-  }, [theme, textSize, notificationTime, notificationsEnabled, onboardingComplete, welcomeSeen, journalEntries, completedReflections, userBlessings]);
+  }, [theme, textSize, fontSize, notificationTime, notificationsEnabled, onboardingComplete, welcomeSeen, journalEntries, completedReflections, userBlessings]);
 
   const importBackupJSON = useCallback((jsonStr: string): { success: boolean; message: string } => {
     try {
@@ -378,6 +405,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         if (data.settings) {
           if (data.settings.theme) setThemeState(data.settings.theme);
           if (data.settings.textSize) setTextSizeState(data.settings.textSize);
+          if (typeof data.settings.fontSize === 'number') setFontSizeState(data.settings.fontSize);
           if (data.settings.notificationTime) setNotificationTimeState(data.settings.notificationTime);
         }
         return { success: true, message: 'تم استرجاع بياناتك بنجاح.' };
@@ -444,6 +472,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         notificationsEnabled,
         theme,
         textSize,
+        fontSize,
         firstLaunchDate: null,
         welcomeSeen,
         analyticsConsent,
@@ -456,6 +485,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         setAnalyticsConsent,
         setTheme,
         setTextSize,
+        setFontSize,
         setNotificationTime,
         setNotificationsEnabled,
         addJournalEntry,

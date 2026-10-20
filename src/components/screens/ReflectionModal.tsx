@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { X, Sparkles, Check, ChevronLeft } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, Check, Timer, Play, Pause, RotateCcw, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Blessing, IstisharStep } from '../../types';
 import { ThreadProgress } from '../common/ThreadProgress';
 import { StarLattice } from '../common/StarLattice';
@@ -11,6 +12,12 @@ interface ReflectionModalProps {
   onComplete: (journalText?: string) => void;
   triggerHaptic: (type?: 'light' | 'medium' | 'heavy' | 'success') => void;
 }
+
+const TIMER_PRESETS = [
+  { label: 'دقيقة واحدة', shortLabel: '١ د', seconds: 60 },
+  { label: '٣ دقائق', shortLabel: '٣ د', seconds: 180 },
+  { label: '٥ دقائق', shortLabel: '٥ د', seconds: 300 },
+];
 
 export const ReflectionModal: React.FC<ReflectionModalProps> = ({
   blessing,
@@ -26,6 +33,13 @@ export const ReflectionModal: React.FC<ReflectionModalProps> = ({
   const [dhikrCount, setDhikrCount] = useState(0);
   const [showAcceptedOverlay, setShowAcceptedOverlay] = useState(false);
 
+  // Optional Relaxation & Tadabbur Timer State
+  const [showTimerPanel, setShowTimerPanel] = useState(false);
+  const [timerDuration, setTimerDuration] = useState<number>(60);
+  const [timerRemaining, setTimerRemaining] = useState<number>(60);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [timerCompleted, setTimerCompleted] = useState(false);
+
   const steps = blessing.istisharSteps || [];
   const currentStep: IstisharStep | undefined = steps[currentStepIdx];
   const isJournalStep = currentStepIdx === steps.length;
@@ -37,6 +51,60 @@ export const ReflectionModal: React.FC<ReflectionModalProps> = ({
         .map(s => s.trim())
         .filter(Boolean)
     : [];
+
+  // Format MM:SS in Arabic numerals
+  const formatArabicTime = (totalSec: number) => {
+    const mins = Math.floor(totalSec / 60);
+    const secs = totalSec % 60;
+    const minStr = toArabicNumerals(mins);
+    const secStr = secs < 10 ? `٠${toArabicNumerals(secs)}` : toArabicNumerals(secs);
+    return `${minStr}:${secStr}`;
+  };
+
+  // Optional Tadabbur Countdown Interval
+  useEffect(() => {
+    if (!isTimerRunning) return;
+
+    const countdown = setInterval(() => {
+      setTimerRemaining(prev => {
+        if (prev <= 1) {
+          setIsTimerRunning(false);
+          setTimerCompleted(true);
+          triggerHaptic('success');
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(countdown);
+  }, [isTimerRunning, triggerHaptic]);
+
+  const handleSelectPreset = (seconds: number) => {
+    triggerHaptic('light');
+    setTimerDuration(seconds);
+    setTimerRemaining(seconds);
+    setTimerCompleted(false);
+    setIsTimerRunning(true);
+  };
+
+  const toggleTimerRunning = () => {
+    triggerHaptic('light');
+    if (timerRemaining === 0) {
+      setTimerRemaining(timerDuration);
+      setTimerCompleted(false);
+      setIsTimerRunning(true);
+    } else {
+      setIsTimerRunning(r => !r);
+    }
+  };
+
+  const resetRelaxTimer = () => {
+    triggerHaptic('light');
+    setIsTimerRunning(false);
+    setTimerCompleted(false);
+    setTimerRemaining(timerDuration);
+  };
 
   // Reset sentence index on step change and pace through sentences
   useEffect(() => {
@@ -105,7 +173,7 @@ export const ReflectionModal: React.FC<ReflectionModalProps> = ({
   const handleDhikrTap = () => {
     setDhikrCount(c => {
       const next = c + 1;
-      if (next % 33 === 0) {
+      if (next % 100 === 0) {
         triggerHaptic('heavy');
       } else {
         triggerHaptic('light');
@@ -113,6 +181,11 @@ export const ReflectionModal: React.FC<ReflectionModalProps> = ({
       return next;
     });
   };
+
+  const timerProgress = timerDuration > 0 ? (timerDuration - timerRemaining) / timerDuration : 0;
+  const circleRadius = 42;
+  const circleCircumference = 2 * Math.PI * circleRadius;
+  const strokeDashoffset = circleCircumference * (1 - timerProgress);
 
   // 1.6s Completion Overlay
   if (showAcceptedOverlay) {
@@ -133,40 +206,192 @@ export const ReflectionModal: React.FC<ReflectionModalProps> = ({
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex flex-col justify-between p-6 sm:p-8 transition-colors duration-700 ease-in-out ${getStepBgClass()}`}
+      className={`fixed inset-0 z-50 flex flex-col justify-between p-6 sm:p-8 transition-colors duration-700 ease-in-out overflow-y-auto ${getStepBgClass()}`}
       dir="rtl"
     >
       {/* Star lattice background */}
       <StarLattice opacity={currentStep?.type === 'deepen' ? 0.015 : 0.045} />
 
-      {/* Top Header: Close, Progress, and Step Label */}
-      <div className="relative z-10 w-full max-w-lg mx-auto flex items-center justify-between">
-        <button
-          onClick={onClose}
-          className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 text-[#AEAECB] hover:text-white flex items-center justify-center transition-colors"
-          aria-label="إغلاق الاستشعار"
-        >
-          <X size={20} />
-        </button>
+      {/* Top Header: Close, Progress, and Optional Relaxation Timer Button */}
+      <div className="relative z-20 w-full max-w-lg mx-auto flex flex-col gap-3">
+        <div className="flex items-center justify-between">
+          <button
+            onClick={onClose}
+            className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 text-[#AEAECB] hover:text-white flex items-center justify-center transition-colors"
+            aria-label="إغلاق الاستشعار"
+          >
+            <X size={20} />
+          </button>
 
-        {/* Thread Progress (growing leftward from right dot) */}
-        {!isJournalStep ? (
-          <ThreadProgress
-            currentStep={currentStepIdx + 1}
-            totalSteps={steps.length}
-            width={130}
-          />
-        ) : (
-          <span className="text-xs font-semibold text-[#C8A951] bg-[#C8A951]/10 px-3 py-1 rounded-full border border-[#C8A951]/30">
-            خاتمة الاستشعار
-          </span>
-        )}
+          {/* Thread Progress (growing leftward from right dot) */}
+          {!isJournalStep ? (
+            <ThreadProgress
+              currentStep={currentStepIdx + 1}
+              totalSteps={steps.length}
+              width={130}
+            />
+          ) : (
+            <span className="text-xs font-semibold text-[#C8A951] bg-[#C8A951]/10 px-3 py-1 rounded-full border border-[#C8A951]/30">
+              خاتمة الاستشعار
+            </span>
+          )}
 
-        <div className="w-10" />
+          {/* Optional Relaxation Timer Toggle Button */}
+          <button
+            onClick={() => {
+              triggerHaptic('light');
+              setShowTimerPanel(prev => !prev);
+            }}
+            className={`h-10 px-3 rounded-full flex items-center gap-1.5 text-xs font-medium transition-all border ${
+              showTimerPanel || isTimerRunning
+                ? 'bg-[#C8A951]/15 border-[#C8A951]/50 text-[#E4C368] shadow-[0_0_15px_rgba(200,169,81,0.2)]'
+                : 'bg-white/5 hover:bg-white/10 border-white/10 text-[#AEAECB] hover:text-white'
+            }`}
+            aria-label="مؤقت خلوة التدبر الاختياري"
+            title="مؤقت الاسترخاء والتدبر"
+          >
+            <Timer size={16} className={isTimerRunning ? 'animate-pulse text-[#E4C368]' : ''} />
+            <span className="hidden xs:inline">
+              {isTimerRunning || timerRemaining < timerDuration
+                ? formatArabicTime(timerRemaining)
+                : 'مؤقت التدبر'}
+            </span>
+            {(isTimerRunning || timerRemaining < timerDuration) && (
+              <span className="xs:hidden font-mono font-bold">
+                {formatArabicTime(timerRemaining)}
+              </span>
+            )}
+          </button>
+        </div>
+
+        {/* Collapsible Relaxation & Tadabbur Timer Panel */}
+        <AnimatePresence>
+          {showTimerPanel && (
+            <motion.div
+              initial={{ opacity: 0, y: -10, height: 0 }}
+              animate={{ opacity: 1, y: 0, height: 'auto' }}
+              exit={{ opacity: 0, y: -10, height: 0 }}
+              transition={{ duration: 0.28, ease: 'easeOut' }}
+              className="overflow-hidden"
+            >
+              <div className="p-4 rounded-2xl bg-[#1E1E38]/90 backdrop-blur-md border border-[#C8A951]/30 shadow-xl space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Sparkles size={14} className="text-[#E4C368]" />
+                    <span className="text-xs font-semibold text-[#EDEDF5]">
+                      خلوة تدبر واسترخاء (اختياري)
+                    </span>
+                  </div>
+                  <span className="text-[11px] text-[#AEAECB]">
+                    {timerCompleted
+                      ? 'اكتمل وقت الخلوة بسلام'
+                      : isTimerRunning
+                      ? 'تنفّس بعمق واستشعر النعمة...'
+                      : 'اختر مدة للتأمل الهادئ'}
+                  </span>
+                </div>
+
+                {/* Preset Pills + Circular Countdown & Controls */}
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                  {/* Duration Presets */}
+                  <div className="flex items-center gap-2 w-full sm:w-auto justify-center">
+                    {TIMER_PRESETS.map(preset => {
+                      const active = timerDuration === preset.seconds;
+                      return (
+                        <button
+                          key={preset.seconds}
+                          onClick={() => handleSelectPreset(preset.seconds)}
+                          className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
+                            active
+                              ? 'bg-[#C8A951] text-[#111126] font-bold shadow-sm'
+                              : 'bg-[#15152A]/80 text-[#AEAECB] hover:text-white border border-[#2E2E4A]'
+                          }`}
+                        >
+                          {preset.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Circular Ring & Play/Pause/Reset */}
+                  <div className="flex items-center gap-4">
+                    <div className="relative w-24 h-24 flex items-center justify-center">
+                      {/* Breathing halo when running */}
+                      {isTimerRunning && (
+                        <motion.div
+                          className="absolute inset-1 rounded-full blur-md pointer-events-none"
+                          style={{ backgroundColor: 'var(--ayah-border)' }}
+                          animate={{ scale: [0.92, 1.12, 0.92], opacity: [0.3, 0.7, 0.3] }}
+                          transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                        />
+                      )}
+                      <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r={circleRadius}
+                          fill="transparent"
+                          stroke="var(--border-hairline)"
+                          strokeWidth="5"
+                        />
+                        <circle
+                          cx="50"
+                          cy="50"
+                          r={circleRadius}
+                          fill="transparent"
+                          stroke="var(--accent-stroke)"
+                          strokeWidth="5"
+                          strokeLinecap="round"
+                          strokeDasharray={circleCircumference}
+                          strokeDashoffset={strokeDashoffset}
+                          className="transition-all duration-700 ease-linear"
+                        />
+                      </svg>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                        <span
+                          className="text-base font-bold tracking-wider"
+                          style={{ color: 'var(--text-primary)' }}
+                        >
+                          {formatArabicTime(timerRemaining)}
+                        </span>
+                        {timerCompleted && (
+                          <span
+                            className="text-[10px] font-medium"
+                            style={{ color: 'var(--accent-text)' }}
+                          >
+                            تمّ بحمد الله
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={toggleTimerRunning}
+                        className="w-10 h-10 rounded-xl bg-[#6C63FF] hover:bg-[#594DFF] text-white flex items-center justify-center transition-transform active:scale-95 shadow-md shadow-[#6C63FF]/25 cursor-pointer"
+                        aria-label={isTimerRunning ? 'إيقاف مؤقت' : 'بدء المؤقت'}
+                      >
+                        {isTimerRunning ? <Pause size={18} /> : <Play size={18} />}
+                      </button>
+                      <button
+                        onClick={resetRelaxTimer}
+                        className="w-10 h-10 rounded-xl bg-[#15152A] hover:bg-[#2E2E4A] text-[#AEAECB] hover:text-white border border-[#2E2E4A] flex items-center justify-center transition-colors cursor-pointer"
+                        aria-label="إعادة ضبط المؤقت"
+                      >
+                        <RotateCcw size={16} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Main Content Area */}
-      <div className="relative z-10 w-full max-w-md mx-auto my-auto flex flex-col items-center text-center px-4">
+      <div className="relative z-10 w-full max-w-md mx-auto my-auto flex flex-col items-center text-center px-4 py-4">
         {!isJournalStep && currentStep ? (
           <div className="space-y-6 w-full animate-fade-in">
             {/* Step Type Chip */}
@@ -179,17 +404,17 @@ export const ReflectionModal: React.FC<ReflectionModalProps> = ({
             </span>
 
             {/* Step Sentence by Sentence Display */}
-            <div className="min-h-[160px] flex flex-col items-center justify-center">
-              <p className="text-xl sm:text-2xl font-serif text-[#EDEDF5] leading-[2.1] font-medium transition-all duration-500">
+            <div className="min-h-[170px] flex flex-col items-center justify-center">
+              <p className="text-2xl sm:text-3xl font-serif text-[#EDEDF5] leading-[2.15] font-medium transition-all duration-500">
                 {sentences.slice(0, sentenceIdx + 1).join(' ')}
               </p>
             </div>
 
             {/* Special Hamd Step: Sacred Duaa Display */}
             {currentStep.type === 'hamd' && blessing.duaa && (
-              <div className="mt-4 p-5 rounded-2xl bg-[#1E1E38]/90 border border-[#C8A951]/30 animate-fade-in shadow-lg">
-                <span className="text-xs font-semibold text-[#E4C368] block mb-2">دعاء اليوم:</span>
-                <p className="font-serif text-[#EDEDF5] text-lg leading-relaxed">
+              <div className="mt-4 p-5 sm:p-6 rounded-2xl bg-[#1E1E38]/90 border border-[#C8A951]/30 animate-fade-in shadow-lg">
+                <span className="text-sm font-bold text-[#E4C368] block mb-2">دعاء اليوم:</span>
+                <p className="font-serif text-[#EDEDF5] text-xl sm:text-2xl leading-[2.0]">
                   «{blessing.duaa}»
                 </p>
               </div>
@@ -199,10 +424,10 @@ export const ReflectionModal: React.FC<ReflectionModalProps> = ({
           /* Step 6: Journal Step */
           <div className="w-full space-y-6 animate-fade-in text-right">
             <div className="text-center space-y-2">
-              <h3 className="text-2xl font-serif font-bold text-[#EDEDF5]">
+              <h3 className="text-2xl sm:text-3xl font-serif font-bold text-[#EDEDF5]">
                 سجل الحمد
               </h3>
-              <p className="text-xs text-[#AEAECB]">
+              <p className="text-sm sm:text-base text-[#AEAECB]">
                 {blessing.journalPrompt || 'دوّن ما فاض به قلبك من شكرٍ لله على هذه النعمة:'}
               </p>
             </div>
@@ -214,21 +439,60 @@ export const ReflectionModal: React.FC<ReflectionModalProps> = ({
                 onChange={e => setJournalText(e.target.value)}
                 placeholder="اكتب حمدك..."
                 rows={3}
-                className="w-full p-4 rounded-2xl bg-[#1E1E38]/90 border border-[#2E2E4A] focus:border-[#C8A951] text-[#EDEDF5] placeholder-[#AEAECB]/50 text-sm leading-relaxed outline-none transition-colors resize-none"
+                className="w-full p-4 rounded-2xl bg-[#1E1E38]/90 border border-[#2E2E4A] focus:border-[#C8A951] text-[#EDEDF5] placeholder-[#AEAECB]/50 text-base leading-[1.9] outline-none transition-colors resize-none"
               />
             </div>
 
             {/* Tap-to-count "الحمد لله" Dhikr Circle */}
             <div className="flex flex-col items-center justify-center pt-2">
-              <span className="text-xs text-[#AEAECB] mb-2">تسبيح ختامي</span>
+              <span className="text-xs font-medium text-[#AEAECB] mb-2.5">تسبيح ختامي</span>
               <button
+                type="button"
                 onClick={handleDhikrTap}
-                className="w-24 h-24 rounded-full bg-gradient-to-b from-[#1E1E38] to-[#25232E] border-2 border-[#C8A951]/50 hover:border-[#C8A951] active:scale-95 shadow-[0_0_20px_rgba(200,169,81,0.15)] flex flex-col items-center justify-center transition-all group"
+                style={{
+                  backgroundColor: 'var(--bg-raised)',
+                  boxShadow: 'var(--raised-shadow)',
+                }}
+                className="relative w-28 h-28 rounded-full active:scale-95 flex flex-col items-center justify-center transition-all cursor-pointer select-none group"
               >
-                <span className="font-serif text-sm font-bold text-[#E4C368] group-hover:scale-105 transition-transform">
+                {/* SVG Ring Track & Progress (0 = empty, 100 = full, 101 = 1/100) */}
+                <svg className="absolute inset-0 w-full h-full -rotate-90 pointer-events-none" viewBox="0 0 112 112">
+                  <circle
+                    cx="56"
+                    cy="56"
+                    r="51"
+                    fill="none"
+                    stroke="var(--border-hairline)"
+                    strokeWidth="3"
+                  />
+                  {dhikrCount > 0 && (
+                    <circle
+                      cx="56"
+                      cy="56"
+                      r="51"
+                      fill="none"
+                      stroke="var(--accent-stroke)"
+                      strokeWidth="3.5"
+                      strokeLinecap="round"
+                      strokeDasharray={2 * Math.PI * 51}
+                      strokeDashoffset={
+                        2 * Math.PI * 51 * (1 - ((dhikrCount % 100) === 0 ? 100 : (dhikrCount % 100)) / 100)
+                      }
+                      className="transition-all duration-300 ease-out"
+                    />
+                  )}
+                </svg>
+
+                <span
+                  className="relative z-10 font-serif text-base font-bold group-hover:scale-105 transition-transform"
+                  style={{ color: 'var(--accent-text)' }}
+                >
                   الحمد لله
                 </span>
-                <span className="text-xs font-bold text-[#EDEDF5] mt-1">
+                <span
+                  className="relative z-10 text-lg font-bold mt-1 leading-none"
+                  style={{ color: 'var(--text-primary)' }}
+                >
                   {toArabicNumerals(dhikrCount)}
                 </span>
               </button>
@@ -271,3 +535,4 @@ export const ReflectionModal: React.FC<ReflectionModalProps> = ({
     </div>
   );
 };
+

@@ -3,6 +3,8 @@ import {
   Sun, 
   Moon, 
   Type, 
+  Minus,
+  Plus,
   Bell, 
   Download, 
   Upload, 
@@ -15,7 +17,7 @@ import {
 } from 'lucide-react';
 import { useStore } from '../../lib/store';
 import { GlassCard } from '../common/GlassCard';
-import { formatArabicTime } from '../../lib/arabic';
+import { formatArabicTime, toArabicNumerals } from '../../lib/arabic';
 import { AboutModal } from './AboutModal';
 import { ContentReviewModal } from './ContentReviewModal';
 import { PrivacyPolicyModal } from './PrivacyPolicyModal';
@@ -23,15 +25,13 @@ import { PrivacyPolicyModal } from './PrivacyPolicyModal';
 export const SettingsScreen: React.FC = () => {
   const {
     theme,
-    textSize,
+    fontSize,
     notificationsEnabled,
     notificationTime,
-    analyticsConsent,
     setTheme,
-    setTextSize,
+    setFontSize,
     setNotificationsEnabled,
     setNotificationTime,
-    setAnalyticsConsent,
     exportBackupJSON,
     importBackupJSON,
     replayTour,
@@ -100,7 +100,7 @@ export const SettingsScreen: React.FC = () => {
           الإعدادات
         </h1>
         <p className="text-xs sm:text-sm text-[#AEAECB]">
-          تخصيص المظهر والتنبيهات، والنسخ الاحتياطي المحلي.
+          تخصيص المظهر وحجم الخط والتنبيهات، والنسخ الاحتياطي المحلي.
         </p>
       </div>
 
@@ -120,7 +120,7 @@ export const SettingsScreen: React.FC = () => {
         <div className="grid grid-cols-2 gap-3">
           <button
             onClick={() => setTheme('dark')}
-            className={`flex items-center justify-center gap-2.5 py-3 px-4 rounded-xl border text-xs font-semibold transition-all ${
+            className={`flex items-center justify-center gap-2.5 py-3 px-4 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
               theme === 'dark'
                 ? 'bg-[#6C63FF] border-[#6C63FF] text-white shadow-md'
                 : 'bg-[#15152A] border-[#2E2E4A] text-[#AEAECB] hover:text-white'
@@ -132,60 +132,128 @@ export const SettingsScreen: React.FC = () => {
 
           <button
             onClick={() => setTheme('light')}
-            className={`flex items-center justify-center gap-2.5 py-3 px-4 rounded-xl border text-xs font-semibold transition-all ${
+            className={`flex items-center justify-center gap-2.5 py-3 px-4 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
               theme === 'light'
                 ? 'bg-[#6C63FF] border-[#6C63FF] text-white shadow-md'
                 : 'bg-[#15152A] border-[#2E2E4A] text-[#AEAECB] hover:text-white'
             }`}
           >
             <Sun size={16} />
-            <span>فاتح (فجر)</span>
+            <span>فاتح (نهار)</span>
           </button>
         </div>
       </GlassCard>
 
-      {/* 2. Text Size */}
+      {/* 2. Numeric Font Size Control (12px – 24px) */}
       <GlassCard padding="p-5" className="space-y-4">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-bold text-[#AEAECB] uppercase tracking-wider">
-            حجم الخط العربي
-          </span>
-          <Type size={16} className="text-[#C8A951]" />
+          <div className="flex items-center gap-2">
+            <Type size={16} className="text-[#C8A951]" />
+            <span className="text-xs font-bold text-[#AEAECB] uppercase tracking-wider">
+              حجم الخط بالرقم (١٢ – ٢٤)
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {fontSize !== 16 && (
+              <button
+                onClick={() => {
+                  setFontSize(16);
+                  triggerHaptic('light');
+                }}
+                className="text-[11px] font-medium text-[#AEAECB] hover:text-[#E4C368] px-2 py-1 rounded-lg border border-[#2E2E4A] transition-colors cursor-pointer"
+                title="إعادة الحجم الافتراضي (16)"
+              >
+                افتراضي (١٦)
+              </button>
+            )}
+            <span className="px-2.5 py-1 rounded-lg bg-[#15152A] border border-[#C8A951]/40 text-xs font-bold text-[#E4C368]">
+              {toArabicNumerals(fontSize)} px
+            </span>
+          </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-2">
+        {/* Stepper + Slider + Direct Number Input */}
+        <div className="flex items-center gap-3">
           <button
-            onClick={() => setTextSize('normal')}
-            className={`py-2.5 px-3 rounded-xl border text-xs font-semibold transition-all ${
-              textSize === 'normal'
-                ? 'bg-[#E4C368] text-[#15152A] border-[#E4C368] font-bold'
-                : 'bg-[#15152A] border-[#2E2E4A] text-[#AEAECB] hover:text-white'
-            }`}
+            type="button"
+            onClick={() => {
+              setFontSize(fontSize - 1);
+              triggerHaptic('light');
+            }}
+            disabled={fontSize <= 12}
+            className="w-10 h-10 rounded-xl bg-[#15152A] hover:bg-[#25232E] disabled:opacity-40 border border-[#2E2E4A] flex items-center justify-center text-[#EDEDF5] transition-colors cursor-pointer shrink-0"
+            aria-label="تصغير الخط"
           >
-            عادي
+            <Minus size={16} />
           </button>
 
-          <button
-            onClick={() => setTextSize('large')}
-            className={`py-2.5 px-3 rounded-xl border text-xs font-semibold transition-all ${
-              textSize === 'large'
-                ? 'bg-[#E4C368] text-[#15152A] border-[#E4C368] font-bold'
-                : 'bg-[#15152A] border-[#2E2E4A] text-[#AEAECB] hover:text-white'
-            }`}
-          >
-            كبير
-          </button>
+          <div className="flex-1 flex flex-col gap-1.5">
+            <input
+              type="range"
+              min={12}
+              max={24}
+              step={0.5}
+              value={fontSize}
+              onChange={e => setFontSize(parseFloat(e.target.value))}
+              aria-label="شريط تحديد حجم الخط"
+              className="w-full accent-[#C8A951] cursor-pointer h-2 rounded-lg"
+              dir="ltr"
+            />
+            <div className="flex justify-between text-[11px] text-[#AEAECB] px-0.5" dir="ltr">
+              <span>12px</span>
+              <span>16px</span>
+              <span>20px</span>
+              <span>24px</span>
+            </div>
+          </div>
 
           <button
-            onClick={() => setTextSize('xlarge')}
-            className={`py-2.5 px-3 rounded-xl border text-xs font-semibold transition-all ${
-              textSize === 'xlarge'
-                ? 'bg-[#E4C368] text-[#15152A] border-[#E4C368] font-bold'
-                : 'bg-[#15152A] border-[#2E2E4A] text-[#AEAECB] hover:text-white'
-            }`}
+            type="button"
+            onClick={() => {
+              setFontSize(fontSize + 1);
+              triggerHaptic('light');
+            }}
+            disabled={fontSize >= 24}
+            className="w-10 h-10 rounded-xl bg-[#15152A] hover:bg-[#25232E] disabled:opacity-40 border border-[#2E2E4A] flex items-center justify-center text-[#EDEDF5] transition-colors cursor-pointer shrink-0"
+            aria-label="تكبير الخط"
           >
-            أكبر
+            <Plus size={16} />
           </button>
+
+          {/* Direct Number Input */}
+          <div className="flex items-center bg-[#15152A] border border-[#2E2E4A] focus-within:border-[#C8A951] rounded-xl px-2.5 h-10 shrink-0" dir="ltr">
+            <input
+              type="number"
+              min={12}
+              max={24}
+              step={0.5}
+              value={fontSize}
+              onChange={e => {
+                const val = parseFloat(e.target.value);
+                if (!isNaN(val)) setFontSize(val);
+              }}
+              aria-label="إدخال رقم حجم الخط"
+              className="w-12 bg-transparent text-center text-sm font-bold text-[#EDEDF5] outline-none"
+            />
+            <span className="text-[11px] text-[#AEAECB] select-none">px</span>
+          </div>
+        </div>
+
+        {/* Live Preview Box */}
+        <div
+          className="rounded-xl p-3.5 border text-center space-y-1"
+          style={{
+            backgroundColor: 'var(--bg-sunken)',
+            borderColor: 'var(--border-hairline)'
+          }}
+        >
+          <p className="font-quran ayah-text text-lg leading-[2.0]" style={{ color: 'var(--ayah-color)' }}>
+            ﴿وَإِن تَعُدُّوا نِعْمَتَ اللَّهِ لَا تُحْصُوهَا﴾
+          </p>
+          <p className="text-xs text-[#AEAECB]">
+            معاينة مباشرة لحجم الخط ({fontSize}px)
+          </p>
         </div>
       </GlassCard>
 

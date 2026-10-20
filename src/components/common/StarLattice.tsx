@@ -17,35 +17,11 @@ export const StarLattice: React.FC<StarLatticeProps> = ({
     >
       <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <pattern id="islamic-star-pattern" width="80" height="80" patternUnits="userSpaceOnUse">
-            {/* Center 8-point star */}
-            <path
-              d="M40,24 L44,34 L54,34 L46,40 L49,50 L40,44 L31,50 L34,40 L26,34 L36,34 Z"
-              fill="none"
-              stroke="#EDEDF5"
-              strokeWidth="1.2"
-            />
-            {/* Connecting octagram lines */}
-            <path
-              d="M40,10 L50,10 L50,0 M40,70 L50,70 L50,80 M10,40 L10,50 L0,50 M70,40 L70,50 L80,50"
-              fill="none"
-              stroke="#EDEDF5"
-              strokeWidth="1"
-            />
-            {/* Outer geometry */}
-            <polygon
-              points="40,6 64,16 74,40 64,64 40,74 16,64 6,40 16,16"
-              fill="none"
-              stroke="#EDEDF5"
-              strokeWidth="0.8"
-            />
-            {/* Corner interlock stars */}
-            <path
-              d="M0,0 L8,8 M80,0 L72,8 M0,80 L8,72 M80,80 L72,72"
-              fill="none"
-              stroke="#EDEDF5"
-              strokeWidth="1"
-            />
+          <pattern id="islamic-star-pattern" width="140" height="140" patternUnits="userSpaceOnUse">
+            <g fill="none" stroke="var(--text-primary)" strokeWidth="1.2">
+              <rect x="35" y="35" width="70" height="70" />
+              <rect x="35" y="35" width="70" height="70" transform="rotate(45 70 70)" />
+            </g>
           </pattern>
         </defs>
         <rect width="100%" height="100%" fill="url(#islamic-star-pattern)" />
