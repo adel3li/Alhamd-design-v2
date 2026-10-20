@@ -14,6 +14,7 @@ import { AboutModal } from './components/screens/AboutModal';
 import { ContentReviewModal } from './components/screens/ContentReviewModal';
 import { PrivacyPolicyModal } from './components/screens/PrivacyPolicyModal';
 import { SpotlightTour } from './components/common/SpotlightTour';
+import { CompletionParticles } from './components/common/CompletionParticles';
 
 const MainAppContent: React.FC = () => {
   const {
@@ -49,6 +50,7 @@ const MainAppContent: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<TabId>('home');
   const [isReflecting, setIsReflecting] = useState(false);
+  const [showCelebrationParticles, setShowCelebrationParticles] = useState(false);
   const [isTasbihOpen, setIsTasbihOpen] = useState(false);
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isReviewOpen, setIsReviewOpen] = useState(false);
@@ -75,6 +77,10 @@ const MainAppContent: React.FC = () => {
       addJournalEntry(journalText);
     }
     setIsReflecting(false);
+    setShowCelebrationParticles(true);
+    setTimeout(() => {
+      setShowCelebrationParticles(false);
+    }, 3200);
   };
 
   const textScaleClass = textSize === 'large' 

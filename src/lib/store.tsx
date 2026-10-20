@@ -72,7 +72,9 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   });
 
   const [theme, setThemeState] = useState<ThemeMode>(() => {
-    return (localStorage.getItem('alhamd_theme') as ThemeMode) || 'dark';
+    localStorage.removeItem('alhamd_theme');
+    const saved = localStorage.getItem('alhamd_theme_v2') as ThemeMode | null;
+    return saved === 'light' || saved === 'dark' ? saved : 'dark';
   });
 
   const [textSize, setTextSizeState] = useState<TextSize>(() => {
@@ -178,7 +180,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       root.classList.remove('light', 'theme-light');
       root.classList.add('dark', 'theme-dark');
     }
-    localStorage.setItem('alhamd_theme', theme);
+    localStorage.setItem('alhamd_theme_v2', theme);
   }, [theme]);
 
   // Synchronize numeric Font Size & legacy Text Size class

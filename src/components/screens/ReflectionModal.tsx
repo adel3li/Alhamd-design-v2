@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Blessing, IstisharStep } from '../../types';
 import { ThreadProgress } from '../common/ThreadProgress';
 import { StarLattice } from '../common/StarLattice';
+import { CompletionParticles } from '../common/CompletionParticles';
 import { toArabicNumerals } from '../../lib/arabic';
 
 interface ReflectionModalProps {
@@ -167,7 +168,7 @@ export const ReflectionModal: React.FC<ReflectionModalProps> = ({
 
     setTimeout(() => {
       onComplete(saveText && journalText.trim() ? journalText.trim() : undefined);
-    }, 1600);
+    }, 2200);
   };
 
   const handleDhikrTap = () => {
@@ -187,19 +188,51 @@ export const ReflectionModal: React.FC<ReflectionModalProps> = ({
   const circleCircumference = 2 * Math.PI * circleRadius;
   const strokeDashoffset = circleCircumference * (1 - timerProgress);
 
-  // 1.6s Completion Overlay
+  // Serene Completion Overlay with Gentle Floating Particles
   if (showAcceptedOverlay) {
     return (
-      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#111126] text-center p-6 animate-fade-in" dir="rtl">
-        <div className="w-20 h-20 rounded-full bg-[#6C63FF]/20 border border-[#6C63FF]/40 flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(108,99,255,0.4)] animate-scale-up">
-          <Check size={36} className="text-[#E4C368]" strokeWidth={2.5} />
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#111126] text-center p-6 animate-fade-in overflow-hidden" dir="rtl">
+        <StarLattice opacity={0.04} />
+        <CompletionParticles count={36} />
+
+        <div className="relative flex items-center justify-center mb-7">
+          {/* Calm expanding ripple rings */}
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0.6 }}
+            animate={{ scale: 2.1, opacity: 0 }}
+            transition={{ duration: 2.0, ease: 'easeOut', repeat: Infinity }}
+            className="absolute w-20 h-20 rounded-full border pointer-events-none"
+            style={{ borderColor: 'var(--accent-stroke)' }}
+          />
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0.4 }}
+            animate={{ scale: 1.65, opacity: 0 }}
+            transition={{ duration: 1.8, delay: 0.25, ease: 'easeOut', repeat: Infinity }}
+            className="absolute w-20 h-20 rounded-full border pointer-events-none"
+            style={{ borderColor: 'var(--cta-bg)' }}
+          />
+
+          <div className="relative z-10 w-20 h-20 rounded-full bg-[#6C63FF]/20 border border-[#6C63FF]/40 flex items-center justify-center shadow-[0_0_30px_rgba(108,99,255,0.4)] animate-scale-up">
+            <Check size={36} className="text-[#E4C368]" strokeWidth={2.5} />
+          </div>
         </div>
-        <h2 className="text-3xl font-serif font-bold text-[#EDEDF5] mb-2">
+
+        <motion.h2
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="relative z-10 text-3xl font-serif font-bold text-[#EDEDF5] mb-2"
+        >
           تقبل الله منكم
-        </h2>
-        <p className="text-sm text-[#AEAECB]">
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="relative z-10 text-sm text-[#AEAECB]"
+        >
           جعل الله هذا اليوم شاهدًا لك بالحمد والشكر.
-        </p>
+        </motion.p>
       </div>
     );
   }
