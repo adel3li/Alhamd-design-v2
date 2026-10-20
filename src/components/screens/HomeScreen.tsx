@@ -5,6 +5,7 @@ import { GlassCard } from '../common/GlassCard';
 import { getFormattedHijriDate } from '../../lib/hijri';
 import { toArabicNumerals } from '../../lib/arabic';
 import { ShareCardModal } from '../common/ShareCardModal';
+import { HisnCategoryId } from '../../data/hisnAlMuslim';
 
 interface HomeScreenProps {
   blessing: Blessing;
@@ -13,17 +14,17 @@ interface HomeScreenProps {
   tasbihCount: number;
   onStartReflection: () => void;
   onOpenTasbih: () => void;
+  onOpenHisn?: (category?: HisnCategoryId) => void;
 }
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({
   blessing,
   inspiration,
   isCompletedToday,
-  tasbihCount,
   onStartReflection,
-  onOpenTasbih
 }) => {
   const [showTadabbur, setShowTadabbur] = useState(false);
+  const [showInspiration, setShowInspiration] = useState(false);
   const [copiedBlessing, setCopiedBlessing] = useState(false);
   const [copiedInspiration, setCopiedInspiration] = useState(false);
   const [shareModalData, setShareModalData] = useState<{ open: boolean; type: 'ayah' | 'tadabbur' }>({
@@ -58,30 +59,51 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   return (
     <div className="w-full pb-28 pt-2 px-4 sm:px-6 max-w-lg md:max-w-2xl lg:max-w-3xl mx-auto space-y-6 animate-fade-in" dir="rtl">
       {/* 1. Header Greeting + Hijri Date */}
-      <div className="flex flex-col items-start px-1 space-y-1">
+      <div className="flex flex-col items-start space-y-1 px-1">
         <span className="text-sm font-medium text-[#AEAECB]">السلام عليكم</span>
         <h2 className="text-xl sm:text-2xl font-bold font-ibm text-[#EDEDF5]">
           {hijriToday}
         </h2>
       </div>
 
-      {/* 2. «حديث اليوم» / «آية اليوم» Card */}
+      {/* 2. «حديث اليوم» / «آية اليوم» Expandable Card */}
       <GlassCard
         id="card-daily-inspiration"
         className="relative overflow-hidden group hover:border-[#E4C368]/30 transition-all duration-300"
-        padding="p-6"
+        padding={showInspiration ? 'p-5 sm:p-6' : 'py-3.5 px-4 sm:px-5'}
       >
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#E4C368] shadow-[0_0_6px_rgba(228,195,104,0.8)]" />
-            <span className="text-xs sm:text-sm font-semibold text-[#E4C368]">
+        <div
+          onClick={() => setShowInspiration(!showInspiration)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setShowInspiration(!showInspiration);
+            }
+          }}
+          aria-expanded={showInspiration}
+          className="flex items-center justify-between gap-3 cursor-pointer select-none"
+        >
+          <div className="flex items-center gap-2.5 min-w-0 flex-1">
+            <span className="w-2 h-2 rounded-full bg-[#E4C368] shadow-[0_0_6px_rgba(228,195,104,0.8)] shrink-0" />
+            <span className="text-xs sm:text-sm font-semibold text-[#E4C368] shrink-0">
               {inspiration.type === 'hadith' ? 'حديث اليوم' : 'آية اليوم'}
             </span>
+            {!showInspiration && (
+              <span className="text-xs sm:text-sm text-[#AEAECB] truncate font-serif opacity-85">
+                — {inspiration.type === 'ayah' ? `﴿${inspiration.text}﴾` : `«${inspiration.text}»`}
+              </span>
+            )}
           </div>
 
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5 shrink-0">
             <button
-              onClick={handleCopyInspirationText}
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleCopyInspirationText();
+              }}
               className="w-8 h-8 rounded-full bg-[#15152A]/80 hover:bg-[#25232E] border border-[#2E2E4A] text-[#AEAECB] hover:text-[#EDEDF5] flex items-center justify-center transition-colors cursor-pointer"
               title="نسخ النص"
               aria-label="نسخ نص حديث اليوم"
@@ -89,26 +111,40 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
               {copiedInspiration ? <Check size={14} className="text-[#E4C368]" /> : <Copy size={14} />}
             </button>
             <button
-              onClick={() => setShareModalData({ open: true, type: 'ayah' })}
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShareModalData({ open: true, type: 'ayah' });
+              }}
               className="w-8 h-8 rounded-full bg-[#15152A]/80 hover:bg-[#25232E] border border-[#2E2E4A] text-[#AEAECB] hover:text-[#EDEDF5] flex items-center justify-center transition-colors cursor-pointer"
               title="مشاركة كبطاقة"
               aria-label="مشاركة حديث اليوم"
             >
               <Share2 size={15} />
             </button>
+            <span
+              className="w-8 h-8 rounded-full bg-[#15152A]/60 border border-[#2E2E4A] text-[#AEAECB] group-hover:text-[#E4C368] flex items-center justify-center transition-colors"
+              aria-hidden="true"
+            >
+              {showInspiration ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            </span>
           </div>
         </div>
 
-        {/* Text with tashkeel */}
-        <p className={`text-lg sm:text-xl md:text-2xl leading-[2.1] text-center px-2 font-medium ${inspiration.type === 'ayah' ? 'font-quran ayah-text text-[#E4C368]' : 'font-serif text-[#EDEDF5]'}`}>
-          {inspiration.type === 'ayah' ? `﴿${inspiration.text}﴾` : `«${inspiration.text}»`}
-        </p>
+        {/* Expanded Content */}
+        {showInspiration && (
+          <div className="mt-4 pt-3 border-t border-[#2E2E4A]/60 animate-fade-in">
+            <p className={`text-lg sm:text-xl md:text-2xl leading-[2.1] text-center px-2 font-medium ${inspiration.type === 'ayah' ? 'font-quran ayah-text text-[#E4C368]' : 'font-serif text-[#EDEDF5]'}`}>
+              {inspiration.type === 'ayah' ? `﴿${inspiration.text}﴾` : `«${inspiration.text}»`}
+            </p>
 
-        <div className="mt-4 text-center">
-          <span className="text-xs text-[#AEAECB] font-medium tracking-wide">
-            {inspiration.source}
-          </span>
-        </div>
+            <div className="mt-3 text-center">
+              <span className="text-xs text-[#AEAECB] font-medium tracking-wide">
+                {inspiration.source}
+              </span>
+            </div>
+          </div>
+        )}
       </GlassCard>
 
       {/* 3. Divider with "نعمة اليوم" Badge */}

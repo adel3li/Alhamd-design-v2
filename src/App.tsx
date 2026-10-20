@@ -9,7 +9,8 @@ import { ConsistencyScreen } from './components/screens/ConsistencyScreen';
 import { SettingsScreen } from './components/screens/SettingsScreen';
 import { OnboardingScreen } from './components/screens/OnboardingScreen';
 import { ReflectionModal } from './components/screens/ReflectionModal';
-import { TasbihModal } from './components/screens/TasbihModal';
+import { TasbihModal, TasbihSubView } from './components/screens/TasbihModal';
+import { HisnCategoryId } from './data/hisnAlMuslim';
 import { AboutModal } from './components/screens/AboutModal';
 import { ContentReviewModal } from './components/screens/ContentReviewModal';
 import { PrivacyPolicyModal } from './components/screens/PrivacyPolicyModal';
@@ -49,6 +50,8 @@ const MainAppContent: React.FC = () => {
   } = useStore();
 
   const [activeTab, setActiveTab] = useState<TabId>('home');
+  const [tasbihSubView, setTasbihSubView] = useState<TasbihSubView>('counter');
+  const [hisnCategory, setHisnCategory] = useState<HisnCategoryId | undefined>(undefined);
   const [isReflecting, setIsReflecting] = useState(false);
   const [showCelebrationParticles, setShowCelebrationParticles] = useState(false);
   const [isTasbihOpen, setIsTasbihOpen] = useState(false);
@@ -95,11 +98,18 @@ const MainAppContent: React.FC = () => {
 
   return (
     <div className={`min-h-screen ${themeClass} ${textScaleClass} font-sans flex flex-col selection:bg-[#C8A951]/30 transition-colors duration-200`} dir="rtl">
+      {showCelebrationParticles && <CompletionParticles />}
+
       {/* Desktop Header Navigation (≥900px) */}
       <div className="hidden md:block">
         <DesktopNavBar
           activeTab={activeTab}
-          onChangeTab={setActiveTab}
+          onChangeTab={(tab) => {
+            if (tab === 'tasbih') {
+              setTasbihSubView('counter');
+            }
+            setActiveTab(tab);
+          }}
           onOpenAbout={() => setIsAboutOpen(true)}
         />
       </div>
@@ -122,7 +132,15 @@ const MainAppContent: React.FC = () => {
             isCompletedToday={isCompletedToday}
             tasbihCount={tasbihCount}
             onStartReflection={() => setIsReflecting(true)}
-            onOpenTasbih={() => setActiveTab('tasbih')}
+            onOpenTasbih={() => {
+              setTasbihSubView('counter');
+              setActiveTab('tasbih');
+            }}
+            onOpenHisn={(category) => {
+              setHisnCategory(category);
+              setTasbihSubView('hisn');
+              setActiveTab('tasbih');
+            }}
           />
         )}
 
@@ -154,6 +172,8 @@ const MainAppContent: React.FC = () => {
             onIncrementTasbih={incrementTasbih}
             onResetTasbih={resetTasbih}
             triggerHaptic={triggerHaptic}
+            initialSubView={tasbihSubView}
+            initialHisnCategory={hisnCategory}
           />
         )}
 
@@ -166,7 +186,12 @@ const MainAppContent: React.FC = () => {
       <div className="block md:hidden">
         <BottomTabBar
           activeTab={activeTab}
-          onChangeTab={setActiveTab}
+          onChangeTab={(tab) => {
+            if (tab === 'tasbih') {
+              setTasbihSubView('counter');
+            }
+            setActiveTab(tab);
+          }}
         />
       </div>
 

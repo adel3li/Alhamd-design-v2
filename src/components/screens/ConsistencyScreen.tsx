@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { ChevronRight, ChevronLeft, Bell, Sparkles, Flame, TrendingUp } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Bell, Sparkles, Flame, TrendingUp, CalendarDays, CheckCircle2, RotateCcw } from 'lucide-react';
 import {
   ResponsiveContainer,
   AreaChart,
@@ -10,7 +10,7 @@ import {
   CartesianGrid
 } from 'recharts';
 import { GlassCard } from '../common/GlassCard';
-import { generateMonthCalendar } from '../../lib/hijri';
+import { generateMonthCalendar, HijriCalendarDay } from '../../lib/hijri';
 import { toArabicNumerals, formatArabicTime } from '../../lib/arabic';
 
 interface ConsistencyScreenProps {
@@ -31,6 +31,7 @@ export const ConsistencyScreen: React.FC<ConsistencyScreenProps> = ({
   onChangeNotificationTime
 }) => {
   const [monthOffset, setMonthOffset] = useState(0);
+  const [selectedDay, setSelectedDay] = useState<HijriCalendarDay | null>(null);
   const [isTimePickerOpen, setIsTimePickerOpen] = useState(false);
 
   // Generate calendar days for the current offset
@@ -42,6 +43,11 @@ export const ConsistencyScreen: React.FC<ConsistencyScreenProps> = ({
   const completedInThisMonthCount = useMemo(() => {
     return calendarData.days.filter(d => completedDays.includes(d.isoDate)).length;
   }, [calendarData.days, completedDays]);
+
+  const monthCompletionPercentage = useMemo(() => {
+    const total = calendarData.days.length || 30;
+    return Math.min(100, Math.round((completedInThisMonthCount / total) * 100));
+  }, [completedInThisMonthCount, calendarData.days.length]);
 
   // Compute total blessings reflected upon, consecutive days streak, and 7-day Recharts data
   const reflectionStats = useMemo(() => {
@@ -98,6 +104,14 @@ export const ConsistencyScreen: React.FC<ConsistencyScreenProps> = ({
 
   // Weekday letters from Saturday to Friday: س ح ن ث ر خ ج (as in ref-04-calendar.png)
   const weekdayLetters = ['س', 'ح', 'ن', 'ث', 'ر', 'خ', 'ج'];
+  const weekdayFullNames = ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
+
+  const activeDayToReview = useMemo(() => {
+    if (selectedDay && calendarData.days.some(d => d.isoDate === selectedDay.isoDate)) {
+      return selectedDay;
+    }
+    return calendarData.days.find(d => d.isToday) || calendarData.days[0] || null;
+  }, [selectedDay, calendarData.days]);
 
   return (
     <div className="w-full pb-28 pt-4 px-4 sm:px-6 max-w-lg md:max-w-2xl lg:max-w-3xl mx-auto space-y-6 animate-fade-in" dir="rtl">
@@ -256,33 +270,73 @@ export const ConsistencyScreen: React.FC<ConsistencyScreenProps> = ({
         </div>
       </GlassCard>
 
-      {/* Calendar Card (Matches ref-04-calendar.png) */}
-      <GlassCard padding="p-6" className="space-y-6">
-        {/* Month Navigation: ‹ ذو الحجة ١٤٤٧ › */}
-        <div className="flex items-center justify-between px-2">
+      {/* Hijri Calendar Card for Monthly Reflection Achievement Review */}
+      <GlassCard padding="p-5 sm:p-6" className="space-y-5">
+        {/* Card Section Header */}
+        <div className="flex items-center justify-between border-b border-[#2E2E4A]/70 pb-3.5">
+          <div className="flex items-center gap-2">
+            <CalendarDays size={18} className="text-[#C8A951]" />
+            <div>
+              <h2 className="text-sm sm:text-base font-bold text-[#EDEDF5]">
+                التقويم الهجري للتدبر
+              </h2>
+              <p className="text-[11px] text-[#AEAECB]">
+                مراجعة الإنجاز الشهري وأيام التدبر المميزة
+              </p>
+            </div>
+          </div>
+
+          {monthOffset !== 0 && (
+            <button
+              type="button"
+              onClick={() => {
+                setMonthOffset(0);
+                setSelectedDay(null);
+              }}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-[#15152A]/90 hover:bg-[#25232E] border border-[#2E2E4A] text-[#E4C368] transition-colors cursor-pointer"
+              title="العودة للشهر الحالي"
+            >
+              <RotateCcw size={13} />
+              <span>الشهر الحالي</span>
+            </button>
+          )}
+        </div>
+
+        {/* Month Navigation: ‹ الشهر الهجري ١٤٤٨ هـ › */}
+        <div className="flex items-center justify-between px-1">
           <button
-            onClick={() => setMonthOffset(m => m + 1)}
-            className="w-9 h-9 rounded-full bg-[#15152A]/80 hover:bg-[#25232E] border border-[#2E2E4A] flex items-center justify-center text-[#EDEDF5] transition-colors"
-            aria-label="الشهر القادم"
+            type="button"
+            onClick={() => {
+              setMonthOffset(m => m - 1);
+              setSelectedDay(null);
+            }}
+            className="w-9 h-9 rounded-full bg-[#15152A]/80 hover:bg-[#25232E] border border-[#2E2E4A] flex items-center justify-center text-[#EDEDF5] transition-colors cursor-pointer"
+            aria-label="الشهر الهجري السابق"
           >
             <ChevronRight size={18} />
           </button>
 
-          <span className="font-serif font-bold text-lg sm:text-xl text-[#C8A951]">
-            {calendarData.monthTitle}
-          </span>
+          <div className="text-center">
+            <span className="font-serif font-bold text-lg sm:text-xl text-[#C8A951] block">
+              {calendarData.monthTitle}
+            </span>
+          </div>
 
           <button
-            onClick={() => setMonthOffset(m => m - 1)}
-            className="w-9 h-9 rounded-full bg-[#15152A]/80 hover:bg-[#25232E] border border-[#2E2E4A] flex items-center justify-center text-[#EDEDF5] transition-colors"
-            aria-label="الشهر السابق"
+            type="button"
+            onClick={() => {
+              setMonthOffset(m => m + 1);
+              setSelectedDay(null);
+            }}
+            className="w-9 h-9 rounded-full bg-[#15152A]/80 hover:bg-[#25232E] border border-[#2E2E4A] flex items-center justify-center text-[#EDEDF5] transition-colors cursor-pointer"
+            aria-label="الشهر الهجري القادم"
           >
             <ChevronLeft size={18} />
           </button>
         </div>
 
         {/* Weekday Headers: س ح ن ث ر خ ج */}
-        <div className="grid grid-cols-7 gap-1 text-center border-b border-[#2E2E4A]/80 pb-3">
+        <div className="grid grid-cols-7 gap-1 text-center border-b border-[#2E2E4A]/80 pb-2.5">
           {weekdayLetters.map((letter, idx) => (
             <span key={idx} className="text-xs font-semibold text-[#AEAECB]">
               {letter}
@@ -290,51 +344,121 @@ export const ConsistencyScreen: React.FC<ConsistencyScreenProps> = ({
           ))}
         </div>
 
-        {/* Days Grid */}
-        <div className="grid grid-cols-7 gap-y-3 gap-x-1 text-center items-center">
+        {/* Days Grid with Distinctive Reflection Dots */}
+        <div className="grid grid-cols-7 gap-y-2.5 gap-x-1 text-center items-center">
           {/* Padding empty slots */}
           {Array.from({ length: calendarData.startPadding }).map((_, i) => (
-            <div key={`pad-${i}`} className="h-10 w-full" />
+            <div key={`pad-${i}`} className="h-12 w-full" />
           ))}
 
           {/* Calendar day cells */}
           {calendarData.days.map((day) => {
             const isCompleted = completedDays.includes(day.isoDate);
+            const isSelected = activeDayToReview?.isoDate === day.isoDate;
 
             return (
-              <div
+              <button
                 key={day.dayNumber}
-                className="flex flex-col items-center justify-center h-11 w-full relative"
+                type="button"
+                onClick={() => setSelectedDay(day)}
+                className={`flex flex-col items-center justify-center h-12 w-full rounded-xl relative transition-all cursor-pointer select-none ${
+                  isSelected
+                    ? 'bg-[#252547]/90 ring-1 ring-[#C8A951]/60'
+                    : 'hover:bg-[#15152A]/60'
+                }`}
+                aria-label={`${day.hijriFullLabel} - ${isCompleted ? 'تم التدبر' : 'لم يتم التدبر'}`}
               >
-                {/* Number with today ring if today */}
+                {/* Day Number Circle */}
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-all ${
                     day.isToday
-                      ? 'border-2 border-[#6C63FF] bg-[#6C63FF]/15 text-[#EDEDF5] font-bold'
+                      ? 'border-2 border-[#6C63FF] bg-[#6C63FF]/20 text-[#EDEDF5] font-bold'
+                      : isCompleted
+                      ? 'bg-[#C8A951]/15 border border-[#C8A951]/40 text-[#E4C368] font-bold'
+                      : day.isFuture
+                      ? 'text-[#AEAECB]/45'
                       : 'text-[#EDEDF5]'
                   }`}
                 >
                   {day.arabicNumber}
                 </div>
 
-                {/* Gold dot underneath if completed */}
-                {isCompleted && (
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#E4C368] shadow-[0_0_6px_rgba(228,195,104,0.9)] mt-0.5" />
-                )}
-              </div>
+                {/* Distinctive Gold Indicator Dot Underneath Completed Reflection Days */}
+                <div className="h-2.5 flex items-center justify-center mt-0.5">
+                  {isCompleted ? (
+                    <span className="w-2 h-2 rounded-full bg-[#E4C368] shadow-[0_0_8px_rgba(228,195,104,0.95)] ring-2 ring-[#E4C368]/25 transition-transform scale-100" />
+                  ) : day.isToday ? (
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#6C63FF]/80" />
+                  ) : null}
+                </div>
+              </button>
             );
           })}
         </div>
 
-        {/* Summary Line under grid: «أتممتَ N يومًا من <الشهر>» */}
-        <div className="border-t border-[#2E2E4A]/80 pt-4 text-center">
-          <p className="text-xs sm:text-sm text-[#AEAECB]">
-            أتممتَ{' '}
-            <span className="font-bold text-[#E4C368]">
-              {toArabicNumerals(completedInThisMonthCount)}
-            </span>{' '}
-            يومًا من {calendarData.monthTitle}
-          </p>
+        {/* Legend for Calendar Indicators */}
+        <div className="flex flex-wrap items-center justify-center gap-4 pt-1 text-[11px] text-[#AEAECB]">
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#E4C368] shadow-[0_0_6px_rgba(228,195,104,0.9)] inline-block" />
+            <span>يوم تم فيه التدبر</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full border-2 border-[#6C63FF] bg-[#6C63FF]/20 inline-block" />
+            <span>اليوم الحالي</span>
+          </div>
+        </div>
+
+        {/* Selected Day Details & Monthly Progress Review Box */}
+        <div
+          className="rounded-2xl p-4 border space-y-3"
+          style={{
+            backgroundColor: 'var(--bg-sunken)',
+            borderColor: 'var(--border-hairline)',
+          }}
+        >
+          {/* Selected Day Status */}
+          {activeDayToReview && (
+            <div className="flex items-center justify-between border-b pb-3" style={{ borderColor: 'var(--border-hairline)' }}>
+              <div className="text-right">
+                <div className="text-xs sm:text-sm font-bold text-[#EDEDF5]">
+                  {weekdayFullNames[activeDayToReview.weekdayIndex]}، {activeDayToReview.hijriFullLabel}
+                </div>
+                <div className="text-[11px] text-[#AEAECB]">
+                  الموافق {activeDayToReview.gregorianLabel}
+                </div>
+              </div>
+
+              {completedDays.includes(activeDayToReview.isoDate) ? (
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#C8A951]/15 border border-[#C8A951]/35 text-[#E4C368] text-xs font-bold">
+                  <CheckCircle2 size={14} />
+                  <span>تم التدبر</span>
+                </div>
+              ) : (
+                <div className="px-2.5 py-1 rounded-lg bg-[#15152A]/80 border border-[#2E2E4A] text-[#AEAECB] text-xs">
+                  {activeDayToReview.isFuture ? 'يوم قادم' : 'لم يُسجَّل تدبر'}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Monthly Achievement Progress Bar & Summary */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-xs sm:text-sm">
+              <span className="text-[#AEAECB]">
+                إنجاز شهر <span className="text-[#EDEDF5] font-semibold">{calendarData.monthName}</span>:
+              </span>
+              <span className="font-bold text-[#E4C368]">
+                {toArabicNumerals(completedInThisMonthCount)} من {toArabicNumerals(calendarData.days.length)} يومًا ({toArabicNumerals(monthCompletionPercentage)}٪)
+              </span>
+            </div>
+
+            <div className="w-full h-2 rounded-full bg-[#15152A] overflow-hidden border border-[#2E2E4A]/70">
+              <div
+                className="h-full rounded-full bg-gradient-to-l from-[#E4C368] to-[#C8A951] transition-all duration-500"
+                style={{ width: `${monthCompletionPercentage}%` }}
+              />
+            </div>
+          </div>
         </div>
       </GlassCard>
 

@@ -1,16 +1,23 @@
-import React, { useState } from 'react';
-import { X, RotateCcw, Sparkles } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, RotateCcw, Sparkles, Shield } from 'lucide-react';
 import { GlassCard } from '../common/GlassCard';
 import { toArabicNumerals } from '../../lib/arabic';
 import { dailyDhikrs } from '../../data/dhikr';
+import { HisnScreen } from './HisnScreen';
+import { HisnCategoryId } from '../../data/hisnAlMuslim';
+import { TasbihIcon } from '../layout/BottomTabBar';
+
+export type TasbihSubView = 'counter' | 'hisn';
 
 interface TasbihModalProps {
   onClose?: () => void;
   tasbihCount: number;
   onIncrementTasbih: () => void;
   onResetTasbih: () => void;
-  triggerHaptic: (type?: 'light' | 'medium' | 'heavy') => void;
+  triggerHaptic: (type?: 'light' | 'medium' | 'heavy' | 'success') => void;
   inline?: boolean;
+  initialSubView?: TasbihSubView;
+  initialHisnCategory?: HisnCategoryId;
 }
 
 const DHIKR_PRESETS = [
@@ -29,10 +36,17 @@ export const TasbihModal: React.FC<TasbihModalProps> = ({
   onIncrementTasbih,
   onResetTasbih,
   triggerHaptic,
-  inline = false
+  inline = false,
+  initialSubView = 'counter',
+  initialHisnCategory
 }) => {
   const [sessionCount, setSessionCount] = useState(0);
   const [selectedDhikr, setSelectedDhikr] = useState(DHIKR_PRESETS[0]);
+  const [subView, setSubView] = useState<TasbihSubView>(initialSubView);
+
+  useEffect(() => {
+    setSubView(initialSubView);
+  }, [initialSubView, initialHisnCategory]);
 
   // Today's dhikr card with virtue
   const todayDhikr = dailyDhikrs[0];
@@ -55,46 +69,8 @@ export const TasbihModal: React.FC<TasbihModalProps> = ({
     triggerHaptic('medium');
   };
 
-  const innerContent = (
-    <>
-      {/* Top Header */}
-      <div className="w-full flex items-center justify-between pb-4 border-b border-[#2E2E4A]/80">
-        {inline ? (
-          <div className="text-right space-y-0.5">
-            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#EDEDF5]">
-              المسبحة
-            </h1>
-            <p className="text-xs sm:text-sm text-[#AEAECB]">
-              أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ
-            </p>
-          </div>
-        ) : (
-          <>
-            <button
-              onClick={onClose}
-              className="w-9 h-9 rounded-full bg-[#1E1E38] text-[#AEAECB] hover:text-white flex items-center justify-center transition-colors cursor-pointer"
-              aria-label="إغلاق"
-            >
-              <X size={18} />
-            </button>
-
-            <h2 className="text-base sm:text-lg font-serif font-bold text-[#EDEDF5]">
-              المسبحة
-            </h2>
-          </>
-        )}
-
-        <button
-          onClick={handleResetSession}
-          className="h-9 px-3 rounded-full bg-[#1E1E38] border border-[#2E2E4A] text-[#AEAECB] hover:text-[#EDEDF5] flex items-center gap-1.5 text-xs font-medium transition-colors cursor-pointer"
-          title="تصفير الجلسة"
-          aria-label="تصفير الجلسة"
-        >
-          <RotateCcw size={15} />
-          {inline && <span>تصفير الجلسة</span>}
-        </button>
-      </div>
-
+  const tasbihCounterSection = (
+    <div className="w-full flex flex-col items-center">
       {/* Dhikr selection chips */}
       <div className="w-full py-4 overflow-x-auto no-scrollbar flex items-center gap-2">
         {DHIKR_PRESETS.map((d) => (
@@ -207,6 +183,106 @@ export const TasbihModal: React.FC<TasbihModalProps> = ({
           </GlassCard>
         )}
       </div>
+    </div>
+  );
+
+  const innerContent = (
+    <>
+      {/* Top Header */}
+      <div className="w-full flex items-center justify-between pb-4 border-b border-[#2E2E4A]/80">
+        {inline ? (
+          <div className="text-right space-y-0.5">
+            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#EDEDF5]">
+              المسبحة وحصن المسلم
+            </h1>
+            <p className="text-xs sm:text-sm text-[#AEAECB]">
+              أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ
+            </p>
+          </div>
+        ) : (
+          <>
+            <button
+              onClick={onClose}
+              className="w-9 h-9 rounded-full bg-[#1E1E38] text-[#AEAECB] hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+              aria-label="إغلاق"
+            >
+              <X size={18} />
+            </button>
+
+            <h2 className="text-base sm:text-lg font-serif font-bold text-[#EDEDF5]">
+              المسبحة
+            </h2>
+          </>
+        )}
+
+        {subView === 'counter' && (
+          <button
+            onClick={handleResetSession}
+            className="h-9 px-3 rounded-full bg-[#1E1E38] border border-[#2E2E4A] text-[#AEAECB] hover:text-[#EDEDF5] flex items-center gap-1.5 text-xs font-medium transition-colors cursor-pointer"
+            title="تصفير الجلسة"
+            aria-label="تصفير الجلسة"
+          >
+            <RotateCcw size={15} />
+            {inline && <span>تصفير الجلسة</span>}
+          </button>
+        )}
+      </div>
+
+      {/* Sub-Navigation Switcher inside المسبحة (المسبحة / حصن المسلم) */}
+      {inline && (
+        <div
+          className="w-full grid grid-cols-2 gap-2 p-1.5 mt-4 mb-2 rounded-2xl border"
+          style={{
+            backgroundColor: 'var(--bg-sunken)',
+            borderColor: 'var(--border-hairline)'
+          }}
+        >
+          <button
+            type="button"
+            onClick={() => {
+              triggerHaptic('light');
+              setSubView('counter');
+            }}
+            className={`py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+              subView === 'counter'
+                ? 'bg-[#E4C368] text-[#15152A] shadow-sm'
+                : 'text-[#AEAECB] hover:text-[#EDEDF5]'
+            }`}
+          >
+            <TasbihIcon size={17} strokeWidth={subView === 'counter' ? 2.2 : 1.7} />
+            <span>عداد التسبيح</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              triggerHaptic('light');
+              setSubView('hisn');
+            }}
+            className={`py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
+              subView === 'hisn'
+                ? 'bg-[#E4C368] text-[#15152A] shadow-sm'
+                : 'text-[#AEAECB] hover:text-[#EDEDF5]'
+            }`}
+          >
+            <Shield size={16} strokeWidth={subView === 'hisn' ? 2.2 : 1.8} />
+            <span>حصن المسلم</span>
+          </button>
+        </div>
+      )}
+
+      {/* Render Selected Sub-View */}
+      {!inline || subView === 'counter' ? (
+        tasbihCounterSection
+      ) : (
+        <div className="w-full pt-3">
+          <HisnScreen
+            embedded={true}
+            triggerHaptic={triggerHaptic}
+            initialCategory={initialHisnCategory}
+          />
+        </div>
+      )}
     </>
   );
 
@@ -226,3 +302,4 @@ export const TasbihModal: React.FC<TasbihModalProps> = ({
     </div>
   );
 };
+

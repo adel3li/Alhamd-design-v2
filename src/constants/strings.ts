@@ -11,6 +11,7 @@ export const APP_STRINGS = {
     journal: 'سجل الحمد',
     consistency: 'المداومة',
     tasbih: 'المسبحة',
+    hisn: 'حصن المسلم',
     settings: 'الإعدادات'
   },
 
