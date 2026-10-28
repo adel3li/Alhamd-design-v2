@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { X, Check, Timer, Play, Pause, RotateCcw, Sparkles } from 'lucide-react';
+import { X, Check, Timer, Play, Pause, RotateCcw, Sparkles, Share2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Blessing, IstisharStep } from '../../types';
 import { ThreadProgress } from '../common/ThreadProgress';
 import { StarLattice } from '../common/StarLattice';
 import { CompletionParticles } from '../common/CompletionParticles';
+import { ShareCardModal } from '../common/ShareCardModal';
 import { toArabicNumerals } from '../../lib/arabic';
 
 interface ReflectionModalProps {
@@ -40,6 +41,7 @@ export const ReflectionModal: React.FC<ReflectionModalProps> = ({
   const [timerRemaining, setTimerRemaining] = useState<number>(60);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [timerCompleted, setTimerCompleted] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
 
   const steps = blessing.istisharSteps || [];
   const currentStep: IstisharStep | undefined = steps[currentStepIdx];
@@ -269,32 +271,49 @@ export const ReflectionModal: React.FC<ReflectionModalProps> = ({
             </span>
           )}
 
-          {/* Optional Relaxation Timer Toggle Button */}
-          <button
-            onClick={() => {
-              triggerHaptic('light');
-              setShowTimerPanel(prev => !prev);
-            }}
-            className={`h-10 px-3 rounded-full flex items-center gap-1.5 text-xs font-medium transition-all border ${
-              showTimerPanel || isTimerRunning
-                ? 'bg-[#C8A951]/15 border-[#C8A951]/50 text-[#E4C368] shadow-[0_0_15px_rgba(200,169,81,0.2)]'
-                : 'bg-white/5 hover:bg-white/10 border-white/10 text-[#AEAECB] hover:text-white'
-            }`}
-            aria-label="مؤقت خلوة التدبر الاختياري"
-            title="مؤقت الاسترخاء والتدبر"
-          >
-            <Timer size={16} className={isTimerRunning ? 'animate-pulse text-[#E4C368]' : ''} />
-            <span className="hidden xs:inline">
-              {isTimerRunning || timerRemaining < timerDuration
-                ? formatArabicTime(timerRemaining)
-                : 'مؤقت التدبر'}
-            </span>
-            {(isTimerRunning || timerRemaining < timerDuration) && (
-              <span className="xs:hidden font-mono font-bold">
-                {formatArabicTime(timerRemaining)}
+          {/* Share & Optional Relaxation Timer Buttons */}
+          <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => {
+                triggerHaptic('light');
+                setShowShareModal(true);
+              }}
+              className="h-10 px-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#C8A951]/50 text-[#E4C368] flex items-center gap-1.5 text-xs font-semibold transition-all cursor-pointer"
+              aria-label="مشاركة النعمة"
+              title="مشاركة نص النعمة أو إنشاء صورة مخصصة"
+            >
+              <Share2 size={15} />
+              <span>مشاركة</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                triggerHaptic('light');
+                setShowTimerPanel(prev => !prev);
+              }}
+              className={`h-10 px-3 rounded-full flex items-center gap-1.5 text-xs font-medium transition-all border cursor-pointer ${
+                showTimerPanel || isTimerRunning
+                  ? 'bg-[#C8A951]/15 border-[#C8A951]/50 text-[#E4C368] shadow-[0_0_15px_rgba(200,169,81,0.2)]'
+                  : 'bg-white/5 hover:bg-white/10 border-white/10 text-[#AEAECB] hover:text-white'
+              }`}
+              aria-label="مؤقت خلوة التدبر الاختياري"
+              title="مؤقت الاسترخاء والتدبر"
+            >
+              <Timer size={16} className={isTimerRunning ? 'animate-pulse text-[#E4C368]' : ''} />
+              <span className="hidden sm:inline">
+                {isTimerRunning || timerRemaining < timerDuration
+                  ? formatArabicTime(timerRemaining)
+                  : 'مؤقت التدبر'}
               </span>
-            )}
-          </button>
+              {(isTimerRunning || timerRemaining < timerDuration) && (
+                <span className="sm:hidden font-mono font-bold">
+                  {formatArabicTime(timerRemaining)}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Collapsible Relaxation & Tadabbur Timer Panel */}
@@ -565,6 +584,15 @@ export const ReflectionModal: React.FC<ReflectionModalProps> = ({
           </div>
         )}
       </div>
+
+      {/* Share Blessing Modal */}
+      {showShareModal && (
+        <ShareCardModal
+          blessing={blessing}
+          type="tadabbur"
+          onClose={() => setShowShareModal(false)}
+        />
+      )}
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { TopBar } from './components/layout/TopBar';
 import { BottomTabBar, TabId } from './components/layout/BottomTabBar';
 import { DesktopNavBar } from './components/layout/DesktopNavBar';
 import { HomeScreen } from './components/screens/HomeScreen';
+import { JourneyPathScreen } from './components/journey/JourneyPathScreen';
 import { JournalScreen } from './components/screens/JournalScreen';
 import { ConsistencyScreen } from './components/screens/ConsistencyScreen';
 import { SettingsScreen } from './components/screens/SettingsScreen';
@@ -16,6 +17,8 @@ import { ContentReviewModal } from './components/screens/ContentReviewModal';
 import { PrivacyPolicyModal } from './components/screens/PrivacyPolicyModal';
 import { SpotlightTour } from './components/common/SpotlightTour';
 import { CompletionParticles } from './components/common/CompletionParticles';
+import { getDeveloperPremiumSync } from './lib/entitlements';
+import { PremiumPaywallScreen } from './components/screens/PremiumPaywallScreen';
 
 const MainAppContent: React.FC = () => {
   const {
@@ -58,6 +61,18 @@ const MainAppContent: React.FC = () => {
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const [isReviewOpen, setIsReviewOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
+  const [showJourneyPaywall, setShowJourneyPaywall] = useState(false);
+
+  const handleTabChange = (tab: TabId) => {
+    if (tab === 'journey' && !getDeveloperPremiumSync()) {
+      setShowJourneyPaywall(true);
+      return;
+    }
+    if (tab === 'tasbih') {
+      setTasbihSubView('counter');
+    }
+    setActiveTab(tab);
+  };
 
   // If user hasn't completed onboarding yet, render full Onboarding screen
   if (!onboardingCompleted) {
@@ -104,12 +119,7 @@ const MainAppContent: React.FC = () => {
       <div className="hidden md:block">
         <DesktopNavBar
           activeTab={activeTab}
-          onChangeTab={(tab) => {
-            if (tab === 'tasbih') {
-              setTasbihSubView('counter');
-            }
-            setActiveTab(tab);
-          }}
+          onChangeTab={handleTabChange}
           onOpenAbout={() => setIsAboutOpen(true)}
         />
       </div>
@@ -142,6 +152,10 @@ const MainAppContent: React.FC = () => {
               setActiveTab('tasbih');
             }}
           />
+        )}
+
+        {activeTab === 'journey' && (
+          <JourneyPathScreen />
         )}
 
         {activeTab === 'journal' && (
@@ -186,14 +200,21 @@ const MainAppContent: React.FC = () => {
       <div className="block md:hidden">
         <BottomTabBar
           activeTab={activeTab}
-          onChangeTab={(tab) => {
-            if (tab === 'tasbih') {
-              setTasbihSubView('counter');
-            }
-            setActiveTab(tab);
-          }}
+          onChangeTab={handleTabChange}
         />
       </div>
+
+      {/* Paywall Modal when clicking رحلتي without Developer Mode enabled */}
+      {showJourneyPaywall && (
+        <PremiumPaywallScreen
+          triggerReason="preview"
+          onClose={() => setShowJourneyPaywall(false)}
+          onUnlocked={() => {
+            setShowJourneyPaywall(false);
+            setActiveTab('journey');
+          }}
+        />
+      )}
 
       {/* 5-Step Reflection Modal */}
       {isReflecting && (

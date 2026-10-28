@@ -1,8 +1,8 @@
 import React from 'react';
-import { Home, BookOpen, Calendar } from 'lucide-react';
+import { Home, Compass, BookOpen, Calendar } from 'lucide-react';
 import { APP_STRINGS } from '../../constants/strings';
 
-export type TabId = 'home' | 'journal' | 'consistency' | 'tasbih' | 'settings';
+export type TabId = 'home' | 'journey' | 'journal' | 'consistency' | 'tasbih' | 'settings';
 
 export const TasbihIcon: React.FC<{ size?: number; strokeWidth?: number; className?: string }> = ({
   size = 22,
@@ -48,6 +48,7 @@ export const BottomTabBar: React.FC<BottomTabBarProps> = ({
 }) => {
   const tabs = [
     { id: 'home' as TabId, label: APP_STRINGS.tabs.home, icon: Home },
+    { id: 'journey' as TabId, label: APP_STRINGS.tabs.journey, icon: Compass },
     { id: 'journal' as TabId, label: APP_STRINGS.tabs.journal, icon: BookOpen },
     { id: 'consistency' as TabId, label: APP_STRINGS.tabs.consistency, icon: Calendar },
     { id: 'tasbih' as TabId, label: APP_STRINGS.tabs.tasbih, icon: TasbihIcon }

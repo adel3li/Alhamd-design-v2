@@ -276,3 +276,273 @@ html {
   animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* ==========================================================================
+   High Contrast Text Clarity Mode (وضع التباين العالي والإضاءة الساطعة)
+   ========================================================================== */
+
+/* High Contrast in Dark Mode (Layl) */
+html.high-contrast:not(.theme-light) {
+  --bg-ground: #0B0B18;
+  --bg-deep: #070712;
+  --bg-deepest: #04040B;
+  --bg-glass: #14142B;
+  --bg-raised: #1C1C38;
+  --bg-sunken: #0E0E20;
+  --border-hairline: #525282;
+  --text-primary: #FFFFFF;
+  --text-secondary: #F2F2FC;
+  --text-muted: #DADAEE;
+  --accent-text: #FFE484;
+  --accent-stroke: #F0CA50;
+  --ayah-color: #FFE484;
+}
+
+html.high-contrast:not(.theme-light) .text-\[\#EDEDF5\] {
+  color: #FFFFFF !important;
+}
+html.high-contrast:not(.theme-light) .text-\[\#C7C4D8\] {
+  color: #F2F2FC !important;
+}
+html.high-contrast:not(.theme-light) .text-\[\#AEAECB\],
+html.high-contrast:not(.theme-light) .text-\[\#AEAECB\]\/80,
+html.high-contrast:not(.theme-light) .text-\[\#AEAECB\]\/70,
+html.high-contrast:not(.theme-light) .text-\[\#AEAECB\]\/65,
+html.high-contrast:not(.theme-light) .text-\[\#AEAECB\]\/60 {
+  color: #DADAEE !important;
+}
+html.high-contrast:not(.theme-light) .text-\[\#E4C368\],
+html.high-contrast:not(.theme-light) .text-\[\#C8A951\] {
+  color: #FFE484 !important;
+}
+html.high-contrast:not(.theme-light) .border-\[\#2E2E4A\],
+html.high-contrast:not(.theme-light) .border-\[\#2E2E4A\]\/80,
+html.high-contrast:not(.theme-light) .border-\[\#2E2E4A\]\/70 {
+  border-color: #525282 !important;
+}
+
+/* High Contrast in Light Mode / Bright Daylight (Nahar) */
+html.theme-light.high-contrast {
+  --bg-ground: #FAF7F2;
+  --bg-deep: #F3EDE2;
+  --bg-deepest: #EAE1D3;
+  --bg-glass: #FFFFFF;
+  --bg-raised: #FFFFFF;
+  --bg-sunken: #F2ECE1;
+  --border-hairline: #8C7762;
+  --text-primary: #0D0805;
+  --text-secondary: #1C130D;
+  --text-muted: #33251B;
+  --accent-text: #6E240E;
+  --accent-stroke: #8A3217;
+  --cta-bg: #8F3418;
+  --cta-pressed: #6E240E;
+  --ayah-color: #0D0805;
+  --ayah-border: rgba(138, 50, 23, 0.55);
+}
+
+html.theme-light.high-contrast .bg-\[\#15152A\] {
+  background-color: #FAF7F2 !important;
+}
+html.theme-light.high-contrast .bg-\[\#1E1E38\],
+html.theme-light.high-contrast .bg-\[\#1E1E38\]\/90,
+html.theme-light.high-contrast .bg-\[\#1E1E38\]\/80 {
+  background-color: #FFFFFF !important;
+}
+html.theme-light.high-contrast .text-\[\#EDEDF5\] {
+  color: #0D0805 !important;
+  font-weight: 600;
+}
+html.theme-light.high-contrast .text-\[\#C7C4D8\] {
+  color: #1C130D !important;
+  font-weight: 500;
+}
+html.theme-light.high-contrast .text-\[\#AEAECB\],
+html.theme-light.high-contrast .text-\[\#AEAECB\]\/80,
+html.theme-light.high-contrast .text-\[\#AEAECB\]\/70,
+html.theme-light.high-contrast .text-\[\#AEAECB\]\/65,
+html.theme-light.high-contrast .text-\[\#AEAECB\]\/60 {
+  color: #33251B !important;
+  font-weight: 500;
+}
+html.theme-light.high-contrast .text-\[\#E4C368\],
+html.theme-light.high-contrast .text-\[\#C8A951\],
+html.theme-light.high-contrast .text-\[\#6C63FF\] {
+  color: #6E240E !important;
+  font-weight: 700;
+}
+html.theme-light.high-contrast .border-\[\#2E2E4A\],
+html.theme-light.high-contrast .border-\[\#2E2E4A\]\/80,
+html.theme-light.high-contrast .border-\[\#2E2E4A\]\/70,
+html.theme-light.high-contrast .border-\[\#2E2E4A\]\/60 {
+  border-color: #8C7762 !important;
+}
+
+/* Long-reading font family line-height & legibility adjustments */
+html[data-font-family="noto-naskh"] body,
+html[data-font-family="amiri"] body {
+  line-height: 1.9;
+}
+
+html[data-font-family="tajawal"] body {
+  letter-spacing: 0.01em;
+}
+
+/* ==========================================================================
+   Night Reading Mode (وضع القراءة الليلية — تقليل الضوء الأزرق قبل النوم)
+   Shifts cool indigo/blue-violet tones to deep warm obsidian-espresso and
+   soft candlelight amber to protect melatonin and soothe the eyes before sleep.
+   ========================================================================== */
+html.night-reading {
+  --bg-ground: #0B0806;
+  --bg-deep: #080604;
+  --bg-deepest: #050403;
+  --bg-glass: #140F0B;
+  --bg-raised: #1C1510;
+  --bg-sunken: #0E0B08;
+  --border-hairline: #2B2017;
+  --text-primary: #E8DAC8;
+  --text-secondary: #C6B49D;
+  --text-muted: #988670;
+  --accent-text: #D89A4E;
+  --accent-stroke: #C4853B;
+  --cta-bg: #B87333;
+  --cta-pressed: #9E5F24;
+  --danger: #D47264;
+  --ayah-color: #E2AE63;
+  --ayah-border: rgba(216, 154, 78, 0.22);
+  --card-shadow: 0 12px 32px rgba(0, 0, 0, 0.65);
+  --raised-shadow: 0 16px 40px rgba(0, 0, 0, 0.75);
+}
+
+/* Subtle warm amber blue-light filter overlay across the viewport */
+html.night-reading body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: radial-gradient(
+    circle at 50% 30%,
+    rgba(216, 142, 56, 0.055) 0%,
+    rgba(180, 100, 28, 0.085) 100%
+  );
+  mix-blend-mode: screen;
+}
+
+/* Background remapping for Night Reading Mode (Deeper warm espresso-obsidian) */
+html.night-reading .bg-\[\#15152A\] { background-color: #0B0806 !important; }
+html.night-reading .bg-\[\#15152A\]\/95,
+html.night-reading .bg-\[\#15152A\]\/92,
+html.night-reading .bg-\[\#15152A\]\/90 { background-color: rgba(11, 8, 6, 0.94) !important; }
+html.night-reading .bg-\[\#15152A\]\/85,
+html.night-reading .bg-\[\#15152A\]\/80,
+html.night-reading .bg-\[\#15152A\]\/70,
+html.night-reading .bg-\[\#15152A\]\/60 { background-color: rgba(14, 11, 8, 0.88) !important; }
+
+html.night-reading .bg-\[\#111126\] { background-color: #080604 !important; }
+html.night-reading .bg-\[\#0C0C1C\] { background-color: #050403 !important; }
+
+html.night-reading .bg-\[\#1E1E38\],
+html.night-reading .bg-\[\#1E1E38\]\/95,
+html.night-reading .bg-\[\#1E1E38\]\/90,
+html.night-reading .bg-\[\#1E1E38\]\/80,
+html.night-reading .bg-\[\#1E1E38\]\/70 {
+  background-color: #140F0B !important;
+}
+
+html.night-reading .bg-\[\#25232E\],
+html.night-reading .bg-\[\#25232E\]\/85 {
+  background-color: #1C1510 !important;
+}
+
+html.night-reading .hover\:bg-\[\#25232E\]:hover {
+  background-color: #221A14 !important;
+}
+
+html.night-reading .bg-\[\#1B1B33\] {
+  background-color: #0E0B08 !important;
+}
+
+html.night-reading .bg-\[\#2E2E4A\] {
+  background-color: #2B2017 !important;
+}
+
+html.night-reading .from-\[\#1E1E38\] {
+  --tw-gradient-from: #140F0B var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgb(20 15 11 / 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+
+html.night-reading .to-\[\#25232E\],
+html.night-reading .to-\[\#17172E\],
+html.night-reading .to-\[\#15152A\] {
+  --tw-gradient-to: #0B0806 var(--tw-gradient-to-position) !important;
+}
+
+/* Text colors remapped to soft warm candlelight parchment (zero harsh blue/white glare) */
+html.night-reading .text-\[\#EDEDF5\],
+html.night-reading .text-white {
+  color: #E8DAC8 !important;
+}
+
+html.night-reading .text-\[\#C7C4D8\] {
+  color: #C6B49D !important;
+}
+
+html.night-reading .text-\[\#AEAECB\],
+html.night-reading .text-\[\#AEAECB\]\/80,
+html.night-reading .text-\[\#AEAECB\]\/70,
+html.night-reading .text-\[\#AEAECB\]\/60,
+html.night-reading .text-\[\#AEAECB\]\/50 {
+  color: #988670 !important;
+}
+
+/* Eliminate blue/violet light (#6C63FF) -> Warm Amber Candlelight (#B87333 / #D89A4E) */
+html.night-reading .bg-\[\#6C63FF\] {
+  background-color: #B87333 !important;
+  color: #FAF0E4 !important;
+}
+
+html.night-reading .hover\:bg-\[\#594DFF\]:hover {
+  background-color: #9E5F24 !important;
+}
+
+html.night-reading .bg-\[\#6C63FF\]\/10,
+html.night-reading .bg-\[\#6C63FF\]\/15,
+html.night-reading .bg-\[\#6C63FF\]\/20,
+html.night-reading .bg-\[\#6C63FF\]\/25 {
+  background-color: rgba(184, 115, 51, 0.16) !important;
+}
+
+html.night-reading .text-\[\#6C63FF\] {
+  color: #D89A4E !important;
+}
+
+html.night-reading .border-\[\#6C63FF\],
+html.night-reading .border-\[\#6C63FF\]\/30,
+html.night-reading .border-\[\#6C63FF\]\/40,
+html.night-reading .border-\[\#6C63FF\]\/50 {
+  border-color: rgba(216, 154, 78, 0.45) !important;
+}
+
+/* Gold highlights softened to warm amber */
+html.night-reading .text-\[\#E4C368\],
+html.night-reading .text-\[\#C8A951\] {
+  color: #D89A4E !important;
+}
+
+html.night-reading .ayah-text {
+  color: #E2AE63 !important;
+}
+
+/* Borders & Dividers in Night Reading Mode */
+html.night-reading .border-\[\#2E2E4A\],
+html.night-reading .border-\[\#2E2E4A\]\/90,
+html.night-reading .border-\[\#2E2E4A\]\/80,
+html.night-reading .border-\[\#2E2E4A\]\/70,
+html.night-reading .border-\[\#2E2E4A\]\/60,
+html.night-reading .border-\[\#2E2E4A\]\/50 {
+  border-color: #2B2017 !important;
+}
+
+

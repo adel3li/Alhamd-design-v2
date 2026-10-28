@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, BookOpen, Calendar, Settings } from 'lucide-react';
+import { Home, Compass, BookOpen, Calendar, Settings } from 'lucide-react';
 import { TabId, TasbihIcon } from './BottomTabBar';
 import { BrandMark } from '../common/BrandMark';
 import { APP_STRINGS } from '../../constants/strings';
@@ -17,6 +17,7 @@ export const DesktopNavBar: React.FC<DesktopNavBarProps> = ({
 }) => {
   const tabs = [
     { id: 'home' as TabId, label: APP_STRINGS.tabs.home, icon: Home },
+    { id: 'journey' as TabId, label: APP_STRINGS.tabs.journey, icon: Compass },
     { id: 'journal' as TabId, label: APP_STRINGS.tabs.journal, icon: BookOpen },
     { id: 'consistency' as TabId, label: APP_STRINGS.tabs.consistency, icon: Calendar },
     { id: 'tasbih' as TabId, label: APP_STRINGS.tabs.tasbih, icon: TasbihIcon }

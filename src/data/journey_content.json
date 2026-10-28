@@ -1,0 +1,725 @@
+{
+  "schemaVersion": 1,
+  "reviewStatus": "pending_review",
+  "reviewedBy": "",
+  "reviewDate": null,
+  "contentNote": "يحتوي هذا الملف على مرحلتين تجريبيتين (7 محطات لكل مرحلة) مرتبطة بمعرّفات النعم الفعلية في التطبيق. جميع النصوص المؤلفة (نيات المنازل، أسئلة التدوين، وأعمال اليوم) والأذكار والنصوص الشرعية الإضافية تحمل حقول المراجعة اللازمة (reviewStatus: pending_review, verifiedVerbatim: false).",
+  "stages": [
+    {
+      "id": "stage_ibadah",
+      "theme": "din",
+      "focusLabel": "العبادات ومواسمها",
+      "focusDescription": "تأمل نعمة الهداية، الصلاة، القرآن، ومواسم القرب من الله",
+      "title": "منزل نعمة العبادة",
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "intention": {
+        "text": "في هذا المنزل نتأمل نعمة الاصطفاء والقرب والوقوف بين يدي الله.",
+        "reviewStatus": "pending_review",
+        "reviewedBy": "",
+        "reviewDate": null
+      },
+      "stations": [
+        {
+          "blessingId": "islam",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "اكتب موقفًا شعرت فيه بقيمة هذه النعمة وطمأنينة الانتماء إليها.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "جدّد نيتك في عملٍ عاديّ تقوم به اليوم ليكون خالصًا لله.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "sacredPlaceholder": {
+            "token": "[[AYAH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dhikrPlaceholder": {
+            "token": "[[HADITH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_002",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "متى شعرتَ بربّك قريبًا منك يسمع نجواك في لحظة ضيق؟",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "اختلِ بنفسك دقيقتين اليوم في مكان هادئ وناجِ ربك بما في صدرك.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "sacredPlaceholder": {
+            "token": "[[AYAH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dhikrPlaceholder": {
+            "token": "[[HADITH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_003",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "ما الآية التي كلما سمعتها شعرتَ أنها تخاطب قلبك مباشرة؟",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "اقرأ اليوم خمس آيات من المصحف بتأنٍّ وتأملٍ في معانيها.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "sacredPlaceholder": {
+            "token": "[[AYAH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dhikrPlaceholder": {
+            "token": "[[HADITH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_005",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "صف شعورك بعد صلاةٍ أدّيتها بقلبٍ حاضرٍ وسكينة.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "توضأ للصلاة القادمة قبل الأذان بدقائق واستحضر الوقوف بين يدي الله.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "sacredPlaceholder": {
+            "token": "[[HADITH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dhikrPlaceholder": {
+            "token": "[[HADITH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_006",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "تذكّر دعوةً قديمةً استجابها الله لك أو صرف عنك بها سوءًا.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "ادعُ اليوم لإنسانٍ تحبه بظهر الغيب دون أن تخبره.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "sacredPlaceholder": {
+            "token": "[[AYAH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dhikrPlaceholder": {
+            "token": "[[HADITH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_007",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "ماذا يعني لقلبك أن باب العودة إلى الله مفتوح في كل لحظة؟",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "خصص لحظةً قبل نومك اليوم لمحاسبة نفسك بهدوء واستغفار.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "sacredPlaceholder": {
+            "token": "[[HADITH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dhikrPlaceholder": {
+            "token": "[[HADITH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_009",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "في أي أوقات يومك تجد أثر الذكر أشدّ طمأنينةً على قلبك؟",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "اجعل طريقك اليوم أو وقت انتظارك معمورًا بالتسبيح الهادئ.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "sacredPlaceholder": {
+            "token": "[[AYAH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dhikrPlaceholder": {
+            "token": "[[HADITH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "stage_badan",
+      "theme": "afiyah",
+      "focusLabel": "البدن والحواس",
+      "focusDescription": "تأمل نعمة العافية، السمع، البصر، الحركة، والأنفاس الصامتة",
+      "title": "منزل نعمة البدن",
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "intention": {
+        "text": "في هذا المنزل نتأمل نعمة الجسد الذي نغفل عنه.",
+        "reviewStatus": "pending_review",
+        "reviewedBy": "",
+        "reviewDate": null
+      },
+      "stations": [
+        {
+          "blessingId": "blessing_035",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "اكتب موقفًا شعرت فيه بقيمة العافية بعد وعكةٍ أو تعبٍ عابر.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "اسأل عن مريضٍ تعرفه اليوم أو ادعُ له بالشفاء والعافية.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "sacredPlaceholder": {
+            "token": "[[HADITH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dhikrPlaceholder": {
+            "token": "[[HADITH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_036",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "ما الصوت الطيب الذي سمعته قريبًا وأدخل السكينة على قلبك؟",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "أنصت اليوم باهتمامٍ كاملٍ لمن يحدثك دون مقاطعة أو انشغال.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "sacredPlaceholder": {
+            "token": "[[AYAH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dhikrPlaceholder": {
+            "token": "[[HADITH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_037",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "صف مشهدًا رأته عيناك اليوم وتوقفتَ عنده متأملًا.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "انظر اليوم إلى السماء أو الطبيعة حولك نظرة تدبرٍ صامتة لمدة دقيقة.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "sacredPlaceholder": {
+            "token": "[[AYAH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dhikrPlaceholder": {
+            "token": "[[HADITH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_038",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "ما العمل الذي أنجزته بيديك أو سرتَ إليه بقدميك اليوم وتستشعر فيه فضل الله؟",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "أعِن أحدًا اليوم بيدك في حمل شيءٍ أو قضاء حاجةٍ يسيرة.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "sacredPlaceholder": {
+            "token": "[[HADITH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dhikrPlaceholder": {
+            "token": "[[HADITH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_017",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "حين تتنفس بعمقٍ وهدوء الآن، ما الشعور الذي يسري في صدرك؟",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "توقف ثلاث مرات اليوم لتأخذ نفسًا عميقًا وتحمد الله في سرك.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "sacredPlaceholder": {
+            "token": "[[AYAH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dhikrPlaceholder": {
+            "token": "[[HADITH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_014",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "تذكّر ليلةً نمتَ فيها مطمئنًا بعد تعبٍ طويل… كيف كان صباحك؟",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "اترك الهاتف قبل نومك الليلة بربع ساعة لتسكن نفسك وتستحضر أذكار النوم.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "sacredPlaceholder": {
+            "token": "[[AYAH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dhikrPlaceholder": {
+            "token": "[[HADITH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_021",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "ما الكلمة الطيبة التي نطقتَ بها يومًا فتركت أثرًا جميلًا فيمن حولك؟",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "اشكر من أعانك اليوم بكلمةٍ طيبةٍ صادقة.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "sacredPlaceholder": {
+            "token": "[[AYAH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dhikrPlaceholder": {
+            "token": "[[HADITH_TOKEN]]",
+            "verifiedVerbatim": false,
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "stage_ahl",
+      "theme": "nasl",
+      "focusLabel": "الأهل والمودة",
+      "focusDescription": "تأمل نعمة الوالدين، السكن الزوجي، الذرية، الأرحام، والصحبة الصالحة",
+      "title": "منزل نعمة الأهل",
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "intention": {
+        "text": "في هذا المنزل نتأمل القلوب التي آنس الله بها وحشتنا وجعلها سكنًا ومودة.",
+        "reviewStatus": "pending_review",
+        "reviewedBy": "",
+        "reviewDate": null
+      },
+      "stations": [
+        {
+          "blessingId": "blessing_022",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "تذكّر موقفًا شعرتَ فيه بدفء دعاء أمك أو حنانها عليك.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "ادعُ لأمك اليوم دعوةً صادقةً أو أدخل السرور على قلبها بتواصلٍ لطيف.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_023",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "ما الأثر الذي تركه أبوك في شخصيتك أو حياتك وتستشعر قيمته اليوم؟",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "تصدّق اليوم بصدقةٍ يسيرةٍ أو دعوةٍ طيبةٍ بنية برّ والديك.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_024",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "كيف تجلّت لك معنى السكينة والمودة في بيتك وأهلك؟",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "عبّر اليوم بكلمة امتنانٍ صادقةٍ لمن يشاركك بيتك وحياتك.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_025",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "ما اللحظة التي أدخل فيها صغار العائلة البهجة والرحمة على قلبك؟",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "امسح على رأس صغيرٍ في عائلتك اليوم وادعُ له بالبركة والصلاح.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_026",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "من القريب الذي تشعر بالطمأنينة والبركة كلما وصلتَ رحمه؟",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "أرسل رسالة سلامٍ وسؤالٍ لقريبٍ لم تتواصل معه منذ مدة.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_027",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "اذكر صديقًا صالحًا أعانك على الخير أو خفّف عنك عبء يومٍ ثقيل.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "ادعُ لصديقك الصالح بظهر الغيب أو أخبره بامتنانك لوجوده.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_033",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "ما الشعور الذي يغمرك حين تغلق باب بيتك وتأوي إلى سكنك آمنًا؟",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "قل دعاء دخول المنزل بحضور قلبٍ حين تعود إلى بيتك اليوم.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        }
+      ]
+    },
+    {
+      "id": "stage_rizq",
+      "theme": "rizq",
+      "focusLabel": "الرزق والسكينة",
+      "focusDescription": "تأمل نعمة الكفاية، الماء، الطعام، العمل، القناعة، والأمن في الأوطان",
+      "title": "منزل نعمة الرزق والسكينة",
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "intention": {
+        "text": "في هذا المنزل نتأمل أرزاق الله التي تسري إلينا كل يومٍ بلطفٍ وكفاية.",
+        "reviewStatus": "pending_review",
+        "reviewedBy": "",
+        "reviewDate": null
+      },
+      "stations": [
+        {
+          "blessingId": "blessing_015",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "كيف تغيّر شعورك بشربة الماء العذب حين تستحضر تيسيرها لك؟",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "توقف لحظةً قبل شرب الماء اليوم، وسمِّ الله، واحمده بقلبٍ حاضر.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_016",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "تأمّل في طعام يومك، كم سببًا سخّره الله ليصل إليك هنيئًا؟",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "احرص اليوم على عدم إهدار أي جزءٍ من طعامك شكرًا لنعمة الله.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_028",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "متى جاءك رزقٌ أو فرجٌ من بابٍ لم تكن تحتسبه؟",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "جدّد توكلك على الله في أمرٍ يشغل بالك اليوم وقل: حسبي الله ونعم الوكيل.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewedDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_030",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "ما الجانب الذي تحمد الله عليه في عملك أو سعيك اليومي؟",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "أتقن مهمةً واحدةً في عملك اليوم بنية الإحسان وشكر النعمة.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_031",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "اذكر ثلاثة أشياء تملكها اليوم كانت يومًا ما أمنيةً تدعو الله بها.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "تصدّق اليوم بشيءٍ يسيرٍ مما رزقك الله تطهيرًا وبركة.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_032",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "ما التفاصيل اليومية التي تنعم بها بفضل نعمة الأمن والطمأنينة؟",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "ادعُ الله اليوم أن يديم الأمن والسكينة وأن يفرّج عن كل خائف.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        },
+        {
+          "blessingId": "blessing_039",
+          "reviewStatus": "pending_review",
+          "journalPrompt": {
+            "text": "كيف يمكنك استثمار ساعة فراغٍ في يومك بما يترك أثرًا طيبًا في قلبك؟",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          },
+          "dailyAction": {
+            "text": "خصّص عشر دقائق من وقتك اليوم لعملٍ نافعٍ أو قراءةٍ هادئة بلا مقاطعة.",
+            "reviewStatus": "pending_review",
+            "reviewedBy": "",
+            "reviewDate": null
+          }
+        }
+      ]
+    }
+  ]
+}

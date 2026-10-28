@@ -6,6 +6,7 @@ import { dailyDhikrs } from '../../data/dhikr';
 import { HisnScreen } from './HisnScreen';
 import { HisnCategoryId } from '../../data/hisnAlMuslim';
 import { TasbihIcon } from '../layout/BottomTabBar';
+import { TasbihAudioPlayer } from './TasbihAudioPlayer';
 
 export type TasbihSubView = 'counter' | 'hisn';
 
@@ -86,6 +87,15 @@ export const TasbihModal: React.FC<TasbihModalProps> = ({
             {d}
           </button>
         ))}
+      </div>
+
+      {/* Calm Dhikr Audio Player with Reciter Selector & Volume Control */}
+      <div className="w-full mb-3">
+        <TasbihAudioPlayer
+          selectedDhikr={selectedDhikr}
+          onSelectDhikr={setSelectedDhikr}
+          triggerHaptic={triggerHaptic}
+        />
       </div>
 
       {/* Selected Dhikr Display */}

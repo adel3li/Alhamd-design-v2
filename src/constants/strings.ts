@@ -8,6 +8,7 @@ export const APP_STRINGS = {
   // Tabs
   tabs: {
     home: 'الرئيسية',
+    journey: 'رحلتي',
     journal: 'سجل الحمد',
     consistency: 'المداومة',
     tasbih: 'المسبحة',

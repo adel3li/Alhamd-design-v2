@@ -1,15 +1,71 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, ReactNode } from 'react';
-import { AppState, StoreContextType, JournalEntry, UserBlessing, ThemeMode, TextSize, BackupPayloadV2 } from '../types';
+import {
+  AppState,
+  StoreContextType,
+  JournalEntry,
+  UserBlessing,
+  ThemeMode,
+  TextSize,
+  DisplayFontFamily,
+  BackupPayloadV2
+} from '../types';
 import { mapOldCategoryToCanonical } from '../constants/categories';
 import { getAllBlessings } from '../data/loader';
 import { resolveTodayExperience, getDayNumber, getTodayInspiration } from './dailyLogic';
+import {
+  loadJourneyState,
+  saveJourneyState,
+  sanitizeJourneyState,
+  completeJourneyOnboarding,
+  completeJourneyStation,
+  saveStationJournal,
+  saveStageMuhasaba,
+  devResetEntireJourney,
+  JOURNEY_UPDATED_EVENT
+} from './journeyStore';
+
+export interface JourneyStation {
+  id: string;
+  stageId: string;
+  stageIndex?: number;
+  stationIndex: number;
+  blessingId: string;
+  completed?: boolean;
+  completedAt?: string;
+  journalText?: string;
+}
+
+export interface JourneyStage {
+  id: string;
+  theme: string;
+  title: string;
+  intention?: string;
+  stationBlessingIds: string[]; // references existing blessing ids
+  stations?: JourneyStation[];
+}
+
+export interface JourneyState {
+  schemaVersion: 1;
+  createdAt: string; // ISO
+  focusThemes: string[];
+  pace: 1 | 2;
+  reminderTime: string | null; // "HH:mm"
+  stages: JourneyStage[];
+  stations: JourneyStation[];
+  completed: Record<string, { completedAt: string }>; // key: stationId
+  unlockedTodayCount: number;
+  lastUnlockDate: string; // "YYYY-MM-DD", local date
+  journal: Record<string, string>; // stationId -> private text (local-only, never sent externally)
+  muhasaba: Record<string, { q1: string; q2: string; completedAt?: string }>; // stageId -> answers (local-only)
+}
 
 const STORAGE_KEYS = {
   STATE: 'alhamd_state',
   USER_BLESSINGS: 'alhamd:userBlessings:v1',
   ONBOARDED: 'alhamd_onboarded',
   TOUR: 'alhamd:tourComplete',
-  CONSENT: 'alhamd:analytics_consent'
+  CONSENT: 'alhamd:analytics_consent',
+  JOURNEY: 'alhamd:journey_state:v1'
 };
 
 const initialSampleJournal: JournalEntry[] = [
@@ -77,6 +133,22 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     return saved === 'light' || saved === 'dark' ? saved : 'dark';
   });
 
+  const [highContrast, setHighContrastState] = useState<boolean>(() => {
+    return localStorage.getItem('alhamd_high_contrast') === 'true';
+  });
+
+  const [nightReadingMode, setNightReadingModeState] = useState<boolean>(() => {
+    return localStorage.getItem('alhamd_night_reading') === 'true';
+  });
+
+  const [fontFamily, setFontFamilyState] = useState<DisplayFontFamily>(() => {
+    const saved = localStorage.getItem('alhamd_font_family') as DisplayFontFamily | null;
+    if (saved === 'ibm' || saved === 'noto-naskh' || saved === 'amiri' || saved === 'tajawal') {
+      return saved;
+    }
+    return 'ibm';
+  });
+
   const [textSize, setTextSizeState] = useState<TextSize>(() => {
     return (localStorage.getItem('alhamd_text_size') as TextSize) || 'normal';
   });
@@ -118,6 +190,11 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     ];
   });
 
+  // Journey state (themes, pace, stage/station progress, and private journals stored strictly on local device)
+  const [journeyState, setJourneyStateInternal] = useState<JourneyState>(() => {
+    return loadJourneyState();
+  });
+
   const [journalEntries, setJournalEntries] = useState<JournalEntry[]>(() => {
     try {
       const stored = localStorage.getItem('alhamd_journal');
@@ -138,6 +215,85 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const val = localStorage.getItem('alhamd_tasbih_count');
     return val ? parseInt(val, 10) : 0;
   });
+
+  // Ensure journeyState is persisted locally whenever it updates
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEYS.JOURNEY, JSON.stringify(journeyState));
+    } catch {
+      // Ignore storage quota errors
+    }
+  }, [journeyState]);
+
+  // Listen for JourneyState updates from journeyStore helpers
+  useEffect(() => {
+    const handleJourneyUpdated = () => {
+      const latest = loadJourneyState();
+      setJourneyStateInternal((prev) => {
+        if (JSON.stringify(prev) === JSON.stringify(latest)) return prev;
+        return latest;
+      });
+    };
+    window.addEventListener(JOURNEY_UPDATED_EVENT, handleJourneyUpdated);
+    return () => {
+      window.removeEventListener(JOURNEY_UPDATED_EVENT, handleJourneyUpdated);
+    };
+  }, []);
+
+  // Persist journeyState changes locally on the device only (never sent externally)
+  const updateJourneyState = useCallback(
+    (updater: JourneyState | ((prev: JourneyState) => JourneyState)) => {
+      setJourneyStateInternal((prev) => {
+        const nextRaw = typeof updater === 'function' ? updater(prev) : updater;
+        const sanitized = sanitizeJourneyState(nextRaw);
+        saveJourneyState(sanitized);
+        return sanitized;
+      });
+    },
+    []
+  );
+
+  const completeJourneyOnboardingState = useCallback(
+    (params: { focusThemes: string[]; pace: 1 | 2; reminderTime: string | null }): JourneyState => {
+      const next = completeJourneyOnboarding(params);
+      setJourneyStateInternal(next);
+      return next;
+    },
+    []
+  );
+
+  const completeJourneyStationState = useCallback(
+    (params: { stationId: string; journalText?: string }): JourneyState => {
+      const next = completeJourneyStation(params);
+      setJourneyStateInternal(next);
+      return next;
+    },
+    []
+  );
+
+  const saveJourneyStationJournal = useCallback(
+    (stationId: string, journalText: string): JourneyState => {
+      const next = saveStationJournal(stationId, journalText);
+      setJourneyStateInternal(next);
+      return next;
+    },
+    []
+  );
+
+  const saveJourneyStageMuhasaba = useCallback(
+    (stageId: string, q1: string, q2: string): JourneyState => {
+      const next = saveStageMuhasaba(stageId, q1, q2);
+      setJourneyStateInternal(next);
+      return next;
+    },
+    []
+  );
+
+  const resetJourneyState = useCallback((): JourneyState => {
+    const fresh = devResetEntireJourney();
+    setJourneyStateInternal(fresh);
+    return fresh;
+  }, []);
 
   // Blessings pool and Today's computed blessing
   const allBlessings = useMemo(() => getAllBlessings(), []);
@@ -170,7 +326,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
   }, []);
 
-  // Synchronize with document element classes for Theme
+  // Synchronize with document element classes for Theme & High Contrast
   useEffect(() => {
     const root = document.documentElement;
     if (theme === 'light') {
@@ -182,6 +338,33 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     }
     localStorage.setItem('alhamd_theme_v2', theme);
   }, [theme]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.toggle('high-contrast', highContrast);
+    localStorage.setItem('alhamd_high_contrast', String(highContrast));
+  }, [highContrast]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.toggle('night-reading', nightReadingMode);
+    localStorage.setItem('alhamd_night_reading', String(nightReadingMode));
+  }, [nightReadingMode]);
+
+  // Synchronize Display Font Family for long-form reading comfort
+  useEffect(() => {
+    const root = document.documentElement;
+    const fontStackMap: Record<DisplayFontFamily, string> = {
+      ibm: "'IBM Plex Sans Arabic', sans-serif",
+      'noto-naskh': "'Noto Naskh Arabic', 'Amiri', serif",
+      amiri: "'Amiri', serif",
+      tajawal: "'Tajawal', 'IBM Plex Sans Arabic', sans-serif"
+    };
+    const selectedStack = fontStackMap[fontFamily] || fontStackMap.ibm;
+    root.style.setProperty('--font-sans', selectedStack);
+    root.setAttribute('data-font-family', fontFamily);
+    localStorage.setItem('alhamd_font_family', fontFamily);
+  }, [fontFamily]);
 
   // Synchronize numeric Font Size & legacy Text Size class
   useEffect(() => {
@@ -237,6 +420,28 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const setTheme = useCallback((newTheme: ThemeMode) => {
     setThemeState(newTheme);
+    if (newTheme === 'light') {
+      setNightReadingModeState(false);
+    }
+  }, []);
+
+  const setHighContrast = useCallback((enabled: boolean) => {
+    setHighContrastState(enabled);
+    if (enabled) {
+      setNightReadingModeState(false);
+    }
+  }, []);
+
+  const setNightReadingMode = useCallback((enabled: boolean) => {
+    setNightReadingModeState(enabled);
+    if (enabled) {
+      setThemeState('dark');
+      setHighContrastState(false);
+    }
+  }, []);
+
+  const setFontFamily = useCallback((font: DisplayFontFamily) => {
+    setFontFamilyState(font);
   }, []);
 
   const setFontSize = useCallback((size: number) => {
@@ -376,6 +581,9 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       exportedAt: new Date().toISOString(),
       settings: {
         theme,
+        highContrast,
+        nightReadingMode,
+        fontFamily,
         textSize,
         fontSize,
         notificationTime,
@@ -385,10 +593,11 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       },
       journal: journalEntries,
       completedDays: completedReflections,
-      personalBlessings: userBlessings
+      personalBlessings: userBlessings,
+      journeyState: sanitizeJourneyState(journeyState)
     };
     return JSON.stringify(payload, null, 2);
-  }, [theme, textSize, fontSize, notificationTime, notificationsEnabled, onboardingComplete, welcomeSeen, journalEntries, completedReflections, userBlessings]);
+  }, [theme, highContrast, nightReadingMode, fontFamily, textSize, fontSize, notificationTime, notificationsEnabled, onboardingComplete, welcomeSeen, journalEntries, completedReflections, userBlessings, journeyState]);
 
   const importBackupJSON = useCallback((jsonStr: string): { success: boolean; message: string } => {
     try {
@@ -404,8 +613,16 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         if (data.personalBlessings && Array.isArray(data.personalBlessings)) {
           setUserBlessings(data.personalBlessings);
         }
+        if (data.journeyState && typeof data.journeyState === 'object') {
+          const cleanJourney = sanitizeJourneyState(data.journeyState);
+          saveJourneyState(cleanJourney);
+          setJourneyStateInternal(cleanJourney);
+        }
         if (data.settings) {
           if (data.settings.theme) setThemeState(data.settings.theme);
+          if (typeof data.settings.highContrast === 'boolean') setHighContrastState(data.settings.highContrast);
+          if (typeof data.settings.nightReadingMode === 'boolean') setNightReadingModeState(data.settings.nightReadingMode);
+          if (data.settings.fontFamily) setFontFamilyState(data.settings.fontFamily);
           if (data.settings.textSize) setTextSizeState(data.settings.textSize);
           if (typeof data.settings.fontSize === 'number') setFontSizeState(data.settings.fontSize);
           if (data.settings.notificationTime) setNotificationTimeState(data.settings.notificationTime);
@@ -469,10 +686,14 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         userBlessings,
         completedDays: completedReflections,
         completedReflections,
+        journeyState,
         isCompletedToday,
         notificationTime,
         notificationsEnabled,
         theme,
+        highContrast,
+        nightReadingMode,
+        fontFamily,
         textSize,
         fontSize,
         firstLaunchDate: null,
@@ -486,10 +707,19 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         replayTour,
         setAnalyticsConsent,
         setTheme,
+        setHighContrast,
+        setNightReadingMode,
+        setFontFamily,
         setTextSize,
         setFontSize,
         setNotificationTime,
         setNotificationsEnabled,
+        updateJourneyState,
+        completeJourneyOnboardingState,
+        completeJourneyStationState,
+        saveJourneyStationJournal,
+        saveJourneyStageMuhasaba,
+        resetJourneyState,
         addJournalEntry,
         deleteJournalEntry,
         addUserBlessing,

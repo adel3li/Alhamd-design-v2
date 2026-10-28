@@ -290,15 +290,17 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                   </div>
                 )}
 
-                {/* Share Tadabbur Icon Button */}
+                {/* Share Tadabbur Button */}
                 <div className="pt-2 flex justify-end">
                   <button
+                    type="button"
                     onClick={() => setShareModalData({ open: true, type: 'tadabbur' })}
-                    className="w-9 h-9 rounded-full bg-[#15152A]/80 hover:bg-[#25232E] border border-[#2E2E4A] text-[#AEAECB] hover:text-[#EDEDF5] flex items-center justify-center transition-colors cursor-pointer"
+                    className="h-9 px-3.5 rounded-xl bg-[#15152A]/90 hover:bg-[#25232E] border border-[#2E2E4A] hover:border-[#E4C368]/50 text-[#E4C368] flex items-center gap-1.5 text-xs font-semibold transition-colors cursor-pointer"
                     title="مشاركة التدبّر"
-                    aria-label="مشاركة التدبّر"
+                    aria-label="مشاركة"
                   >
-                    <Share2 size={15} />
+                    <Share2 size={14} />
+                    <span>مشاركة</span>
                   </button>
                 </div>
               </div>

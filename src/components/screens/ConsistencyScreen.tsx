@@ -10,6 +10,7 @@ import {
   CartesianGrid
 } from 'recharts';
 import { GlassCard } from '../common/GlassCard';
+import { ReflectionCategoryCharts } from '../common/ReflectionCategoryCharts';
 import { generateMonthCalendar, HijriCalendarDay } from '../../lib/hijri';
 import { toArabicNumerals, formatArabicTime } from '../../lib/arabic';
 
@@ -269,6 +270,9 @@ export const ConsistencyScreen: React.FC<ConsistencyScreenProps> = ({
           </ResponsiveContainer>
         </div>
       </GlassCard>
+
+      {/* Self-Awareness & Most Reflected Categories / Topics Visualization */}
+      <ReflectionCategoryCharts />
 
       {/* Hijri Calendar Card for Monthly Reflection Achievement Review */}
       <GlassCard padding="p-5 sm:p-6" className="space-y-5">
