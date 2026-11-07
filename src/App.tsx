@@ -90,6 +90,7 @@ const MainAppContent: React.FC = () => {
   }
 
   const handleReflectionComplete = (journalText?: string) => {
+    triggerHaptic('success');
     markTodayCompleted();
     if (journalText) {
       addJournalEntry(journalText);

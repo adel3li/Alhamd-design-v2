@@ -9,7 +9,7 @@ import {
   Star, 
   BookOpen, 
   Sparkles,
-  Heart
+  Check
 } from 'lucide-react';
 import { JournalEntry, UserBlessing } from '../../types';
 import { GlassCard } from '../common/GlassCard';
@@ -17,6 +17,7 @@ import { CATEGORIES } from '../../constants/categories';
 import { getHijriMonthAndYear } from '../../lib/hijri';
 import { formatTimestampArabicTime, toArabicNumerals } from '../../lib/arabic';
 import { ComposeBlessingModal } from './ComposeBlessingModal';
+import { useStore } from '../../lib/store';
 
 interface JournalScreenProps {
   entries: JournalEntry[];
@@ -41,12 +42,33 @@ export const JournalScreen: React.FC<JournalScreenProps> = ({
   onDeleteUserBlessing,
   onToggleFavoriteBlessing
 }) => {
+  const { addJournalEntry, triggerHaptic, todayBlessing } = useStore();
   const [segment, setSegment] = useState<'journal' | 'personal'>('journal');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('الكل');
   const [monthOffset, setMonthOffset] = useState(0);
   const [isComposeOpen, setIsComposeOpen] = useState(false);
-  const [expandedEntryId, setExpandedEntryId] = useState<string | null>(null);
+  const [isQuickJournalOpen, setIsQuickJournalOpen] = useState(false);
+  const [quickJournalTitle, setQuickJournalTitle] = useState('');
+  const [quickJournalText, setQuickJournalText] = useState('');
+  const [quickJournalCategory, setQuickJournalCategory] = useState(CATEGORIES[0].label);
+
+  const handleSaveQuickJournal = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!quickJournalText.trim()) {
+      triggerHaptic('medium');
+      return;
+    }
+    triggerHaptic('success');
+    addJournalEntry({
+      shortTitle: quickJournalTitle.trim() || todayBlessing.shortTitle,
+      categoryLabel: quickJournalCategory,
+      text: quickJournalText.trim()
+    });
+    setQuickJournalTitle('');
+    setQuickJournalText('');
+    setIsQuickJournalOpen(false);
+  };
 
   // Month navigation calculation
   const targetDate = useMemo(() => {
@@ -115,8 +137,11 @@ export const JournalScreen: React.FC<JournalScreenProps> = ({
       {/* Segment Switcher: «سجل الحمد» | «نِعَمي» */}
       <div className="flex bg-[#1E1E38]/90 p-1 rounded-2xl border border-[#2E2E4A] max-w-xs mx-auto shadow-sm">
         <button
-          onClick={() => setSegment('journal')}
-          className={`flex-1 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
+          onClick={() => {
+            triggerHaptic('light');
+            setSegment('journal');
+          }}
+          className={`flex-1 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
             segment === 'journal'
               ? 'bg-[#6C63FF] text-white shadow-sm'
               : 'text-[#AEAECB] hover:text-white'
@@ -125,8 +150,11 @@ export const JournalScreen: React.FC<JournalScreenProps> = ({
           سجل الحمد
         </button>
         <button
-          onClick={() => setSegment('personal')}
-          className={`flex-1 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
+          onClick={() => {
+            triggerHaptic('light');
+            setSegment('personal');
+          }}
+          className={`flex-1 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
             segment === 'personal'
               ? 'bg-[#6C63FF] text-white shadow-sm'
               : 'text-[#AEAECB] hover:text-white'
@@ -142,8 +170,11 @@ export const JournalScreen: React.FC<JournalScreenProps> = ({
           {/* Hijri Month Navigator: ‹ ذو الحجة ١٤٤٧ › */}
           <div className="flex items-center justify-between px-2 py-1">
             <button
-              onClick={() => setMonthOffset(m => m + 1)}
-              className="w-8 h-8 rounded-full bg-[#1E1E38] hover:bg-[#25232E] border border-[#2E2E4A] flex items-center justify-center text-[#EDEDF5] transition-colors"
+              onClick={() => {
+                triggerHaptic('light');
+                setMonthOffset(m => m + 1);
+              }}
+              className="w-8 h-8 rounded-full bg-[#1E1E38] hover:bg-[#25232E] border border-[#2E2E4A] flex items-center justify-center text-[#EDEDF5] transition-colors cursor-pointer"
               aria-label="الشهر القادم"
             >
               <ChevronRight size={16} />
@@ -154,8 +185,11 @@ export const JournalScreen: React.FC<JournalScreenProps> = ({
             </span>
 
             <button
-              onClick={() => setMonthOffset(m => m - 1)}
-              className="w-8 h-8 rounded-full bg-[#1E1E38] hover:bg-[#25232E] border border-[#2E2E4A] flex items-center justify-center text-[#EDEDF5] transition-colors"
+              onClick={() => {
+                triggerHaptic('light');
+                setMonthOffset(m => m - 1);
+              }}
+              className="w-8 h-8 rounded-full bg-[#1E1E38] hover:bg-[#25232E] border border-[#2E2E4A] flex items-center justify-center text-[#EDEDF5] transition-colors cursor-pointer"
               aria-label="الشهر السابق"
             >
               <ChevronLeft size={16} />
@@ -177,8 +211,11 @@ export const JournalScreen: React.FC<JournalScreenProps> = ({
           {/* Category Filter Pills */}
           <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
             <button
-              onClick={() => setSelectedCategory('الكل')}
-              className={`px-3 py-1 rounded-full text-xs whitespace-nowrap transition-all ${
+              onClick={() => {
+                triggerHaptic('light');
+                setSelectedCategory('الكل');
+              }}
+              className={`px-3 py-1 rounded-full text-xs whitespace-nowrap transition-all cursor-pointer ${
                 selectedCategory === 'الكل'
                   ? 'bg-[#E4C368] text-[#15152A] font-bold'
                   : 'bg-[#1E1E38] text-[#AEAECB] border border-[#2E2E4A]'
@@ -189,8 +226,11 @@ export const JournalScreen: React.FC<JournalScreenProps> = ({
             {CATEGORIES.map(c => (
               <button
                 key={c.key}
-                onClick={() => setSelectedCategory(c.label)}
-                className={`px-3 py-1 rounded-full text-xs whitespace-nowrap transition-all ${
+                onClick={() => {
+                  triggerHaptic('light');
+                  setSelectedCategory(c.label);
+                }}
+                className={`px-3 py-1 rounded-full text-xs whitespace-nowrap transition-all cursor-pointer ${
                   selectedCategory === c.label
                     ? 'bg-[#E4C368] text-[#15152A] font-bold'
                     : 'bg-[#1E1E38] text-[#AEAECB] border border-[#2E2E4A]'
@@ -200,6 +240,71 @@ export const JournalScreen: React.FC<JournalScreenProps> = ({
               </button>
             ))}
           </div>
+
+          {/* Quick Journal Entry Composer Toggle / Form */}
+          {!isQuickJournalOpen ? (
+            <button
+              type="button"
+              onClick={() => {
+                triggerHaptic('light');
+                setIsQuickJournalOpen(true);
+              }}
+              className="w-full py-3.5 px-5 rounded-2xl bg-[#1E1E38] hover:bg-[#252547] border border-[#6C63FF]/45 text-[#EDEDF5] font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm"
+            >
+              <Plus size={18} className="text-[#E4C368]" />
+              <span>دوّن تأملاً جديداً في سجل الحمد</span>
+            </button>
+          ) : (
+            <GlassCard padding="p-4 sm:p-5" className="space-y-3 border border-[#6C63FF]/45 animate-fade-in">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-[#E4C368]">تدوين تأمل جديد</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    triggerHaptic('light');
+                    setIsQuickJournalOpen(false);
+                  }}
+                  className="text-xs text-[#AEAECB] hover:text-white cursor-pointer"
+                >
+                  إلغاء
+                </button>
+              </div>
+              <form onSubmit={handleSaveQuickJournal} className="space-y-3">
+                <input
+                  type="text"
+                  value={quickJournalTitle}
+                  onChange={e => setQuickJournalTitle(e.target.value)}
+                  placeholder={`عنوان النعمة (افتراضي: ${todayBlessing.shortTitle})`}
+                  className="w-full p-2.5 rounded-xl bg-[#15152A]/85 border border-[#2E2E4A] focus:border-[#C8A951] text-[#EDEDF5] placeholder-[#AEAECB]/40 text-xs sm:text-sm outline-none"
+                />
+                <textarea
+                  value={quickJournalText}
+                  onChange={e => setQuickJournalText(e.target.value)}
+                  placeholder="اكتب ما استشعرته من حمدٍ وامتنان..."
+                  rows={3}
+                  className="w-full p-3 rounded-xl bg-[#15152A]/85 border border-[#2E2E4A] focus:border-[#C8A951] text-[#EDEDF5] placeholder-[#AEAECB]/40 text-xs sm:text-sm outline-none resize-none leading-relaxed"
+                />
+                <div className="flex items-center justify-between gap-2 pt-1">
+                  <select
+                    value={quickJournalCategory}
+                    onChange={e => setQuickJournalCategory(e.target.value)}
+                    className="px-3 py-2 rounded-xl bg-[#15152A] border border-[#2E2E4A] text-xs text-[#EDEDF5] outline-none"
+                  >
+                    {CATEGORIES.map(c => (
+                      <option key={c.key} value={c.label}>{c.label}</option>
+                    ))}
+                  </select>
+                  <button
+                    type="submit"
+                    className="px-5 py-2.5 rounded-xl bg-[#6C63FF] hover:bg-[#594DFF] text-white text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <Check size={15} />
+                    <span>حفظ التأمل</span>
+                  </button>
+                </div>
+              </form>
+            </GlassCard>
+          )}
         </div>
       )}
 

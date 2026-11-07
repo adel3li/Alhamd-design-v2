@@ -79,39 +79,39 @@ export const PremiumPaywallScreen: React.FC<PremiumPaywallScreenProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/75 backdrop-blur-md animate-fade-in overflow-y-auto"
+      className="fixed inset-0 z-50 max-h-screen overflow-hidden flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-md animate-fade-in"
       dir="rtl"
       role="dialog"
       aria-modal="true"
       aria-labelledby="premium-paywall-title"
     >
-      <div className="relative w-full max-w-md rounded-3xl bg-[#15152A] border border-[#2E2E4A] p-6 sm:p-7 shadow-2xl space-y-5 my-auto">
+      <div className="relative w-full max-w-md md:max-w-lg max-h-[calc(100vh-1.5rem)] overflow-hidden rounded-3xl bg-[#15152A] border border-[#2E2E4A] p-4 sm:p-5 shadow-2xl flex flex-col justify-between gap-2.5">
         {/* Top bar */}
-        <div className="flex items-center justify-between">
-          <span className="text-xs font-semibold text-[#AEAECB] px-3 py-1 rounded-xl bg-[#1E1E38] border border-[#2E2E4A]">
+        <div className="flex items-center justify-between shrink-0">
+          <span className="text-[11px] font-semibold text-[#AEAECB] px-2.5 py-1 rounded-xl bg-[#1E1E38] border border-[#2E2E4A]">
             رحلتي · المسار الخاص
           </span>
           <button
             type="button"
             onClick={onClose}
-            className="w-9 h-9 rounded-full bg-[#1E1E38] hover:bg-[#25232E] border border-[#2E2E4A] flex items-center justify-center text-[#AEAECB] hover:text-[#EDEDF5] transition-colors cursor-pointer"
+            className="w-8 h-8 rounded-full bg-[#1E1E38] hover:bg-[#25232E] border border-[#2E2E4A] flex items-center justify-center text-[#AEAECB] hover:text-[#EDEDF5] transition-colors cursor-pointer"
             aria-label="إغلاق"
           >
-            <X size={18} />
+            <X size={16} />
           </button>
         </div>
 
         {/* Free Limit Contextual Notice when user attempts to exceed free station limit */}
         {triggerReason === 'free_limit_reached' && (
-          <div className="p-3.5 rounded-2xl bg-[#6C63FF]/12 border border-[#6C63FF]/35 flex items-start gap-3 text-right">
-            <div className="w-8 h-8 rounded-xl bg-[#6C63FF]/20 border border-[#6C63FF]/40 flex items-center justify-center text-[#E4C368] shrink-0 mt-0.5">
-              <Sparkles size={16} />
+          <div className="p-2.5 rounded-2xl bg-[#6C63FF]/12 border border-[#6C63FF]/35 flex items-start gap-2.5 text-right shrink-0">
+            <div className="w-7 h-7 rounded-xl bg-[#6C63FF]/20 border border-[#6C63FF]/40 flex items-center justify-center text-[#E4C368] shrink-0 mt-0.5">
+              <Sparkles size={14} />
             </div>
             <div className="space-y-0.5">
-              <div className="text-xs font-bold text-[#EDEDF5]">
+              <div className="text-[11px] font-bold text-[#EDEDF5]">
                 وصلتَ إلى نهاية المعاينة المجانية ({toArabicNumerals(Math.min(completedFreeCount, freeStationLimit))} من {toArabicNumerals(freeStationLimit)} محطات)
               </div>
-              <p className="text-[11px] text-[#C7C4D8] leading-relaxed">
+              <p className="text-[10px] text-[#C7C4D8] leading-snug">
                 {targetStationTitle
                   ? `لبدء التدبر في «${targetStationTitle}» وإكمال بقية محطات ومنازل الرحلة، يمكنك الترقية إلى الخطة الكاملة.`
                   : 'لإكمال بقية المحطات وفتح جميع منازل الرحلة ووقفات المحاسبة، يمكنك الترقية إلى الخطة الكاملة.'}
@@ -121,53 +121,53 @@ export const PremiumPaywallScreen: React.FC<PremiumPaywallScreenProps> = ({
         )}
 
         {/* Calm Header & Subtitle */}
-        <div className="space-y-2 text-right">
+        <div className="space-y-1 text-right shrink-0">
           <h2
             id="premium-paywall-title"
-            className="text-2xl sm:text-3xl font-serif font-bold text-[#EDEDF5] leading-snug"
+            className="text-xl sm:text-2xl font-serif font-bold text-[#EDEDF5] leading-snug"
           >
             رحلتك الخاصة مع النعم
           </h2>
-          <p className="text-xs sm:text-sm text-[#C7C4D8] leading-relaxed">
+          <p className="text-[11px] sm:text-xs text-[#C7C4D8] leading-relaxed">
             مساحة هادئة للغوص أعمق في منازل الشكر والامتنان، صُممت لترافقك بخصوصية تامة وبلا أي ضغوط أو تنبيهات مزعجة.
           </p>
         </div>
 
         {/* Three Core Benefits */}
-        <div className="space-y-3" aria-label="مزايا الخطة المدفوعة">
+        <div className="space-y-2 shrink-0" aria-label="مزايا الخطة المدفوعة">
           {benefits.map((benefit) => {
             const Icon = benefit.icon;
             return (
               <div
                 key={benefit.id}
-                className="p-4 rounded-2xl bg-[#1E1E38]/85 border border-[#2E2E4A] flex items-start gap-3.5"
+                className="p-2.5 sm:p-3 rounded-2xl bg-[#1E1E38]/85 border border-[#2E2E4A] flex items-start gap-2.5"
               >
-                <div className="w-9 h-9 rounded-xl bg-[#6C63FF]/15 border border-[#6C63FF]/35 flex items-center justify-center text-[#6C63FF] shrink-0 mt-0.5">
-                  <Icon size={18} />
+                <div className="w-8 h-8 rounded-xl bg-[#6C63FF]/15 border border-[#6C63FF]/35 flex items-center justify-center text-[#6C63FF] shrink-0 mt-0.5">
+                  <Icon size={16} />
                 </div>
-                <div className="space-y-1 text-right">
-                  <h3 className="text-sm font-bold text-[#EDEDF5]">{benefit.title}</h3>
-                  <p className="text-xs text-[#AEAECB] leading-relaxed">{benefit.desc}</p>
+                <div className="space-y-0.5 text-right">
+                  <h3 className="text-xs font-bold text-[#EDEDF5]">{benefit.title}</h3>
+                  <p className="text-[11px] text-[#AEAECB] leading-snug">{benefit.desc}</p>
                 </div>
               </div>
             );
           })}
         </div>
 
-        {/* Two Plan Options: Annual & Lifetime with Price Placeholders (No countdowns, no fake urgency) */}
-        <div className="space-y-2.5">
-          <span className="text-xs font-semibold text-[#AEAECB] block text-right">
+        {/* Two Plan Options: Annual & Lifetime with Price Placeholders */}
+        <div className="space-y-1.5 shrink-0">
+          <span className="text-[11px] font-semibold text-[#AEAECB] block text-right">
             اختر الخطة المناسبة لك:
           </span>
 
-          <div className="grid grid-cols-2 gap-3" role="radiogroup" aria-label="خيارات الاشتراك">
+          <div className="grid grid-cols-2 gap-2.5" role="radiogroup" aria-label="خيارات الاشتراك">
             {/* Option 1: Annual */}
             <button
               type="button"
               role="radio"
               aria-checked={selectedPlan === 'annual'}
               onClick={() => handleSelectPlan('annual')}
-              className={`p-4 rounded-2xl border text-right transition-all flex flex-col justify-between gap-2.5 cursor-pointer ${
+              className={`p-3 rounded-2xl border text-right transition-all flex flex-col justify-between gap-1.5 cursor-pointer ${
                 selectedPlan === 'annual'
                   ? 'bg-[#1E1E38] border-[#6C63FF] shadow-[0_0_20px_rgba(108,99,255,0.18)]'
                   : 'bg-[#1E1E38]/50 border-[#2E2E4A] hover:border-[#2E2E4A]/90'
@@ -176,21 +176,21 @@ export const PremiumPaywallScreen: React.FC<PremiumPaywallScreenProps> = ({
               <div className="flex items-center justify-between w-full">
                 <span className="text-xs font-bold text-[#EDEDF5]">اشتراك سنوي</span>
                 <div
-                  className={`w-5 h-5 rounded-full flex items-center justify-center border ${
+                  className={`w-4 h-4 rounded-full flex items-center justify-center border ${
                     selectedPlan === 'annual'
                       ? 'bg-[#6C63FF] border-[#6C63FF] text-white'
                       : 'border-[#2E2E4A]'
                   }`}
                 >
-                  {selectedPlan === 'annual' && <Check size={12} />}
+                  {selectedPlan === 'annual' && <Check size={10} />}
                 </div>
               </div>
 
-              <div className="pt-1 space-y-0.5">
-                <div className="text-sm sm:text-base font-bold text-[#EDEDF5]">
+              <div className="space-y-0.5">
+                <div className="text-xs sm:text-sm font-bold text-[#EDEDF5]">
                   [السعر السنوي]
                 </div>
-                <div className="text-[11px] text-[#AEAECB]">
+                <div className="text-[10px] text-[#AEAECB]">
                   يُجدَّد سنوياً · يمكن إلغاؤه بأي وقت
                 </div>
               </div>
@@ -202,7 +202,7 @@ export const PremiumPaywallScreen: React.FC<PremiumPaywallScreenProps> = ({
               role="radio"
               aria-checked={selectedPlan === 'lifetime'}
               onClick={() => handleSelectPlan('lifetime')}
-              className={`p-4 rounded-2xl border text-right transition-all flex flex-col justify-between gap-2.5 cursor-pointer ${
+              className={`p-3 rounded-2xl border text-right transition-all flex flex-col justify-between gap-1.5 cursor-pointer ${
                 selectedPlan === 'lifetime'
                   ? 'bg-[#1E1E38] border-[#6C63FF] shadow-[0_0_20px_rgba(108,99,255,0.18)]'
                   : 'bg-[#1E1E38]/50 border-[#2E2E4A] hover:border-[#2E2E4A]/90'
@@ -211,21 +211,21 @@ export const PremiumPaywallScreen: React.FC<PremiumPaywallScreenProps> = ({
               <div className="flex items-center justify-between w-full">
                 <span className="text-xs font-bold text-[#EDEDF5]">مدى الحياة</span>
                 <div
-                  className={`w-5 h-5 rounded-full flex items-center justify-center border ${
+                  className={`w-4 h-4 rounded-full flex items-center justify-center border ${
                     selectedPlan === 'lifetime'
                       ? 'bg-[#6C63FF] border-[#6C63FF] text-white'
                       : 'border-[#2E2E4A]'
                   }`}
                 >
-                  {selectedPlan === 'lifetime' && <Check size={12} />}
+                  {selectedPlan === 'lifetime' && <Check size={10} />}
                 </div>
               </div>
 
-              <div className="pt-1 space-y-0.5">
-                <div className="text-sm sm:text-base font-bold text-[#EDEDF5]">
+              <div className="space-y-0.5">
+                <div className="text-xs sm:text-sm font-bold text-[#EDEDF5]">
                   [سعر مدى الحياة]
                 </div>
-                <div className="text-[11px] text-[#AEAECB]">
+                <div className="text-[10px] text-[#AEAECB]">
                   دفعة واحدة · دون اشتراك متكرر
                 </div>
               </div>
@@ -234,46 +234,48 @@ export const PremiumPaywallScreen: React.FC<PremiumPaywallScreenProps> = ({
         </div>
 
         {/* Privacy & local storage reassurance */}
-        <div className="px-3.5 py-2.5 rounded-xl bg-[#1E1E38]/50 border border-[#2E2E4A]/80 flex items-center gap-2.5 text-right">
-          <ShieldCheck size={16} className="text-[#AEAECB] shrink-0" />
-          <p className="text-[11px] text-[#AEAECB] leading-relaxed">
-            تبقى جميع يومياتك ووقفات محاسبتك محفوظة محلياً على جهازك وحده حتى بعد الاشتراك.
-          </p>
-        </div>
+        {!noticeMessage && (
+          <div className="px-3 py-2 rounded-xl bg-[#1E1E38]/50 border border-[#2E2E4A]/80 flex items-center gap-2 text-right shrink-0">
+            <ShieldCheck size={14} className="text-[#AEAECB] shrink-0" />
+            <p className="text-[10px] text-[#AEAECB] leading-snug">
+              تبقى جميع يومياتك ووقفات محاسبتك محفوظة محلياً على جهازك وحده حتى بعد الاشتراك.
+            </p>
+          </div>
+        )}
 
         {/* Developer / RevenueCat Notice */}
         {noticeMessage && (
-          <div className="p-3.5 rounded-2xl bg-[#1E1E38] border border-[#6C63FF]/40 space-y-2.5 text-right animate-fade-in">
-            <p className="text-xs text-[#C7C4D8] leading-relaxed">{noticeMessage}</p>
+          <div className="p-2.5 rounded-2xl bg-[#1E1E38] border border-[#6C63FF]/40 flex items-center justify-between gap-2.5 text-right animate-fade-in shrink-0">
+            <p className="text-[10px] text-[#C7C4D8] leading-snug flex-1">{noticeMessage}</p>
             <button
               type="button"
               onClick={handleDevUnlockNow}
-              className="w-full py-2.5 px-4 rounded-xl bg-[#6C63FF]/20 hover:bg-[#6C63FF]/30 border border-[#6C63FF]/50 text-xs font-bold text-[#EDEDF5] transition-colors cursor-pointer"
+              className="py-2 px-3 rounded-xl bg-[#6C63FF]/25 hover:bg-[#6C63FF]/35 border border-[#6C63FF]/50 text-[11px] font-bold text-[#EDEDF5] transition-colors cursor-pointer shrink-0"
             >
-              تفعيل «رحلتي» الآن (وضع المطوّر)
+              تفعيل الآن (وضع المطوّر)
             </button>
           </div>
         )}
 
         {/* Primary CTA & Reassurance */}
-        <div className="space-y-3 pt-1">
+        <div className="space-y-2 pt-0.5 shrink-0">
           <button
             type="button"
             onClick={handleSubscribeClick}
-            className="w-full py-4 px-6 rounded-2xl bg-[#6C63FF] hover:bg-[#594DFF] text-white font-bold text-sm sm:text-base transition-all shadow-lg shadow-[#6C63FF]/25 cursor-pointer"
+            className="w-full py-3 px-5 rounded-2xl bg-[#6C63FF] hover:bg-[#594DFF] text-white font-bold text-xs sm:text-sm transition-all shadow-lg shadow-[#6C63FF]/25 cursor-pointer"
           >
             {selectedPlan === 'annual'
               ? 'متابعة مع الاشتراك السنوي'
               : 'متابعة مع خطة مدى الحياة'}
           </button>
 
-          <div className="flex items-center justify-between pt-1 px-1">
+          <div className="flex items-center justify-between px-1">
             <button
               type="button"
               onClick={handleRestorePurchases}
-              className="inline-flex items-center gap-1.5 text-[11px] text-[#AEAECB] hover:text-[#EDEDF5] transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1 text-[11px] text-[#AEAECB] hover:text-[#EDEDF5] transition-colors cursor-pointer"
             >
-              <RotateCcw size={12} />
+              <RotateCcw size={11} />
               <span>استعادة المشتريات</span>
             </button>
 
@@ -287,7 +289,7 @@ export const PremiumPaywallScreen: React.FC<PremiumPaywallScreenProps> = ({
           </div>
 
           {/* Mandatory clear reassurance sentence */}
-          <p className="text-xs text-[#AEAECB] text-center font-medium pt-1 border-t border-[#2E2E4A]/60">
+          <p className="text-[10px] text-[#AEAECB] text-center font-medium pt-1.5 border-t border-[#2E2E4A]/60">
             نعمة اليوم والأذكار والتسبيح تبقى مجانية دائماً وبلا إعلانات
           </p>
         </div>

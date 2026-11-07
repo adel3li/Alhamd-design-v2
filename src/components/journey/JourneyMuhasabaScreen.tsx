@@ -3,6 +3,7 @@ import { X, BookOpen, Check, ShieldCheck } from 'lucide-react';
 import { getBlessingById } from '../../data/loader';
 import { makeStationId } from '../../lib/journeyStore';
 import { toArabicNumerals } from '../../lib/arabic';
+import { useStore } from '../../lib/store';
 
 interface JourneyMuhasabaScreenProps {
   stage: {
@@ -24,6 +25,7 @@ export const JourneyMuhasabaScreen: React.FC<JourneyMuhasabaScreenProps> = ({
   onClose,
   onSave
 }) => {
+  const { triggerHaptic } = useStore();
   const [q1, setQ1] = useState(initialAnswers?.q1 || '');
   const [q2, setQ2] = useState(initialAnswers?.q2 || '');
 
@@ -41,6 +43,7 @@ export const JourneyMuhasabaScreen: React.FC<JourneyMuhasabaScreenProps> = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    triggerHaptic('success');
     onSave(q1, q2);
   };
 

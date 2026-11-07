@@ -131,12 +131,12 @@ export const JourneyStationFlow: React.FC<JourneyStationFlowProps> = ({
   };
 
   const handleAdvanceFromDawwin = () => {
-    triggerHaptic('light');
+    triggerHaptic(journalText.trim().length > 0 ? 'success' : 'light');
     setPhase('amal');
   };
 
   const handleAdvanceFromAmal = () => {
-    triggerHaptic('light');
+    triggerHaptic('success');
     if (!hasRecordedClosingRef.current && onReachClosing) {
       hasRecordedClosingRef.current = true;
       onReachClosing(journalText.trim() || undefined);
@@ -145,7 +145,7 @@ export const JourneyStationFlow: React.FC<JourneyStationFlowProps> = ({
   };
 
   const handleFinishSession = () => {
-    triggerHaptic('light');
+    triggerHaptic('success');
     onComplete(journalText.trim() || undefined);
   };
 

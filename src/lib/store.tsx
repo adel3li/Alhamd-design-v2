@@ -253,47 +253,64 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     []
   );
 
+  // Haptic Feedback Helper
+  const triggerHaptic = useCallback((type: 'light' | 'medium' | 'heavy' | 'success' = 'light') => {
+    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+      try {
+        if (type === 'light') navigator.vibrate(8);
+        else if (type === 'medium') navigator.vibrate(20);
+        else if (type === 'heavy') navigator.vibrate(35);
+        else if (type === 'success') navigator.vibrate([15, 30, 25]);
+      } catch {}
+    }
+  }, []);
+
   const completeJourneyOnboardingState = useCallback(
     (params: { focusThemes: string[]; pace: 1 | 2; reminderTime: string | null }): JourneyState => {
       const next = completeJourneyOnboarding(params);
       setJourneyStateInternal(next);
+      triggerHaptic('success');
       return next;
     },
-    []
+    [triggerHaptic]
   );
 
   const completeJourneyStationState = useCallback(
     (params: { stationId: string; journalText?: string }): JourneyState => {
       const next = completeJourneyStation(params);
       setJourneyStateInternal(next);
+      triggerHaptic('success');
       return next;
     },
-    []
+    [triggerHaptic]
   );
 
   const saveJourneyStationJournal = useCallback(
     (stationId: string, journalText: string): JourneyState => {
       const next = saveStationJournal(stationId, journalText);
       setJourneyStateInternal(next);
+      triggerHaptic('success');
       return next;
     },
-    []
+    [triggerHaptic]
   );
 
   const saveJourneyStageMuhasaba = useCallback(
     (stageId: string, q1: string, q2: string): JourneyState => {
       const next = saveStageMuhasaba(stageId, q1, q2);
       setJourneyStateInternal(next);
+      triggerHaptic('success');
       return next;
     },
-    []
+    [triggerHaptic]
   );
 
   const resetJourneyState = useCallback((): JourneyState => {
     const fresh = devResetEntireJourney();
     setJourneyStateInternal(fresh);
+    triggerHaptic('medium');
     return fresh;
-  }, []);
+  }, [triggerHaptic]);
 
   // Blessings pool and Today's computed blessing
   const allBlessings = useMemo(() => getAllBlessings(), []);
@@ -313,18 +330,6 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     const todayStr = new Date().toISOString().split('T')[0];
     return completedReflections.includes(todayStr);
   }, [completedReflections]);
-
-  // Haptic Feedback Helper
-  const triggerHaptic = useCallback((type: 'light' | 'medium' | 'heavy' | 'success' = 'light') => {
-    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
-      try {
-        if (type === 'light') navigator.vibrate(8);
-        else if (type === 'medium') navigator.vibrate(20);
-        else if (type === 'heavy') navigator.vibrate(35);
-        else if (type === 'success') navigator.vibrate([15, 30, 25]);
-      } catch {}
-    }
-  }, []);
 
   // Synchronize with document element classes for Theme & High Contrast
   useEffect(() => {

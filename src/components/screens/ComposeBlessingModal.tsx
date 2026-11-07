@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { ChevronRight, Check } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { GlassCard } from '../common/GlassCard';
 import { CATEGORIES } from '../../constants/categories';
 import { APP_STRINGS } from '../../constants/strings';
 import { toArabicNumerals } from '../../lib/arabic';
+import { useStore } from '../../lib/store';
 
 interface ComposeBlessingModalProps {
   onClose: () => void;
@@ -20,6 +21,7 @@ export const ComposeBlessingModal: React.FC<ComposeBlessingModalProps> = ({
   onClose,
   onSave
 }) => {
+  const { triggerHaptic } = useStore();
   const [title, setTitle] = useState('');
   const [prompt1, setPrompt1] = useState('');
   const [prompt2, setPrompt2] = useState('');
@@ -29,9 +31,11 @@ export const ComposeBlessingModal: React.FC<ComposeBlessingModalProps> = ({
 
   const handleSave = () => {
     if (!title.trim()) {
+      triggerHaptic('medium');
       setError('يرجى كتابة اسم النعمة أولًا');
       return;
     }
+    triggerHaptic('success');
     onSave({
       title: title.trim(),
       prompt1: prompt1.trim(),

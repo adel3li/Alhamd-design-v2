@@ -353,7 +353,7 @@ export const JourneyPathScreen: React.FC = () => {
       pace: params.pace
     });
     setShowOnboarding(false);
-    triggerHaptic('light');
+    triggerHaptic('success');
   };
 
   const handleSelectStation = (
@@ -454,6 +454,7 @@ export const JourneyPathScreen: React.FC = () => {
       });
     }
 
+    triggerHaptic('success');
     return updatedState;
   };
 
@@ -586,7 +587,7 @@ export const JourneyPathScreen: React.FC = () => {
       stage_id: activeMuhasabaStageId
     });
     setActiveMuhasabaStageId(null);
-    triggerHaptic('light');
+    triggerHaptic('success');
   };
 
   if (!entitlementLoaded) {
