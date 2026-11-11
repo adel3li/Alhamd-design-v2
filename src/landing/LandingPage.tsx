@@ -3,7 +3,7 @@ import {BeadsIcon, BookIcon, CalendarIcon, CloseIcon, CompassIcon, HomeIcon, Shi
 import {PhoneFrame, PhoneHomeScreen, PhoneReflectScreen, StarPattern} from './PhoneMockups';
 
 /** Where the "try the app" buttons point. */
-const APP_URL = 'https://alhamd.ai.studio';
+const APP_URL = 'https://app.alhamd.app';
 /** Support address for the footer's "contact us" link; the link is hidden while this is empty. */
 const SUPPORT_EMAIL = '';
 
