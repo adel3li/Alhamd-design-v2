@@ -3,12 +3,7 @@
   "redirects": [
     {
       "source": "/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "www.alhamd.app"
-        }
-      ],
+      "has": [{ "type": "host", "value": "www.alhamd.app" }],
       "destination": "https://alhamd.app/:path*",
       "permanent": true
     }
@@ -16,13 +11,12 @@
   "rewrites": [
     {
       "source": "/",
-      "has": [
-        {
-          "type": "host",
-          "value": "alhamd.app"
-        }
-      ],
+      "has": [{ "type": "host", "value": "alhamd.app" }],
       "destination": "/landing/index.html"
+    },
+    {
+      "source": "/",
+      "destination": "/app.html"
     }
   ]
 }
