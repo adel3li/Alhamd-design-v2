@@ -1,0 +1,645 @@
+<title>Alhamd by Subtraction</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Geist+Mono:wght@400;500&family=Amiri:wght@400;700&family=Amiri+Quran&display=swap">
+<style>
+/* Layout concept: the case study follows the app's own five-step ritual.
+   Arrive (night) → Imagine it gone (near-black, bare) → Go deeper (near-black)
+   → Return (light comes back) → Praise (day). The gold thread in the top bar
+   is the reading progress, with one knot per step, exactly like the app's
+   reflection screen. Single committed look, theme-independent. */
+:root{
+  --night:#0C0C1C; --void:#05050D; --raise:#15152B; --line-n:#2A2A46;
+  --star:#EDEDF5; --haze:#ABAAC8; --gold:#E4C368; --violet:#7A72FF; --loss:#E5837A;
+  --day:#F4EDE3; --day-2:#EAE0D0; --card:#FBF8F3; --line-d:#D6C8B5;
+  --ink:#2A1F19; --ink-2:#5E4D41; --clay:#A9502F; --ok:#2C7A55;
+  --f-display:'Bricolage Grotesque','Arial Narrow',system-ui,sans-serif;
+  --f-body:'Instrument Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-mono:'Geist Mono',ui-monospace,'SF Mono',Menlo,monospace;
+  --f-ar:'Amiri','Noto Naskh Arabic',serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{background:var(--night);color:var(--star);font:400 17px/1.62 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--night)}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:6px}
+.light :focus-visible{outline-color:var(--clay)}
+h1,h2,h3{font-family:var(--f-display);font-weight:600;margin:0;text-wrap:balance;letter-spacing:-.025em}
+h2{font-size:clamp(2.1rem,5vw,3.9rem);line-height:1.02}
+h3{font-size:1.35rem;line-height:1.2;letter-spacing:-.01em}
+p{margin:0}
+.ar{font-family:var(--f-ar);direction:rtl}
+.mono{font:400 .78rem/1.5 var(--f-mono)}
+.label{font:500 .7rem/1.3 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--haze)}
+.light .label{color:var(--ink-2)}
+.muted{color:var(--haze)} .light .muted{color:var(--ink-2)}
+.acc{color:var(--gold)} .light .acc{color:var(--clay)}
+.wrap{max-width:1160px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.band{padding-block:clamp(80px,11vw,150px)}
+.stack{display:flex;flex-direction:column;min-width:0}
+.prose{max-width:62ch;display:flex;flex-direction:column;gap:1.05em}
+.night{background:var(--night)} .void{background:var(--void)}
+.light{background:var(--day);color:var(--ink)} .light-2{background:var(--day-2)}
+.tradeoff{border-left:0;padding:14px 16px;border-radius:12px;background:#ffffff0a;font-size:.95rem;max-width:62ch}
+.tradeoff b{font:500 .7rem/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:6px}
+.light .tradeoff{background:#2a1f190a}.light .tradeoff b{color:var(--clay)}
+
+/* ── top bar with the reading thread ── */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--night) 90%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line-n)}
+.bar .wrap{display:flex;align-items:center;gap:24px;height:62px}
+.mark{font:700 24px/1 var(--f-ar);color:var(--gold);text-decoration:none;flex:0 0 auto}
+.reading{position:relative;flex:1;height:30px;min-width:0}
+.reading .track{position:absolute;left:0;right:0;top:9px;height:1px;background:var(--line-n)}
+.reading .fill{position:absolute;left:0;top:8.5px;height:2px;width:0;background:var(--gold)}
+.reading a{position:absolute;top:0;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;padding:5px 4px 0}
+.reading a i{width:9px;height:9px;border-radius:50%;background:var(--night);border:1.5px solid var(--line-n);transition:background .3s,border-color .3s}
+.reading a.on i{background:var(--gold);border-color:var(--gold)}
+.reading a span{font:500 .62rem/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--haze);white-space:nowrap}
+.reading a.on span{color:var(--star)}
+.reading a:first-of-type{transform:none;align-items:flex-start;padding-left:0}
+@media (max-width:820px){.reading a span{display:none}.bar .wrap{gap:14px}}
+.switch{display:inline-flex;border:1px solid var(--line-n);border-radius:999px;padding:3px;background:var(--raise);flex:0 0 auto}
+.switch button{all:unset;cursor:pointer;font:500 .72rem/1 var(--f-mono);letter-spacing:.05em;padding:9px 12px;border-radius:999px;color:var(--haze);display:inline-flex;align-items:center;gap:6px}
+.switch button[aria-pressed="true"]{background:var(--star);color:var(--night)}
+.switch button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.dot{width:7px;height:7px;border-radius:50%;background:currentColor;display:inline-block;flex:0 0 auto}
+.switch button[data-s="live"][aria-pressed="true"] .dot{background:#2FA36B}
+.live-only{display:none}
+[data-state="live"] .live-only{display:revert}
+[data-state="live"] .pre-only{display:none}
+
+/* ── hero ── */
+.hero{position:relative;overflow:hidden;padding-block:clamp(56px,8vw,110px) clamp(64px,8vw,104px)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(36px,6vw,88px);align-items:center}
+@media (max-width:920px){.hero-grid{grid-template-columns:1fr}}
+.hero h1{font-size:clamp(3.4rem,10vw,8.4rem);line-height:.88;letter-spacing:-.045em;font-weight:700}
+.hero h1 s{text-decoration:none;position:relative;color:var(--haze)}
+.hero h1 s::after{content:"";position:absolute;left:-2%;right:-2%;top:54%;height:.07em;background:var(--gold);border-radius:2px}
+.hero .sub{font-size:1.2rem;line-height:1.55;color:#D5D4E8;max-width:33em}
+.field{display:flex;flex-wrap:wrap;gap:8px;align-content:center}
+.field span{display:inline-flex;align-items:baseline;gap:8px;padding:9px 14px;border-radius:999px;border:1px solid var(--line-n);font-size:.95rem;color:var(--star);transition:opacity .9s ease,border-color .9s ease,color .9s ease}
+.field span b{font:400 1.05rem/1 var(--f-ar);color:var(--haze);transition:color .9s ease}
+.field span.gone{opacity:.1}
+.field span.seen{border-color:color-mix(in srgb,var(--gold) 70%,transparent)}
+.field span.seen b{color:var(--gold)}
+.field-cap{margin-top:18px;font:400 .78rem/1.5 var(--f-mono);color:var(--haze)}
+.brief{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line-n);margin-top:clamp(48px,7vw,88px)}
+.brief>div{padding:22px 22px 0 0;display:flex;flex-direction:column;gap:8px;min-width:0}
+.brief>div+div{padding-left:22px;border-left:1px solid var(--line-n)}
+.brief p{font-size:.98rem;line-height:1.5}
+@media (max-width:900px){.brief{grid-template-columns:1fr 1fr}.brief>div{padding-bottom:22px}.brief>div:nth-child(3){padding-left:0;border-left:0}.brief>div:nth-child(n+3){border-top:1px solid var(--line-n)}}
+@media (max-width:520px){.brief{grid-template-columns:1fr}.brief>div+div{padding-left:0;border-left:0;border-top:1px solid var(--line-n)}}
+.facts{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:28px;font:400 .78rem/1.5 var(--f-mono);color:var(--haze)}
+.facts b{color:var(--star);font-weight:500}
+
+/* ── step headers ── */
+.step{display:flex;align-items:center;gap:14px;margin-bottom:26px;flex-wrap:wrap}
+.step .n{font:500 .72rem/1 var(--f-mono);letter-spacing:.1em;padding:7px 11px;border-radius:999px;border:1px solid currentColor;color:var(--gold)}
+.light .step .n{color:var(--clay)}
+.step .a{font:700 1.25rem/1 var(--f-ar);color:var(--gold)}
+.light .step .a{color:var(--clay)}
+
+/* ── phone + ritual ── */
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,400px);gap:clamp(40px,6vw,88px);align-items:center}
+@media (max-width:900px){.two{grid-template-columns:1fr}}
+.phone{position:relative;width:min(100%,360px);aspect-ratio:9/17;margin-inline:auto;border-radius:42px;border:1px solid var(--line-n);background:#111126;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.55)}
+.lattice{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.glow{position:absolute;inset:0;transition:background 2.5s ease;background:radial-gradient(60% 45% at 50% 45%,rgba(228,195,104,0),transparent)}
+.phone[data-type="visualize"],.phone[data-type="deepen"]{background:#08081a}
+.phone[data-type="return"] .glow{background:radial-gradient(60% 45% at 50% 45%,rgba(228,195,104,.1),transparent)}
+.phone[data-type="hamd"] .glow{background:radial-gradient(75% 55% at 50% 45%,rgba(228,195,104,.22),transparent)}
+.p-top{position:absolute;top:22px;left:20px;right:20px;display:flex;align-items:center;gap:12px;direction:rtl}
+.thread{position:relative;flex:1;height:8px}
+.thread::before{content:"";position:absolute;inset:3px 0 auto;height:1px;background:var(--line-n)}
+.thread .fill{position:absolute;right:0;top:3px;height:1.5px;background:var(--gold);width:0}
+.thread .knot{position:absolute;top:0;width:7px;height:7px;border-radius:50%;background:var(--line-n);transform:translateX(50%)}
+.thread .knot.on{background:var(--gold)}
+.timer{font:500 .76rem/1 var(--f-mono);color:var(--haze)}
+.p-body{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:0 28px;text-align:center}
+.chip{font:700 14px/1 var(--f-ar);padding:8px 16px;border-radius:999px;border:1px solid var(--line-n);color:var(--gold);background:#11112699;direction:rtl}
+.sentence{font:400 clamp(1.3rem,4.4vw,1.65rem)/1.85 var(--f-ar);direction:rtl;transition:opacity .4s ease,transform .4s ease}
+.gloss{font:italic 400 .98rem/1.45 var(--f-body);color:var(--haze);max-width:27ch;transition:opacity .4s ease}
+.out{opacity:0}
+.sentence.out{transform:translateY(6px)}
+.p-foot{position:absolute;left:20px;right:20px;bottom:22px;display:flex;gap:10px}
+.btn{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;height:50px;padding:0 20px;border-radius:16px;font:600 .95rem/1 var(--f-body)}
+.btn-p{background:var(--violet);color:#fff;flex:1}.btn-p:hover{background:#6A61F2}
+.btn-g{border:1px solid var(--line-n);color:var(--star);background:#11112699}
+.btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.key{list-style:none;margin:8px 0 0;padding:0}
+.key li{display:grid;grid-template-columns:1fr auto;gap:14px;padding:12px 0;border-top:1px solid var(--line-n);color:var(--haze);transition:color .3s}
+.key li:last-child{border-bottom:1px solid var(--line-n)}
+.key li.now{color:var(--gold)}
+.key .t{font:400 .78rem/1.6 var(--f-mono);font-variant-numeric:tabular-nums}
+
+/* ── streak simulator ── */
+.sim{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:760px){.sim{grid-template-columns:1fr}}
+.sim-card{border:1px solid var(--line-n);border-radius:24px;padding:24px;display:flex;flex-direction:column;gap:18px;min-width:0;background:#0B0B18}
+.sim-card.v2{background:var(--raise)}
+.sim-num{font:700 5.2rem/1 var(--f-display);letter-spacing:-.04em;font-variant-numeric:tabular-nums;transition:color .4s;min-height:1em}
+.sim-num.broke{color:var(--loss)}
+.days{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));gap:5px}
+.days i{aspect-ratio:1;border-radius:50%;border:1.5px solid var(--line-n)}
+.days i.f{background:var(--gold);border-color:var(--gold)}
+.days i.today{outline:1.5px solid var(--star);outline-offset:2px}
+.sim-card.v1.broke .days i.f{background:#4a4a66;border-color:#4a4a66}
+.sim-msg{font-size:.95rem;min-height:3.1em}
+.sim-ctl{display:flex;gap:10px;flex-wrap:wrap}
+.sim-ctl .btn{height:48px}
+.btn-o{border:1px solid var(--line-n);color:var(--star)}
+.btn-o:hover{border-color:var(--haze)}
+
+/* ── ledger ── */
+.ledger{border-top:1px solid var(--line-n)}
+.row{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) minmax(0,1.3fr) minmax(0,1.1fr);gap:22px;padding:22px 0;border-bottom:1px solid var(--line-n);align-items:start}
+.row.head{padding:12px 0}
+.row h3 s{text-decoration-color:var(--loss);text-decoration-thickness:2px;color:var(--star)}
+.row p{font-size:.95rem;line-height:1.5}
+.row .kept{color:var(--gold)}
+@media (max-width:900px){.row{grid-template-columns:1fr;gap:8px}.row.head{display:none}.row p[data-l]::before{content:attr(data-l);display:block;font:500 .64rem/1.6 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--haze)}}
+.cut{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:820px){.cut{grid-template-columns:1fr}}
+.ev{display:flex;flex-wrap:wrap;gap:5px}
+.ev span{font:400 .68rem/1 var(--f-mono);padding:5px 7px;border-radius:6px;border:1px solid var(--line-n);color:#7f7e9e;text-decoration:line-through;text-decoration-color:#E5837A99}
+.ev.keep span{color:var(--gold);border-color:color-mix(in srgb,var(--gold) 55%,transparent);text-decoration:none}
+.code{font:400 .8rem/1.7 var(--f-mono);background:#0A0A16;border:1px solid var(--line-n);border-radius:14px;padding:16px 18px;overflow-x:auto;white-space:pre;color:#D2D0E6;max-width:100%}
+.code .c{color:#7F7E9E}.code .k{color:var(--gold)}.code .s{color:#B9B4FF}.code .f{color:var(--loss)}
+.bignum{font:700 4.6rem/.9 var(--f-display);letter-spacing:-.04em}
+
+/* ── return (light) ── */
+.dawn{background:linear-gradient(var(--void),#2A1F19 55%,var(--day));height:clamp(120px,16vw,220px)}
+.kept-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:820px){.kept-grid{grid-template-columns:1fr}}
+.kcard{background:var(--card);border:1px solid var(--line-d);border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:18px;min-width:0}
+.kcard.wide{grid-column:1/-1}
+.kcard p{font-size:.98rem}
+.today{border-radius:18px;background:var(--night);color:var(--star);padding:22px;text-align:center;display:flex;flex-direction:column;gap:8px}
+.today .t{font:700 1.9rem/1.4 var(--f-ar);direction:rtl}
+.cities{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 20px}
+.cities div{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--line-d);font:400 .76rem/1.4 var(--f-mono);font-variant-numeric:tabular-nums}
+.dur{display:flex;flex-direction:column;gap:9px}
+.dur-row{display:grid;grid-template-columns:118px minmax(0,1fr);gap:12px;align-items:center;font-size:.92rem}
+.dur-bar{height:28px;border-radius:7px;background:#2a1f190d;position:relative}
+.dur-bar b{position:absolute;inset:0 auto 0 0;border-radius:7px;background:var(--clay);display:flex;align-items:center;padding-left:10px;font:500 .74rem/1 var(--f-mono);color:#fff}
+.dur-bar b.dark{background:var(--ink)}
+.specs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:1px solid var(--line-d)}
+.specs div{padding:14px 12px 0 0;display:flex;flex-direction:column;gap:4px;font-size:.84rem;color:var(--ink-2)}
+.specs div+div{padding-left:12px;border-left:1px solid var(--line-d)}
+.specs b{font:600 1.5rem/1 var(--f-display);color:var(--ink);letter-spacing:-.02em}
+@media (max-width:560px){.specs{grid-template-columns:1fr 1fr}.specs div:nth-child(3){padding-left:0;border-left:0}.specs div{padding-bottom:12px}}
+.trust{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:28px;align-items:start}
+@media (max-width:820px){.trust{grid-template-columns:1fr}}
+.gate-bar{display:grid;grid-template-columns:repeat(40,minmax(0,1fr));gap:2px}
+.gate-bar i{height:26px;border-radius:3px;border:1px solid var(--line-d)}
+[data-state="live"] .gate-bar i{background:var(--ok);border-color:var(--ok)}
+.model{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+@media (max-width:640px){.model{grid-template-columns:1fr}}
+.model ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px;font-size:.96rem}
+.model li{display:flex;gap:10px;align-items:baseline}
+.model li::before{content:"";flex:0 0 6px;height:6px;border-radius:50%;background:var(--clay);transform:translateY(-2px)}
+.stations{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;max-width:280px}
+.stations i{aspect-ratio:1;border-radius:50%;border:1.5px solid var(--line-d)}
+.stations i.free{background:var(--clay);border-color:var(--clay)}
+.st small{font:400 .7rem/2 var(--f-mono);color:var(--ink-2);display:block}
+.pal{display:grid;grid-template-columns:1fr 1fr;border-radius:16px;overflow:hidden;border:1px solid var(--line-d)}
+.pal>div{padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.pal .l{background:#15152A;color:#E4C368}.pal .n{background:#F4EDE3;color:#9E4A30}
+.pal b{font:700 2.4rem/1 var(--f-ar)}
+.sw{display:flex;gap:6px;flex-wrap:wrap}
+.sw i{width:30px;height:30px;border-radius:8px;border:1px solid #0000001f}
+@media (max-width:480px){.pal{grid-template-columns:1fr}}
+
+/* ── going live ── */
+.gates{list-style:none;margin:0;padding:0;border-top:1px solid var(--line-d)}
+.gates li{display:grid;grid-template-columns:96px minmax(0,1fr) minmax(0,1.4fr);gap:18px;padding:16px 0;border-bottom:1px solid var(--line-d);align-items:baseline}
+@media (max-width:720px){.gates li{grid-template-columns:1fr;gap:5px}}
+.tag{display:inline-flex;align-items:center;font:500 .66rem/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;padding:6px 9px;border-radius:999px;border:1px solid currentColor;justify-self:start}
+.tag.done{color:var(--ok)}.tag.open{color:var(--clay)}
+[data-state="live"] .tag.open{color:var(--ok)}
+[data-state="live"] .tag.open .pre-only{display:none}
+.score{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--line-d)}
+.score>div{padding:20px 18px 22px 0;display:flex;flex-direction:column;gap:8px;border-bottom:1px solid var(--line-d);min-width:0}
+.score>div+div{padding-left:18px;border-left:1px solid var(--line-d)}
+.score .v{font:600 1.9rem/1.05 var(--f-display);letter-spacing:-.02em}
+.score p{font-size:.9rem;line-height:1.45}
+.score .actual{display:none;font:500 .74rem/1.4 var(--f-mono);color:var(--ok);border-top:1px dashed var(--line-d);padding-top:8px}
+[data-state="live"] .score .actual{display:block}
+@media (max-width:880px){.score{grid-template-columns:1fr 1fr}.score>div:nth-child(3){padding-left:0;border-left:0}}
+@media (max-width:500px){.score{grid-template-columns:1fr}.score>div+div{padding-left:0;border-left:0}}
+.banner{border:1px solid #2C7A5566;background:#2C7A5512;border-radius:14px;padding:16px 18px;color:#1F5C40;font-size:.95rem}
+.end{font:700 clamp(2.6rem,8vw,7rem)/.92 var(--f-display);letter-spacing:-.045em;text-wrap:balance}
+.retro{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--line-d)}
+.retro>div{padding:22px 22px 0 0;display:flex;flex-direction:column;gap:8px}
+.retro>div+div{padding-left:22px;border-left:1px solid var(--line-d)}
+.retro p{font-size:.96rem}
+@media (max-width:760px){.retro{grid-template-columns:1fr}.retro>div{padding-bottom:22px}.retro>div+div{padding-left:0;border-left:0;border-top:1px solid var(--line-d)}}
+footer{background:var(--day);color:var(--ink-2);border-top:1px solid var(--line-d);padding-block:30px;font-size:.85rem}
+footer .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+</style>
+
+<div id="page" data-state="pre">
+
+<div class="bar">
+  <div class="wrap">
+    <a class="mark" href="#top" lang="ar" aria-label="Alhamd, back to top">الحمد</a>
+    <nav class="reading" id="reading" aria-label="Reading progress, five steps">
+      <div class="track"></div><div class="fill" id="readFill"></div>
+      <a href="#arrive"><i></i><span>Arrive</span></a>
+      <a href="#gone"><i></i><span>Imagine it gone</span></a>
+      <a href="#deeper"><i></i><span>Go deeper</span></a>
+      <a href="#return"><i></i><span>Return</span></a>
+      <a href="#praise"><i></i><span>Praise</span></a>
+    </nav>
+    <div class="switch" role="group" aria-label="Show the case study as">
+      <button type="button" data-s="pre" aria-pressed="true"><span class="dot" aria-hidden="true"></span>Pre-launch</button>
+      <button type="button" data-s="live" aria-pressed="false"><span class="dot" aria-hidden="true"></span>Live</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section id="top" class="hero night">
+  <svg class="lattice" aria-hidden="true"><defs><pattern id="lat" width="140" height="140" patternUnits="userSpaceOnUse"><g fill="none" stroke="#EDEDF5" stroke-opacity=".04"><rect x="40" y="40" width="60" height="60"/><rect x="40" y="40" width="60" height="60" transform="rotate(45 70 70)"/></g></pattern></defs><rect width="100%" height="100%" fill="url(#lat)"/></svg>
+  <div class="wrap" style="position:relative">
+    <div class="hero-grid">
+      <div class="stack" style="gap:30px">
+        <p class="label">Product case study · Alhamd <span class="ar" lang="ar" style="letter-spacing:0">الحمد</span></p>
+        <h1>Everything I <s>built</s> took out.</h1>
+        <p class="sub">Alhamd is a daily gratitude ritual for Muslims. It got better every time I removed something: the streak, the account, the feed, 27 analytics events. This is the story of those cuts, what each one cost, and why I’d make them again.</p>
+      </div>
+      <div>
+        <div class="field" id="field" aria-label="Twenty of the app’s forty blessings"></div>
+        <p class="field-cap" id="fieldCap">20 of the app’s 40 blessings. You stopped noticing most of them years ago.</p>
+      </div>
+    </div>
+
+    <div class="brief" aria-label="The 60-second version">
+      <div><span class="label">The problem</span><p>Gratitude said every day stops being felt. Habit apps fix how often you say it, not whether you mean it.</p></div>
+      <div><span class="label">The bet</span><p>One blessing a day. Imagine it gone for 80 seconds, then get it back. Count nothing.</p></div>
+      <div><span class="label">The cuts</span><p>Streaks, accounts, a social feed, 27 of 32 tracked events, and any paywall on the daily ritual.</p></div>
+      <div><span class="label">The status</span><p><span class="pre-only">Built solo in nine weeks. Pre-launch: scholar review of the content is the last hard gate.</span><span class="live-only">Live. Built solo in nine weeks; the scorecard below is what I’m watching.</span></p></div>
+    </div>
+    <p class="facts"><span><b>Role</b> product, design, build</span><span><b>When</b> Sep 10 → Nov 10, 2026</span><span><b>Platform</b> mobile web, Android next</span><span><b>Language</b> Arabic, right-to-left</span></p>
+  </div>
+</section>
+
+<!-- ═══ 1 · ARRIVE ═══ -->
+<section id="arrive" class="band night" data-step>
+  <div class="wrap two">
+    <div class="stack" style="gap:26px">
+      <div class="step" style="margin:0"><span class="n">STEP 1 OF 5 · 10 S</span><span class="a" lang="ar">التهيئة والحضور</span></div>
+      <h2>Said fifty times a day. Felt almost never.</h2>
+      <div class="prose muted">
+        <p><span class="ar" lang="ar">الحمد لله</span>, “praise be to God,” is the opening line of the Qur’an and the most repeated phrase in a Muslim’s day. Repetition is the problem. Sight, water, a mother’s voice: the blessings that never leave are the ones we stop seeing.</p>
+        <p>The app’s answer is a method it calls <span class="ar" lang="ar">استشعار القيمة</span>, sensing the value. You take one blessing, imagine your day without it, then return and find it still there. Five steps, 80 seconds, the same script for all 40 blessings.</p>
+        <p style="color:var(--star)">This case study follows the same five steps. Try the real one first; the gold thread at the top of this page works the way the one on the phone does.</p>
+      </div>
+      <ol class="key" id="key" aria-label="The five steps and how long each is held"></ol>
+    </div>
+    <div class="phone" id="phone" data-type="idle" role="region" aria-label="Interactive reflection" aria-live="polite">
+      <svg class="lattice" aria-hidden="true"><rect width="100%" height="100%" fill="url(#lat)"/></svg>
+      <div class="glow"></div>
+      <div class="p-top"><div class="thread" id="thread" aria-hidden="true"><div class="fill" id="fill"></div></div><span class="timer" id="timer" dir="ltr">0:00 / 1:20</span></div>
+      <div class="p-body">
+        <span class="chip" id="chip" lang="ar">نعمة الإسلام</span>
+        <p class="sentence" id="sentence" lang="ar">أعظمُ نعمةٍ أنعمَ اللهُ بها عليك: أن هداكَ للإسلام، ولو شاء لتركك في الظلمات.</p>
+        <p class="gloss" id="gloss">The greatest blessing God gave you: He guided you to Islam. Had He willed, He could have left you in the dark.</p>
+      </div>
+      <div class="p-foot"><button class="btn btn-p" id="play" type="button">Begin · 80 s</button><button class="btn btn-g" id="fast" type="button" aria-pressed="false" aria-label="Play at four times speed">4×</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 2 · IMAGINE IT GONE ═══ -->
+<section id="gone" class="band void" data-step>
+  <div class="wrap stack" style="gap:44px">
+    <div class="stack" style="gap:26px">
+      <div class="step" style="margin:0"><span class="n">STEP 2 OF 5 · 20 S</span><span class="a" lang="ar">تخيّل الغياب</span></div>
+      <h2 style="max-width:16ch">I shipped a streak. Then I imagined the app without it.</h2>
+      <div class="prose muted">
+        <p>Version 1 had the feature every habit app has: a consecutive-day counter and nine celebration milestones, from 3 days to 365. It also had an onboarding screen that promised the opposite: <span class="ar" lang="ar">لا نِقاط، ولا سلاسل، ولا مقارنة بأحد</span>. No points, no chains, no comparing yourself to anyone.</p>
+        <p>I applied the product’s own method to the product. Don’t read about it. Miss a day and watch both versions.</p>
+      </div>
+    </div>
+
+    <div class="stack" style="gap:16px">
+      <div class="sim">
+        <div class="sim-card v1" id="v1">
+          <span class="label">Version 1 · streak (simplified)</span>
+          <div class="sim-num" id="v1num" aria-live="polite">6</div>
+          <span class="mono muted" lang="ar" dir="rtl" style="font-family:var(--f-ar);font-size:1rem">أيام متتالية من المداومة</span>
+          <div class="days" id="v1days" aria-hidden="true"></div>
+          <p class="sim-msg muted" id="v1msg">Six days in a row. The number is the reward.</p>
+        </div>
+        <div class="sim-card v2" id="v2">
+          <span class="label">Version 2 · Hijri calendar</span>
+          <div class="sim-num ar acc" lang="ar" style="font:700 2.1rem/2.48 var(--f-ar);letter-spacing:0">بلا عدّاد</div>
+          <span class="mono muted" lang="ar" dir="rtl" style="font-family:var(--f-ar);font-size:1rem">ولا أيّامٍ «فائتة»</span>
+          <div class="days" id="v2days" aria-hidden="true"></div>
+          <p class="sim-msg muted" id="v2msg">Six days you reflected. No number anywhere in the app.</p>
+        </div>
+      </div>
+      <div class="sim-ctl">
+        <button class="btn btn-p" id="miss" type="button" style="flex:0 1 auto">Miss a day</button>
+        <button class="btn btn-o" id="reflect" type="button">Reflect today</button>
+        <button class="btn btn-o" id="reset" type="button">Reset</button>
+      </div>
+    </div>
+
+    <div class="prose muted">
+      <p>In version 1, one missed day turns six days of worship into a zero. The guilt is about the number, and the easiest way to stop feeling it is to stop opening the app. In version 2 an empty day is just empty. It is never red and never called missed.</p>
+      <p>The deciding argument came from the content itself. The hadith on that onboarding screen says the deeds God loves most are the most consistent, <em>even if small</em>. And in worship, a number you can show someone invites the wrong intention.</p>
+    </div>
+    <p class="tradeoff"><b>What it cost</b>The streak is the cheapest day-7 retention there is, and I expect to pay for removing it. I chose a different measure of success, in step 5.</p>
+  </div>
+</section>
+
+<!-- ═══ 3 · GO DEEPER ═══ -->
+<section id="deeper" class="band void" data-step style="padding-top:0">
+  <div class="wrap stack" style="gap:44px">
+    <div class="stack" style="gap:26px">
+      <div class="step" style="margin:0"><span class="n">STEP 3 OF 5 · 20 S</span><span class="a" lang="ar">التعمّق</span></div>
+      <h2 style="max-width:14ch">Then I kept going.</h2>
+      <p class="prose muted">Once the streak was gone, the same test worked on everything else: does this help someone feel one blessing, or does it help me keep them? Six things failed it. Each one buys something real for most apps, so each line below is a cost I chose.</p>
+    </div>
+
+    <div class="ledger">
+      <div class="row head label"><span>Removed</span><span>What it buys most apps</span><span>Why it went</span><span>What stayed instead</span></div>
+      <div class="row"><h3><s>Streaks &amp; 9 milestones</s></h3><p class="muted" data-l="What it buys">Day-7 retention. A reason to open.</p><p data-l="Why it went">Punishes one missed day and turns worship into a score.</p><p class="kept" data-l="What stayed">A Hijri calendar with no totals.</p></div>
+      <div class="row"><h3><s>Accounts &amp; login</s></h3><p class="muted" data-l="What it buys">Identity, sync across devices, an email channel.</p><p data-l="Why it went">Private reflections don’t belong on my server, and a sign-up wall comes before any value.</p><p class="kept" data-l="What stayed">Everything on the device, with a manual backup file you keep yourself.</p></div>
+      <div class="row"><h3><s>A social feed</s></h3><p class="muted" data-l="What it buys">Network effects and free content.</p><p data-l="Why it went">It brings back every comparison I had just removed.</p><p class="kept" data-l="What stayed">The same blessing for everyone on the same day.</p></div>
+      <div class="row"><h3><s>27 of 32 analytics events</s></h3><p class="muted" data-l="What it buys">Full funnels. Answers to almost any question.</p><p data-l="Why it went">Several sat right beside people’s journals. I couldn’t promise privacy and keep them.</p><p class="kept" data-l="What stayed">5 events, only with consent, never any text.</p></div>
+      <div class="row"><h3><s>Hourly haptic nudge</s></h3><p class="muted" data-l="What it buys">Re-engagement through the day.</p><p data-l="Why it went">A buzz every hour is noise, not remembrance. It was specced, then cancelled.</p><p class="kept" data-l="What stayed">One daily reminder, at a time you choose.</p></div>
+      <div class="row"><h3><s>A paywall on the ritual</s></h3><p class="muted" data-l="What it buys">Revenue from the most-used screen.</p><p data-l="Why it went">Charging for the prayer breaks trust with exactly the people who would pay.</p><p class="kept" data-l="What stayed">The daily ritual is free forever. Only the guided path is paid.</p></div>
+    </div>
+
+    <div class="cut">
+      <div class="stack" style="gap:16px">
+        <div style="display:flex;align-items:baseline;gap:14px"><span class="bignum" style="color:#7f7e9e">32</span><span class="label">event types in version 1</span></div>
+        <div class="ev" id="evOld" aria-label="The 32 event types version 1 tracked, all removed"></div>
+      </div>
+      <div class="stack" style="gap:16px">
+        <div style="display:flex;align-items:baseline;gap:14px"><span class="bignum acc">5</span><span class="label">in version 2, off until you say yes</span></div>
+        <div class="ev keep"><span>journey_onboarded</span><span>journey_station_completed</span><span>journey_stage_completed</span><span>journey_paywall_viewed</span><span>journey_paywall_cta_tapped</span></div>
+<div class="code"><span class="c">// analytics.ts: privacy enforced in code, not in a policy</span>
+<span class="k">const</span> allowedKeys = [<span class="s">'themes_count'</span>, <span class="s">'pace'</span>,
+  <span class="s">'stage_id'</span>, <span class="s">'station_index'</span>, <span class="s">'plan'</span>];
+<span class="c">// any other key is dropped before it is stored.</span>
+<span class="c">// reflection text never reaches this function.</span></div>
+      </div>
+    </div>
+    <p class="tradeoff"><b>What it cost</b>I’m flying with fewer instruments. I can’t build an onboarding funnel in version 2, and I can’t see who stops at which screen outside the guided path. I accepted that so the privacy promise is true, not approximately true.</p>
+  </div>
+</section>
+
+<div class="dawn" aria-hidden="true"></div>
+
+<!-- ═══ 4 · RETURN ═══ -->
+<section id="return" class="band light" data-step style="padding-top:clamp(40px,6vw,80px)">
+  <div class="wrap stack" style="gap:44px">
+    <div class="stack" style="gap:26px">
+      <div class="step" style="margin:0"><span class="n">STEP 4 OF 5 · 15 S</span><span class="a" lang="ar">العودة</span></div>
+      <h2 style="max-width:15ch">What was left was the product.</h2>
+      <p class="prose muted">Open your eyes: it’s still here. Take away the counter, the account and the feed, and four things remain. They are the whole product, and they are where the effort went.</p>
+    </div>
+
+    <div class="kept-grid">
+      <div class="kcard">
+        <span class="label">1 · A shared day, with no server</span>
+        <h3>Everyone gets the same blessing today.</h3>
+        <p class="muted">Every device turns today’s date into the same number and uses it to pick from the same list. Togetherness without profiles, posts or a backend. Your first day is always <span class="ar" lang="ar">نعمة الإسلام</span>.</p>
+        <div class="today"><span class="label" style="color:var(--haze)">Everyone, today</span><span class="t" id="todayT" lang="ar">نعمة الماء</span><span class="mono" style="color:var(--haze)" id="todayM" lang="ar" dir="rtl"></span></div>
+        <div class="cities" id="cities" aria-label="The same day number in four cities"></div>
+        <p class="mono muted">Computed in your browser with the app’s formula: <span style="color:var(--ink)">pool[day % pool.length]</span></p>
+      </div>
+
+      <div class="kcard">
+        <span class="label">2 · Eighty seconds, designed</span>
+        <h3>The pause is the interface.</h3>
+        <p class="muted">All 40 scripts run exactly 80 seconds. Absence gets the most time because that’s where the feeling happens. Relief is fast.</p>
+        <div class="dur" role="img" aria-label="Step durations: Arrive 10 seconds, Imagine it gone 20, Go deeper 20, Return 15, Praise 15">
+          <div class="dur-row"><span>Arrive</span><div class="dur-bar"><b style="width:50%">10 s</b></div></div>
+          <div class="dur-row"><span>Imagine it gone</span><div class="dur-bar"><b class="dark" style="width:100%">20 s</b></div></div>
+          <div class="dur-row"><span>Go deeper</span><div class="dur-bar"><b class="dark" style="width:100%">20 s</b></div></div>
+          <div class="dur-row"><span>Return</span><div class="dur-bar"><b style="width:75%">15 s</b></div></div>
+          <div class="dur-row"><span>Praise</span><div class="dur-bar"><b style="width:75%">15 s</b></div></div>
+        </div>
+        <div class="specs">
+          <div><b>400 ms</b>each sentence fades in</div>
+          <div><b>2.5 s</b>mood shift; 0.8 s with reduced motion</div>
+          <div><b>33</b>heavy haptic on every 33rd tasbih</div>
+          <div><b>4.5:1</b>minimum contrast, measured</div>
+        </div>
+      </div>
+
+      <div class="kcard wide">
+        <span class="label">3 · Sacred text, treated like regulated data</span>
+        <div class="trust">
+          <div class="stack" style="gap:16px">
+            <h3>One misquoted verse and nobody trusts the other thirty-nine.</h3>
+            <p class="muted">Users forgive a bug. They don’t forgive a wrong vowel in a verse, or a weak hadith presented as sound. So every field that can be wrong carries its own review state: the verse, the hadith grade, and whether a scholar’s words are a quote or a paraphrase.</p>
+            <div class="stack" style="gap:8px">
+              <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><span class="label">Scholar review · hard launch gate</span><span class="mono"><span class="pre-only">0 / 40 approved</span><span class="live-only" style="color:var(--ok)">40 / 40 approved (required to be live)</span></span></div>
+              <div class="gate-bar" id="gateBar" aria-hidden="true"></div>
+              <p class="muted pre-only" style="font-size:.9rem">The true state today: all 40 blessings and 28 journey stations are written and waiting. I’d rather launch late than launch wrong.</p>
+            </div>
+          </div>
+<div class="code">{
+  <span class="k">"id"</span>: <span class="s">"islam"</span>,
+  <span class="k">"quran"</span>: { <span class="k">"surahNumber"</span>: 5, <span class="k">"ayahNumber"</span>: 3,
+             <span class="k">"verified"</span>: <span class="f">false</span> },
+  <span class="k">"hadith"</span>: { <span class="k">"source"</span>: <span class="s">"صحيح مسلم"</span>, <span class="k">"grade"</span>: <span class="s">"صحيح"</span>,
+              <span class="k">"gradeVerified"</span>: <span class="f">false</span> },
+  <span class="k">"scholarQuote"</span>: { <span class="k">"scholar"</span>: <span class="s">"ابن القيم"</span>,
+              <span class="k">"attributionType"</span>: <span class="s">"paraphrase"</span> },
+  <span class="k">"reviewStatus"</span>: <span class="s">"pending_review"</span>,
+  <span class="k">"reviewedBy"</span>: <span class="s">""</span>
+}</div>
+        </div>
+      </div>
+
+      <div class="kcard">
+        <span class="label">4 · A business that doesn’t tax the prayer</span>
+        <h3>Charge for the path, not the ritual.</h3>
+        <div class="model">
+          <div class="stack" style="gap:10px"><span class="mono muted">FREE, FOREVER</span><ul><li>Today’s blessing</li><li>The 80-second reflection</li><li>Private journal</li><li>Hijri calendar</li><li>Tasbih, Hisn al-Muslim</li></ul></div>
+          <div class="stack st" style="gap:2px" aria-label="My Journey: four stages of seven stations, first two free"><span class="mono muted" style="margin-bottom:8px">MY JOURNEY · PAID</span>
+            <small>Worship</small><div class="stations"><i class="free"></i><i class="free"></i><i></i><i></i><i></i><i></i><i></i></div>
+            <small>The body</small><div class="stations"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <small>Family</small><div class="stations"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <small>Provision &amp; calm</small><div class="stations"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          </div>
+        </div>
+        <p class="muted">28 guided stations, each with a journaling prompt and one small action for the day. The first two are free, so the paywall only appears after someone has felt the value. Annual or lifetime. No monthly plan.</p>
+      </div>
+
+      <div class="kcard">
+        <span class="label">And the look · night and day</span>
+        <h3>Dark for reflecting. Light taken from the icon.</h3>
+        <div class="pal">
+          <div class="l"><b lang="ar">الحمد</b><div class="sw"><i style="background:#1E1E38"></i><i style="background:#E4C368"></i><i style="background:#6C63FF"></i><i style="background:#EDEDF5"></i></div><span class="mono" style="color:#AEAECB">Layl · default</span></div>
+          <div class="n"><b lang="ar">الحمد</b><div class="sw"><i style="background:#FBF8F3"></i><i style="background:#B9573B"></i><i style="background:#9E4A30"></i><i style="background:#2A1F19"></i></div><span class="mono" style="color:#6B5A4E">Nahar</span></div>
+        </div>
+        <p class="muted">Night is the default because most reflection happens after Isha or before Fajr. Day is not an inverted night: it comes from the app icon’s clay and cream, and one terracotta replaces both the gold and the violet. There is no Latin typeface in the app.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 5 · PRAISE ═══ -->
+<section id="praise" class="band light light-2" data-step>
+  <div class="wrap stack" style="gap:48px">
+    <div class="stack" style="gap:26px">
+      <div class="step" style="margin:0"><span class="n">STEP 5 OF 5 · 15 S</span><span class="a" lang="ar">الحمد</span></div>
+      <h2 class="pre-only" style="max-width:17ch">Going live: what must be true, and how I’ll know.</h2>
+      <h2 class="live-only" style="max-width:17ch">Live. Here’s what I’m watching.</h2>
+      <p class="banner live-only"><strong>Preview of the live version.</strong> This is how the page reads after launch. Gates turn green, and each target gets an “Actual” line that fills from the five consent-gated events. No number here is a real result yet.</p>
+    </div>
+
+    <ol class="gates" aria-label="Launch gates">
+      <li><span class="tag done">Done</span><b>Core product</b><span class="muted">Daily blessing, reflection, journal, calendar, tasbih, Hisn al-Muslim, both themes, haptics, accessibility.</span></li>
+      <li><span class="tag done">Done</span><b>Landing page</b><span class="muted">Built from the app’s own tokens, in both themes.</span></li>
+      <li><span class="tag open"><span class="pre-only">Open</span><span class="live-only">Done</span></span><b>Scholar review</b><span class="muted">40 blessings, 28 stations. No unreviewed sacred text in production.</span></li>
+      <li><span class="tag open"><span class="pre-only">Open</span><span class="live-only">Done</span></span><b>Payments</b><span class="muted">Entitlements sit behind one function, so wiring the store’s billing touches no screens.</span></li>
+      <li><span class="tag open"><span class="pre-only">Open</span><span class="live-only">Done</span></span><b>Analytics destination</b><span class="muted">The five events log on the device today. They need a privacy-respecting home.</span></li>
+      <li><span class="tag open"><span class="pre-only">Next</span><span class="live-only">Done</span></span><b>Google Play</b><span class="muted">Packaged Android release.</span></li>
+    </ol>
+
+    <div class="stack" style="gap:14px">
+      <span class="label">The scorecard · targets set before any data</span>
+      <div class="score">
+        <div><span class="label">North star</span><span class="v">Reflections finished per person, per week</span><p class="muted">Not opens. Not minutes. A finished reflection is the only event that means the product worked.</p><span class="actual">Actual: awaiting launch data</span></div>
+        <div><span class="label">Target</span><span class="v">3 or more</span><p class="muted">Three felt reflections beat seven rushed ones. Consistent, even if small.</p><span class="actual">Actual: —</span></div>
+        <div><span class="label">Revenue signal</span><span class="v">Station 2 → 3</span><p class="muted">The paywall moment: views to taps, split by annual and lifetime.</p><span class="actual">Actual: —</span></div>
+        <div><span class="label">Guardrail</span><span class="v">0 corrections</span><p class="muted">Errors users report in approved sacred text. One is an incident.</p><span class="actual">Actual: —</span></div>
+      </div>
+      <p class="tradeoff"><b>If day-7 retention is low</b>I won’t bring the streak back. I’d first test the reminder time and a shorter first reflection, and read drop-off step by step, which works because all 40 scripts share the same five fixed steps.</p>
+    </div>
+
+    <p class="end">Most products ask how to keep you. <span class="acc">This one asks how to let you go, grateful.</span></p>
+
+    <div class="retro">
+      <div><span class="label">What I’d do differently</span><p class="muted">Bring a scholar in during week one. Content review turned out to be the critical path, and I found that after the content was written.</p></div>
+      <div><span class="label">Still deciding</span><p class="muted">Whether the tasbih shows this session only or a lifetime total. A lifetime total starts to look like the score I removed.</p></div>
+      <div><span class="label">What this shows</span><p class="muted">I can hold a product to one sentence, say no to the easy metric, name what each no costs, and still ship: seven milestones in nine weeks, alone.</p></div>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap"><span class="ar" lang="ar">الحمد · نعمةٌ كلَّ يوم</span><span>Case study · Sep–Nov 2026</span></div></footer>
+</div>
+
+<script>
+(function(){
+  const page=document.getElementById('page');
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const AR=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+
+  // ── Pre-launch / Live ──
+  const sw=[...document.querySelectorAll('.switch button')];
+  function setState(s){page.dataset.state=s;sw.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.s===s)));try{localStorage.setItem('alhamd-cs2-state',s)}catch(e){}}
+  sw.forEach(b=>b.addEventListener('click',()=>setState(b.dataset.s)));
+  let st='pre';try{st=localStorage.getItem('alhamd-cs2-state')||'pre'}catch(e){}
+  setState(st==='live'?'live':'pre');
+
+  // ── Reading thread ──
+  const reading=document.getElementById('reading'),rf=document.getElementById('readFill');
+  const links=[...reading.querySelectorAll('a')];
+  const secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+  // Knots sit at even intervals; the fill maps scroll position onto them step by step.
+  links.forEach((a,i)=>{a.style.left=(i/links.length*100)+'%'});
+  function layout(){onScroll()}
+  function onScroll(){
+    const y=scrollY+innerHeight*0.35,n=secs.length,end=document.documentElement.scrollHeight;
+    let pos=0;
+    if(y<secs[0].offsetTop)pos=0;
+    else for(let i=0;i<n;i++){
+      const a=secs[i].offsetTop,b=i<n-1?secs[i+1].offsetTop:end;
+      if(y>=a)pos=(i+Math.min(1,(y-a)/(b-a)))/n;
+    }
+    if(scrollY+innerHeight>=end-2)pos=1;
+    rf.style.width=(pos*100)+'%';
+    links.forEach((a,i)=>a.classList.toggle('on',y>=secs[i].offsetTop));
+  }
+  addEventListener('scroll',onScroll,{passive:true});addEventListener('resize',layout);
+  layout();setTimeout(layout,600);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(layout);
+
+  // ── Hero field: blessings fade out, then come back seen ──
+  const items=[['Sight','البصر'],['Water','الماء'],['Your mother','الأم'],['Breath','النَّفَس'],['Sleep','النوم'],['Hearing','السمع'],['Safety','الأمن'],['A home','البيت'],['Food','الطعام'],['Time','الوقت'],['Speech','البيان'],['Reason','العقل'],['Your father','الأب'],['Health','العافية'],['Night and day','الليل والنهار'],['Children','الأولاد'],['Good friends','الصحبة'],['Work','العمل'],['Hands and feet','اليدان والقدمان'],['Prayer','الصلاة']];
+  const field=document.getElementById('field'),cap=document.getElementById('fieldCap');
+  items.forEach(([en,ar])=>{const s=document.createElement('span');s.append(en+' ');const b=document.createElement('b');b.lang='ar';b.textContent=ar;s.appendChild(b);field.appendChild(s)});
+  const chips=[...field.children];
+  if(reduce){chips.forEach(c=>c.classList.add('seen'))}
+  else{
+    const order=chips.map((_,i)=>i).sort(()=>Math.random()-.5);
+    order.forEach((i,k)=>setTimeout(()=>chips[i].classList.add('gone'),1400+k*110));
+    const back=1400+order.length*110+1500;
+    setTimeout(()=>{cap.textContent='Imagine the day without them.'},1400+order.length*110);
+    order.forEach((i,k)=>setTimeout(()=>{chips[i].classList.remove('gone');chips[i].classList.add('seen')},back+k*70));
+    setTimeout(()=>{cap.textContent='20 of the app’s 40 blessings. Now you see them.'},back+order.length*70);
+  }
+
+  // ── Ritual ──
+  const steps=[
+    {type:'ground',name:'Arrive',chip:'التهيئة والحضور',sec:10,ar:'خذ نفسًا عميقًا… وأحضر قلبك معي لحظة.',en:'Take a deep breath, and bring your heart here with me for a moment.'},
+    {type:'visualize',name:'Imagine it gone',chip:'تخيّل الغياب',sec:20,ar:'تخيَّل لو أنك وُلدتَ في أرضٍ لا تعرف الله… تعيش وتموت ولم تسجد له سجدةً واحدة.',en:'Imagine you were born in a land that does not know God, and lived and died without bowing to Him once.'},
+    {type:'deepen',name:'Go deeper',chip:'التعمّق',sec:20,ar:'لا صلاةٌ تطمئن بها… ولا قرآنٌ يهديك… ولا تدري إذا متَّ إلى أين تصير.',en:'No prayer to steady you. No Qur’an to guide you. No idea where you go when you die.'},
+    {type:'return',name:'Return',chip:'العودة',sec:15,ar:'ثم افتح عينيك… أنت مسلم. عرفتَ ربك واسمَه ودينَه، وأنت لم تطلب ذلك يومًا.',en:'Then open your eyes. You are Muslim. You know your Lord, His name and His religion, and you never once asked for it.'},
+    {type:'hamd',name:'Praise',chip:'الحمد',sec:15,ar:'فقل من قلبك: الحمدُ لله الذي هدانا لهذا وما كنا لنهتديَ لولا أن هدانا الله.',en:'So say it from your heart: praise be to God, who guided us to this. We would never have been guided had God not guided us.'}
+  ];
+  const key=document.getElementById('key');
+  steps.forEach(s=>{const li=document.createElement('li');const a=document.createElement('span');a.textContent=s.name;const t=document.createElement('span');t.className='t';t.textContent=s.sec+' s';li.append(a,t);key.appendChild(li)});
+  const phone=document.getElementById('phone'),chip=document.getElementById('chip'),sent=document.getElementById('sentence'),gloss=document.getElementById('gloss'),fill=document.getElementById('fill'),timer=document.getElementById('timer'),play=document.getElementById('play'),fast=document.getElementById('fast'),thread=document.getElementById('thread');
+  const knotAt=[];{let a=0;steps.forEach(s=>{knotAt.push(a);a+=s.sec});knotAt.push(80)}
+  const knots=knotAt.map(p=>{const k=document.createElement('span');k.className='knot';k.style.right=(p/80*100)+'%';thread.appendChild(k);return k});
+  let speed=1,raf=0,last=0,elapsed=0,running=false,cur=-1;
+  const fmt=t=>{t=Math.floor(t);return Math.floor(t/60)+':'+String(t%60).padStart(2,'0')};
+  function show(i){if(i===cur)return;cur=i;const s=steps[i];phone.dataset.type=s.type;[...key.children].forEach((li,j)=>li.classList.toggle('now',j===i));sent.classList.add('out');gloss.classList.add('out');setTimeout(()=>{chip.textContent=s.chip;sent.textContent=s.ar;gloss.textContent=s.en;sent.classList.remove('out');gloss.classList.remove('out')},reduce?0:300)}
+  function tick(now){elapsed+=(now-last)/1000*speed;last=now;const t=Math.min(elapsed,80);let idx=0;knotAt.forEach((p,i)=>{if(i<steps.length&&t>=p)idx=i});show(idx);fill.style.width=(t/80*100)+'%';knots.forEach((k,j)=>k.classList.toggle('on',t>=knotAt[j]));timer.textContent=fmt(t)+' / 1:20';if(t>=80){running=false;play.textContent='Again';return}raf=requestAnimationFrame(tick)}
+  play.addEventListener('click',()=>{if(running){running=false;cancelAnimationFrame(raf);play.textContent='Resume';return}if(elapsed>=80){elapsed=0;cur=-1}running=true;play.textContent='Pause';last=performance.now();raf=requestAnimationFrame(tick)});
+  fast.addEventListener('click',()=>{speed=speed===1?4:1;fast.setAttribute('aria-pressed',String(speed===4));fast.textContent=speed===4?'1×':'4×';fast.setAttribute('aria-label',speed===4?'Back to real time':'Play at four times speed')});
+
+  // ── Streak simulator ──
+  const N=14,v1=document.getElementById('v1'),v1num=document.getElementById('v1num'),v1msg=document.getElementById('v1msg'),v2msg=document.getElementById('v2msg'),d1=document.getElementById('v1days'),d2=document.getElementById('v2days');
+  let days,streak,best;
+  function reset(){days=[1,1,1,1,1,1];streak=6;best=6;draw('start')}
+  function draw(why){
+    [d1,d2].forEach(c=>{c.textContent='';for(let i=0;i<N;i++){const d=document.createElement('i');if(days[i])d.className='f';if(i===days.length-1)d.classList.add('today');c.appendChild(d)}});
+    const done=days.filter(Boolean).length;
+    v1num.textContent=String(streak);
+    const broke=why==='miss';
+    v1num.classList.toggle('broke',broke);v1.classList.toggle('broke',streak===0);
+    if(why==='start'){v1msg.textContent='Six days in a row. The number is the reward.';v2msg.textContent='Six days you reflected. No number anywhere in the app.'}
+    else if(broke){v1msg.textContent='Back to zero. '+best+' days of practice now read as nothing, and the next milestone is three days away again.';v2msg.textContent='One empty day. The '+done+' days you reflected are still there, and nothing calls it missed.'}
+    else{v1msg.textContent=streak<best?'Rebuilding: '+streak+' of the '+best+' you had before the miss.':streak+' in a row. The cost of missing tomorrow just went up.';v2msg.textContent=done+' days you reflected. Tomorrow is just tomorrow.'}
+  }
+  function step(did){if(days.length>=N){days=days.slice(1)}days.push(did?1:0);if(did){streak++;best=Math.max(best,streak);draw('reflect')}else{best=Math.max(best,streak);streak=0;draw('miss')}}
+  document.getElementById('miss').addEventListener('click',()=>step(false));
+  document.getElementById('reflect').addEventListener('click',()=>step(true));
+  document.getElementById('reset').addEventListener('click',reset);
+  reset();
+
+  // ── V1 events ──
+  const old=['app_open','onboarding_started','onboarding_completed','onboarding_skipped','blessing_viewed','blessing_completed','value_reflection_started','value_reflection_completed','value_reflection_skipped','journal_opened','consistency_opened','settings_opened','privacy_policy_opened','notification_permission_requested','notification_permission_granted','notification_permission_denied','daily_reminder_scheduled','backup_exported','backup_imported','backup_import_failed','personal_blessing_created','personal_blessing_opened','personal_blessing_edited','personal_blessing_deleted','personal_blessing_favorited','theme_changed','reminder_set','reflection_step_viewed','dhikr_session','reflection_completed','journal_saved','reflection_started'];
+  const eo=document.getElementById('evOld');old.forEach(e=>{const s=document.createElement('span');s.textContent=e;eo.appendChild(s)});
+
+  // ── Review gate ──
+  const gb=document.getElementById('gateBar');for(let i=0;i<40;i++)gb.appendChild(document.createElement('i'));
+
+  // ── Today's shared blessing (the app's own formula) ──
+  const POOL=[["نعمة وجود الله ومعرفته","ق ٥٠:١٦"],["نعمة القرآن","الإسراء ١٧:٩"],["نعمة النبي محمد ﷺ","آل عمران ٣:١٦٤"],["نعمة الصلاة","العنكبوت ٢٩:٤٥"],["نعمة الدعاء","البقرة ٢:١٨٦"],["نعمة التوبة","الزمر ٣٩:٥٣"],["نعمة الثبات على الدين","إبراهيم ١٤:٢٧"],["نعمة ذكر الله","الرعد ١٣:٢٨"],["نعمة الستر","الأعراف ٧:٢٦"],["نعمة الفطرة","الروم ٣٠:٣٠"],["نعمة رمضان","البقرة ٢:١٨٥"],["نعمة الحياة","الملك ٦٧:٢"],["نعمة النوم","النبأ ٧٨:٩"],["نعمة الماء","الملك ٦٧:٣٠"],["نعمة الطعام","عبس ٨٠:٢٤"],["نعمة النَّفَس","النحل ١٦:٥٣"],["نعمة الليل والنهار","القصص ٢٨:٧٣"],["نعمة العقل","آل عمران ٣:١٩٠"],["نعمة العلم","المجادلة ٥٨:١١"],["نعمة البيان والنطق","الرحمن ٥٥:١"],["نعمة الأم","لقمان ٣١:١٤"],["نعمة الأب","الإسراء ١٧:٢٣"],["نعمة الزوج والسكن","الروم ٣٠:٢١"],["نعمة الأولاد","الكهف ١٨:٤٦"],["نعمة الأرحام","النساء ٤:١"],["نعمة الصحبة الصالحة","الزخرف ٤٣:٦٧"],["نعمة الرزق","هود ١١:٦"],["نعمة المال","سبأ ٣٤:٣٩"],["نعمة العمل والكسب","الملك ٦٧:١٥"],["نعمة القناعة","طه ٢٠:١٣١"],["نعمة الأمن","قريش ١٠٦:٣"],["نعمة البيت والمأوى","النحل ١٦:٨٠"],["نعمة حفظ الله","الرعد ١٣:١١"],["نعمة العافية في البدن","الشعراء ٢٦:٨٠"],["نعمة السمع","النحل ١٦:٧٨"],["نعمة البصر","البلد ٩٠:٨"],["نعمة اليدين والقدمين","الإسراء ١٧:٧٠"],["نعمة الوقت والفراغ","العصر ١٠٣:١"],["نعمة الجنة الموعودة","السجدة ٣٢:١٧"]];
+  const nd=new Date(),day=Math.floor(Date.UTC(nd.getFullYear(),nd.getMonth(),nd.getDate())/86400000),idx=((day%POOL.length)+POOL.length)%POOL.length;
+  document.getElementById('todayT').textContent=POOL[idx][0];
+  document.getElementById('todayM').textContent=POOL[idx][1];
+  const box=document.getElementById('cities');
+  [['Jakarta','Asia/Jakarta'],['Riyadh','Asia/Riyadh'],['Cairo','Africa/Cairo'],['London','Europe/London']].forEach(([n,tz])=>{
+    let t='';try{t=new Intl.DateTimeFormat('en-GB',{timeZone:tz,hour:'2-digit',minute:'2-digit'}).format(nd)}catch(e){}
+    const r=document.createElement('div'),a=document.createElement('span'),b=document.createElement('span');a.textContent=n+' '+t;b.textContent='#'+(idx+1)+' of 39';r.append(a,b);box.appendChild(r);
+  });
+})();
+</script>
