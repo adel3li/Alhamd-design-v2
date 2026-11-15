@@ -68,43 +68,9 @@ const STORAGE_KEYS = {
   JOURNEY: 'alhamd:journey_state:v1'
 };
 
-const initialSampleJournal: JournalEntry[] = [
-  {
-    id: 'sample_entry_1',
-    date: new Date(Date.now() - 86400000).toISOString().split('T')[0],
-    displayDate: 'الأحد ٢٥ ذو الحجة',
-    blessingId: 'blessing_022',
-    shortTitle: 'الأم',
-    categoryLabel: 'نعم الأهل',
-    text: 'اتصلتُ بها اليوم لأشكرها فقط، فدعت لي دعوةً أذابت قلبي.',
-    createdAt: Date.now() - 86400000
-  },
-  {
-    id: 'sample_entry_2',
-    date: new Date(Date.now() - 172800000).toISOString().split('T')[0],
-    displayDate: 'السبت ٢٤ ذو الحجة',
-    blessingId: 'blessing_015',
-    shortTitle: 'الماء',
-    categoryLabel: 'نعم الحياة والنفس',
-    text: 'انقطع الماء عن حيّنا ساعتين، فذقتُ معنى النعمة حين غابت.',
-    createdAt: Date.now() - 172800000
-  }
-];
-
-const initialSampleBlessings: UserBlessing[] = [
-  {
-    id: 'sample_user_blessing_1',
-    title: 'صوت المطر على نافذتي',
-    prompt1: 'الليلة الماضية حين انهمر المطر في هدوء الليل.',
-    prompt2: 'جفاف الأرض وصمت الطبيعة وغياب رائحة الغيث التي تشرح الصدر.',
-    prompt3: 'الحمد لله الذي يسوق السحاب رحمةً وينزل الغيث من بعد ما قنطوا.',
-    category: 'نعم الحياة والنفس',
-    isFavorite: true,
-    source: 'user',
-    createdAt: Date.now() - 259200000,
-    updatedAt: Date.now() - 259200000
-  }
-];
+// A new user starts with an empty history. Earlier builds pre-filled sample
+// journal entries and one personal blessing; drop those if they were persisted.
+const isSeeded = (item: { id: string }) => item.id.startsWith('sample_');
 
 const StoreContext = createContext<StoreContextType | null>(null);
 
@@ -178,16 +144,8 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       const stored = localStorage.getItem('alhamd_completed_reflections');
       if (stored) return JSON.parse(stored);
     } catch {}
-    // Default with past 3 days completed for warm rich experience
-    const today = new Date();
-    const d1 = new Date(today); d1.setDate(today.getDate() - 1);
-    const d2 = new Date(today); d2.setDate(today.getDate() - 2);
-    const d3 = new Date(today); d3.setDate(today.getDate() - 4);
-    return [
-      d1.toISOString().split('T')[0],
-      d2.toISOString().split('T')[0],
-      d3.toISOString().split('T')[0]
-    ];
+    // Nothing is counted until the user has actually reflected.
+    return [];
   });
 
   // Journey state (themes, pace, stage/station progress, and private journals stored strictly on local device)
@@ -198,17 +156,17 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   const [journalEntries, setJournalEntries] = useState<JournalEntry[]>(() => {
     try {
       const stored = localStorage.getItem('alhamd_journal');
-      if (stored) return JSON.parse(stored);
+      if (stored) return (JSON.parse(stored) as JournalEntry[]).filter(e => !isSeeded(e));
     } catch {}
-    return initialSampleJournal;
+    return [];
   });
 
   const [userBlessings, setUserBlessings] = useState<UserBlessing[]>(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEYS.USER_BLESSINGS);
-      if (stored) return JSON.parse(stored);
+      if (stored) return (JSON.parse(stored) as UserBlessing[]).filter(b => !isSeeded(b));
     } catch {}
-    return initialSampleBlessings;
+    return [];
   });
 
   const [tasbihCount, setTasbihCount] = useState<number>(() => {
