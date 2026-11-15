@@ -6,7 +6,8 @@ import {fileURLToPath} from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const pages = [
-  {src: 'alhamd-case-study-v3.html', out: 'story/index.html', base: '/story/'},
+  {src: 'alhamd-case-study-v4.html', out: 'story/index.html', base: '/story/'},
+  {src: 'alhamd-case-study-v3.html', out: 'story/v3/index.html', base: '/story/v3/'},
   {src: 'alhamd-case-study-v2.html', out: 'story/v2/index.html', base: '/story/v2/'},
   {src: 'alhamd-case-study.html', out: 'story/v1/index.html', base: '/story/v1/'},
 ];

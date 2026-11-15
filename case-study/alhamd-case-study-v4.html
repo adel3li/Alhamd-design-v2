@@ -1,0 +1,270 @@
+<title>Alhamd, Simply</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Geist+Mono:wght@400;500&family=Amiri:wght@400;700&display=swap">
+<style>
+/* Layout concept: one reading column, like a letter. Five short sections,
+   one thing to try, one before/after. Night by default (the app's own
+   palette); day follows the system or the toggle. */
+:root{
+  --bg:#0C0C1C; --card:#14142B; --line:#2A2A46;
+  --fg:#EDEDF5; --fg2:#AEADCB; --prose:#D6D5E8;
+  --acc:#E4C368; --cta:#7A72FF; --ok:#6FD6A2;
+  --f-display:'Bricolage Grotesque','Arial Narrow',system-ui,sans-serif;
+  --f-prose:'Source Serif 4','Iowan Old Style',Georgia,serif;
+  --f-mono:'Geist Mono',ui-monospace,'SF Mono',Menlo,monospace;
+  --f-ar:'Amiri','Noto Naskh Arabic',serif;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){
+  --bg:#F5EFE6; --card:#FCFAF6; --line:#DACDBA;
+  --fg:#271D17; --fg2:#5F4E42; --prose:#3B2E26;
+  --acc:#A44C2C; --cta:#A44C2C; --ok:#2A7651; color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#F5EFE6; --card:#FCFAF6; --line:#DACDBA;
+  --fg:#271D17; --fg2:#5F4E42; --prose:#3B2E26;
+  --acc:#A44C2C; --cta:#A44C2C; --ok:#2A7651; color-scheme:light}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+body{background:var(--bg);color:var(--fg);font:400 1.15rem/1.7 var(--f-prose);-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .3s,color .3s}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px;border-radius:6px}
+.col{max-width:680px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.wide{max-width:960px}
+section{padding-block:clamp(64px,9vw,112px);border-top:1px solid var(--line)}
+section:first-of-type{border-top:0}
+h1,h2{font-family:var(--f-display);font-weight:700;letter-spacing:-.035em;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.8rem,8vw,5rem);line-height:.95}
+h2{font-size:clamp(1.9rem,4.4vw,2.8rem);line-height:1.05;margin-bottom:22px}
+.acc{color:var(--acc)}
+.ar{font-family:var(--f-ar);direction:rtl}
+.label{font:500 .7rem/1.4 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--fg2)}
+.prose{display:flex;flex-direction:column;gap:1.05em;color:var(--prose)}
+.prose b{color:var(--fg);font-weight:600}
+.muted{color:var(--fg2)}
+.chip{display:inline-block;font:400 .72rem/1.3 var(--f-mono);padding:3px 8px;border-radius:999px;border:1px solid var(--line);color:var(--fg2);white-space:nowrap;vertical-align:2px}
+.slot{border:1.5px dashed var(--acc);border-radius:6px;padding:0 6px;color:var(--acc);font:400 .85em var(--f-mono)}
+
+/* top */
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-block:22px}
+.mark{font:700 1.5rem/1 var(--f-ar);color:var(--acc);text-decoration:none}
+.theme{all:unset;cursor:pointer;font:500 .72rem/1 var(--f-mono);letter-spacing:.06em;color:var(--fg2);padding:11px 14px;border:1px solid var(--line);border-radius:999px}
+.theme:hover{color:var(--fg)}
+.theme:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+
+/* hero */
+.hero{padding-block:clamp(40px,7vw,88px) clamp(56px,8vw,96px)}
+.hero .lede{font-size:clamp(1.2rem,2.2vw,1.4rem);line-height:1.6;color:var(--prose);margin-top:28px}
+.facts{display:flex;flex-wrap:wrap;gap:6px 26px;margin-top:30px;font:400 .8rem/1.6 var(--f-mono);color:var(--fg2)}
+.facts b{color:var(--fg);font-weight:500}
+
+/* try */
+.try{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:clamp(28px,5vw,56px);align-items:center;margin-top:36px}
+@media (max-width:760px){.try{grid-template-columns:1fr}}
+.phone{position:relative;width:min(100%,300px);aspect-ratio:9/17;margin-inline:auto;border-radius:38px;background:#111126;color:#EDEDF5;border:1px solid #2A2A46;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.35);transition:background 2.5s ease}
+.phone[data-type="visualize"],.phone[data-type="deepen"]{background:#06061A}
+.phone::after{content:"";position:absolute;inset:0;pointer-events:none;transition:opacity 2.5s ease;opacity:0;background:radial-gradient(70% 50% at 50% 45%,rgba(228,195,104,.22),transparent)}
+.phone[data-type="return"]::after{opacity:.45}.phone[data-type="hamd"]::after{opacity:1}
+.p-top{position:absolute;top:20px;left:18px;right:18px;display:flex;gap:10px;align-items:center;direction:rtl}
+.thread{position:relative;flex:1;height:2px;background:#2A2A46;border-radius:2px}
+.thread i{position:absolute;right:0;top:0;height:2px;width:0;background:#E4C368;border-radius:2px}
+.timer{font:500 .72rem/1 var(--f-mono);color:#AEADCB}
+.p-body{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:0 24px;text-align:center}
+.p-chip{font:700 13px/1 var(--f-ar);padding:7px 14px;border-radius:999px;border:1px solid #2A2A46;color:#E4C368}
+.sentence{font:400 1.45rem/1.85 var(--f-ar);direction:rtl;transition:opacity .4s ease}
+.sentence.out{opacity:0}
+.go{all:unset;box-sizing:border-box;cursor:pointer;position:absolute;left:18px;right:18px;bottom:20px;height:50px;border-radius:15px;background:#7A72FF;color:#fff;font:600 .95rem/50px var(--f-display);text-align:center}
+.go:focus-visible{outline:2px solid #E4C368;outline-offset:3px}
+.gloss{display:flex;flex-direction:column;gap:12px}
+.gloss .step{font:500 .7rem/1.4 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
+.gloss .en{font:italic 400 1.15rem/1.6 var(--f-prose);color:var(--prose);min-height:5.2em}
+
+/* promises */
+.promises{list-style:none;margin:28px 0 0;padding:0;border-top:1px solid var(--line)}
+.promises li{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:8px 28px;padding:20px 0;border-bottom:1px solid var(--line)}
+.promises b{font:700 1.15rem/1.3 var(--f-display);letter-spacing:-.01em}
+.promises span{font-size:1rem;line-height:1.55;color:var(--fg2)}
+@media (max-width:620px){.promises li{grid-template-columns:1fr}}
+
+/* before / after */
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-block:36px}
+@media (max-width:620px){.ba{grid-template-columns:1fr}}
+.ba figure{margin:0;display:flex;flex-direction:column;gap:12px}
+.ba img{width:100%;height:auto;aspect-ratio:720/646;object-fit:cover;object-position:top;border-radius:18px;border:1px solid var(--line);display:block}
+.ba figcaption{display:flex;flex-direction:column;gap:4px;font-size:.98rem;line-height:1.5;color:var(--fg2)}
+.ba figcaption b{font:500 .7rem/1.4 var(--f-mono);letter-spacing:.14em;text-transform:uppercase}
+.ba .before b{color:#E5837A}.ba .after b{color:var(--ok)}
+.fixes{list-style:none;margin:28px 0 0;padding:0;counter-reset:f}
+.fixes li{counter-increment:f;display:grid;grid-template-columns:28px minmax(0,1fr);gap:4px 12px;padding:14px 0;border-top:1px solid var(--line);font-size:1.02rem;line-height:1.55;color:var(--prose)}
+.fixes li::before{content:counter(f);font:500 .8rem/1.9 var(--f-mono);color:var(--acc)}
+.fixes .chip{margin-left:6px}
+.note{margin-top:28px;padding:18px 20px;border-radius:14px;background:var(--card);border:1px solid var(--line);font-size:1.02rem;line-height:1.6;color:var(--prose)}
+
+/* next */
+.measure{list-style:none;margin:24px 0 0;padding:0;border-top:1px solid var(--line)}
+.measure li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;padding:16px 0;border-bottom:1px solid var(--line);align-items:baseline;font-size:1.02rem;color:var(--prose)}
+.measure b{display:block;font:700 1.05rem/1.3 var(--f-display);color:var(--fg)}
+.end{font:700 clamp(2rem,5.6vw,3.4rem)/1.05 var(--f-display);letter-spacing:-.035em;text-wrap:balance}
+footer{padding-block:28px 40px;border-top:1px solid var(--line);font:400 .8rem/1.6 var(--f-mono);color:var(--fg2)}
+footer .col{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+</style>
+
+<div class="col top">
+  <a class="mark" href="#top" lang="ar" aria-label="Alhamd, back to top">الحمد</a>
+  <button class="theme" id="theme" type="button" aria-label="Switch to the day theme">Day</button>
+</div>
+
+<!-- HERO -->
+<section id="top" class="hero">
+  <div class="col">
+    <p class="label">Case study · Alhamd</p>
+    <h1 style="margin-top:22px">You don’t see a blessing <span class="acc">until it’s gone.</span></h1>
+    <p class="lede">Alhamd (<span class="ar" lang="ar">الحمد</span>) is a daily gratitude ritual for Muslims. Once a day it gives you one blessing and asks you to imagine your day without it, for eighty seconds. I designed and built it around three promises. Then I checked the app against them, and it had broken two.</p>
+    <p class="facts"><span><b>Role</b> <span class="slot">[Founder · product lead]</span></span><span><b>Built</b> Sep – Nov 2026</span><span><b>Platform</b> web, Android next</span></p>
+  </div>
+</section>
+
+<!-- 1 -->
+<section>
+  <div class="col">
+    <p class="label">1 · The idea</p>
+    <h2 style="margin-top:14px">Said fifty times a day. Felt almost never.</h2>
+    <div class="prose">
+      <p><span class="ar" lang="ar">الحمد لله</span>, “praise be to God”, is among the most repeated phrases in a Muslim’s day. Repetition is the problem. Sight, water, a mother’s voice: the blessings that never leave are the ones we stop seeing.</p>
+      <p>Most apps here count how often you say it. Alhamd tries to make you mean it once. You take one blessing, picture a day without it, then come back and find it still there. Every blessing runs on the same five steps, eighty seconds in all. <b>Try it.</b></p>
+    </div>
+    <div class="try">
+      <div class="phone" id="phone" data-type="idle" role="region" aria-label="The reflection, five timed steps">
+        <div class="p-top"><div class="thread" aria-hidden="true"><i id="fill"></i></div><span class="timer" id="timer" dir="ltr">0:00 / 1:20</span></div>
+        <div class="p-body">
+          <span class="p-chip" id="chip" lang="ar">نعمة الإسلام</span>
+          <p class="sentence" id="sentence" lang="ar">أعظمُ نعمةٍ أنعمَ اللهُ بها عليك: أن هداكَ للإسلام.</p>
+        </div>
+        <button class="go" id="play" type="button">Begin · 80 s</button>
+      </div>
+      <div class="gloss" aria-live="polite">
+        <span class="step" id="step">Before you begin</span>
+        <p class="en" id="en">The greatest blessing God gave you is that He guided you to Islam. Everyone’s first day starts here.</p>
+        <p class="muted" style="font-size:.95rem">The real Arabic text and timings from the app. The English is my gloss.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section>
+  <div class="col">
+    <p class="label">2 · Three promises</p>
+    <h2 style="margin-top:14px">Written before any screen. Each one costs something.</h2>
+    <ul class="promises">
+      <li><b>No streaks.</b><span>One missed day shouldn’t turn six days of worship into a zero. It costs the easiest retention lever there is.</span></li>
+      <li><b>Nothing leaves your phone.</b><span>No account, no login, analytics only if you say yes, and never your words. It costs almost all the data I’d want.</span></li>
+      <li><b>No unverified sacred text.</b><span>Every verse and hadith carries its source, grade and review status. It costs speed: launch waits for a scholar.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- 3 -->
+<section>
+  <div class="col wide">
+    <div style="max-width:640px">
+      <p class="label">3 · The audit</p>
+      <h2 style="margin-top:14px">Then I checked my own app. <span class="acc">It had a streak.</span></h2>
+      <div class="prose">
+        <p>Writing this case study, I checked every promise against the code. The screen whose subtitle says “no race, no comparison” had a flame and a consecutive-days counter. Nobody chose to add it. It came in on 20 October inside a commit about themes and fonts, and nothing was watching.</p>
+      </div>
+    </div>
+    <div class="ba">
+      <figure class="before"><img src="img/streak-exhibit.webp" width="720" height="646" alt="Before: the Consistency screen with a flame icon, a count of consecutive reflection days and a streak chart, under a subtitle promising no race"><figcaption><b>Before</b>A streak, under the promise of no streaks.</figcaption></figure>
+      <figure class="after"><img src="img/consistency-fixed.webp" width="720" height="803" alt="After: the same screen with only the Hijri calendar, described as having no counter and no missed days"><figcaption><b>After</b>Only the calendar. An empty day is just empty.</figcaption></figure>
+    </div>
+    <div style="max-width:640px">
+      <div class="prose"><p>The audit found five problems in all. I fixed each one in its own commit:</p></div>
+      <ol class="fixes">
+        <li><span>Removed the streak counter, its chart and the monthly percentage. <span class="chip">e2296c2</span></span></li>
+        <li><span>New users now start with an empty history. They used to get three days and two journal entries they never did. <span class="chip">f05f291</span></span></li>
+        <li><span>The app gave the reflection three different lengths. Every screen now says eighty seconds, which is what the scripts actually run. <span class="chip">4209f2c</span></span></li>
+        <li><span>The landing page claimed scholar review that hasn’t happened. Unreviewed text is now marked as such. <span class="chip">5c1347d</span></span></li>
+        <li><span>Finishing a reflection, the one thing that matters, recorded nothing. It now does, with consent and without any text. <span class="chip">16dd14a</span></span></li>
+      </ol>
+      <p class="note"><b style="color:var(--fg)">The lesson:</b> a promise in onboarding copy is a requirement. It needs a test like any other. The build now fails if any of these five comes back. <span class="chip">2ba90c4</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- 4 -->
+<section>
+  <div class="col">
+    <p class="label">4 · What’s next</p>
+    <h2 style="margin-top:14px">How I’ll know it works, without reading anyone’s words.</h2>
+    <ul class="measure">
+      <li><span><b>Reflections finished per person, per week</b>The north star. Three or more beats seven rushed ones.</span><span class="slot">[number]</span></li>
+      <li><span><b>Where people stop</b>Drop-off at each of the five steps, comparable across all 40 blessings.</span><span class="slot">[number]</span></li>
+      <li><span><b>Errors in sacred text</b>Reported on approved content. One is an incident.</span><span class="slot">[number]</span></li>
+    </ul>
+    <div class="prose" style="margin-top:28px">
+      <p>Before launch: a named scholar signs all 40 blessings, the analytics get a privacy-respecting home, and the Android release. If retention is low, I won’t bring the streak back. I’ll test the reminder time and a shorter first reflection.</p>
+    </div>
+  </div>
+</section>
+
+<!-- END -->
+<section>
+  <div class="col">
+    <p class="end">Most products ask how to keep you. <span class="acc">This one asks how to let you go, grateful.</span></p>
+    <p style="margin-top:28px;color:var(--prose)">Next for me: <span class="slot">[what you’re looking for, one line]</span> · <span class="slot">[email or LinkedIn]</span></p>
+  </div>
+</section>
+
+<footer><div class="col"><span class="ar" lang="ar">الحمد · نعمةٌ كلَّ يوم</span><span>Every figure is from the product’s repository, Nov 2026</span></div></footer>
+
+<script>
+(function(){
+  const root=document.documentElement,btn=document.getElementById('theme');
+  const sysDark=()=>matchMedia('(prefers-color-scheme: dark)').matches;
+  const isLight=()=>root.dataset.theme?root.dataset.theme==='light':!sysDark();
+  function label(){const l=isLight();btn.textContent=l?'Night':'Day';btn.setAttribute('aria-label','Switch to the '+(l?'night':'day')+' theme')}
+  function set(t){root.dataset.theme=t;label()}
+  btn.addEventListener('click',()=>{const t=isLight()?'dark':'light';set(t);try{localStorage.setItem('alhamd-cs4-theme',t)}catch(e){}});
+  let t0=null;if(location.hash==='#dark'||location.hash==='#light')t0=location.hash.slice(1);
+  if(!t0){try{t0=localStorage.getItem('alhamd-cs4-theme')}catch(e){}}
+  if(t0==='dark'||t0==='light')set(t0);else label();
+  addEventListener('hashchange',()=>{if(location.hash==='#dark'||location.hash==='#light')set(location.hash.slice(1))});
+
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const steps=[
+    {type:'ground',name:'Arrive',sec:10,chip:'التهيئة والحضور',ar:'خذ نفسًا عميقًا… وأحضر قلبك معي لحظة.',en:'Take a deep breath, and bring your heart here with me for a moment.'},
+    {type:'visualize',name:'Imagine it gone',sec:20,chip:'تخيّل الغياب',ar:'تخيَّل لو أنك وُلدتَ في أرضٍ لا تعرف الله… تعيش وتموت ولم تسجد له سجدةً واحدة.',en:'Imagine you were born in a land that does not know God, and lived and died without bowing to Him once.'},
+    {type:'deepen',name:'Go deeper',sec:20,chip:'التعمّق',ar:'لا صلاةٌ تطمئن بها… ولا قرآنٌ يهديك… ولا تدري إذا متَّ إلى أين تصير.',en:'No prayer to steady you. No Qur’an to guide you. No idea where you go when you die.'},
+    {type:'return',name:'Return',sec:15,chip:'العودة',ar:'ثم افتح عينيك… أنت مسلم. عرفتَ ربك واسمَه ودينَه، وأنت لم تطلب ذلك يومًا.',en:'Then open your eyes. You are Muslim. You know your Lord, His name and His religion, and you never once asked for it.'},
+    {type:'hamd',name:'Praise',sec:15,chip:'الحمد',ar:'فقل من قلبك: الحمدُ لله الذي هدانا لهذا وما كنا لنهتديَ لولا أن هدانا الله.',en:'So say it from your heart: praise be to God, who guided us to this.'}
+  ];
+  const starts=[];{let a=0;steps.forEach(s=>{starts.push(a);a+=s.sec})}
+  const $=id=>document.getElementById(id);
+  const phone=$('phone'),chip=$('chip'),sent=$('sentence'),fill=$('fill'),timer=$('timer'),play=$('play'),stepEl=$('step'),en=$('en');
+  let raf=0,last=0,elapsed=0,running=false,cur=-1;
+  const fmt=t=>Math.floor(t/60)+':'+String(Math.floor(t)%60).padStart(2,'0');
+  function show(i){
+    if(i===cur)return;cur=i;const s=steps[i];phone.dataset.type=s.type;
+    stepEl.textContent='Step '+(i+1)+' of 5 · '+s.name+' · '+s.sec+' s';en.textContent=s.en;
+    sent.classList.add('out');setTimeout(()=>{chip.textContent=s.chip;sent.textContent=s.ar;sent.classList.remove('out')},reduce?0:300);
+  }
+  function tick(now){
+    elapsed+=(now-last)/1000;last=now;const t=Math.min(elapsed,80);
+    let i=0;starts.forEach((p,k)=>{if(t>=p)i=k});show(i);
+    fill.style.width=(t/80*100)+'%';timer.textContent=fmt(t)+' / 1:20';
+    if(t>=80){running=false;play.textContent='Again';return}
+    raf=requestAnimationFrame(tick);
+  }
+  play.addEventListener('click',()=>{
+    if(running){running=false;cancelAnimationFrame(raf);play.textContent='Resume';return}
+    if(elapsed>=80){elapsed=0;cur=-1}
+    running=true;play.textContent='Pause';last=performance.now();raf=requestAnimationFrame(tick);
+  });
+})();
+</script>
