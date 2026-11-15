@@ -186,7 +186,7 @@ export default function LandingPage() {
             <span className="text-ah-accent">حتى تغيب.</span>
           </h1>
           <p className="m-0 max-w-[34em] text-[17px] leading-[1.9] text-ah-body sm:text-[19px]">
-            «الحمد» يضع بين يديك كلَّ يومٍ نعمةً واحدة، ثم يأخذك في دقيقتين من التأمّل: تتخيّل يومك لو غابت، ثم تعود
+            «الحمد» يضع بين يديك كلَّ يومٍ نعمةً واحدة، ثم يأخذك في ثمانين ثانية من التأمّل: تتخيّل يومك لو غابت، ثم تعود
             إليها فتحمد الله عليها.
           </p>
           <div className="mt-2 flex flex-wrap items-center justify-center gap-4">
@@ -237,7 +237,7 @@ export default function LandingPage() {
           <div className="flex min-w-0 flex-[1_1_480px] flex-col gap-10">
             <div className="flex flex-col gap-3.5">
               <Eyebrow>التأمّل</Eyebrow>
-              <SectionTitle>دقيقتان، وخمس وقفات</SectionTitle>
+              <SectionTitle>ثمانون ثانية، وخمس وقفات</SectionTitle>
               <p className="m-0 max-w-[30em] text-[17px] leading-[1.9] text-ah-body">
                 جملةٌ بعد جملة، على خلفيةٍ ساكنة. لا شيء يستعجلك، ولا شيء يشغلك عن النعمة.
               </p>

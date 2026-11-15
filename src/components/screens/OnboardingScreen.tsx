@@ -37,7 +37,7 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({
       iconBg: 'bg-[#6C63FF]/15 border-[#6C63FF]/30',
       title: 'من المعرفة إلى الشعور',
       body: 'لا نعدّ النعم، بل نستشعرها: نتخيّل غيابها، لندرك أثرها، فيفيض اللسان بالحمد صادقاً.',
-      bullet: 'خمس دقائق هادئة تغيّر نظرتك ليومك.'
+      bullet: 'ثمانون ثانية هادئة تغيّر نظرتك ليومك.'
     },
     {
       icon: Bell,
