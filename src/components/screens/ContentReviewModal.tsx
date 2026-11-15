@@ -2,12 +2,14 @@ import React from 'react';
 import { X, CheckCircle2, Clock } from 'lucide-react';
 import { GlassCard } from '../common/GlassCard';
 import { toArabicNumerals } from '../../lib/arabic';
+import { getReviewSummary } from '../../data/loader';
 
 interface ContentReviewModalProps {
   onClose: () => void;
 }
 
 export const ContentReviewModal: React.FC<ContentReviewModalProps> = ({ onClose }) => {
+  const review = getReviewSummary();
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in" dir="rtl">
       <div className="relative w-full max-w-md bg-[#15152A] border border-[#2E2E4A] rounded-3xl p-6 shadow-2xl flex flex-col max-h-[92vh] overflow-y-auto">
@@ -59,7 +61,7 @@ export const ContentReviewModal: React.FC<ContentReviewModalProps> = ({ onClose 
 
         <div className="pt-2 text-center">
           <span className="text-xs text-[#AEAECB]">
-            إجمالي النعم المعتمدة في التطبيق: {toArabicNumerals(40)} نعمة
+            النعم في التطبيق: {toArabicNumerals(review.total)} · المعتمدة بعد المراجعة: {toArabicNumerals(review.approved)}
           </span>
         </div>
       </div>

@@ -6,6 +6,7 @@ import { getFormattedHijriDate } from '../../lib/hijri';
 import { toArabicNumerals } from '../../lib/arabic';
 import { ShareCardModal } from '../common/ShareCardModal';
 import { HisnCategoryId } from '../../data/hisnAlMuslim';
+import { isApproved } from '../../data/loader';
 
 interface HomeScreenProps {
   blessing: Blessing;
@@ -236,6 +237,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 سورة {blessing.quran.surahName} : {toArabicNumerals(blessing.quran.ayahNumber)}
               </span>
             </div>
+            {!isApproved(blessing) && (
+              <p className="mt-2 text-center text-[11px] text-[#AEAECB]">
+                النص قيد المراجعة العلمية
+              </p>
+            )}
           </div>
 
           {/* Collapsible «تدبّر النعمة» (Tadabbur section) */}
