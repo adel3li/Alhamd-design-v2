@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
-    "build": "node scripts/build-story.mjs && vite build && mv dist/index.html dist/app.html",
+    "check:promises": "node scripts/check-promises.mjs",
+    "build": "node scripts/check-promises.mjs && node scripts/build-story.mjs && vite build && mv dist/index.html dist/app.html",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit"
