@@ -1,0 +1,144 @@
+@import "tailwindcss" source("./");
+
+/*
+ * Landing page tokens.
+ * Layl (dark) is the default; Nahar (light) follows the system preference,
+ * and either can be forced with <html data-theme="dark|light">.
+ */
+:root {
+  --l-page: #0C0C1C;
+  --l-deep: #111126;
+  --l-ground: #15152A;
+  --l-glass: #1E1E38;
+  --l-sunken: #1B1B33;
+  --l-tabbar: #1A1A30;
+  --l-frame: #15152A;
+  --l-hairline: #2E2E4A;
+  --l-text: #EDEDF5;
+  --l-body: #C7C4D8;
+  --l-muted: #AEAECB;
+  --l-accent: #E4C368;
+  --l-stroke: #C8A951;
+  --l-cta: #6C63FF;
+  --l-cta-hover: #594DFF;
+  --l-ayah: #E4C368;
+  --l-pill: rgba(17, 17, 38, 0.6);
+  --l-halo: rgba(200, 169, 81, 0.18);
+  --l-pattern: rgba(237, 237, 245, 0.05);
+  --l-cone: rgba(237, 237, 245, 0.07);
+  --l-card-glow: rgba(237, 237, 245, 0.05);
+  --l-card-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  --l-raised-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --l-page: #F4EDE3;
+    --l-deep: #EDE3D4;
+    --l-ground: #F4EDE3;
+    --l-glass: #FBF8F3;
+    --l-sunken: #EFE6D9;
+    --l-tabbar: #FFFFFF;
+    --l-frame: #FFFFFF;
+    --l-hairline: #DCCFBE;
+    --l-text: #2A1F19;
+    --l-body: #4A3B32;
+    --l-muted: #6B5A4E;
+    --l-accent: #9E4A30;
+    --l-stroke: #B9573B;
+    --l-cta: #B9573B;
+    --l-cta-hover: #8F4229;
+    --l-ayah: #2A1F19;
+    --l-pill: rgba(244, 237, 227, 0.7);
+    --l-halo: rgba(185, 87, 59, 0.14);
+    --l-pattern: rgba(42, 31, 25, 0.05);
+    --l-cone: rgba(230, 218, 200, 0);
+    --l-card-glow: rgba(230, 218, 200, 0.6);
+    --l-card-shadow: 0 12px 32px rgba(42, 31, 25, 0.08);
+    --l-raised-shadow: 0 16px 40px rgba(42, 31, 25, 0.12);
+    color-scheme: light;
+  }
+}
+
+:root[data-theme="light"] {
+  --l-page: #F4EDE3;
+  --l-deep: #EDE3D4;
+  --l-ground: #F4EDE3;
+  --l-glass: #FBF8F3;
+  --l-sunken: #EFE6D9;
+  --l-tabbar: #FFFFFF;
+  --l-frame: #FFFFFF;
+  --l-hairline: #DCCFBE;
+  --l-text: #2A1F19;
+  --l-body: #4A3B32;
+  --l-muted: #6B5A4E;
+  --l-accent: #9E4A30;
+  --l-stroke: #B9573B;
+  --l-cta: #B9573B;
+  --l-cta-hover: #8F4229;
+  --l-ayah: #2A1F19;
+  --l-pill: rgba(244, 237, 227, 0.7);
+  --l-halo: rgba(185, 87, 59, 0.14);
+  --l-pattern: rgba(42, 31, 25, 0.05);
+  --l-cone: rgba(230, 218, 200, 0);
+  --l-card-glow: rgba(230, 218, 200, 0.6);
+  --l-card-shadow: 0 12px 32px rgba(42, 31, 25, 0.08);
+  --l-raised-shadow: 0 16px 40px rgba(42, 31, 25, 0.12);
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-ah-page: var(--l-page);
+  --color-ah-deep: var(--l-deep);
+  --color-ah-ground: var(--l-ground);
+  --color-ah-glass: var(--l-glass);
+  --color-ah-sunken: var(--l-sunken);
+  --color-ah-tabbar: var(--l-tabbar);
+  --color-ah-frame: var(--l-frame);
+  --color-ah-hairline: var(--l-hairline);
+  --color-ah-text: var(--l-text);
+  --color-ah-body: var(--l-body);
+  --color-ah-muted: var(--l-muted);
+  --color-ah-accent: var(--l-accent);
+  --color-ah-stroke: var(--l-stroke);
+  --color-ah-cta: var(--l-cta);
+  --color-ah-cta-hover: var(--l-cta-hover);
+  --color-ah-ayah: var(--l-ayah);
+  --color-ah-pill: var(--l-pill);
+  --font-serif: 'Amiri', serif;
+  --font-sans: 'IBM Plex Sans Arabic', system-ui, sans-serif;
+  --font-quran: 'Amiri Quran', 'Amiri', serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--l-page);
+  color: var(--l-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--l-halo);
+  color: var(--l-accent);
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--l-accent);
+  outline-offset: 3px;
+}
+
