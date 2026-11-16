@@ -4,7 +4,7 @@
 
 **A calm, Arabic-first app for noticing and reflecting on God's blessings — one blessing a day, without pressure or streaks.**
 
-[**Live demo**](https://alhamd-wheat.vercel.app) · [Screenshots](#screenshots) · [Tech stack](#tech-stack) · [Architecture](#architecture)
+[**Website**](https://alhamd.app) · [**Live app**](https://alhamd-wheat.vercel.app) · [Screenshots](#screenshots) · [Tech stack](#tech-stack) · [Architecture](#architecture)
 
 ![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript&logoColor=white)
