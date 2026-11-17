@@ -12,7 +12,7 @@ The landing page has its own stylesheet (`src/landing/landing.css`) and is descr
 - Colour is applied by **two mechanisms that coexist**:
   1. CSS custom properties (`--bg-ground`, `--text-primary`, ...) declared in `src/index.css` and read through inline `style` attributes.
   2. Hard-coded dark-theme hex utilities (`bg-[#15152A]`, `text-[#EDEDF5]`, ...) written in components, which `src/index.css` re-colours per mode with `!important` rules keyed on the escaped class name.
-- Mechanism 2 carries most of the UI: 1,574 six-digit hex literals in `src/components`, against 150 `var(--…)` reads in `src/` outside the landing page.
+- Mechanism 2 carries most of the UI: 1,574 six-digit hex literals in `src/components`, against 146 `var(--…)` reads in `src/` outside the landing page.
 - There is no `tailwind.config`, and `src/index.css` contains no `@theme`, `@utility` or `@custom-variant`. Tailwind runs on its defaults.
 - `src/constants/tokens.ts` is imported by nothing. Its light palette is a different (cool blue-grey) palette from the one in use.
 - The main app has no `prefers-reduced-motion` handling.
@@ -169,7 +169,7 @@ Effects of running on defaults:
 
 - **`dark:` is a media-query variant.** With no `@custom-variant dark`, Tailwind compiles `dark:` to `@media (prefers-color-scheme: dark)` (confirmed in the build output). The `dark` class the store puts on `<html>` does not drive it. The app uses `dark:` twice, each time repeating the base value: `bg-[#15152A]/92 dark:bg-[#15152A]/92` (`src/components/layout/BottomTabBar.tsx:59`) and `bg-[#15152A]/90 dark:bg-[#15152A]/90` (`src/components/layout/DesktopNavBar.tsx:27`). Both are no-ops.
 - **`font-sans` and `font-serif` exist twice.** Tailwind's own utilities read `--font-sans` / `--font-serif`, which `:root` overrides in the base layer; `src/index.css:66-72` then defines unlayered classes of the same name with the same result.
-- **Source detection covers the whole repository.** `src/index.css` does not restrict scanning (the landing stylesheet does, with `source("./")`). The built app stylesheet (87,888 bytes) contains utilities that occur only under `legacy/`, for example `dark:bg-[#0B0C10]` from `legacy/src/components/PrivacyPolicyView.tsx`. Markdown under `docs/` is scanned as well. Paths excluded by `.gitignore` are skipped, which includes `public/assets/aistudio/` because that folder contains a `.gitignore` with `*`.
+- **Source detection covers the whole repository.** `src/index.css` does not restrict scanning (the landing stylesheet does, with `source("./")`). The built app stylesheet contains utilities that occur only under `legacy/`, for example `dark:bg-[#0B0C10]` from `legacy/src/components/PrivacyPolicyView.tsx`. Markdown is scanned as well, verified by building before and after this documentation was written: the app stylesheet grew from 87,888 to 90,348 bytes and gained utilities such as `bg-[#15152A]/95`, a class name that appears in these files but in no component. Paths excluded by `.gitignore` are skipped, which includes `public/assets/aistudio/` because that folder contains a `.gitignore` with `*`.
 - **Breakpoints, spacing and the colour palette are Tailwind's defaults** (section 12).
 
 `body` (`src/index.css:54-63`) sets `font-family: var(--font-sans)`, `direction: rtl`, `background-color: var(--bg-ground)`, `color: var(--text-primary)`, font smoothing, `overflow-x: hidden` and a 0.25 s transition on background and text colour.
@@ -178,12 +178,12 @@ Effects of running on defaults:
 
 ### 5.1 Font classes
 
-| Class | Declaration | Line | Uses in `src/**/*.tsx` |
+| Class | Declaration | Line | Uses in `src/**/*.tsx` outside `src/landing` |
 |---|---|---|---|
-| `.font-serif` | `font-family: var(--font-serif)` (Amiri) | `:66` | 67 in 23 files |
-| `.font-sans` | `font-family: var(--font-sans)` (the user's chosen family) | `:70` | 8 in 6 files, 4 of them in `src/landing` |
+| `.font-serif` | `font-family: var(--font-serif)` (Amiri) | `:66` | 52 in 21 files |
+| `.font-sans` | `font-family: var(--font-sans)` (the user's chosen family) | `:70` | 4 in 4 files: `App.tsx:116`, `ShareCardModal.tsx:665`, `JournalScreen.tsx:362`, `OnboardingScreen.tsx:107` |
 | `.font-ibm` | Same rule as `.font-sans`. Despite the name it follows the user's choice | `:70` | 1: `src/components/screens/HomeScreen.tsx:64` |
-| `.font-quran` | `font-family: var(--font-quran)` (Amiri Quran, then Amiri) | `:74` | 8 in 7 files (section 7.4) |
+| `.font-quran` | `font-family: var(--font-quran)` (Amiri Quran, then Amiri) | `:74` | 7 in 6 files (section 7.4) |
 
 ### 5.2 Helper classes
 
@@ -362,7 +362,7 @@ The choice changes interface text only. `.font-serif` and `.font-quran` are not 
 | Family | Applied through | Used for |
 |---|---|---|
 | User's choice (`--font-sans`) | `body`, Tailwind preflight, `.font-sans`, `.font-ibm` | All text without another font class |
-| Amiri | `.font-serif` (67 uses) | Screen and card titles, hadith and duʿāʾ text, the «الحمد» wordmark (`BrandMark.tsx:26`), the «ح» buttons (`TopBar.tsx:27`, `DesktopNavBar.tsx:77`), tour and share-modal headings |
+| Amiri | `.font-serif` (52 uses) | Screen and card titles, hadith and duʿāʾ text, the «الحمد» wordmark (`BrandMark.tsx:26`), the «ح» buttons (`TopBar.tsx:27`, `DesktopNavBar.tsx:77`), tour and share-modal headings |
 | Amiri Quran | `.font-quran` | Verses (7.4) |
 | IBM Plex Sans Arabic, Amiri, Amiri Quran by name | Canvas `ctx.font` strings in `ShareCardModal.tsx:205-297` | The exported share image. It ignores the user's font choice |
 

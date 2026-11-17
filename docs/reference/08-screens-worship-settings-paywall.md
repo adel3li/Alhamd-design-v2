@@ -24,7 +24,7 @@ Storage keys read or written by the files on this page (none of the first seven 
 
 | Key | Value format | Owner |
 |---|---|---|
-| `alhamd_tasbih_count` | Decimal integer string. Lifetime tap total | Store (`src/lib/store.tsx:214`, `:564`); shown by `TasbihModal` |
+| `alhamd_tasbih_count` | Decimal integer string. Lifetime tap total | Store (`src/lib/store.tsx:214`, `src/lib/store.tsx:564`); shown by `TasbihModal` |
 | `alhamd_tasbih_reciter_v1` | Reciter id, e.g. `husary` | `TasbihAudioPlayer` (`src/components/screens/TasbihAudioPlayer.tsx:150`) |
 | `alhamd_tasbih_volume_v1` | Float string between 0 and 1, e.g. `0.83` | `TasbihAudioPlayer` (`src/components/screens/TasbihAudioPlayer.tsx:151`) |
 | `alhamd_hisn_counts_YYYY-MM-DD` | JSON object `{ [dhikrId]: number }`. One key per **UTC** date | `HisnScreen` (`src/components/screens/HisnScreen.tsx:126`) |
@@ -132,8 +132,8 @@ These exact strings are also the join key to the audio tracks (`dhikrPreset` in 
 ### Styling
 
 - CSS custom properties from `src/index.css:3-29`: `--bg-raised`, `--raised-shadow` (tap button), `--border-hairline`, `--accent-stroke` (ring), `--text-primary`, `--accent-text`, `--bg-sunken` (switch track).
-- Utility classes defined in `src/index.css`: `animate-fade-in` (`:271`), `no-scrollbar` (`:252`), `font-serif` (`:66`).
-- Hard-coded colours: `#E4C368` (selected chip and switch), `#15152A`, `#1E1E38`, `#2E2E4A`, `#AEAECB`, `#EDEDF5`, `#C8A951`. Light, high-contrast and night-reading themes recolour them through the `!important` remaps in `src/index.css:79-226`, `:283-378`, `:395-546`.
+- Utility classes: `animate-fade-in` (`src/index.css:271`), `no-scrollbar` (`src/index.css:252`), `font-serif` (`src/index.css:66`).
+- Hard-coded colours: `#E4C368` (selected chip and switch), `#15152A`, `#1E1E38`, `#2E2E4A`, `#AEAECB`, `#EDEDF5`, `#C8A951`. Light, high-contrast and night-reading themes recolour them through the `!important` remaps in `src/index.css:79-226`, `src/index.css:283-378` and `src/index.css:395-546`.
 - Breakpoints: `sm` (640 px) enlarges text and the tap button; `md` / `lg` widen the container.
 - Animation: `animate-fade-in` on the root, `active:scale-95` on the tap button, a 300 ms transition on the ring.
 
@@ -486,7 +486,7 @@ Only `categoryId` is used (`:103`, `:290`); `label` and `reason` are never rende
 ### Styling
 
 - CSS custom properties: `--border-hairline`, `--accent-text`, `--accent-stroke`, `--bg-raised`, `--bg-sunken`, `--cta-bg`, `--text-primary`, `--text-secondary`, `--ayah-border`, `--ayah-color`; `GlassCard` adds `--bg-glass` and `--card-shadow` (`src/components/common/GlassCard.tsx:27-29`).
-- Classes from `src/index.css`: `animate-fade-in`, `no-scrollbar`, `font-serif`, `font-quran` (`:74`), `ayah-text` (recoloured in light and night-reading themes, `:162`, `:534`).
+- Classes from `src/index.css`: `animate-fade-in`, `no-scrollbar`, `font-serif`, `font-quran` (`src/index.css:74`), `ayah-text` (recoloured in the light and night-reading themes, `src/index.css:162` and `src/index.css:534`).
 - Hard-coded colours: gold `#E4C368` / `#C8A951`, violet `#6C63FF` / `#594DFF` (counter button, favourites toggle), `#15152A`, `#1E1E38`, `#25232E`, `#2E2E4A`, `#AEAECB`, `#C7C4D8`, `#EDEDF5`.
 - Breakpoints: `sm` switches the wird cards to three columns and enlarges text; `md` / `lg` apply only in the unused non-embedded layout.
 - Animation: `animate-fade-in` on the root; drawer backdrop fade 0.2 s; drawer panel spring (`damping: 28, stiffness: 280`); 300–500 ms transitions on bars and rings.
@@ -638,7 +638,7 @@ Coupling inside the store that shapes the behaviour here: `setTheme('light')` al
 
 Not from the store:
 
-- Entitlements (`src/lib/entitlements.ts`): `isPremium`, `getDeveloperPremiumSync`, `setDeveloperPremium`, `subscribeEntitlementChange`. These read and write `alhamd:dev_premium` (`'true'` / `'false'`) and dispatch / listen for the window event `alhamd:entitlement_changed` (`src/lib/entitlements.ts:58-68`, `:82-95`).
+- Entitlements (`src/lib/entitlements.ts`): `isPremium`, `getDeveloperPremiumSync`, `setDeveloperPremium`, `subscribeEntitlementChange`. These read and write `alhamd:dev_premium` (`'true'` / `'false'`) and dispatch / listen for the window event `alhamd:entitlement_changed` (`src/lib/entitlements.ts:58-68`, `src/lib/entitlements.ts:82-95`).
 - Journey developer helpers (`src/lib/journeyStore.ts`): `devResetTodayPacingLock` (`src/lib/journeyStore.ts:553`) and `devResetEntireJourney` (`src/lib/journeyStore.ts:567`). They rewrite `alhamd:journey_state:v1`; the second also removes `alhamd:journey_onboarded:v1`. Both go through `saveJourneyState`, which dispatches `alhamd:journey_updated` (`src/lib/journeyStore.ts:388-394`); the store listens for it and reloads.
 
 This file has no direct `localStorage` or `sessionStorage` calls.
@@ -708,7 +708,7 @@ Import flow (`:125-140`):
 
 1. "استيراد نسخة" clicks the hidden input.
 2. On change, the first file is read as text. There is no size or type check beyond the `accept` hint, and no confirmation step.
-3. If the text is non-empty, `importBackupJSON(text)` runs and its `message` is shown in the banner for 4 s. The `success` flag is ignored. Messages (`src/lib/store.tsx:635`, `:674`, `:676`, `:678`): "تم استرجاع بياناتك بنجاح.", "تم استرجاع النسخة الاحتياطية وترقيتها بنجاح.", "ملف النسخة الاحتياطية غير متوافق.", "تعذر قراءة ملف النسخة الاحتياطية.".
+3. If the text is non-empty, `importBackupJSON(text)` runs and its `message` is shown in the banner for 4 s. The `success` flag is ignored. Messages (`src/lib/store.tsx:635`, `src/lib/store.tsx:674`, `src/lib/store.tsx:676`, `src/lib/store.tsx:678`): "تم استرجاع بياناتك بنجاح.", "تم استرجاع النسخة الاحتياطية وترقيتها بنجاح.", "ملف النسخة الاحتياطية غير متوافق.", "تعذر قراءة ملف النسخة الاحتياطية.".
 4. The input's value is reset so the same file can be chosen again.
 5. An empty file, or a read error (no `onerror` handler), produces no message *(runtime-checked for the empty file)*.
 
@@ -895,7 +895,7 @@ Sizing *(runtime-checked, default font size, mounted from `App`)*: the card and 
 ### Styling
 
 - No CSS custom properties; all colours are hard-coded Tailwind arbitrary values: `#15152A` (card), `#1E1E38` with opacities `/50` and `/85`, `#2E2E4A`, violet `#6C63FF` / `#594DFF` with opacities `/12`, `/15`, `/20`, `/25`, `/35`, `/40`, `/50`, gold `#E4C368`, text `#EDEDF5`, `#C7C4D8`, `#AEAECB`; selected plan glow `rgba(108, 99, 255, 0.18)`.
-- `src/index.css` remaps `bg-[#1E1E38]` and its `/90` and `/80` variants for the light theme (`:88-92`) but not `/85` or `/50`. In the light theme the benefit cards, the unselected plan and the privacy line keep a dark navy background while their text is remapped to dark ink *(runtime-checked: background `rgba(30, 30, 56, 0.85)`, text `rgb(42, 31, 25)`)*.
+- `src/index.css:88-92` remaps `bg-[#1E1E38]` and its `/90` and `/80` variants for the light theme, but not `/85` or `/50`. In the light theme the benefit cards, the unselected plan and the privacy line keep a dark navy background while their text is remapped to dark ink *(runtime-checked: background `rgba(30, 30, 56, 0.85)`, text `rgb(42, 31, 25)`)*.
 - Classes from `src/index.css`: `animate-fade-in` (overlay and notice), `font-serif`.
 - Breakpoints: `sm` adjusts padding and text size; `md` widens the card.
 - Body copy uses `text-[10px]` and `text-[11px]` (0.6875 rem / 0.75 rem after the remap in `src/index.css:234-242`).
