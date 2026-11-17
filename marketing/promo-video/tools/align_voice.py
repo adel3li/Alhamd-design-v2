@@ -10,7 +10,8 @@ Writes:
   out/voice-track.wav       the voice placed on the film's timeline, loudness-normalised for social (-14 LUFS)
 
 Then:
-  node tools/render-motion.cjs --timing out/final-timings.json --audio out/voice-track.wav --out out/alhamd-promo.mp4
+  python3 tools/sfx.py out/final-timings.json out/sfx.wav --mix out/voice-track.wav out/mix.wav
+  node tools/render-motion.cjs --timing out/final-timings.json --audio out/mix.wav --out out/alhamd-promo.mp4
 """
 import json
 import re

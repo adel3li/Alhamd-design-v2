@@ -46,6 +46,7 @@ tools/
   build_animatic.py         timed animatic with a temporary gTTS voice → out/animatic.mp4, out/timings.json
   align_voice.py            splits the real recording into its 19 lines → out/final-timings.json, out/voice-track.wav
   render-motion.cjs         the animated film → out/promo.mp4 (3 parallel renderers, 30 fps)
+  sfx.py                    natural sound effects (drop, breeze, vibration, steps, breath, tap), no music
   contact-sheet.cjs         contact sheets → out/contact-sheet-*.png
   build_script.py           script.md and script/ from storyboard.json
   build_page.py             review page → out/page/ (uses page-template.html)
@@ -74,7 +75,8 @@ The gTTS voice is only a guide track for pacing. With the real recording:
 
 ```bash
 python3 tools/align_voice.py path/to/voice.wav     # or a folder with one file per line
-node tools/render-motion.cjs --timing out/final-timings.json --audio out/voice-track.wav --out out/alhamd-promo.mp4
+python3 tools/sfx.py out/final-timings.json out/sfx.wav --mix out/voice-track.wav out/mix.wav
+node tools/render-motion.cjs --timing out/final-timings.json --audio out/mix.wav --out out/alhamd-promo.mp4
 ```
 
 ## Notes
