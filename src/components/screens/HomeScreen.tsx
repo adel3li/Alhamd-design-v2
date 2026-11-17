@@ -268,7 +268,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
 
                 {/* Tadabbur Text */}
                 {blessing.tadabbur && (
-                  <div className="space-y-2 border-t border-[#2E2E4A]/50 pt-4">
+                  <div className={`space-y-2 ${blessing.hadith?.text ? 'border-t border-[#2E2E4A]/50 pt-4' : ''}`}>
                     <span className="text-sm font-bold text-[#C8A951] block">وقفات في أثر النعمة:</span>
                     <p className="text-base sm:text-lg text-[#C7C4D8] leading-[1.95]">
                       {blessing.tadabbur}

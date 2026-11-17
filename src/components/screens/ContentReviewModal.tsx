@@ -28,7 +28,17 @@ export const ContentReviewModal: React.FC<ContentReviewModalProps> = ({ onClose 
           <GlassCard padding="p-4" className="space-y-2">
             <h4 className="text-xs font-bold text-[#E4C368]">الآيات القرآنية</h4>
             <p className="text-xs text-[#C7C4D8] leading-relaxed">
-              جميع الآيات منقولة بالنص العثماني المعتمد من مجمع الملك فهد لطباعة المصحف الشريف، مع ذكر رقم الآية واسم السورة بدقة.
+              نصوص آيات النِّعم منقولة بحروفها وتشكيلها عن مشروع «تنزيل» لنصّ القرآن الكريم (
+              <a
+                href="https://tanzil.net"
+                target="_blank"
+                rel="noopener noreferrer"
+                dir="ltr"
+                className="underline text-[#E4C368]"
+              >
+                tanzil.net
+              </a>
+              )، مع ذكر اسم السورة ورقم الآية.
             </p>
           </GlassCard>
 

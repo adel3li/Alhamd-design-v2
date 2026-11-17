@@ -61,7 +61,9 @@ const CATEGORY_COLORS: Record<string, string> = {
   'نعم الرزق': '#F4A261',
   'نعم العقل': '#56CFE1',
   'نعم الأمن': '#80ED99',
-  'نعم المال': '#E76F51'
+  'نعم المال': '#E76F51',
+  'نعم الكون': '#4895EF',
+  'نعم الوجدان': '#F28DB2'
 };
 
 const SHORT_CATEGORY_LABELS: Record<string, string> = {
@@ -72,7 +74,9 @@ const SHORT_CATEGORY_LABELS: Record<string, string> = {
   'نعم الرزق': 'الرزق',
   'نعم العقل': 'العقل',
   'نعم الأمن': 'الأمن',
-  'نعم المال': 'المال'
+  'نعم المال': 'المال',
+  'نعم الكون': 'الكون',
+  'نعم الوجدان': 'الوجدان'
 };
 
 const CATEGORY_SELF_AWARENESS_HINTS: Record<string, string> = {
@@ -83,7 +87,9 @@ const CATEGORY_SELF_AWARENESS_HINTS: Record<string, string> = {
   'نعم الرزق': 'تأمل الرزق الذي يسوقه الله إليك من حيث تحتسب ومن حيث لا تحتسب.',
   'نعم العقل': 'تأمل نعمة الفهم، التمييز، التدبر، وحفظ الذكريات الجميلة.',
   'نعم الأمن': 'تأمل نعمة الأمان في المسكن والوطن وطمأنينة القلب عند المساء.',
-  'نعم المال': 'تأمل نعمة الكفاية، الاستغناء عن الخلق، والقدرة على البذل والعطاء.'
+  'نعم المال': 'تأمل نعمة الكفاية، الاستغناء عن الخلق، والقدرة على البذل والعطاء.',
+  'نعم الكون': 'تأمل الشمس والقمر، المطر والنبات، وما سُخِّر لك في السماوات والأرض.',
+  'نعم الوجدان': 'تأمل نعمة السكينة، الفرح، الأمل، والأنس الذي يملأ القلب.'
 };
 
 export const ReflectionCategoryCharts: React.FC<ReflectionCategoryChartsProps> = ({
@@ -353,7 +359,7 @@ export const ReflectionCategoryCharts: React.FC<ReflectionCategoryChartsProps> =
       </div>
 
       {/* Main Recharts Visualization Area */}
-      <div className="w-full h-60 pt-1" dir="ltr">
+      <div className="w-full h-72 pt-1" dir="ltr">
         {chartType === 'bars' && (
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
@@ -379,6 +385,7 @@ export const ReflectionCategoryCharts: React.FC<ReflectionCategoryChartsProps> =
                 type="category"
                 dataKey="shortLabel"
                 width={82}
+                interval={0}
                 tick={{ fill: 'var(--text-primary)', fontSize: 11, fontWeight: 600 }}
                 axisLine={false}
                 tickLine={false}
