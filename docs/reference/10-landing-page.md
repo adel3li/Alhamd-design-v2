@@ -4,6 +4,8 @@ State of the code at commit `68e723a` (`main`, 2026-11-16). Line references are 
 
 The landing page is a single static marketing page in Arabic (RTL) for the Alhamd app. It is a second Vite entry that lives beside the app in the same repository and is served at the root of `alhamd.app`. It was added in commit `55ccf2e` (2026-11-10); commit `70602c1` (2026-11-11) changed one line of it (the app URL) and added the host routing.
 
+File names written without a directory (`LandingPage.tsx`, `PhoneMockups.tsx`, `icons.tsx`, `landing.css`, `main.tsx`) are in `src/landing/`.
+
 Statements marked **(measured)** were checked on 2026-11-17 by running `vite build` (Vite 6.4.4) into a scratch directory and loading the output in headless Chromium through Playwright, with requests to Google Fonts blocked. Font rendering was therefore not checked.
 
 ## 1. Files
@@ -131,7 +133,14 @@ The root element is `<div dir="rtl" lang="ar" class="bg-ah-page font-sans text-a
 ### 4.1 Hero — `<section id="top">` (`LandingPage.tsx:143-208`)
 
 - Background: star lattice (`StarPattern id="heroStar"`) and a radial glow using `--l-cone` (lines 144-149).
-- `<header>` (lines 151-172): the small wordmark «الحمد» linking to `#top` with `aria-label="الحمد — أعلى الصفحة"`, then `<nav aria-label="أقسام الصفحة">` with four anchor links and an outlined button.
+- `<header>` (lines 151-172): the small wordmark «الحمد» linking to `#top` with `aria-label="الحمد — أعلى الصفحة"`, then `<nav aria-label="أقسام الصفحة">` with four anchor links and an outlined button (table below). The four anchor links have `hidden md:inline` (line 160), so below 768px only the wordmark and «جرّب التطبيق» are shown.
+- Tagline pill: «نعمةٌ كلَّ يوم» (lines 175-177).
+- `<h1>` (lines 178-182): «النعمة لا تُرى…» then, on a second line in the accent colour, «حتى تغيب.»
+- Lead paragraph (lines 183-186): ««الحمد» يضع بين يديك كلَّ يومٍ نعمةً واحدة، ثم يأخذك في دقيقتين من التأمّل: تتخيّل يومك لو غابت، ثم تعود إليها فتحمد الله عليها.»
+- Call to action row (lines 187-192): the primary button «ابدأ بنعمة اليوم» (links to `APP_URL`) and plain text «قريبًا على متجر «جوجل بلاي»». The Google Play text is a `<span>`, not a link.
+- Hero phone (lines 196-207): `PhoneFrame` containing `PhoneHomeScreen`, in a container of fixed height (540px, 635px from `sm`) with `overflow-hidden`. A gradient from transparent (at 55%) to `--l-page` fades the lower part, so the phone looks cut by the fold. The frame's label is «شاشة «نعمة اليوم» في تطبيق الحمد: نعمة الإسلام مع آيتها من سورة المائدة» (line 198).
+
+Header navigation:
 
 | Label | Target | Source |
 |---|---|---|
@@ -140,14 +149,6 @@ The root element is `<div dir="rtl" lang="ar" class="bg-ah-page font-sans text-a
 | في التطبيق | `#inside` | `LandingPage.tsx:13` |
 | خصوصيّتك | `#promise` | `LandingPage.tsx:14` |
 | جرّب التطبيق | `APP_URL` | `LandingPage.tsx:165-170` |
-
-  The four anchor links have `hidden md:inline` (line 160), so below 768px only the wordmark and «جرّب التطبيق» are shown.
-
-- Tagline pill: «نعمةٌ كلَّ يوم» (lines 175-177).
-- `<h1>` (lines 178-182): «النعمة لا تُرى…» then, on a second line in the accent colour, «حتى تغيب.»
-- Lead paragraph (lines 183-186): ««الحمد» يضع بين يديك كلَّ يومٍ نعمةً واحدة، ثم يأخذك في دقيقتين من التأمّل: تتخيّل يومك لو غابت، ثم تعود إليها فتحمد الله عليها.»
-- Call to action row (lines 187-192): the primary button «ابدأ بنعمة اليوم» (links to `APP_URL`) and plain text «قريبًا على متجر «جوجل بلاي»». The Google Play text is a `<span>`, not a link.
-- Hero phone (lines 196-207): `PhoneFrame` containing `PhoneHomeScreen`, in a container of fixed height (540px, 635px from `sm`) with `overflow-hidden`. A gradient from transparent (at 55%) to `--l-page` fades the lower part, so the phone looks cut by the fold. The frame's label is «شاشة «نعمة اليوم» في تطبيق الحمد: نعمة الإسلام مع آيتها من سورة المائدة» (line 198).
 
 ### 4.2 Story — `<section id="story">` (`LandingPage.tsx:211-227`)
 

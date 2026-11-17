@@ -7,7 +7,7 @@ Written on 2026-11-17 against commit `68e723a`. This file has two parts:
 
 Nothing here has been fixed. This file records what was found; fixing is separate work.
 
-How each finding was established is stated in its row: **run time** means the behaviour was observed in a headless browser against the production build; **code** means it was read in the source and, for "nothing calls X" claims, confirmed with a repository-wide search; **branch** means a fix already exists on the unmerged branch `claude/trusting-rubin-9ue5hh` (see [HISTORY.md](HISTORY.md), section 9).
+How each finding was established is stated in its row: **run time** means the behaviour was observed in a headless browser against the production build; **code** means it was read in the source and, for "nothing calls X" claims, confirmed with a repository-wide search; **run time (reviewer)** means it was observed in a browser by one of the parallel reviewers that read each area line by line; **branch** means a fix already exists on the unmerged branch `claude/trusting-rubin-9ue5hh` (see [HISTORY.md](HISTORY.md), section 9).
 
 Severity: **High** breaks a core promise or a core flow for every user; **Medium** is wrong or risky in a common situation; **Low** is a defect with limited reach, or cleanup.
 
@@ -19,12 +19,12 @@ The first three are the ones already planned. The rest are suggestions, ordered 
 
 | # | Area | Why it is worth doing here | Where to start |
 |---:|---|---|---|
-| 1 | **Frontend quality** | The UI works, but it is built from very large components (one file is 1,398 lines), hard-coded colours, a light theme implemented by CSS overrides, inline copy, and dead UI paths | Fix the High bugs in Part B first; then split the largest screens, move colours to variables, and add screenshot comparisons so refactors are safe |
+| 1 | **Frontend quality** | The UI works, but it is built from very large components (one file is 1,398 lines), hard-coded colours, a light theme implemented by CSS overrides, inline copy, and dead UI paths | Fix the High items in B, U and J first; then split the largest screens, move colours to variables, and add screenshot comparisons so refactors are safe |
 | 2 | **Testing** | There are no tests, no test runner and no CI. Several High bugs (B-01, B-02) would have been caught by ten lines of unit tests | Vitest for the pure modules listed in [reference/03](reference/03-domain-logic.md) section 6 and in T-01 to T-06; Playwright for the five core flows; a timezone matrix |
-| 3 | **Security and privacy** | No backend limits the attack surface, but premium is a client flag anyone can set, imported backups are not validated, no security headers are sent, and the privacy promise is broader than what the app does | S-01 to S-10; then a privacy-policy review against [reference/11](reference/11-build-and-deployment.md) section 5 |
+| 3 | **Security and privacy** | No backend limits the attack surface, but premium is a client flag anyone can set, imported backups are not validated, no security headers are sent, and the privacy promise is broader than what the app does | S-01 to S-12; then a privacy-policy review against [reference/11](reference/11-build-and-deployment.md) section 5 |
 | 4 | **Product-promise integrity** | The app promises no streaks, an honest duration, an empty private journal and reviewed text; the code breaks each of these today | P-01 to P-06. Six fixes and a build-time guard already exist on an unmerged branch |
-| 5 | **Content and scholarly review** | 0 of 40 blessings and 0 journey texts are approved; adhkar have no review fields; the UI does not distinguish reviewed from unreviewed sacred text | C-01 to C-06; a reviewer worksheet generated from the JSON; a verse check against a trusted Qur'an source |
-| 6 | **Performance** | One 1 MB JavaScript chunk (280 kB gzipped) loads before first paint; every store change re-renders every consumer; five font families block rendering | PF-01 to PF-07; lazy-load each tab and recharts first |
+| 5 | **Content and scholarly review** | 0 of 40 blessings and 0 journey texts are approved; adhkar have no review fields; the UI does not distinguish reviewed from unreviewed sacred text | C-01 to C-08; a reviewer worksheet generated from the JSON; a verse check against a trusted Qur'an source |
+| 6 | **Performance** | One 1 MB JavaScript chunk (280 kB gzipped) loads before first paint; every store change re-renders every consumer; five font families block rendering | PF-01 to PF-06; lazy-load each tab and recharts first |
 | 7 | **Accessibility** | Zoom is disabled, there is no reduced-motion handling, and modals are hand-built | A-01 onward; an automated axe pass, then a screen-reader walk-through in Arabic |
 | 8 | **Design-system consolidation** | Colours live in four places that disagree (CSS variables, hex classes, `tokens.ts`, the landing page) | D-01 onward; one token source, components that read variables, removal of the override block |
 | 9 | **Data model and migrations** | Two key naming styles, UTC and local dates mixed in stored data, no migration mechanism, a backup that omits several things | [reference/02](reference/02-state-and-persistence.md); a versioned storage layer with migrations and schema validation |
@@ -51,8 +51,31 @@ The first three are the ones already planned. The rest are suggestions, ordered 
 | B-05 | Medium | The blessing and verse of the day are computed once when the app mounts. A tab left open past midnight shows yesterday's until reload | `src/lib/store.tsx:317`, `323` (code) | Recompute on `visibilitychange` or when the local date changes |
 | B-06 | Medium | The calendar's "today" marker uses the UTC date while its cells use local dates | `src/lib/hijri.ts:191`, `218` (code) | Same fix as B-02 |
 | B-07 | Low | `blessingForDate` given a date string returns the previous day's blessing in time zones behind UTC | `src/lib/dailyLogic.ts:27`; caller `src/components/common/ReflectionCategoryCharts.tsx:130` (code) | Parse `YYYY-MM-DD` as a local date |
-| B-09 | Medium | **Opening a reflection may crash on iOS before 16.4.** Both reflection screens split text with a regular-expression lookbehind, which Safari did not support before 16.4. The build emits it as `new RegExp(...)` inside the component, so the error is thrown during render, and there is no error boundary. Not tested on a device | `src/components/screens/ReflectionModal.tsx:53`; `src/components/journey/JourneyStationFlow.tsx:71`; present in `dist/assets/main-*.js` (code) | Split without lookbehind; add an error boundary (M-03) |
 | B-08 | Low | Backup restore ignores three settings that backup writes (`notificationsEnabled`, `onboardingComplete`, `welcomeSeen`); tasbih count, Hisn counters and favourites, reciter and volume are not backed up at all | `src/lib/store.tsx:583`–`634` (code) | Decide what a backup is for, then make export and import symmetrical |
+| B-09 | Medium | **Opening a reflection may crash on iOS before 16.4.** Both reflection screens split text with a regular-expression lookbehind, which Safari did not support before 16.4. The build emits it as `new RegExp(...)` inside the component, so the error is thrown during render, and there is no error boundary. Not tested on a device | `src/components/screens/ReflectionModal.tsx:53`; `src/components/journey/JourneyStationFlow.tsx:71`; present in `dist/assets/main-*.js` (code) | Split without lookbehind; add an error boundary (M-03) |
+| B-10 | Medium | Hisn Al-Muslim's daily counters reset at UTC midnight (03:00 in Riyadh), and not at all while the screen stays open | `src/components/screens/HisnScreen.tsx:126`–`129`. **Run time** (reviewer): at 01:30 on 18 Nov in Riyadh the key is still `…_2026-11-17` | Same fix as B-02 |
+| B-11 | Medium | Importing a v1 backup gives every journal entry today's date, because v1 stored the date as a Hijri display string; v1's analytics consent (`'granted'`) is read by v2 as "no" | `src/lib/store.tsx:642`, `648`; `legacy/src/App.tsx:148`; `legacy/src/services/analytics.ts:40`–`52` (code) | Parse or keep the original date; map the old consent value |
+| B-12 | Medium | The category charts over-count: a reflection finished with a note counts once as a completed day and again as a journal entry, and a fresh install already shows the seeded items | `src/components/common/ReflectionCategoryCharts.tsx:129`–`144` (code) | Count each reflection once; see P-01 |
+
+### U. User interface and flows
+
+Found by exercising the production build in a headless browser as well as by reading. The complete lists are in [findings/screens-core.md](findings/screens-core.md), [findings/screens-worship-settings-paywall.md](findings/screens-worship-settings-paywall.md) and [findings/design-system-shared.md](findings/design-system-shared.md).
+
+| Id | Sev | Finding | Evidence | Direction |
+|---|---|---|---|---|
+| U-01 | High | **Dialogs opened from inside a screen are placed against the screen, not the viewport.** The screen roots carry `animate-fade-in`, which leaves a transform in place; a transformed element becomes the frame for its `position: fixed` children. On long screens the dialog is centred far below what the user sees. Affected: the share card from Home, the compose form in the journal, the reminder-time dialog, About / content review / privacy and the paywall preview opened from Settings, the Hisn index drawer | `src/index.css:261`–`273`. **Run time:** on Settings a fixed child measures 2,351 px tall in an 844 px viewport; reviewers saw the reminder-time dialog and the About dialog open off screen | Drop `forwards` or end the animation at `transform: none`; better, render overlays through a portal on `document.body` |
+| U-02 | High | **The paywall cuts off its own buttons on short screens** and cannot scroll | `src/components/screens/PremiumPaywallScreen.tsx:82`, `88`. **Run time** (reviewer) at 360×640 | Let the card scroll |
+| U-03 | Medium | The delete button on a journal entry is invisible on touch devices (it only appears on hover), though it still receives taps | `src/components/screens/JournalScreen.tsx:353`. **Run time** (reviewer) | Always show it; confirm before deleting |
+| U-04 | Medium | The journal's month navigator changes its label and filters nothing; the hidden search and category filters keep applying to «نِعَمي» and can make it look empty | `src/components/screens/JournalScreen.tsx:49`, `74`–`120`. **Run time** (reviewer) | Filter by month; reset or show the filters on both segments |
+| U-05 | Medium | The share button on the verse-of-the-day card shares the day's blessing instead | `src/components/screens/HomeScreen.tsx:113`–`124` (code and run time, reviewer) | Give the share card an inspiration input |
+| U-06 | Medium | The font-size number box cannot be typed into: each keystroke is clamped to 12–24, so typing "18" gives 24 | `src/components/screens/SettingsScreen.tsx:460`–`472`. **Run time** (reviewer) | Clamp on blur |
+| U-07 | Medium | Backup import replaces all data with no confirmation, shows a success icon even when it fails, and shows the result where the user may not see it; export confirms nothing | `src/components/screens/SettingsScreen.tsx:108`–`140`, `171`–`176`. **Run time** (reviewer) | Confirm with a summary; show errors as errors |
+| U-08 | Medium | "Replay the tour" does nothing visible, because the tour only renders on Home | `src/components/screens/SettingsScreen.tsx:619`–`628`; `src/App.tsx:261` | Switch to Home when it is tapped |
+| U-09 | Medium | The spotlight tour misplaces itself: the highlight is measured before the smooth scroll finishes, the explanation card covers the button it explains, the highlighted element stays dimmed, and on desktop the fourth step points at a hidden element | `src/components/common/SpotlightTour.tsx:36`, `47`–`51`, `68`–`84`. **Run time** (reviewer) | Re-measure after scroll; position the card away from the target |
+| U-10 | Medium | Hisn search does not normalise Arabic: searching «الحمد» finds 1 item, the vocalised form finds 9 | `src/components/screens/HisnScreen.tsx:309`–`316`. **Run time** (reviewer) | Strip diacritics and normalise letter forms on both sides |
+| U-11 | Medium | The recitation player's fallbacks misfire: one failure triggers both the stream and the chime-and-speech fallback; pausing does not stop the speech; one reciter's fallback address returns 403 | `src/components/screens/TasbihAudioPlayer.tsx:71`, `249`, `283`–`299`, `448`–`512`. **Run time** (reviewer) | One fallback path guarded by one state; cancel speech on pause and unmount; fix the address |
+| U-12 | Low | User-facing text contains developer terms (`isPremium()`, RevenueCat, "developer mode") and bracketed placeholder prices | `src/components/screens/PremiumPaywallScreen.tsx:191`, `226`; `src/components/screens/SettingsScreen.tsx:641`–`690` | Remove before any public launch |
+| U-13 | Low | Smaller defects: the desktop nav wraps between 768 and 800 px; `ThreadProgress` draws its origin dot at the wrong end; Hisn's daily total covers only three of six categories; several haptics fire for one tap | [findings/](findings/) | |
 
 ### J. My Journey
 
@@ -93,6 +116,9 @@ The complete list for this feature (64 items) is in [findings/journey.md](findin
 | C-03 | Medium | Hisn Al-Muslim adhkar, the daily tips, the verse-of-the-day list and the tasbih dhikr have no review fields at all | `src/data/hisnAlMuslim.ts`, `inspirations.ts`, `dhikr.ts` (code) | Bring them under the same review schema |
 | C-04 | Low | The tasbih "dhikr of the day" is always the first item; the function that rotates it is unused | `src/components/screens/TasbihModal.tsx:53`; `src/lib/dailyLogic.ts:62` (code) | Use `getTodayDhikr` |
 | C-05 | Low | 17 blessings name a podcast episode that nothing displays; the journey file's note still describes two stages | `relatedPodcastEpisode` in `blessings_ar.json`; `contentNote` in `journey_content.json` (code) | Remove or use; update the note |
+| C-06 | Medium | The share image limits a verse to four lines and cuts the rest with "...", dropping the closing ﴾; the design sheet says sacred text is shown without truncation. It is also drawn without waiting for fonts to load | `src/components/common/ShareCardModal.tsx:113`–`126`, `137`–`311` (code) | Shrink the type or grow the card instead of cutting; wait for `document.fonts` |
+| C-07 | Medium | Paraphrases are displayed as quotations, 19 of 40 with no name; the hadith grade is printed as fact although no grade is verified | `src/components/screens/HomeScreen.tsx:263`–`289` (code) | Present paraphrases as paraphrases; hide or mark unverified grades |
+| C-08 | Medium | The landing page and the content sheet make claims the data does not support: every text reviewed by scholars, verses in the Uthmani script of the King Fahd Complex, only sound hadith, a free app | `src/landing/LandingPage.tsx:27`–`40`, `338`; `src/components/screens/ContentReviewModal.tsx:41`–`62` (code) | **Branch** `4209f2c` rewrites the review claim; the rest needs the same treatment |
 
 ### S. Security and privacy
 
@@ -107,6 +133,9 @@ The complete list for this feature (64 items) is in [findings/journey.md](findin
 | S-07 | Low | Two known advisories in the dependency tree: `body-parser` (high), pulled in by the unused `express`; Vite 6.4.4 dev server (moderate) | `bun audit` on 17 Nov | Remove `express`; update Vite. Neither affects the deployed static site |
 | S-08 | Low | Journal text is stored unencrypted in `localStorage`, readable by anyone with the device or by any script that runs on the origin | By design (code) | State it in the privacy policy; a CSP (S-02) is the main protection |
 | S-09 | Low | The app also answers at `https://alhamd.app/app.html`, a different origin with separate storage | **Run time** | Redirect that path to `app.alhamd.app` |
+| S-10 | Medium | The privacy policy says the backup file is encrypted. It is plain JSON containing the whole journal | `src/components/screens/PrivacyPolicyModal.tsx:45`; `src/lib/store.tsx:604` (code) | Correct the text, or encrypt the file with a passphrase |
+| S-11 | Medium | Analytics consent can only be given during onboarding; there is no control to change or withdraw it later | `src/App.tsx:86`; no control in `SettingsScreen.tsx` (code) | Add a switch in Settings |
+| S-12 | Low | There is no "erase all my data" control, and the privacy policy exists only inside a dialog with no address, date or contact | `src/components/screens/SettingsScreen.tsx`; `src/landing/LandingPage.tsx:83`–`135` (code) | Add both |
 
 ### PF. Performance
 
@@ -125,6 +154,8 @@ The complete list for this feature (64 items) is in [findings/journey.md](findin
 |---|---|---|---|---|
 | A-01 | Medium | Pinch zoom is disabled for the whole app | `index.html:5` (`maximum-scale=1.0, user-scalable=no`) | Remove both |
 | A-02 | Medium | The app has no reduced-motion handling: particles, breathing halos and transitions always run | No `prefers-reduced-motion` or `useReducedMotion` in the app (code) | Honour the media query in CSS and in `motion` |
+| A-03 | Medium | No overlay in the app manages focus: no focus trap, no Escape key, no return of focus, and the page behind stays reachable. The full-screen flows are not exposed as dialogs at all | J-10; [findings/screens-core.md](findings/screens-core.md) (code) | One modal primitive used everywhere |
+| A-04 | Low | Many controls are 24–36 px, toggles lack state attributes, charts have no text alternative, and some small text falls just under 4.5:1 | [findings/](findings/) (code) | Fix alongside the component split |
 
 ### D. Design system
 
@@ -132,12 +163,16 @@ The complete list for this feature (64 items) is in [findings/journey.md](findin
 |---|---|---|---|---|
 | D-01 | Medium | The light theme is produced by overriding specific hex-colour utility classes with `!important`. A colour that is not in the override list stays dark in light mode | `src/index.css:79`–`226` (code). **Run time:** the journey's muhasaba node and path connectors stay dark on the cream background | Components should read CSS variables; then delete the override block |
 | D-02 | Low | `src/constants/tokens.ts` is imported by nothing and its light palette is the pre-October blue-grey one | Repository search (code) | Delete it or make it the single source |
+| D-03 | High | **Light theme with high contrast does not work.** The app's root element also carries `theme-light`, which re-declares the ordinary light variables and hides the high-contrast ones set on `<html>` | `src/App.tsx:112`; `src/index.css:31`, `324`. **Run time** (reviewer): `--text-primary` is `#0d0805` on `<html>` and `#2a1f19` inside the app | Set theme classes in one place only |
+| D-04 | Medium | 79 of the 132 hex colour classes used in components (157 uses) have no light-theme rule. Visible results: the selected calendar day is dark on dark, the paywall cards are unreadable, completed journey stations are dark text on a dark fill | `src/components/screens/ConsistencyScreen.tsx:370`; `src/components/screens/PremiumPaywallScreen.tsx:143`; [reference/05](reference/05-design-system.md) section 16. **Run time** (reviewer) | Same as D-01; until then, a check that fails on an unmapped class |
+| D-05 | Low | Classes and variables that nothing reads: `text-size-*`, `text-scale-*` (three names for the same rule), `dark`, `light`, `theme-dark`, `--bg-deep`, `--cta-pressed`, `--danger` | [reference/05](reference/05-design-system.md) (code) | Remove |
+| D-06 | Low | Tailwind scans the whole repository, so the app's stylesheet contains utilities used only in `legacy/` and grows when documentation mentions class names | `src/index.css:1` has no `source()` restriction (code and build) | Restrict the source to `src/` |
 
 ### M. Maintainability and engineering
 
 | Id | Sev | Finding | Evidence | Direction |
 |---|---|---|---|---|
-| M-01 | High | No tests, no test runner, no CI. The only automated check is `tsc --noEmit`, with `strict` off | `package.json`; `tsconfig.json` | See T-01 onward; add a CI workflow that runs type check, tests and build |
+| M-01 | High | No tests, no test runner, no CI. The only automated check is `tsc --noEmit`, with `strict` off, and it does not cover React code (M-10) | `package.json`; `tsconfig.json` | See T-01 onward; add a CI workflow that runs type check, tests and build |
 | M-02 | Medium | Six fixes for live problems sit on a branch with no pull request | [HISTORY.md](HISTORY.md), section 9 | Review and merge, or re-apply |
 | M-03 | Medium | No error boundary: a render error leaves a blank page with nothing reported | Repository search (code) | Add one at the root with a recovery screen |
 | M-04 | Low | Seven declared dependencies are unused: `@google/genai`, `express`, `dotenv`, `@types/express`, `autoprefixer`, `esbuild`, `tsx` | Import search (code) | Remove |
@@ -146,6 +181,21 @@ The complete list for this feature (64 items) is in [findings/journey.md](findin
 | M-07 | Low | The repository carries the whole v1 app (`legacy/`, 42 files), AI Studio working files (`.aistudio/`) and template leftovers (`metadata.json`, `.env.example`, `clean` script) | Repository listing | Archive `legacy/` on a tag or branch; delete the rest |
 | M-08 | Low | `package.json` is still named `react-example` at version `0.0.0`; there are no release tags | `package.json:2`–`4` | Name it, version it, tag releases |
 | M-09 | Low | Comments and behaviour disagree: `getDayNumber` says UTC-synchronised but uses local dates; `App.tsx` says ≥900 px but switches at 768 px; `AppState.fontSize` says default 15 but it is 16 | `src/lib/dailyLogic.ts:8`; `src/App.tsx:119`; `src/types.ts:161` (code) | Fix the comments |
+| M-10 | High | **The type check does not check React code.** `@types/react` and `@types/react-dom` are not installed, so `react` is typed `any` and no component's props or JSX are checked. With `--strict` the project reports 3,119 errors, 2,808 of them for untyped JSX. B-04 is a mistake the compiler would otherwise have caught | `package.json`; `node_modules/@types` (verified by running `tsc --strict`) | Install both packages, then turn on `strict` in steps |
+| M-11 | Low | The only test file in the repository (`legacy/src/lib/dailyLogic.test.ts`) cannot run: Vitest is in neither lockfile, there is no test script, and three of its cases fail in time zones behind UTC | (code; run by a reviewer) | Port to v2 with a fake clock (T-01) |
+| M-12 | Low | Screens are very large single components: `JourneyPathScreen` 1,398 lines, `HisnScreen` 1,021, `SettingsScreen` 790, `TasbihAudioPlayer` 770, `ShareCardModal` 761, with logic inside render functions | Line counts | Extract pure functions and hooks first (they are also the test targets), then split the views |
+
+### L. Landing page
+
+The complete list is in [findings/landing-legacy.md](findings/landing-legacy.md).
+
+| Id | Sev | Finding | Evidence | Direction |
+|---|---|---|---|---|
+| L-01 | Medium | No share image, canonical link or `og:url`, although `twitter:card` asks for a large image | `landing/index.html:9`–`12` (code) | Add a 1200×630 image and the missing tags |
+| L-02 | Medium | All content is rendered in the browser: the HTML body is an empty `#root`, so crawlers and link previews that do not run JavaScript see nothing | `landing/index.html:20` (code) | Prerender to static HTML at build time |
+| L-03 | Medium | The page ships React (70 kB gzipped) to render static markup with one dialog | Build output | Same fix as L-02 |
+| L-04 | Medium | The phone mockups are hand-built copies of two app screens with frozen text, including a literal date | `src/landing/PhoneMockups.tsx:64`–`144` (code) | Generate from real screenshots, or accept and document |
+| L-05 | Medium | Copy that contradicts the app; see C-08, P-02, P-03 | | |
 
 ### T. Test targets
 
@@ -164,3 +214,19 @@ Nothing is tested today. These are the places where tests would pay for themselv
 | T-09 | Journey: unlock, set-up, complete a station with text, one journal entry, pace limit | End to end | B-03, P-05 |
 | T-10 | Themes: every screen in dark, light, high contrast and night reading | Screenshot comparison | D-01 |
 | T-11 | Product promises as assertions | Build-time script | **Branch** `2ba90c4` has `scripts/check-promises.mjs` |
+
+---
+
+## Detailed lists
+
+Part B holds the findings that matter most. The line-by-line reviews produced 353 items in all; the complete lists are kept here so nothing is lost.
+
+| File | Area | Items |
+|---|---|---:|
+| [findings/screens-core.md](findings/screens-core.md) | Home, reflection, onboarding, journal, compose, consistency, info modals | 72 |
+| [findings/screens-worship-settings-paywall.md](findings/screens-worship-settings-paywall.md) | Tasbih, recitation player, Hisn Al-Muslim, Settings, paywall | 92 |
+| [findings/journey.md](findings/journey.md) | My Journey | 64 |
+| [findings/design-system-shared.md](findings/design-system-shared.md) | Design system, layout, shared components | 79 |
+| [findings/landing-legacy.md](findings/landing-legacy.md) | Landing page, legacy v1 | 46 |
+
+Items in those lists were established by reading the code unless the item says it was checked at run time. Every High item in Part B was checked a second time, against the source or in the browser, before being listed. Medium and Low items rest on one reviewer's read unless their row says run time.

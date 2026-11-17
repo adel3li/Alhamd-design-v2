@@ -410,8 +410,8 @@ The design sheets ask for something different: three steps (×1.0, ×1.125, ×1.
 
 Toggled by the `high-contrast` class on `<html>`. Section comment: «وضع التباين العالي والإضاءة الساطعة» (`src/index.css:280`).
 
-- **Dark** (`html.high-contrast:not(.theme-light)`, `:284-321`): overrides 13 variables (backgrounds darker, text and gold brighter, hairline `#525282`), and remaps text classes and `border-[#2E2E4A]` (three opacity variants). Background hex classes are not remapped, so a card built with `bg-[#1E1E38]` stays `#1E1E38` while a `GlassCard` (variable-driven) becomes `#14142B`. Verified at run time: the today-card renders `rgb(20, 20, 43)` with a `rgb(240, 202, 80)` accent border.
-- **Light** (`html.theme-light.high-contrast`, `:324-378`): overrides 16 variables and remaps `bg-[#15152A]`, the `bg-[#1E1E38]` family, text classes (adding `font-weight` 500–700) and `border-[#2E2E4A]` (four opacity variants). The variable overrides do not reach the app (2.4).
+- **Dark** (`html.high-contrast:not(.theme-light)`, `:284-321`): overrides 13 variables (backgrounds darker, text and gold brighter, hairline `#525282`), and remaps text classes and `border-[#2E2E4A]` (plain, `/80`, `/70`). Background hex classes are not remapped, so a card built with `bg-[#1E1E38]` stays `#1E1E38` while a `GlassCard` (variable-driven) becomes `#14142B`. Verified at run time: the today-card renders `rgb(20, 20, 43)` with a `rgb(240, 202, 80)` accent border.
+- **Light** (`html.theme-light.high-contrast`, `:324-378`): overrides 16 variables and remaps `bg-[#15152A]`, the `bg-[#1E1E38]` family, text classes (adding `font-weight` 500–700) and `border-[#2E2E4A]` (plain, `/80`, `/70`, `/60`). The variable overrides do not reach the app (2.4).
 - `--danger` and the two shadows are not overridden in either variant. `--cta-bg` and `--cta-pressed` are not overridden in the dark variant.
 
 ## 10. Night-reading mode
@@ -497,7 +497,7 @@ The two sheets have the same seven sections plus a closing box. The Nahar sheet 
 
 ### 14.1 Section 1: colours
 
-Layl swatches (`design-sheet-layl-dark…html:40-53`). Contrast figures are quoted from the sheet (on ground / on glass) and were not recomputed here.
+Layl swatches (`design-sheet-layl-dark…html:40-53`). Contrast figures are quoted from the sheet (on ground / on glass). Five were recomputed with the WCAG formula and agree: muted on ground 8.29, white on violet 4.32, light muted on cream 5.65, `#9E4A30` on cream 5.20, `#B9573B` on cream 4.03.
 
 | Swatch | Value | Sheet note | Contrast stated |
 |---|---|---|---|

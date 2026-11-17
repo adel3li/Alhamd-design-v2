@@ -34,7 +34,7 @@ The product makes four promises, repeated in onboarding, the landing page and th
 
 Declared in `package.json` but imported by nothing in `src/` or `vite.config.ts`: `@google/genai`, `express`, `dotenv`, `@types/express`, `autoprefixer`, `esbuild`, `tsx`. They are leftovers of the Google AI Studio project template (see `metadata.json`, `.env.example`).
 
-There is no test runner, no linter other than `tsc --noEmit`, no formatter config and no CI workflow in the repository.
+There is no test runner, no linter other than `tsc --noEmit`, no formatter config and no CI workflow in the repository. The React type packages are missing, so that type check does not cover component props or JSX (see [11](11-build-and-deployment.md), section 2).
 
 ## 3. Repository map
 

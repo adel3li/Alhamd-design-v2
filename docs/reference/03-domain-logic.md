@@ -65,7 +65,7 @@ The code mixes UTC dates and local dates. For users east of UTC (the whole Arab 
 | "Completed today" flag and the date recorded on completion | UTC | `store.tsx:330`, `551` |
 | Journal entry `date` | UTC | `store.tsx:479` |
 | Seeded sample days | UTC | `store.tsx:187` |
-| Hisn Al-Muslim daily counters | see [08](08-screens-worship-settings-paywall.md) | `HisnScreen.tsx:126` |
+| Hisn Al-Muslim daily counters | UTC, computed once per mount | `HisnScreen.tsx:126` |
 | Journey unlock window, weekly chart | local | `journeyStore.ts:61` |
 | Calendar cell dates | local | `hijri.ts:203` |
 | Calendar "today" marker | UTC | `hijri.ts:191` |

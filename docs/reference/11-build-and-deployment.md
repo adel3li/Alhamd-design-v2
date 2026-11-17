@@ -10,7 +10,7 @@ Defined in `package.json:6`–`12`. Bun is the package manager (`bun.lock`); npm
 | `bun run dev` | `vite --port=3000 --host=0.0.0.0` | App at `http://localhost:3000/`, landing page at `http://localhost:3000/landing/` |
 | `bun run build` | `vite build && mv dist/index.html dist/app.html` | About 4 s. The rename is what makes host routing work, see section 4 |
 | `bun run preview` | `vite preview` | Serves `dist/`. Because of the rename, `/` returns 404 locally; open `/app.html` and `/landing/index.html` |
-| `bun run lint` | `tsc --noEmit` | Type check only. Passes with no errors at `68e723a` |
+| `bun run lint` | `tsc --noEmit` | Type check only. Passes with no errors at `68e723a`, but does not cover React code (section 2) |
 | `bun run clean` | `rm -rf dist server.js` | `server.js` is an AI Studio template leftover; no such file exists |
 
 There is no `test` script.
@@ -27,6 +27,8 @@ There is no `test` script.
 ### `tsconfig.json`
 
 Target and lib ES2022 with DOM; `module: ESNext`; `moduleResolution: bundler`; `jsx: react-jsx`; `isolatedModules`; `allowJs`; `allowImportingTsExtensions`; `noEmit`; `skipLibCheck`; `experimentalDecorators` and `useDefineForClassFields: false` (template defaults, nothing uses decorators). `include: ["src"]`, `exclude: ["legacy", "node_modules", "dist"]`. `strict` is off, so `null`/`undefined` mistakes and implicit `any` are not reported by `bun run lint`.
+
+`@types/react` and `@types/react-dom` are not installed and React ships no types of its own, so `react` is typed `any`. Component props and JSX are therefore not checked at all: `bun run lint` passes, while `tsc --strict` reports 3,119 errors, 2,808 of them for untyped JSX.
 
 ### Environment
 

@@ -91,6 +91,10 @@ src/
 - 40 blessings · 23 adhkar · 4 journey stages / 28 stations · 5 reciters
 - Production bundle: 352 KB JS + 14 KB CSS (gzipped)
 
+## Documentation
+
+Full documentation is in [`docs/`](docs/README.md): the project history, a reference for every module and screen, and a register of known issues.
+
 ## Getting started
 
 Requires [Bun](https://bun.sh) (or Node.js 20+ with npm).

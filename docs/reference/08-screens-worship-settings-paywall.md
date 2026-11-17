@@ -248,7 +248,7 @@ Playback flow:
 1. The play button calls `togglePlay` (`:532-535`): `light` haptic, flip `isPlaying`.
 2. Effect 5 runs. If `isPlaying` is false it pauses and clears `isLoading`. Otherwise it resets `fallbackSourceAttemptedRef`, sets `audio.src` to the primary URL if different (resetting progress), sets `isLoading`, and calls `audio.play()`.
 3. If that promise resolves, `isLoading` clears. If it rejects and the fallback host has not been tried, the flag is set, `audio.src` becomes the fallback URL and `play()` is called again; if that rejects too, or the flag was already set, `playOfflineFallback(currentTrack)` runs (`:448-460`).
-4. Independently, the `error` listener (`:503-512`) applies the same rule using the same flag.
+4. Independently, the `error` listener (`:503-512`) applies the same rule using the same flag, and the `play()` call it makes has its own rejection handler that also calls `playOfflineFallback` (`:508`).
 5. `timeupdate` updates `progressPercent` (`:478-484`).
 6. `ended` (`:486-501`): progress 100; if looping, wait 2200 ms, seek to 0, play (a rejection stops playback); otherwise `setIsPlaying(false)`.
 
@@ -273,7 +273,7 @@ Root (`:555-562`): rounded card on `--bg-raised`; the border turns gold (`rgba(2
 1. **Top row** (`:564-632`).
    - Play / pause button, `aria-label` "تشغيل تلاوة الذكر الهادئة" when stopped and "إيقاف مؤقت لتلاوة الذكر" when playing. Shows a spinner while `isLoading`.
    - Title "تلاوة الأذكار الهادئة" with a headphones icon; badge "يُتلى الآن" while playing; subtitle `بصوت القارئ {reciter name} · {track title}`.
-   - Previous-track button (`title` and `aria-label` "المقطع السابق", drawn with the `SkipForward` icon) and next-track button ("المقطع التالي", `SkipBack` icon); the icons are swapped for the right-to-left layout. They step through the eight tracks with wrap-around (`:537-549`).
+   - Previous-track button (`title` and `aria-label` "المقطع السابق", drawn with the `SkipForward` icon) and next-track button ("المقطع التالي", `SkipBack` icon). The icon names are the reverse of the actions; in this right-to-left row the previous button sits on the right with a right-pointing icon. They step through the eight tracks with wrap-around (`:537-549`).
    - Expand / collapse button, `aria-label` "طي إعدادات الصوت والقارئ" or "فتح إعدادات الصوت والقارئ".
 2. **Verse box** (`:635-657`): `verseText`, then `surahRef` and the `dhikrPreset`, then a progress line whose width is `max(6, progressPercent)` % while playing and 0 otherwise.
 3. **Expanded panel** (`:660-767`), shown while `isExpanded`:
@@ -673,7 +673,7 @@ Returns `{ tip, index }` (`:350-357`). `dayOfYear = floor((date − local midnig
 - `morning-niamah-shukr` and `evening-niamah-shukr` are the morning and evening forms of the same dhikr but carry different `source` strings ("رواه أبو داود والنسائي" and "رواه أبو داود").
 - `source` describes the dhikr text; the `virtue` sentence has no reference of its own.
 - In a non-leap year 31 December (day 365, index 1) and 1 January (day 1, index 1) show the same tip.
-- Because the day number comes from a millisecond difference divided by 24 h, the first hour after midnight during daylight-saving time yields the previous day's index.
+- Because the day number comes from a millisecond difference divided by 24 h, in time zones that observe daylight-saving time the first hour after midnight during the DST period yields the previous day's index. (Derived from the arithmetic; not exercised at run time.)
 
 ---
 

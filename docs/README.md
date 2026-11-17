@@ -1,6 +1,6 @@
 # Alhamd documentation
 
-Written on 2026-11-17 from a full read of the repository at commit `68e723a` (`main`). Every file under `src/`, `legacy/`, `landing/`, `public/` and the root configuration was read; the Git history, pull requests, remote branches and Vercel deployments were reviewed; the production build was run and the app was exercised in a headless browser to confirm the behaviours marked "verified at run time".
+Written on 2026-11-17 from a full read of the repository at commit `68e723a` (`main`). Every file under `src/`, `legacy/`, `landing/`, `public/` and the root configuration was read, each area line by line by a separate reviewer working in parallel; the Git history, pull requests, remote branches and Vercel deployments were reviewed; the production build was run and the app was exercised in a headless browser to confirm the behaviours marked "verified at run time".
 
 ## Three documents
 
@@ -9,6 +9,8 @@ Written on 2026-11-17 from a full read of the repository at commit `68e723a` (`m
 | [HISTORY.md](HISTORY.md) | What was done, when, by whom, and how the product and its design changed from the first commit to today |
 | [reference/](reference/) | How the code works now: every module, screen, component, data file and setting |
 | [FINDINGS.md](FINDINGS.md) | What should be improved, and the areas where this knowledge can be put to work next |
+
+The complete per-area lists behind the findings register are in [findings/](findings/).
 
 ## History
 

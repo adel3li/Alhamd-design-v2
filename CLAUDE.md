@@ -14,7 +14,7 @@ Arabic-only, right-to-left, mobile-first gratitude app. React 19, TypeScript, Vi
 ```bash
 bun install
 bun run dev      # app at http://localhost:3000/, landing at /landing/
-bun run lint     # tsc --noEmit; the only static check
+bun run lint     # tsc --noEmit; the only static check, and it does not check React props or JSX (@types/react is missing)
 bun run build    # vite build, then renames dist/index.html to dist/app.html
 bun run preview  # open /app.html, not /
 ```
@@ -27,6 +27,7 @@ There are no tests yet. Verify UI changes in a browser.
 - **Storage keys.** Real users have data under the existing keys. Do not rename a key or change a stored shape without a migration and an update to `docs/reference/02-state-and-persistence.md`.
 - **Dates.** The store mixes UTC and local dates (`docs/reference/03-domain-logic.md`, section 4). Use `getLocalDateString` for new code.
 - **Theming.** The light theme works by overriding specific Tailwind arbitrary-colour classes in `src/index.css`. A new hard-coded hex colour in a component will not adapt to light mode unless it is one already overridden there (`docs/reference/05-design-system.md`).
+- **Overlays.** Screen roots use `animate-fade-in`, which leaves a transform behind, so a `position: fixed` dialog rendered inside a screen is placed against the screen, not the viewport (FINDINGS U-01). Render new overlays from `App.tsx` or through a portal.
 - **Product promises.** No streaks, no points, no account, nothing leaves the device. Do not add counters of consecutive days or network calls that carry user text.
 - **`legacy/`** is the old v1 app, kept for reference. Do not edit or import it.
 - **Build rename.** `vercel.json` relies on the app being `app.html`; keep the `mv` step in the build script.
