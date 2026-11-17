@@ -3,7 +3,6 @@ import { Home, Compass, BookOpen, Calendar, Settings } from 'lucide-react';
 import { TabId, TasbihIcon } from './BottomTabBar';
 import { BrandMark } from '../common/BrandMark';
 import { APP_STRINGS } from '../../constants/strings';
-import { JOURNEY_ENABLED } from '../../lib/entitlements';
 
 interface DesktopNavBarProps {
   activeTab: TabId;
@@ -22,7 +21,7 @@ export const DesktopNavBar: React.FC<DesktopNavBarProps> = ({
     { id: 'journal' as TabId, label: APP_STRINGS.tabs.journal, icon: BookOpen },
     { id: 'consistency' as TabId, label: APP_STRINGS.tabs.consistency, icon: Calendar },
     { id: 'tasbih' as TabId, label: APP_STRINGS.tabs.tasbih, icon: TasbihIcon }
-  ].filter((tab) => tab.id !== 'journey' || JOURNEY_ENABLED);
+  ];
 
   return (
     <header className="w-full sticky top-0 z-40 bg-[#15152A]/90 dark:bg-[#15152A]/90 backdrop-blur-xl border-b border-[#2E2E4A]/80 py-3.5 px-8" dir="rtl">

@@ -27,7 +27,7 @@ import {
   getDeveloperPremiumSync,
   setDeveloperPremium,
   subscribeEntitlementChange,
-  JOURNEY_ENABLED
+  PAYWALL_ENABLED
 } from '../../lib/entitlements';
 import { toLocalDateString } from '../../lib/dates';
 import { devResetTodayPacingLock, devResetEntireJourney } from '../../lib/journeyStore';
@@ -640,8 +640,8 @@ export const SettingsScreen: React.FC = () => {
         </button>
 
         {/* Developer Mode Toggle ('وضع المطور: تفعيل الرحلة') for testing «رحلتي» locally before subscribing.
-            Rendered only when the journey is enabled for this build (see JOURNEY_ENABLED). */}
-        {JOURNEY_ENABLED && (
+            Rendered only when there is a paywall to test (see PAYWALL_ENABLED). */}
+        {PAYWALL_ENABLED && (
         <div className="pt-2">
           <div className="p-4 rounded-2xl bg-[#1E1E38]/90 border border-dashed border-[#2E2E4A] space-y-3">
             <div className="flex items-center justify-between gap-3">
@@ -780,7 +780,7 @@ export const SettingsScreen: React.FC = () => {
         <PrivacyPolicyModal onClose={() => setModalType('none')} />
       )}
 
-      {JOURNEY_ENABLED && modalType === 'paywall' && (
+      {PAYWALL_ENABLED && modalType === 'paywall' && (
         <PremiumPaywallScreen
           onClose={() => setModalType('none')}
           onUnlocked={() => {

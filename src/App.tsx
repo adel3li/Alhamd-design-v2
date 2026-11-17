@@ -17,7 +17,7 @@ import { ContentReviewModal } from './components/screens/ContentReviewModal';
 import { PrivacyPolicyModal } from './components/screens/PrivacyPolicyModal';
 import { SpotlightTour } from './components/common/SpotlightTour';
 import { CompletionParticles } from './components/common/CompletionParticles';
-import { getDeveloperPremiumSync, JOURNEY_ENABLED } from './lib/entitlements';
+import { getDeveloperPremiumSync, PAYWALL_ENABLED } from './lib/entitlements';
 import { PremiumPaywallScreen } from './components/screens/PremiumPaywallScreen';
 
 const MainAppContent: React.FC = () => {
@@ -66,10 +66,7 @@ const MainAppContent: React.FC = () => {
   const [showJourneyPaywall, setShowJourneyPaywall] = useState(false);
 
   const handleTabChange = (tab: TabId) => {
-    if (tab === 'journey' && !JOURNEY_ENABLED) {
-      return;
-    }
-    if (tab === 'journey' && !getDeveloperPremiumSync()) {
+    if (tab === 'journey' && PAYWALL_ENABLED && !getDeveloperPremiumSync()) {
       setShowJourneyPaywall(true);
       return;
     }
@@ -164,7 +161,7 @@ const MainAppContent: React.FC = () => {
           />
         )}
 
-        {JOURNEY_ENABLED && activeTab === 'journey' && (
+        {activeTab === 'journey' && (
           <JourneyPathScreen />
         )}
 
@@ -215,7 +212,7 @@ const MainAppContent: React.FC = () => {
       </div>
 
       {/* Paywall Modal when clicking رحلتي without Developer Mode enabled */}
-      {JOURNEY_ENABLED && showJourneyPaywall && (
+      {PAYWALL_ENABLED && showJourneyPaywall && (
         <PremiumPaywallScreen
           triggerReason="preview"
           onClose={() => setShowJourneyPaywall(false)}

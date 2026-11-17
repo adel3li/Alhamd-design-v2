@@ -195,7 +195,9 @@ export const JourneyPathScreen: React.FC = () => {
 
   const [premiumStatus, setPremiumStatus] = useState<boolean>(() => getDeveloperPremiumSync());
   const [entitlementLoaded, setEntitlementLoaded] = useState<boolean>(true);
-  const [showOnboarding, setShowOnboarding] = useState<boolean>(false);
+  // First visit: start with the set-up (themes, pace, reminder). It used to open
+  // only from the paywall's unlock, so a user who entered any other way never saw it.
+  const [showOnboarding, setShowOnboarding] = useState<boolean>(() => !hasCompletedJourneyOnboarding());
   const [showPaywall, setShowPaywall] = useState<boolean>(false);
   const [paywallContext, setPaywallContext] = useState<{
     reason: 'free_limit_reached' | 'preview';
@@ -437,13 +439,18 @@ export const JourneyPathScreen: React.FC = () => {
       journalText
     });
 
-    if (journalText && journalText.trim().length > 0) {
+    // Copy the note into the main journal once. This function runs when the
+    // station is completed and again when the user returns to the path, with
+    // the same text; a replay with the note unchanged must not add a copy either.
+    const trimmedText = journalText?.trim() ?? '';
+    const alreadyInJournal = (state.journal[stationId] ?? '').trim() === trimmedText;
+    if (trimmedText.length > 0 && !alreadyInJournal) {
       const blessing = getBlessingById(blessingId);
       addJournalEntry({
         blessingId,
         shortTitle: blessing?.shortTitle || blessing?.title || 'محطة تأمل',
         categoryLabel: blessing?.categoryLabel || 'رحلتي',
-        text: journalText.trim()
+        text: trimmedText
       });
     }
 
@@ -623,10 +630,14 @@ export const JourneyPathScreen: React.FC = () => {
     .map((t) => themeLabelsMap[t] || t)
     .join('، ');
 
+  // The last revealed stage is the one the user is on: either still in progress,
+  // or finished and waiting for its end-of-stage review. Falling back to the
+  // pointer's stage instead skipped ahead as soon as the seventh station was
+  // done, and a review closed without saving could never be reached again.
   const displayedStage =
     revealedStages.find((s) => s.id === activeStageIdView) ||
-    currentPointer.stage ||
-    revealedStages[revealedStages.length - 1];
+    revealedStages[revealedStages.length - 1] ||
+    currentPointer.stage;
 
   return (
     <div

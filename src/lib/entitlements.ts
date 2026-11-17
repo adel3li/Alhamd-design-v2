@@ -3,14 +3,15 @@ export const ENTITLEMENT_CHANGED_EVENT = 'alhamd:entitlement_changed';
 export const FREE_STATION_LIMIT = 2;
 
 /**
- * «رحلتي» is the only premium feature. Until pricing and payments are decided
- * it is hidden altogether: no tab, no paywall, no developer unlock in Settings.
- * Nothing a user saved in the journey is deleted; it is only not shown.
+ * «رحلتي» is free for everyone, like the rest of the app (owner's decision,
+ * November 2026). With the paywall off, every premium check below answers
+ * yes, and the paywall and the developer unlock in Settings are not rendered.
  *
- * To bring it back, build with VITE_ENABLE_JOURNEY=true. Before doing that for
- * real users, replace the developer unlock with a real purchase check.
+ * If a paid tier is introduced later: set this to true, and first replace the
+ * developer flag with a real purchase check (see the RevenueCat notes below).
+ * As long as the flag is the only check, anyone can unlock from the UI.
  */
-export const JOURNEY_ENABLED = import.meta.env.VITE_ENABLE_JOURNEY === 'true';
+export const PAYWALL_ENABLED = false;
 
 export type EntitlementPlan = 'free' | 'annual' | 'lifetime';
 
@@ -33,6 +34,7 @@ export interface EntitlementStatus {
  * without touching any UI components.
  */
 export async function isPremium(): Promise<boolean> {
+  if (!PAYWALL_ENABLED) return true;
   // TODO: RevenueCat — integrate RevenueCat SDK (Purchases.getCustomerInfo()) here to verify active subscription entitlement
   return getDeveloperPremiumSync();
 }
@@ -54,6 +56,7 @@ export async function getEntitlementStatus(): Promise<EntitlementStatus> {
  * Synchronous read for local developer toggle state in Settings.
  */
 export function getDeveloperPremiumSync(): boolean {
+  if (!PAYWALL_ENABLED) return true;
   try {
     if (typeof window === 'undefined') return false;
     return localStorage.getItem(DEV_PREMIUM_STORAGE_KEY) === 'true';
