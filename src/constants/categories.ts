@@ -11,7 +11,9 @@ export const CATEGORIES: CategoryDef[] = [
   { key: 'afiyah', label: 'نعم العافية' },
   { key: 'aql', label: 'نعم العقل' },
   { key: 'amn', label: 'نعم الأمن' },
-  { key: 'mal', label: 'نعم المال' }
+  { key: 'mal', label: 'نعم المال' },
+  { key: 'kawn', label: 'نعم الكون' },
+  { key: 'wijdan', label: 'نعم الوجدان' }
 ];
 
 export function mapOldCategoryToCanonical(oldCategory?: string): string {
@@ -24,5 +26,7 @@ export function mapOldCategoryToCanonical(oldCategory?: string): string {
   if (oldCategory.includes('العافية')) return 'نعم العافية';
   if (oldCategory.includes('الأمن')) return 'نعم الأمن';
   if (oldCategory.includes('الرزق')) return 'نعم الرزق';
+  if (oldCategory.includes('الكون')) return 'نعم الكون';
+  if (oldCategory.includes('الوجدان')) return 'نعم الوجدان';
   return 'نعم الحياة والنفس';
 }

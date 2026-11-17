@@ -144,6 +144,19 @@ export const ShareCardModal: React.FC<ShareCardModalProps> = ({
     const ctx = canvas.getContext('2d');
     if (!ctx) return null;
 
+    // Canvas text is drawn in a system font if the web font has not loaded yet.
+    try {
+      await Promise.all([
+        document.fonts.load('44px "Amiri Quran"', blessing.quran.textUthmani),
+        document.fonts.load('bold 58px "Amiri"', blessing.title),
+        document.fonts.load('29px "IBM Plex Sans Arabic"', blessing.openingLine),
+        document.fonts.load('600 26px "IBM Plex Sans Arabic"', blessing.categoryLabel),
+        document.fonts.load('italic 32px "Amiri"', blessing.duaa)
+      ]);
+    } catch {
+      // Draw with whatever is available.
+    }
+
     // Palette tokens for Layl (Dark), Nahar (Light), and Royal (Indigo/Gold)
     const groundBg = isLight ? '#F4EDE3' : isRoyal ? '#0F1026' : '#15152A';
     const cardFill = isLight ? '#FBF8F3' : isRoyal ? '#171836' : '#1E1E38';
@@ -224,10 +237,36 @@ export const ShareCardModal: React.FC<ShareCardModalProps> = ({
 
     // Sacred Quran Ayah Box
     cursorY += 20;
-    ctx.font = '44px "Amiri Quran", "Amiri", serif';
     const ayahString = `﴿ ${blessing.quran.textUthmani} ﴾`;
-    const ayahLines = wrapCanvasText(ctx, ayahString, maxTextWidth - 60, 4);
-    const ayahBoxHeight = ayahLines.length * 76 + 96;
+    const maxTadabburLines = aspect === '9:16' ? 4 : 3;
+    let showTadabbur = (contentMode === 'tadabbur' || contentMode === 'full') && !!blessing.tadabbur;
+
+    // The verse is never cut. Its font shrinks until the whole verse fits in the room left
+    // for it; a verse too long to fit beside the reflection takes the reflection's room.
+    const fitAyah = (availableHeight: number, sizes: number[]) => {
+      let fitted = { size: sizes[0], step: 0, lines: [] as string[], boxHeight: 0, fits: false };
+      for (const size of sizes) {
+        ctx.font = `${size}px "Amiri Quran", "Amiri", serif`;
+        const lines = wrapCanvasText(ctx, ayahString, maxTextWidth - 60, Infinity);
+        const step = Math.round(size * 1.68);
+        const boxHeight = lines.length * (step + 2) + 52 + size;
+        fitted = { size, step, lines, boxHeight, fits: boxHeight <= availableHeight };
+        if (fitted.fits) break;
+      }
+      return fitted;
+    };
+    const roomBelowCursor = cardY + cardH - 56 - cursorY;
+    const tadabburRoom = 58 + 48 + maxTadabburLines * 48;
+    let ayahFit = fitAyah(roomBelowCursor - (showTadabbur ? tadabburRoom : 0), [44, 40, 36, 32, 29, 26]);
+    if (!ayahFit.fits && showTadabbur) {
+      showTadabbur = false;
+      ayahFit = fitAyah(roomBelowCursor, [36, 32, 29, 26, 24, 22, 20]);
+    } else if (!ayahFit.fits) {
+      ayahFit = fitAyah(roomBelowCursor, [24, 22, 20]);
+    }
+    ctx.font = `${ayahFit.size}px "Amiri Quran", "Amiri", serif`;
+    const ayahLines = ayahFit.lines;
+    const ayahBoxHeight = ayahFit.boxHeight;
 
     ctx.save();
     ctx.fillStyle = ayahBoxFill;
@@ -239,11 +278,11 @@ export const ShareCardModal: React.FC<ShareCardModalProps> = ({
     ctx.stroke();
     ctx.restore();
 
-    let ayahCursorY = cursorY + 68;
+    let ayahCursorY = cursorY + 24 + ayahFit.size;
     ctx.fillStyle = ayahTextCol;
     for (const aLine of ayahLines) {
       ctx.fillText(aLine, width / 2, ayahCursorY);
-      ayahCursorY += 74;
+      ayahCursorY += ayahFit.step;
     }
 
     // Surah Reference inside Ayah Box
@@ -258,7 +297,7 @@ export const ShareCardModal: React.FC<ShareCardModalProps> = ({
     cursorY += ayahBoxHeight + 58;
 
     // Tadabbur reflection excerpt when in 'tadabbur' or 'full' mode
-    if ((contentMode === 'tadabbur' || contentMode === 'full') && blessing.tadabbur) {
+    if (showTadabbur) {
       ctx.font = '600 25px "IBM Plex Sans Arabic", sans-serif';
       ctx.fillStyle = isLight ? '#9E4A30' : '#E4C368';
       ctx.fillText('وقفة تدبّر', width / 2, cursorY);
@@ -266,7 +305,6 @@ export const ShareCardModal: React.FC<ShareCardModalProps> = ({
 
       ctx.font = '28px "IBM Plex Sans Arabic", sans-serif';
       ctx.fillStyle = secondaryText;
-      const maxTadabburLines = aspect === '9:16' ? 4 : 3;
       const tLines = wrapCanvasText(ctx, blessing.tadabbur, maxTextWidth, maxTadabburLines);
       for (const tLine of tLines) {
         ctx.fillText(tLine, width / 2, cursorY);

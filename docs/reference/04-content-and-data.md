@@ -4,14 +4,14 @@ All content ships inside the JavaScript bundle. There is no CMS and no remote fe
 
 | File | Lines | What it holds | Consumed by |
 |---|---:|---|---|
-| `src/data/blessings_ar.json` | 2,806 | 40 blessings, the core content | `data/loader.ts` |
+| `src/data/blessings_ar.json` | 7,006 | 100 blessings, the core content | `data/loader.ts` |
 | `src/data/loader.ts` | 17 | Access functions and the review gate | store, charts, journey |
 | `src/data/journey_content.json` | 725 | 4 journey stages × 7 stations | `lib/journeyStore.ts` |
 | `src/data/hisnAlMuslim.ts` | 358 | 6 categories, 23 adhkar, 7 daily tips | `HisnScreen`, `HomeScreen`, `App` |
 | `src/data/inspirations.ts` | 48 | 8 verses and hadith for "verse of the day" | `lib/dailyLogic.ts` |
 | `src/data/dhikr.ts` | 16 | 9 short adhkar with their virtue | `TasbihModal`, `lib/dailyLogic.ts` |
 | `src/constants/strings.ts` | 101 | A partial string table | nav bars, `ComposeBlessingModal` |
-| `src/constants/categories.ts` | 28 | The 8 blessing categories and a legacy mapper | journal, compose, charts, store |
+| `src/constants/categories.ts` | 32 | The 10 blessing categories and a legacy mapper | journal, compose, charts, store |
 
 ## 1. Blessings (`src/data/blessings_ar.json`)
 
@@ -21,7 +21,7 @@ All content ships inside the JavaScript bundle. There is no CMS and no remote fe
 {
   "schemaVersion": 2,
   "contentNote": "جميع النصوص الشرعية (قرآن/حديث/أقوال) بحالة pending_review — …",
-  "blessings": [ Blessing, … ]   // 40 items
+  "blessings": [ Blessing, … ]   // 100 items
 }
 ```
 
@@ -31,23 +31,23 @@ The `contentNote` states that every sacred text is `pending_review`, that Qur'an
 
 | Field | Type | Notes |
 |---|---|---|
-| `id` | string | `islam` for the first, then `blessing_002` … `blessing_040` |
-| `order` | number | 1–40; the daily rotation sorts on it |
-| `category` | string | `din`, `nafs`, `rizq`, `aql`, `nasl`, `mal`, `amn`, `afiyah` |
+| `id` | string | `islam` for the first, then `blessing_002` … `blessing_100` |
+| `order` | number | 1–100; the daily rotation sorts on it |
+| `category` | string | `din`, `nafs`, `rizq`, `aql`, `nasl`, `mal`, `amn`, `afiyah`, `kawn`, `wijdan` |
 | `categoryLabel` | string | Arabic label, e.g. «نعم الدين» |
 | `title` / `shortTitle` | string | «نعمة الإسلام» / «الإسلام» |
 | `openingLine` | string | One-sentence hook shown under the title |
-| `quran` | `{ textUthmani, surahName, surahNumber, ayahNumber, verified }` | `verified` is `false` on all 40 |
-| `hadith` | `{ text, source, number, grade, gradeVerified }` | grade is «صحيح» on 37 and «حسن» on 3; `gradeVerified` is `false` on all 40 |
-| `scholarQuote` | `{ text, scholar, work, attributionType, verifiedVerbatim }` | `attributionType` is `paraphrase` and `verifiedVerbatim` is `false` on all 40 |
+| `quran` | `{ textUthmani, surahName, surahNumber, ayahNumber, verified }` | `verified` is `false` on all 100. Despite the field name the text is Tanzil's Simple text, not the Uthmani one; see 1.7 |
+| `hadith` | `{ text, source, number, grade, gradeVerified }` | Filled on blessings 1–40: grade is «صحيح» on 37 and «حسن» on 3. On blessings 41–100 `text`, `source`, `number` and `grade` are empty strings, and the screens show no hadith block. `gradeVerified` is `false` on all 100 |
+| `scholarQuote` | `{ text, scholar, work, attributionType, verifiedVerbatim }` | `attributionType` is `paraphrase` and `verifiedVerbatim` is `false` on all 100. On 75 the `scholar` begins with «مستفاد», «مأثور» or «إشارة», and the screens then show the text with no name |
 | `istisharSteps` | `IstisharStep[]` | Always 5 steps, see 1.3 |
 | `tadabbur` | string | Longer reflection paragraph |
 | `duaa` | string | Supplication shown at the end |
 | `journalPrompt` | string | Question for the private journal |
-| `relatedPodcastEpisode` | string | Set on 17 blessings (e.g. `ep_islam`), empty on 23. No component reads it |
-| `reviewStatus` | string | `pending_review` on all 40 |
-| `reviewedBy`, `reviewDate` | string, string \| null | Empty / `null` on all 40 |
-| `contentVersion` | number | `1` on all 40 |
+| `relatedPodcastEpisode` | string \| null | Set on 17 of the first 40 (e.g. `ep_islam`), empty on the other 23, `null` on blessings 41–100. No component reads it |
+| `reviewStatus` | string | `pending_review` on all 100 |
+| `reviewedBy`, `reviewDate` | string, string \| null | Empty / `null` on all 100 |
+| `contentVersion` | number | `1` on all 100 |
 
 ### 1.3 The five-step reflection script
 
@@ -63,7 +63,9 @@ Every blessing has the same sequence of step types and durations (`IstisharStep`
 
 Total: 80 seconds. UI copy elsewhere says three minutes (`src/constants/strings.ts:68`), five minutes (onboarding) and two minutes (landing page).
 
-### 1.4 The 40 blessings
+### 1.4 The 100 blessings
+
+Blessings 1–40 are the original set. Blessings 41–100 were written by the owner and imported in November 2026 from a file that held their titles, reflections and verse references but no verse text; section 1.7 says where the verse text came from.
 
 | Order | Id | Category | Short title | Title | Verse |
 |---:|---|---|---|---|---|
@@ -107,22 +109,134 @@ Total: 80 seconds. UI copy elsewhere says three minutes (`src/constants/strings.
 | 38 | `blessing_038` | afiyah | الحركة | نعمة اليدين والقدمين | الإسراء 17:70 |
 | 39 | `blessing_039` | nafs | الوقت | نعمة الوقت والفراغ | العصر 103:1 |
 | 40 | `blessing_040` | din | الجنة | نعمة الجنة الموعودة | السجدة 32:17 |
+| 41 | `blessing_041` | din | الهداية | نعمة الهداية | الأنعام 6:125 |
+| 42 | `blessing_042` | din | السنّة | نعمة السنّة | الحشر 59:7 |
+| 43 | `blessing_043` | din | المساجد | نعمة المساجد | التوبة 9:18 |
+| 44 | `blessing_044` | din | الأخوّة الإيمانية | نعمة الأخوّة الإيمانية | الحجرات 49:10 |
+| 45 | `blessing_045` | din | أسماء الله الحسنى | نعمة أسماء الله الحسنى | الأعراف 7:180 |
+| 46 | `blessing_046` | din | محبة الله | نعمة محبة الله | المائدة 5:54 |
+| 47 | `blessing_047` | din | الصبر | نعمة الصبر | الزمر 39:10 |
+| 48 | `blessing_048` | din | الشكر | نعمة الشكر | إبراهيم 14:7 |
+| 49 | `blessing_049` | din | التوكل | نعمة التوكل | الطلاق 65:3 |
+| 50 | `blessing_050` | din | الإخلاص | نعمة الإخلاص | البيّنة 98:5 |
+| 51 | `blessing_051` | din | الجمعة | نعمة الجمعة | الجمعة 62:9 |
+| 52 | `blessing_052` | din | البيت الحرام | نعمة البيت الحرام | آل عمران 3:96 |
+| 53 | `blessing_053` | din | ليلة القدر | نعمة ليلة القدر | القدر 97:3 |
+| 54 | `blessing_054` | din | يُسر الدين | نعمة يُسر الدين | الحج 22:78 |
+| 55 | `blessing_055` | afiyah | القلب | نعمة القلب | الحج 22:46 |
+| 56 | `blessing_056` | afiyah | الذوق | نعمة الذوق | النحل 16:114 |
+| 57 | `blessing_057` | afiyah | حُسن التقويم | نعمة حُسن التقويم | التين 95:4 |
+| 58 | `blessing_058` | kawn | الشمس | نعمة الشمس | الشمس 91:1 |
+| 59 | `blessing_059` | kawn | القمر | نعمة القمر | الشمس 91:2 |
+| 60 | `blessing_060` | kawn | الرياح | نعمة الرياح | الروم 30:46 |
+| 61 | `blessing_061` | kawn | الغيث | نعمة الغيث | الشورى 42:28 |
+| 62 | `blessing_062` | kawn | الأرض الممهّدة | نعمة الأرض الممهّدة | النبأ 78:6 |
+| 63 | `blessing_063` | kawn | الجبال | نعمة الجبال | النبأ 78:7 |
+| 64 | `blessing_064` | kawn | البحر | نعمة البحر | النحل 16:14 |
+| 65 | `blessing_065` | kawn | النبات | نعمة النبات | الأنعام 6:99 |
+| 66 | `blessing_066` | kawn | الأنعام | نعمة الأنعام | النحل 16:5 |
+| 67 | `blessing_067` | kawn | الطير | نعمة الطير | الملك 67:19 |
+| 68 | `blessing_068` | kawn | النجوم | نعمة النجوم | النحل 16:16 |
+| 69 | `blessing_069` | kawn | الظل | نعمة الظل | النحل 16:81 |
+| 70 | `blessing_070` | kawn | النار | نعمة النار | الواقعة 56:73 |
+| 71 | `blessing_071` | kawn | اللبن | نعمة اللبن | النحل 16:66 |
+| 72 | `blessing_072` | kawn | العسل | نعمة العسل | النحل 16:69 |
+| 73 | `blessing_073` | kawn | إتقان الكون | نعمة إتقان الكون | الملك 67:3 |
+| 74 | `blessing_074` | kawn | إمساك السماوات والأرض | نعمة إمساك السماوات والأرض | فاطر 35:41 |
+| 75 | `blessing_075` | kawn | تسخير الكون | نعمة تسخير الكون | الجاثية 45:13 |
+| 76 | `blessing_076` | rizq | البركة | نعمة البركة | الأعراف 7:96 |
+| 77 | `blessing_077` | rizq | اليُسر بعد العسر | نعمة اليُسر بعد العسر | الشرح 94:6 |
+| 78 | `blessing_078` | mal | الغنى والكفاية | نعمة الغنى والكفاية | الضحى 93:8 |
+| 79 | `blessing_079` | nasl | الجار | نعمة الجار | النساء 4:36 |
+| 80 | `blessing_080` | nasl | المعلّم | نعمة المعلّم | الكهف 18:66 |
+| 81 | `blessing_081` | nasl | العفو بين الناس | نعمة العفو بين الناس | الشورى 42:40 |
+| 82 | `blessing_082` | nasl | التعاون | نعمة التعاون | المائدة 5:2 |
+| 83 | `blessing_083` | nasl | من يدعو لك بظهر الغيب | نعمة من يدعو لك بظهر الغيب | الحشر 59:10 |
+| 84 | `blessing_084` | wijdan | السكينة | نعمة السكينة | الفتح 48:4 |
+| 85 | `blessing_085` | wijdan | الفرح المباح | نعمة الفرح المباح | يونس 10:58 |
+| 86 | `blessing_086` | wijdan | الأمل | نعمة الأمل | يوسف 12:87 |
+| 87 | `blessing_087` | wijdan | الرضا | نعمة الرضا | الفجر 89:28 |
+| 88 | `blessing_088` | wijdan | الأنس بالله | نعمة الأنس بالله | الضحى 93:3 |
+| 89 | `blessing_089` | wijdan | الضحك والبكاء | نعمة الضحك والبكاء | النجم 53:43 |
+| 90 | `blessing_090` | wijdan | النِّعَم الباطنة | نعمة النِّعَم الباطنة | لقمان 31:20 |
+| 91 | `blessing_091` | wijdan | حلاوة الإيمان | نعمة حلاوة الإيمان | الحجرات 49:7 |
+| 92 | `blessing_092` | wijdan | انشراح الصدر | نعمة انشراح الصدر | الشرح 94:1 |
+| 93 | `blessing_093` | din | حِلم الله وإمهاله | نعمة حِلم الله وإمهاله | فاطر 35:45 |
+| 94 | `blessing_094` | aql | القلم والكتابة | نعمة القلم والكتابة | العلق 96:4 |
+| 95 | `blessing_095` | aql | الذاكرة | نعمة الذاكرة | العلق 96:5 |
+| 96 | `blessing_096` | kawn | الفلك والسفن | نعمة الفلك والسفن | يس 36:41 |
+| 97 | `blessing_097` | kawn | الركوب والتنقّل | نعمة الركوب والتنقّل | الزخرف 43:13 |
+| 98 | `blessing_098` | kawn | الثمار | نعمة الثمار | عبس 80:31 |
+| 99 | `blessing_099` | kawn | زينة البحر | نعمة زينة البحر | الرحمن 55:22 |
+| 100 | `blessing_100` | kawn | الحديد والمعادن | نعمة الحديد والمعادن | الحديد 57:25 |
 
-By category: din 13, nafs 6, nasl 6, rizq 4, afiyah 4, aql 3, amn 3, mal 1.
+By category: din 28, kawn 23, nasl 11, wijdan 9, afiyah 7, nafs 6, rizq 6, aql 5, amn 3, mal 2. `kawn` («نعم الكون») and `wijdan` («نعم الوجدان») exist only in blessings 41–100.
 
-`legacy/src/data/blessings_ar.json` is byte-identical to this file.
+`legacy/src/data/blessings_ar.json` holds the first 40 as they were before the import. Two lines of those 40 were corrected in this file at the import: the opening line of blessing 19 («هذه الكلمات» for «هذه كلمات»), and in the reflection of blessing 31 a phrase of the hadith that had been set in the Qur'an brackets ﴿ ﴾ is now in « ».
 
 ### 1.5 Loader (`src/data/loader.ts`)
 
 | Export | Behaviour |
 |---|---|
 | `CONTENT_REVIEW_GATE` | Hard-coded `false`. When true, `getAllBlessings()` returns only `approved` blessings; today that would return an empty list |
-| `getAllBlessings()` | The 40 blessings, subject to the gate |
+| `getAllBlessings()` | The 100 blessings, subject to the gate |
 | `getBlessingById(id)` | Lookup over all blessings, **not** subject to the gate |
 
 ### 1.6 What the review fields do at run time
 
 They are data only. No component reads `quran.verified`, `hadith.gradeVerified`, `scholarQuote.verifiedVerbatim` or a blessing's `reviewStatus`. Unreviewed verses and hadith are displayed exactly like reviewed ones would be. Until `d3dfd92`, `ContentReviewModal` showed an "under review" badge and also stated that 40 blessings were approved while the data says 0. By the owner's decision the badge was removed; the sheet now shows the number of blessings, read from the data, with no statement about review. See [07-screens-core.md](07-screens-core.md).
+
+### 1.7 Where the verse text comes from
+
+**Source.** The Tanzil Project's Qur'an text, type "Simple", version 1.1, downloaded from `tanzil.net` on 17 November 2026 without the optional pause marks, sajdah signs, rub-el-hizb signs and tatweel. This is modern (imla'i) spelling with full vowel marks, not the Uthmani script, although the field is called `textUthmani`.
+
+**Blessings 41–100.** The owner's file gave each blessing a surah and ayah number and no verse text. `quran.textUthmani` is the whole of that ayah, character for character as Tanzil publishes it. Nothing was typed, shortened or joined by hand. Tanzil's file puts the basmala in front of the first ayah of every surah except 1 and 9; it is not part of that ayah and is left out (this affects 91:1 and 94:1). `verified` stays `false` until a named reviewer has read them.
+
+Two independent checks were run on the 60: the letters agree with the text served by `api.quran.com` (v4) for all 60, and the text is identical to the `quran-simple-enhanced` edition of `api.alquran.cloud` once that edition's pause marks are removed.
+
+**Blessings 1–40** were not changed. Compared with the same Tanzil file: 17 are a whole ayah and identical to it, 20 are an exact excerpt of their ayah, and 3 are consecutive ayahs joined by a space (55:1–4, 106:3–4, 103:1–3), identical in letters and vowel marks but with some combining marks stored in a different order. So all 100 verses are Tanzil's Simple text.
+
+**Length.** The longest verse among the first 40 is 18 words, because half of them are excerpts. The 60 are whole ayahs: 24 are longer than 18 words and 10 are longer than 25. Where to cut a verse is a content decision, so none was cut; if the owner wants excerpts, the fragment each reflection itself quotes is the natural candidate:
+
+| Blessing | Ayah | Words | Fragment quoted in its own reflection |
+|---|---|---:|---|
+| 82 التعاون | المائدة 5:2 | 53 | وتعاونوا على البرّ والتقوى |
+| 65 النبات | الأنعام 6:99 | 44 | فأخرجنا به نباتَ كلّ شيء |
+| 54 يُسر الدين | الحج 22:78 | 44 | وما جعل عليكم في الدين من حرج |
+| 46 محبة الله | المائدة 5:54 | 38 | يحبُّهم ويحبّونه |
+| 42 السنّة | الحشر 59:7 | 37 | وما آتاكم الرسولُ فخذوه وما نهاكم عنه فانتهوا |
+| 79 الجار | النساء 4:36 | 32 | والجار ذي القربى والجار الجنب |
+| 90 النِّعَم الباطنة | لقمان 31:20 | 30 | وأسبغ عليكم نعمه ظاهرةً وباطنة |
+| 100 الحديد والمعادن | الحديد 57:25 | 28 | وأنزلنا الحديد فيه بأسٌ شديدٌ ومنافعُ للناس |
+| 91 حلاوة الإيمان | الحجرات 49:7 | 28 | ولكنّ الله حبّب إليكم الإيمان وزيّنه في قلوبكم |
+| 41 الهداية | الأنعام 6:125 | 28 | فمن يُرِدِ الله أن يهديَه يشرحْ صدره للإسلام |
+
+**Licence.** Tanzil's text is under Creative Commons Attribution 3.0 with these terms: verbatim copies only, the source (Tanzil Project) clearly indicated, and a link to tanzil.net. The app meets the last two in the content sheet (`ContentReviewModal.tsx`), which names the project and links to it. Tanzil's notice, which it asks to be kept with the text:
+
+```
+Tanzil Quran Text (Simple, Version 1.1)
+Copyright (C) 2007-2026 Tanzil Project
+License: Creative Commons Attribution 3.0
+
+This copy of the Quran text is carefully produced, highly verified and
+continuously monitored by a group of specialists at Tanzil Project.
+
+TERMS OF USE:
+- Permission is granted to copy and distribute verbatim copies of this text,
+  but CHANGING IT IS NOT ALLOWED.
+- This Quran text can be used in any website or application, provided that its
+  source (Tanzil Project) is clearly indicated, and a link is made to tanzil.net
+  to enable users to keep track of changes.
+- This copyright notice shall be included in all verbatim copies of the text,
+  and shall be reproduced appropriately in all files derived from or containing
+  substantial portion of this text.
+
+Please check updates at: http://tanzil.net/updates/
+```
+
+**Verses quoted inside the reflections are a different thing.** The `tadabbur` paragraphs quote verses in ﴿ ﴾ in the author's own light vowelling; they are not copied from Tanzil. All 139 such fragments across the 100 blessings were compared, letters only, with the Qur'an text. Two did not match, and both were corrected at the import: in blessing 88, «أينما» was written as one word where Al-Hadid 4 has «أَيْنَ مَا»; in blessing 31 the bracketed phrase was not Qur'an at all but words of the hadith (see 1.4).
+
+**For the reviewer, in blessings 41–100.** No hadith is given as a hadith, but five texts lean on one without a source: the `scholarQuote` of blessing 51 (الجمعة) is close to the wording of two hadith and is labelled «مستفاد من كلام أهل العلم»; the `scholarQuote` of 54 (يُسر الدين) and the reflections of 79 (الجار), 83 (من يدعو لك بظهر الغيب) and 91 (حلاوة الإيمان) each report a hadith by meaning. In 30 of the 60 the reflection quotes a verse other than the one in `quran`; those are supporting verses, not mistakes in the reference.
 
 ## 2. Journey content (`src/data/journey_content.json`)
 
@@ -180,7 +294,7 @@ The five onboarding screens and four tour steps written here are not the ones th
 
 ## 6. Categories (`src/constants/categories.ts`)
 
-`CATEGORIES` is the list of 8 `{ key, label }` pairs used for journal filters, the compose form and the charts:
+`CATEGORIES` is the list of 10 `{ key, label }` pairs used for journal filters, the compose form and the charts. The last two were added with blessings 41–100:
 
 | Key | Label |
 |---|---|
@@ -192,16 +306,18 @@ The five onboarding screens and four tour steps written here are not the ones th
 | `aql` | نعم العقل |
 | `amn` | نعم الأمن |
 | `mal` | نعم المال |
+| `kawn` | نعم الكون |
+| `wijdan` | نعم الوجدان |
 
 The first key is `deen` here and `din` in `blessings_ar.json` and in the journey themes. Components match on the Arabic `label`, so nothing breaks today, but the keys cannot be joined.
 
-`mapOldCategoryToCanonical(old?)` maps a v1 category label to one of the eight labels by substring («الدين», «النفس» or «الحياة», «النسل» or «الأهل», «المال», «العقل», «العافية», «الأمن», «الرزق»). Missing input maps to «نعم الدين»; unrecognised input maps to «نعم الحياة والنفس». It is used by the backup importer and by `ReflectionCategoryCharts`.
+`mapOldCategoryToCanonical(old?)` maps a category label to one of the ten labels by substring, tried in this order: «الدين», «النفس» or «الحياة», «النسل» or «الأهل», «المال», «العقل», «العافية», «الأمن», «الرزق», «الكون», «الوجدان». The last two are needed because journal entries written on a new blessing carry its label, and without them the charts and a restored backup would file those entries under «نعم الحياة والنفس». Missing input maps to «نعم الدين»; unrecognised input maps to «نعم الحياة والنفس». It is used by the backup importer and by `ReflectionCategoryCharts`.
 
 ## 7. Content review status at a glance
 
 | Content | Items | Approved | Has review fields |
 |---|---:|---:|---|
-| Blessings | 40 | 0 | yes |
+| Blessings | 100 | 0 | yes |
 | Journey stage intentions | 4 | 0 | yes |
 | Journey station prompts and actions | 56 | 0 | yes |
 | Journey sacred and dhikr placeholders | 28 | 0 | yes (text not yet written) |

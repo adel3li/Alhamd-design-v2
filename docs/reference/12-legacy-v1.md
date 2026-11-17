@@ -23,7 +23,7 @@ Status, each point checked:
 `legacy/` holds 42 tracked files and about 644 KB on disk. Two files account for roughly 305 KB of that:
 
 - `legacy/package-lock.json`: 4,411 lines, 153,730 bytes (npm lockfile v3, 324 package entries). Not documented further.
-- `legacy/src/data/blessings_ar.json`: 2,806 lines, 151,047 bytes. It is **byte-identical** to `src/data/blessings_ar.json` (`cmp` reports no difference; both have SHA-256 `c4693a1c…d3b0f0`).
+- `legacy/src/data/blessings_ar.json`: 2,806 lines, 151,047 bytes. It was **byte-identical** to `src/data/blessings_ar.json` (`cmp` reported no difference; both had SHA-256 `c4693a1c…d3b0f0`) until `9f6b4a0`, when the v2 file grew to 100 blessings; the legacy copy is unchanged.
 
 ## 2. Files
 
@@ -60,7 +60,7 @@ Status, each point checked:
 | `legacy/src/components/SpotlightTour.tsx` | 292 | Seven-step coach-mark tour over the home screen |
 | `legacy/src/components/TasbihView.tsx` | 111 | Tasbih counter |
 | `legacy/src/data/affirmations.ts` | 15 | 8 short reassurance messages |
-| `legacy/src/data/blessings_ar.json` | 2,806 | 40 blessings (identical to v2's file) |
+| `legacy/src/data/blessings_ar.json` | 2,806 | 40 blessings. v2's file was a byte-identical copy until it grew to 100; its first 40 still differ from these only in two corrected lines (blessings 19 and 31) |
 | `legacy/src/data/dhikr.ts` | 16 | 9 adhkar with their stated virtue (identical to `src/data/dhikr.ts`) |
 | `legacy/src/data/inspirations.ts` | 48 | 8 verses and hadiths (identical to `src/data/inspirations.ts`) |
 | `legacy/src/data/loader.ts` | 13 | `getAllBlessings()` and the `CONTENT_REVIEW_GATE` flag |
@@ -563,7 +563,7 @@ Both are spent migration scripts. Neither is referenced by `package.json`.
 | Day rollover while open | `now` refreshed on `visibilitychange` and every 60 s (`App.tsx:61-77`) | Today's blessing is memoised on `[welcomeSeen, allBlessings]` and the inspiration on `[]` (`src/lib/store.tsx:317-326`); no `visibilitychange` listener exists in `src/` | Dropped |
 | Welcome blessing | `welcomeSeen` inside `AppState`; list `[welcome, daily]` | Key `alhamd_welcome_seen` (`src/lib/store.tsx:117-119,406-409`); single result | Carried over, simplified |
 | Unit test | `lib/dailyLogic.test.ts` (Vitest, not runnable) | None | Dropped |
-| Blessings data and loader | `blessings_ar.json`, `loader.ts` | Byte-identical JSON; loader adds `getBlessingById` (`src/data/loader.ts:15-17`) | Carried over as-is |
+| Blessings data and loader | `blessings_ar.json`, `loader.ts` | The same 40 blessings, plus 60 added to v2 in `9f6b4a0`; loader adds `getBlessingById` (`src/data/loader.ts:15-17`) | Carried over, then extended |
 | Inspirations, adhkar | `data/inspirations.ts`, `data/dhikr.ts` | Identical files | Carried over as-is |
 | Inspiration of the day | `inspirations[dayOfYear % 8]` (`App.tsx:108-111`) | `getTodayInspiration(getDayNumber())` (`src/lib/dailyLogic.ts:57-60`) | Rewritten (different index base) |
 | Daily affirmation «رسالة طمأنينة» | `DailyAffirmationCard`, `data/affirmations.ts` | No equivalent; no `affirmations` file | Dropped |

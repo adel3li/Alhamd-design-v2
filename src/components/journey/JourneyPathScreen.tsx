@@ -1237,7 +1237,7 @@ export const JourneyPathScreen: React.FC = () => {
 
                         {/* Tadabbur Text */}
                         {blessing.tadabbur && (
-                          <div className="space-y-1.5 border-t border-[#2E2E4A]/50 pt-3">
+                          <div className={`space-y-1.5 ${blessing.hadith?.text ? 'border-t border-[#2E2E4A]/50 pt-3' : ''}`}>
                             <span className="text-xs sm:text-sm font-bold text-[#C8A951] block">وقفات في أثر النعمة:</span>
                             <p className="text-sm sm:text-base text-[#C7C4D8] leading-[1.85]">
                               {blessing.tadabbur}

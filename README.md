@@ -34,7 +34,7 @@ It is built **local-first and privacy-first**: there are no accounts and no serv
 
 ## Features
 
-- **Daily blessing engine** — picks a blessing for each day by date from a curated set of 40, each with a verse, explanation, and reflection.
+- **Daily blessing engine** — picks a blessing for each day by date from a curated set of 100, each with a verse, explanation, and reflection.
 - **Reflection flow & private journal** — guided reflection, free-form entries, and category charts (Recharts) of what you've been grateful for.
 - **Hisn Al-Muslim** — 23 authenticated adhkar across 6 categories (morning, evening, after prayer, sleep, home, distress), with per-day repetition counters and favourites.
 - **Tasbih counter + recitation player** — 5 renowned reciters, volume control, calm repeat mode, and a speech-synthesis fallback.
@@ -88,7 +88,7 @@ src/
 ## By the numbers
 
 - ~13,700 lines of TypeScript/TSX across 52 source files (35+ components)
-- 40 blessings · 23 adhkar · 4 journey stages / 28 stations · 5 reciters
+- 100 blessings · 23 adhkar · 4 journey stages / 28 stations · 5 reciters
 - Production bundle: 352 KB JS + 14 KB CSS (gzipped)
 
 ## Documentation
