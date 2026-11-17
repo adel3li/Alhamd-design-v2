@@ -13,6 +13,15 @@ export const FREE_STATION_LIMIT = 2;
  */
 export const PAYWALL_ENABLED = false;
 
+/**
+ * Whether a station is outside the free taste: it comes after the first
+ * FREE_STATION_LIMIT stations, or the user has already completed that many.
+ * Only matters while PAYWALL_ENABLED is true.
+ */
+export function isBeyondFreeLimit(stationIndex: number, completedCount: number): boolean {
+  return stationIndex >= FREE_STATION_LIMIT || completedCount >= FREE_STATION_LIMIT;
+}
+
 export type EntitlementPlan = 'free' | 'annual' | 'lifetime';
 
 export interface EntitlementStatus {

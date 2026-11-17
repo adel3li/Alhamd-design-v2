@@ -11,12 +11,12 @@ import {
 } from 'recharts';
 import { TrendingUp, Sparkles, CalendarCheck2, Compass } from 'lucide-react';
 import { JourneyState } from '../../types';
-import { getLocalDateString } from '../../lib/journeyStore';
+import { getLocalDateString, makeStationId } from '../../lib/journeyStore';
+import { useLocalDay } from '../../lib/dates';
 import { toArabicNumerals } from '../../lib/arabic';
 
 interface JourneyWeeklyProgressChartProps {
   journeyState: JourneyState;
-  completedDays?: string[];
 }
 
 const ARABIC_WEEKDAYS = [
@@ -30,10 +30,12 @@ const ARABIC_WEEKDAYS = [
 ];
 
 export const JourneyWeeklyProgressChart: React.FC<JourneyWeeklyProgressChartProps> = ({
-  journeyState,
-  completedDays = []
+  journeyState
 }) => {
   const [chartView, setChartView] = useState<'combined' | 'daily'>('combined');
+
+  // The seven-day window ends today and moves on at midnight.
+  const todayKey = useLocalDay();
 
   const weeklyStats = useMemo(() => {
     const today = new Date();
@@ -56,9 +58,6 @@ export const JourneyWeeklyProgressChart: React.FC<JourneyWeeklyProgressChartProp
       allCompletionDates.push(dateStr);
     });
 
-    // Also include general daily reflections if a day had a reflection outside station count
-    const generalCompletedSet = new Set(completedDays);
-
     const data: Array<{
       dateIso: string;
       dayLabel: string;
@@ -75,20 +74,10 @@ export const JourneyWeeklyProgressChart: React.FC<JourneyWeeklyProgressChartProp
       d.setDate(today.getDate() - offset);
       const iso = getLocalDateString(d);
 
-      const stationsOnDay = stationCountsByDate[iso] || 0;
-      const hasGeneralReflection = generalCompletedSet.has(iso) ? 1 : 0;
-      const dailyBlessings = Math.max(stationsOnDay, hasGeneralReflection);
-
-      const cumulativeStationsUpToDay = allCompletionDates.filter(
-        (dt) => dt <= iso
-      ).length;
-      const cumulativeGeneralUpToDay = completedDays.filter(
-        (dt) => dt <= iso
-      ).length;
-      const cumulativeBlessings = Math.max(
-        cumulativeStationsUpToDay,
-        cumulativeGeneralUpToDay
-      );
+      // This is the journey's chart: it counts stations only. Daily reflections
+      // outside the journey have their own place on the consistency screen.
+      const dailyBlessings = stationCountsByDate[iso] || 0;
+      const cumulativeBlessings = allCompletionDates.filter((dt) => dt <= iso).length;
 
       weekBlessingsTotal += dailyBlessings;
       if (dailyBlessings > 0) {
@@ -108,7 +97,16 @@ export const JourneyWeeklyProgressChart: React.FC<JourneyWeeklyProgressChartProp
       (acc, stg) => acc + stg.stationBlessingIds.length,
       0
     );
-    const totalCompletedStations = Object.keys(journeyState.completed || {}).length;
+    // Count only stations that are on the current path; a completion kept from a
+    // theme the user later deselected is not part of "done out of total".
+    const totalCompletedStations = journeyState.stages.reduce(
+      (acc, stg) =>
+        acc +
+        stg.stationBlessingIds.filter((_, idx) =>
+          Boolean(journeyState.completed?.[makeStationId(stg.id, idx)])
+        ).length,
+      0
+    );
 
     return {
       data,
@@ -117,7 +115,7 @@ export const JourneyWeeklyProgressChart: React.FC<JourneyWeeklyProgressChartProp
       totalCompletedStations,
       totalStationsInJourney
     };
-  }, [journeyState.completed, journeyState.stages, journeyState.pace, completedDays]);
+  }, [journeyState.completed, journeyState.stages, journeyState.pace, todayKey]);
 
   // Encouraging, non-pressuring message based on weekly activity
   const motivationalMessage = useMemo(() => {
