@@ -231,8 +231,47 @@ section.block { padding-block: 64px 8px; }
 .steps li { position: relative; padding-top: 30px; padding-inline-end: 16px; display: flex; flex-direction: column; gap: 4px; }
 .steps li::before { content: ""; position: absolute; top: 2px; right: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--ground); border: 2px solid #3B3B5E; }
 .steps li.on::before { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 0 7px var(--halo); }
+.steps li.done::before { background: var(--gold-deep); border-color: var(--gold-deep); }
 .steps b { font-weight: 600; }
 .steps span { color: var(--faint); font-size: 0.88rem; }
+
+/* script */
+.direction { margin: 0 0 26px; padding: 0 1.2em 0 0; color: var(--body); max-width: 50em; display: flex; flex-direction: column; gap: 4px; }
+.cues { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--hairline); }
+.cues li {
+  display: grid; grid-template-columns: 2.6em minmax(0, 1fr) minmax(0, 0.8fr); gap: 6px 20px; align-items: baseline;
+  padding-block: 14px; border-bottom: 1px solid var(--hairline);
+}
+.cues .n { font-family: var(--serif); font-weight: 700; font-size: 1.35rem; color: var(--gold); text-align: center; }
+.cues .ln { font-family: var(--serif); font-size: 1.45rem; line-height: 1.7; color: var(--text); }
+.cues .sc { display: block; font-family: var(--sans); font-size: 0.8rem; color: var(--faint); margin-top: 2px; }
+.cues .pf { color: var(--body); font-size: 0.92rem; }
+.cues li.silence .ln { color: var(--faint); font-family: var(--sans); font-size: 1rem; }
+.tts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 22px; margin-top: 34px; }
+.tts-box { background: var(--glass); border: 1px solid var(--hairline); border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.tts-box h3 { font-size: 1.4rem; }
+.tts-box p { color: var(--body); font-size: 0.92rem; }
+.copytext {
+  margin: 0; padding: 14px 16px; border-radius: 14px; background: var(--deep); border: 1px solid var(--hairline);
+  color: var(--text); font-family: var(--serif); font-size: 1.05rem; line-height: 1.8;
+  white-space: pre-wrap; word-break: break-word; overflow: auto; max-height: 220px;
+}
+.copytext.tall { max-height: 340px; }
+.copytext.ltr { font-family: var(--sans); font-size: 0.86rem; line-height: 1.7; text-align: left; }
+.copy {
+  align-self: flex-start; border: 1px solid rgba(200, 169, 81, 0.55); background: rgba(17, 17, 38, 0.6); color: var(--gold);
+  border-radius: 999px; padding: 6px 18px 8px; font-weight: 600; font-size: 0.92rem; cursor: pointer;
+}
+.copy:hover { border-color: var(--gold); }
+.copy.ok { color: var(--text); border-color: var(--hairline); }
+.handoff { margin-top: 34px; display: flex; flex-direction: column; gap: 10px; max-width: 52em; }
+.handoff h3 { font-size: 1.35rem; margin-top: 8px; }
+.handoff ul { margin: 0; padding: 0 1.2em 0 0; color: var(--body); display: flex; flex-direction: column; gap: 4px; }
+.handoff ul b { color: var(--gold); font-weight: 600; }
+@media (max-width: 700px) {
+  .cues li { grid-template-columns: 2.2em minmax(0, 1fr); }
+  .cues .pf { grid-column: 2; }
+}
 
 footer.foot { margin-top: 72px; border-top: 1px solid var(--hairline); padding-block: 28px 40px; color: var(--faint); font-size: 0.86rem; }
 footer.foot code { color: var(--body); font-size: 0.85rem; }
@@ -282,7 +321,7 @@ dialog.lb::backdrop { background: rgba(4, 4, 10, 0.82); }
   <div class="wrap hero-in">
     <div class="hero-text">
       <span class="mark" aria-label="الحمد"><b>الحمد</b><i></i></span>
-      <span class="eyebrow">ستوري بورد إعلان التطبيق · مسودة أولى للمراجعة</span>
+      <span class="eyebrow">ستوري بورد إعلان التطبيق · السكريبت النهائي جاهز للتسجيل</span>
       <h1>النعمة لا تُرى… <span>حتى تغيب</span></h1>
       <p class="logline" id="logline"></p>
       <ul class="facts">
@@ -314,6 +353,38 @@ dialog.lb::backdrop { background: rgba(4, 4, 10, 0.82); }
 </header>
 
 <main class="wrap">
+  <section class="block" id="script">
+    <div class="sec-head">
+      <span class="eyebrow">السكريبت النهائي · جاهز للتسجيل</span>
+      <h2>النص اللي هيتسجّل</h2>
+      <p id="scriptLead"></p>
+    </div>
+    <ul class="direction" id="direction"></ul>
+    <ol class="cues" id="cueList"></ol>
+    <div class="tts">
+      <article class="tts-box">
+        <h3>للّصق في Google AI Studio</h3>
+        <p>حط الجملة دي في تعليمات الأسلوب، والنص تحتها في خانة الكلام.</p>
+        <pre id="ttsStyle" class="copytext"></pre>
+        <button class="copy" type="button" data-copy="ttsStyle">نسخ تعليمات الأسلوب</button>
+        <pre id="ttsText" class="copytext tall"></pre>
+        <button class="copy" type="button" data-copy="ttsText">نسخ النص</button>
+      </article>
+      <article class="tts-box">
+        <h3>SSML لـ Google Cloud Text-to-Speech</h3>
+        <p>اختار صوت عربي (ar-XA). فيه وقفة قصيرة عند «…» وثانية بين كل جملة.</p>
+        <pre id="ttsSsml" class="copytext tall ltr"></pre>
+        <button class="copy" type="button" data-copy="ttsSsml">نسخ الـ SSML</button>
+      </article>
+    </div>
+    <div class="handoff">
+      <h3>تسليم ملف الصوت</h3>
+      <ul id="delivery"></ul>
+      <h3>جمل البدايات البديلة (اختياري)</h3>
+      <ul id="hookLines"></ul>
+    </div>
+  </section>
+
   <section class="block" id="film">
     <div class="sec-head">
       <span class="eyebrow">الفيلم الرئيسي</span>
@@ -366,9 +437,9 @@ dialog.lb::backdrop { background: rgba(4, 4, 10, 0.82); }
 
   <section class="block" id="asks">
     <div class="sec-head">
-      <span class="eyebrow">محتاج ردّك</span>
-      <h2>قبل ما أكتب السكريبت النهائي</h2>
-      <p>ردّ عليّ بالأرقام، وأي حاجة مش عاجباك في أي مشهد قولها برقم المشهد.</p>
+      <span class="eyebrow">القرارات</span>
+      <h2>اللي مشيت عليه</h2>
+      <p>وافقت على الفكرة من غير ما تحدد الباقي، فمشيت على اقتراحاتي. أي واحدة عايز تغيّرها قولّي رقمها.</p>
     </div>
     <ol class="asks" id="askList"></ol>
   </section>
@@ -379,15 +450,15 @@ dialog.lb::backdrop { background: rgba(4, 4, 10, 0.82); }
       <h2>الخطوات الجاية</h2>
     </div>
     <ol class="steps">
-      <li class="on"><b>تختار وتوافق</b><span>على الفكرة والبداية والصوت</span></li>
-      <li><b>السكريبت النهائي</b><span>مظبوط على المدة، أبعته لك</span></li>
-      <li><b>ملف الصوت</b><span>تسجّله أو تطلّعه من جوجل وتبعته</span></li>
+      <li class="done"><b>الموافقة</b><span>على الفكرة</span></li>
+      <li class="done"><b>السكريبت النهائي</b><span>جاهز فوق</span></li>
+      <li class="on"><b>ملف الصوت</b><span>دورك: تسجّله أو تطلّعه من جوجل وتبعته</span></li>
       <li><b>الفيديو النهائي</b><span>تحريك كامل على الصوت + النسخ القصيرة</span></li>
     </ol>
   </section>
 
   <footer class="foot">
-    مسودة أولى · ١٧ نوفمبر ٢٠٢٦ · ملفات المشاهد في الريبو: <code class="ltr">marketing/promo-video</code>
+    الإصدار ٢: السكريبت النهائي · ١٧ نوفمبر ٢٠٢٦ · ملفات المشاهد والسكريبت في الريبو: <code class="ltr">marketing/promo-video</code>
   </footer>
 </main>
 
@@ -475,8 +546,35 @@ const DATA = /*__DATA__*/null;
   $('cutList').innerHTML = SB.cutdowns.map((c) => `<div class="cut"><h3>${esc(c.name)}<span>المشاهد ${c.frames.map((id) => numOf[id]).join('، ')}</span></h3>
       <div class="strip">${c.frames.map((id) => { const i = addG(id, `${numOf[id]} · ${SB.frames[id].name}`); return `<button type="button" data-g="${i}" aria-label="تكبير المشهد ${numOf[id]}"><img src="${src(id)}" alt="" loading="lazy" width="720" height="1280"></button>`; }).join('')}</div></div>`).join('');
 
-  // ---- questions
-  $('askList').innerHTML = SB.decisions.map((d) => `<li><span>${esc(d)}</span></li>`).join('');
+  // ---- assumptions (the user approved the idea and said go ahead)
+  $('askList').innerHTML = SB.script.assumptions.map((d) => `<li><span>${esc(d)}</span></li>`).join('');
+
+  // ---- final script
+  const SC = SB.script;
+  const lines = SC.cues.filter((c) => c.n);
+  $('scriptLead').textContent = `${ar(lines.length)} جملة، ${SC.duration}. سجّلها بالترتيب، وسيب ثانية سكوت بين كل جملة والتانية.`;
+  $('direction').innerHTML = SC.direction.map((d) => `<li>${esc(d)}</li>`).join('');
+  $('cueList').innerHTML = SC.cues.map((c) => {
+    const sc = `المشهد ${c.frames.map((f) => ar(order.indexOf(f) + 1)).join('، ')}`;
+    if (c.silence) return `<li class="silence"><span class="n">—</span><span class="ln">صمت<span class="sc">${sc}</span></span><span class="pf">${esc(c.note)}</span></li>`;
+    return `<li><span class="n">${ar(c.n)}</span><span class="ln">${esc(c.text)}<span class="sc">${sc}</span></span><span class="pf">${esc(c.note)}</span></li>`;
+  }).join('');
+  $('ttsStyle').textContent = SC.gemini_style;
+  $('ttsText').textContent = DATA.tts.txt.trim();
+  $('ttsSsml').textContent = DATA.tts.ssml.trim();
+  $('delivery').innerHTML = SC.delivery.map((d) => `<li>${esc(d)}</li>`).join('');
+  $('hookLines').innerHTML = SB.hooks.map((h) => `<li><b>${esc(h.name)}:</b> ${h.vo.map(esc).join(' / ')}</li>`).join('');
+  document.querySelectorAll('[data-copy]').forEach((btn) => {
+    const label = btn.textContent;
+    btn.addEventListener('click', () => {
+      const pre = $(btn.dataset.copy);
+      const done = (msg) => { btn.textContent = msg; btn.classList.add('ok'); setTimeout(() => { btn.textContent = label; btn.classList.remove('ok'); }, 2200); };
+      const select = () => { const r = document.createRange(); r.selectNodeContents(pre); const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); done('النص متحدّد، انسخه'); };
+      try {
+        navigator.clipboard.writeText(pre.textContent).then(() => done('اتنسخ'), select);
+      } catch (e) { select(); }
+    });
+  });
 
   // ---- lightbox
   const lb = $('lb');

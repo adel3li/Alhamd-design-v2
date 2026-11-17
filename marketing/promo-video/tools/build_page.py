@@ -31,6 +31,10 @@ def main() -> None:
         im.save(frames_dir / f"{png.stem}.webp", "WEBP", quality=84, method=6)
 
     data = {
+        "tts": {
+            "txt": (ROOT / "script" / "voiceover.txt").read_text(encoding="utf-8"),
+            "ssml": (ROOT / "script" / "voiceover.ssml").read_text(encoding="utf-8"),
+        },
         "storyboard": sb,
         "timings": {
             "total": tm["total"],
