@@ -261,7 +261,7 @@
    * Gold dust as one full-stage SVG.
    * box: [x, y, w, h]; drift: optional [dx, dy] to bias positions (dissolve trails).
    */
-  function particles({ n = 40, seed = 1, box = [0, 0, 1080, 1920], rmin = 2, rmax = 7, omin = 0.2, omax = 0.9, color = C.gold, stageH = 1920, cluster = null } = {}) {
+  function particles({ n = 40, seed = 1, box = [0, 0, 1080, 1920], rmin = 2, rmax = 7, omin = 0.2, omax = 0.9, color = C.gold, stageH = 1920, stageW = 1080, cluster = null } = {}) {
     const r = rng(seed);
     let s = '';
     for (let i = 0; i < n; i++) {
@@ -279,8 +279,88 @@
       const op = omin + r() * (omax - omin);
       s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rad.toFixed(1)}" fill="${color}" opacity="${op.toFixed(2)}"/>`;
     }
-    return `<svg class="abs particles" style="left:0;top:0;width:1080px;height:${stageH}px;overflow:visible;filter:drop-shadow(0 0 6px rgba(228,195,104,0.55))" viewBox="0 0 1080 ${stageH}">${s}</svg>`;
+    return `<svg class="abs particles" style="left:0;top:0;width:${stageW}px;height:${stageH}px;overflow:visible;filter:drop-shadow(0 0 6px rgba(228,195,104,0.55))" viewBox="0 0 ${stageW} ${stageH}">${s}</svg>`;
   }
 
-  window.ART = { C, windowArt, glassArt, callArt, stepsArt, breathArt, shieldArt, lockArt, particles, rng, bez, bezD, stroke };
+  /* ---------- Crescent and stars (نعمة النوم) ---------- */
+  const sparkle = (x, y, s, color, o = 1) =>
+    `<path d="M${x},${y - s} Q${x},${y} ${x + s},${y} Q${x},${y} ${x},${y + s} Q${x},${y} ${x - s},${y} Q${x},${y} ${x},${y - s} Z" fill="${color}" opacity="${o}"/>`;
+  function moonArt(state = 'lit') {
+    const c = colorFor(state);
+    let s = '';
+    s += `<path d="M360,162 A150,150 0 1 0 360,438 A175,175 0 0 1 360,162 Z" fill="${c}" fill-opacity="${state === 'lit' ? 0.16 : 0}" ${stroke(c, 6.5, dashFor(state))}/>`;
+    if (state === 'lit') {
+      [[470, 180, 24, 1], [520, 330, 15, 0.8], [445, 470, 17, 0.9], [175, 540, 12, 0.7], [150, 150, 11, 0.6], [560, 520, 9, 0.6]].forEach(([x, y, z, o]) => { s += sparkle(x, y, z, C.goldSoft, o); });
+      s += `<path d="M120,610 C200,575 270,600 330,590 C400,578 450,600 500,592" ${stroke(c, 5, 'opacity="0.55"')}/>`;
+    }
+    return svg('0 0 600 700', s);
+  }
+
+  /* ---------- A home with a lit window (نعمة البيت والمأوى) ---------- */
+  function houseArt(state = 'lit') {
+    const lit = state === 'lit';
+    const c = colorFor(state);
+    const d = dashFor(state);
+    let s = '';
+    s += `<path d="M70,600 L530,600" ${stroke(c, 6.5, d)}/>`;
+    s += `<path d="M128,332 L472,332 L472,312 L128,312 Z" ${stroke(c, 6, d)}/>`;
+    s += `<rect x="150" y="332" width="300" height="268" ${stroke(c, 6.5, d)}/>`;
+    [[195, 245], [355, 405]].forEach(([a, b]) => {
+      s += `<path d="M${a},472 L${a},424 A25,25 0 0 1 ${b},424 L${b},472 Z" fill="${C.gold}" fill-opacity="${lit ? 0.42 : 0}" ${stroke(c, 5, d)}/>`;
+      s += `<path d="M${(a + b) / 2},399 L${(a + b) / 2},472" ${stroke(c, 3.5, d + ' opacity="0.7"')}/>`;
+    });
+    s += `<path d="M265,600 L265,506 A35,35 0 0 1 335,506 L335,600" ${stroke(c, 6, d)}/>`;
+    s += `<circle cx="322" cy="556" r="4.5" fill="${c}"/>`;
+    s += `<path d="M300,332 L300,356" ${stroke(c, 3.5, d)}/>`;
+    s += `<rect x="288" y="356" width="24" height="30" rx="6" fill="${C.gold}" fill-opacity="${lit ? 0.55 : 0}" ${stroke(c, 4, d)}/>`;
+    if (lit) {
+      s += `<path d="M482,172 A40,40 0 1 0 482,252 A48,48 0 0 1 482,172 Z" fill="${C.gold}" fill-opacity="0.2" ${stroke(c, 5)}/>`;
+      s += sparkle(140, 196, 14, C.goldSoft, 0.85) + sparkle(210, 140, 9, C.goldSoft, 0.6) + sparkle(560, 290, 8, C.goldSoft, 0.6);
+    }
+    return svg('0 0 600 700', s);
+  }
+
+  /* ---------- Prayer beads, 33 (المسبحة) ---------- */
+  function beadsArt(state = 'lit', lit = 33) {
+    const c = colorFor(state);
+    let s = `<circle cx="300" cy="290" r="175" ${stroke(c, 3, 'opacity="0.5"')}/>`;
+    for (let i = 0; i < 33; i++) {
+      const a = Math.PI / 2 + (i + 1) * ((2 * Math.PI - 0.5) / 34) + 0.25;
+      const x = 300 + 175 * Math.cos(a), y = 290 + 175 * Math.sin(a);
+      const on = i < lit;
+      s += `<circle class="bead-dot" data-k="${i}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="12.5" fill="${C.gold}" fill-opacity="${on ? 0.32 : 0}" ${stroke(c, 4, on ? '' : 'opacity="0.45"')}/>`;
+    }
+    s += `<path d="M300,465 C286,482 286,512 300,530 C314,512 314,482 300,465 Z" fill="${C.gold}" fill-opacity="0.3" ${stroke(c, 4.5)}/>`;
+    s += `<path d="M300,530 L300,556 M300,556 L268,650 M300,556 L286,656 M300,556 L300,660 M300,556 L314,656 M300,556 L332,650" ${stroke(c, 4)}/>`;
+    return svg('0 0 600 700', s);
+  }
+
+  /* ---------- The app's icons (from src/landing/icons.tsx) ---------- */
+  const ICONS = {
+    home: '<path d="M3 10l9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+    compass: '<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
+    book: '<path d="M2 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H2z"/><path d="M22 4h-7a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h8z"/>',
+    calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+    beads: '<circle cx="12" cy="4" r="1.6"/><circle cx="17.7" cy="6.3" r="1.6"/><circle cx="20" cy="12" r="1.6"/><circle cx="17.7" cy="17.7" r="1.6"/><circle cx="12" cy="20" r="1.6"/><circle cx="6.3" cy="17.7" r="1.6"/><circle cx="4" cy="12" r="1.6"/><circle cx="6.3" cy="6.3" r="1.6"/>',
+    shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+    sparkle: '<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>',
+    share: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/>',
+    timer: '<circle cx="12" cy="14" r="7"/><path d="M12 14l2-3M10 2h4"/>',
+  };
+  const icon = (name, color = C.gold, size = 64, sw = 1.5) =>
+    `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
+
+  /* ---------- «نهار»: the light theme of the landing page and the app icon ---------- */
+  const THEMES = {
+    nahar: { gold: '#B9573B', goldDeep: '#9E4A30', goldSoft: '#D4704F', dim: '#C9B8A6', dimmer: '#DCCFBE', text: '#2A1F19', muted: '#6B5A4E', night: '#F7F0E6', hole: '#EFE6D9' },
+  };
+  /** Runs fn with the art palette swapped, so the same drawings serve both themes. */
+  function withTheme(name, fn) {
+    if (!THEMES[name]) return fn();
+    const saved = { ...C };
+    Object.assign(C, THEMES[name]);
+    try { return fn(); } finally { Object.assign(C, saved); }
+  }
+
+  window.ART = { C, windowArt, glassArt, callArt, stepsArt, breathArt, shieldArt, lockArt, moonArt, houseArt, beadsArt, icon, sparkle, withTheme, particles, rng, bez, bezD, stroke };
 })();

@@ -1,8 +1,10 @@
 """
-Procedural sound effects for the film: natural sounds only, no music.
+Procedural sound effects: natural sounds only, no music.
 
   python3 tools/sfx.py out/timings.json out/sfx.wav
   python3 tools/sfx.py out/final-timings.json out/sfx.wav --mix out/voice-track.wav out/mix.wav
+
+The silent videos (videos.json) use build_cues() through tools/render_videos.py.
 
 Each effect is placed relative to the start of its scene, so it follows the timing file
 (temp voice or real voice). Levels sit well under the voice.
@@ -159,6 +161,131 @@ def cues() -> list:
     return c
 
 
+def click(seed: int = 30) -> np.ndarray:
+    """A wooden prayer bead knocking on the next one."""
+    t = t_axis(0.09)
+    hit = biquad(noise(0.09, seed), "bp", 2600, 1.4, passes=2) * np.exp(-t / 0.006)
+    ping = np.sin(2 * np.pi * 1850 * t) * np.exp(-t / 0.022) * 0.45
+    body = np.sin(2 * np.pi * 320 * t) * np.exp(-t / 0.012) * 0.6
+    return fades(hit + ping + body, 0.0005, 0.01)
+
+
+def tick(seed: int = 31) -> np.ndarray:
+    """A soft clock tick."""
+    t = t_axis(0.06)
+    return fades(biquad(noise(0.06, seed), "hp", 2800, passes=2) * np.exp(-t / 0.004) + np.sin(2 * np.pi * 2400 * t) * np.exp(-t / 0.01) * 0.4, 0.0005, 0.01)
+
+
+def heartbeat() -> np.ndarray:
+    """One slow heartbeat: lub, dub."""
+    t = t_axis(0.9)
+    def thump(t0: float, f: float, amp: float) -> np.ndarray:
+        u = np.clip(t - t0, 0, None)
+        return (t >= t0) * amp * np.sin(2 * np.pi * f * u) * np.exp(-u / 0.07)
+    x = thump(0.0, 52, 1.0) + thump(0.27, 62, 0.7)
+    return fades(biquad(x, "lp", 160, passes=2), 0.003, 0.05)
+
+
+def pour(dur: float = 1.8, seed: int = 32) -> np.ndarray:
+    """Water poured into a glass: a stream with bubbles, rising as the glass fills."""
+    t = t_axis(dur)
+    stream = biquad(noise(dur, seed), "bp", 1100 + 700 * t / dur, 0.7, passes=2)
+    rng = np.random.default_rng(seed)
+    am = 0.6 + 0.4 * np.abs(biquad(rng.standard_normal(len(t)), "lp", 18))
+    bubbles = np.zeros_like(t)
+    for _ in range(int(dur * 22)):
+        t0 = rng.uniform(0, dur - 0.05)
+        f0 = rng.uniform(700, 1700) * (1 + 0.6 * t0 / dur)
+        u = np.clip(t - t0, 0, 0.05)
+        bubbles += (t >= t0) * (t < t0 + 0.05) * np.sin(2 * np.pi * (f0 + 9000 * u) * u) * np.exp(-u / 0.012) * rng.uniform(0.2, 0.6)
+    e = np.minimum(1, t / 0.15) * np.minimum(1, (dur - t) / 0.35)
+    return fades((stream * am + bubbles * 0.5) * e, 0.01, 0.05)
+
+
+def glint(seed: int = 33) -> np.ndarray:
+    """A tiny airy glint for points of light appearing."""
+    t = t_axis(0.12)
+    return fades(biquad(noise(0.12, seed), "bp", 6500, 2.0, passes=2) * np.exp(-t / 0.03), 0.002, 0.02)
+
+
+def birds(dur: float = 1.8, seed: int = 34) -> np.ndarray:
+    """A few distant dawn chirps."""
+    t = t_axis(dur)
+    rng = np.random.default_rng(seed)
+    x = np.zeros_like(t)
+    for _ in range(7):
+        t0 = rng.uniform(0, dur - 0.2)
+        n = rng.integers(2, 4)
+        base = rng.uniform(3000, 4200)
+        for j in range(n):
+            s = t0 + j * rng.uniform(0.07, 0.11)
+            d = rng.uniform(0.05, 0.09)
+            u = np.clip(t - s, 0, d)
+            f = base + 1400 * np.sin(np.pi * u / d) - 600 * (u / d)
+            env = (t >= s) * (t < s + d) * np.sin(np.pi * u / d) ** 2
+            x += np.sin(2 * np.pi * np.cumsum(f) / SR) * env * rng.uniform(0.4, 1.0)
+    return fades(biquad(x, "hp", 1800), 0.01, 0.05)
+
+
+def air(dur: float, seed: int = 35) -> np.ndarray:
+    """Room tone: a soft, slowly breathing bed so silence never sounds digital."""
+    t = t_axis(dur)
+    x = biquad(noise(dur, seed), "lp", 650, passes=2)
+    slow = 0.75 + 0.25 * np.sin(2 * np.pi * 0.11 * t + 1.3)
+    return fades(x * slow, 0.4, 0.6)
+
+
+SOUNDS = {
+    "drop": lambda a: drop(a.get("seed", 1)),
+    "whoosh": lambda a: whoosh(a.get("dur", 1.4), a.get("from", 2600), a.get("to", 500), a.get("seed", 2)),
+    "wind": lambda a: whoosh(a.get("dur", 3.0), a.get("from", 900), a.get("to", 300), a.get("seed", 6)),
+    "vibrate": lambda a: vibrate(),
+    "step": lambda a: step(a.get("seed", 20)),
+    "breath": lambda a: breath(a.get("dur", 1.1), a.get("seed", 4)),
+    "tap": lambda a: tap(),
+    "pop": lambda a: pop(),
+    "click": lambda a: click(a.get("seed", 30)),
+    "tick": lambda a: tick(a.get("seed", 31)),
+    "heartbeat": lambda a: heartbeat(),
+    "pour": lambda a: pour(a.get("dur", 1.8), a.get("seed", 32)),
+    "glint": lambda a: glint(a.get("seed", 33)),
+    "birds": lambda a: birds(a.get("dur", 1.8), a.get("seed", 34)),
+}
+
+
+def write_wav(buf: np.ndarray, out_path: Path) -> None:
+    pcm = (np.clip(buf, -1, 1) * 32767).astype(np.int16)
+    with wave.open(str(out_path), "wb") as w:
+        w.setnchannels(1)
+        w.setsampwidth(2)
+        w.setframerate(SR)
+        w.writeframes(pcm.tobytes())
+
+
+def build_cues(slots: list, cue_list: list, out_path: Path, bed_db: float | None = -46.0, peak_db: float | None = None) -> float:
+    """cue_list: [scene id, seconds into that scene, sound name, peak dBFS, {params}]; times are scene-local.
+    peak_db lifts (or lowers) all the effects together so the loudest one peaks there; the bed is added after."""
+    by_id = {s["id"]: s for s in slots}
+    last = slots[-1]
+    total = last["start"] + last["len"] + FADE
+    buf = np.zeros(int(total * SR) + SR)
+    for cue in cue_list:
+        sid, t, name, peak = cue[:4]
+        params = cue[4] if len(cue) > 4 else {}
+        if sid not in by_id:
+            continue
+        i = max(0, int((by_id[sid]["start"] + t) * SR))
+        x = norm(SOUNDS[name](params), peak)
+        buf[i:i + len(x)] += x[: max(0, len(buf) - i)]
+    buf = buf[: int(total * SR)]
+    if peak_db is not None and np.max(np.abs(buf)) > 0:
+        buf = buf / np.max(np.abs(buf)) * db(peak_db)
+    if bed_db is not None:
+        buf += norm(air(total), bed_db)[: len(buf)]
+    write_wav(buf, out_path)
+    return total
+
+
 def build(timing_path: Path, out_path: Path) -> float:
     timing = json.loads(timing_path.read_text(encoding="utf-8"))
     slots = {s["id"]: s for s in timing["slots"]}
@@ -172,13 +299,7 @@ def build(timing_path: Path, out_path: Path) -> float:
         i = max(0, int(at * SR))
         x = norm(snd, peak)
         buf[i:i + len(x)] += x[: max(0, len(buf) - i)]
-    buf = buf[: int(total * SR)]
-    pcm = (np.clip(buf, -1, 1) * 32767).astype(np.int16)
-    with wave.open(str(out_path), "wb") as w:
-        w.setnchannels(1)
-        w.setsampwidth(2)
-        w.setframerate(SR)
-        w.writeframes(pcm.tobytes())
+    write_wav(buf[: int(total * SR)], out_path)
     return total
 
 

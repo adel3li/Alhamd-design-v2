@@ -79,6 +79,30 @@ python3 tools/sfx.py out/final-timings.json out/sfx.wav --mix out/voice-track.wa
 node tools/render-motion.cjs --timing out/final-timings.json --audio out/mix.wav --out out/alhamd-promo.mp4
 ```
 
+## Without a voice-over
+
+Everything that markets the app without narration, collected on one review page (`out/catalog/`):
+
+- **8 silent videos** (`videos.json`): an absence loop, «أغمض عينيك», a daily-blessing episode (the template for the
+  app's 40 blessings), the tasbih, the five pauses, a question loop, a launch teaser and an app tour. Text carries the
+  meaning; the sound is natural effects only (no music) over a quiet room tone.
+- **66 designs** (`scenes/social.js`) in both of the app's looks, «ليل» and «نهار»: posts (1:1, 4:5), five carousels,
+  interactive stories, profile kit (avatar, highlight covers, X / YouTube / Facebook covers), Google Play feature graphic
+  and screenshots, link preview image, lock-screen wallpapers, a WhatsApp card, stickers, an A3 poster and a Mushaf
+  bookmark. The QR code (`scenes/qr.js`) points to https://alhamd.app and was checked with a decoder.
+
+```bash
+pip install segno && python3 tools/build_qr.py      # only if the URL changes
+node tools/render-social.cjs                         # designs → out/social/*.png (+ meta.json)
+node tools/render-social.cjs --scale 2.83 PR1        # print resolution (A3 at 300 dpi)
+python3 tools/render_videos.py                       # silent videos → out/videos/*.mp4, previews and posters
+python3 tools/render_videos.py --audio-only          # new sound mix on the rendered pictures
+python3 tools/build_catalog.py                       # review page → out/catalog/
+```
+
+Files: `scenes/social.html|js` (designs), `scenes/loops.html|js` (silent-video scenes on top of `motion.js`),
+`catalog.json` (the page's words), `tools/catalog-template.html`.
+
 ## Notes
 
 - Every app screen in the film is a real capture, not a mock.

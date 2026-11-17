@@ -31,7 +31,7 @@ const slots = timing.slots.map(({ id, start, len }) => ({ id, start, len }));
 const last = slots[slots.length - 1];
 const total = last.start + last.len + FADE;
 const plan = { fade: FADE, slots };
-const url = `file://${path.join(root, 'scenes', 'motion.html')}`;
+const url = `file://${path.join(root, 'scenes', arg('page', 'motion.html'))}`;
 
 async function openPage(browser) {
   const ctx = await browser.newContext({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 });
@@ -64,7 +64,7 @@ async function frameAt(page, T, file) {
     return;
   }
 
-  const framesDir = path.join(motionDir, 'frames');
+  const framesDir = path.resolve(root, arg('frames', 'out/motion/frames'));
   fs.rmSync(framesDir, { recursive: true, force: true });
   fs.mkdirSync(framesDir, { recursive: true });
   const n = Math.ceil(total * FPS);

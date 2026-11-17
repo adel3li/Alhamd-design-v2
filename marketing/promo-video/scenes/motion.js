@@ -428,6 +428,13 @@
   /** Slow push-in on each scene (scale gained over the whole scene). */
   const CAM = { F10: 0, F16: 0, F24: 0.012, F13: 0.035 };
 
+  // Other films (loops.js) add their own scenes with these helpers.
+  window.MOTION_KIT = { clamp, P, out3, inOut, inQ, back, lerp, A0, $, $$, mv, enter, pop, words, reveal, drawArt, drift, threadTo, chipIn, caption };
+  const sceneOf = (id) => (window.EXTRA_SCENES && window.EXTRA_SCENES[id]) || F[id];
+  const animOf = (id) => (window.EXTRA_ANIM && window.EXTRA_ANIM[id]) || ANIM[id];
+  const initOf = (id) => (window.EXTRA_INIT && window.EXTRA_INIT[id]) || INIT[id];
+  const camOf = (id) => (window.EXTRA_CAM && window.EXTRA_CAM[id] !== undefined ? window.EXTRA_CAM[id] : CAM[id]);
+
   /* ---------- timeline ---------- */
   let plan = null;
   const layers = [];
@@ -456,10 +463,10 @@
       L.dataset.id = s.id;
       const cam = document.createElement('div');
       cam.className = 'cam';
-      cam.innerHTML = F[s.id]();
+      cam.innerHTML = sceneOf(s.id)();
       L.appendChild(cam);
       stage.appendChild(L);
-      if (INIT[s.id]) INIT[s.id](cam);
+      if (initOf(s.id)) initOf(s.id)(cam);
       layers.push({ L, cam, s, i });
     });
     return ready();
@@ -476,9 +483,9 @@
       L.style.opacity = String(o);
       L.style.visibility = o > 0 ? 'visible' : 'hidden';
       if (o <= 0) return;
-      const fn = ANIM[s.id];
+      const fn = animOf(s.id);
       if (fn) fn(cam, t, s.len);
-      const cz = CAM[s.id] ?? 0.022;
+      const cz = camOf(s.id) ?? 0.022;
       cam.style.transform = `scale(${(1 + cz * clamp(t / (s.len + fade))).toFixed(5)})`;
     });
   };
