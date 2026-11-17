@@ -1,0 +1,683 @@
+<title>ستوري بورد إعلان الحمد</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one long RTL scroll in the app's «ليل» theme — hero with a silent animatic player,
+   then the film act by act as frame cards, then hooks, formats, cut-downs, notes and the questions. */
+:root {
+  --page: #0C0C1C;
+  --deep: #111126;
+  --ground: #15152A;
+  --glass: #1A1A33;
+  --hairline: #2E2E4A;
+  --text: #EDEDF5;
+  --body: #C7C4D8;
+  --muted: #AEAECB;
+  --faint: #8A8AAE;
+  --gold: #E4C368;
+  --gold-deep: #C8A951;
+  --halo: rgba(200, 169, 81, 0.18);
+  --violet: #6C63FF;
+  --violet-hover: #594DFF;
+  --serif: 'Amiri', 'Noto Naskh Arabic', 'Times New Roman', serif;
+  --sans: 'IBM Plex Sans Arabic', 'Noto Sans Arabic', 'Segoe UI', system-ui, sans-serif;
+  --step--1: 0.875rem;
+  --step-0: 1rem;
+  --step-1: 1.2rem;
+  --step-2: 1.6rem;
+  --step-3: clamp(1.9rem, 1.4rem + 2vw, 2.6rem);
+  --step-4: clamp(2.4rem, 1.6rem + 3.6vw, 4rem);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: var(--step-0);
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3 { font-family: var(--serif); font-weight: 700; margin: 0; text-wrap: balance; }
+p { margin: 0; }
+a { color: var(--gold); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 6px; }
+.ltr { direction: ltr; unicode-bidi: isolate; }
+.eyebrow { font-size: var(--step--1); font-weight: 600; color: var(--gold); letter-spacing: 0.01em; }
+
+/* ---------- hero ---------- */
+.hero {
+  position: relative;
+  border-bottom: 1px solid var(--hairline);
+  background:
+    radial-gradient(ellipse 55% 60% at 75% 10%, rgba(237, 237, 245, 0.06), transparent 70%),
+    var(--page);
+  overflow: hidden;
+}
+.hero::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cg fill='none' stroke='rgba(237,237,245,0.045)' stroke-width='1.2'%3E%3Crect x='40' y='40' width='60' height='60'/%3E%3Crect x='40' y='40' width='60' height='60' transform='rotate(45 70 70)'/%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.hero-in {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 56px;
+  align-items: center;
+  padding-block: 56px 64px;
+}
+.hero-text { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+.mark { display: inline-flex; flex-direction: column; gap: 8px; align-self: flex-start; }
+.mark b { font-family: var(--serif); font-weight: 700; font-size: 2rem; line-height: 1; color: var(--gold); }
+.mark i { position: relative; height: 2px; background: var(--gold-deep); border-radius: 2px; margin-inline: 2px 0; }
+.mark i::after { content: ""; position: absolute; right: -3px; top: -3px; width: 8px; height: 8px; border-radius: 50%; background: var(--gold-deep); }
+.hero h1 { font-size: var(--step-4); line-height: 1.35; }
+.hero h1 span { color: var(--gold); }
+.logline { font-size: var(--step-1); color: var(--body); max-width: 34em; line-height: 1.9; }
+.facts { display: flex; flex-wrap: wrap; gap: 10px; padding: 0; margin: 4px 0 0; list-style: none; }
+.facts li {
+  border: 1px solid var(--hairline);
+  background: rgba(17, 17, 38, 0.6);
+  border-radius: 999px;
+  padding: 4px 14px 5px;
+  font-size: var(--step--1);
+  color: var(--body);
+}
+.facts li strong { color: var(--text); font-weight: 600; }
+
+/* ---------- player ---------- */
+.player { width: 300px; display: flex; flex-direction: column; gap: 14px; }
+.screen {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  border-radius: 30px;
+  overflow: hidden;
+  background: #07070F;
+  border: 1px solid var(--hairline);
+  box-shadow: 0 40px 90px rgba(0, 0, 0, 0.55), 0 0 0 6px rgba(21, 21, 42, 0.9);
+}
+.screen img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover;
+  transition: opacity 0.35s ease;
+}
+.screen img.off { opacity: 0; }
+.controls { display: flex; align-items: center; gap: 12px; }
+.play {
+  flex: none;
+  width: 48px; height: 48px;
+  border: 0; border-radius: 50%;
+  background: var(--violet);
+  display: grid; place-items: center;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(108, 99, 255, 0.35);
+}
+.play:hover { background: var(--violet-hover); }
+.play svg { width: 20px; height: 20px; fill: #fff; }
+.track { position: relative; flex: 1; height: 28px; cursor: pointer; touch-action: none; }
+.track .rail { position: absolute; inset-inline: 0; top: 13px; height: 2px; background: var(--hairline); border-radius: 2px; }
+.track .fill { position: absolute; right: 0; top: 12px; height: 4px; background: var(--gold-deep); border-radius: 4px; }
+.track .knob {
+  position: absolute; top: 7px; width: 14px; height: 14px; margin-right: -7px; border-radius: 50%;
+  background: var(--gold); box-shadow: 0 0 0 6px var(--halo);
+}
+.track .tick { position: absolute; top: 10px; width: 2px; height: 8px; margin-right: -1px; background: #3B3B5E; border-radius: 1px; }
+.tc { font-size: var(--step--1); color: var(--muted); font-variant-numeric: tabular-nums; min-width: 5.6em; text-align: left; }
+.now { min-height: 4.6em; display: flex; flex-direction: column; gap: 4px; }
+.now .nm { font-size: var(--step--1); font-weight: 600; color: var(--gold); }
+.now .line { font-family: var(--serif); font-size: 1.15rem; line-height: 1.7; color: var(--text); }
+.player-note { font-size: 0.8rem; color: var(--faint); line-height: 1.6; }
+
+/* ---------- sections ---------- */
+section.block { padding-block: 64px 8px; }
+.sec-head { display: flex; flex-direction: column; gap: 8px; margin-bottom: 28px; max-width: 44em; }
+.sec-head h2 { font-size: var(--step-3); line-height: 1.4; }
+.sec-head p { color: var(--body); }
+
+.act { margin-bottom: 52px; }
+.act-head {
+  display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+  padding-bottom: 14px; margin-bottom: 22px;
+  border-bottom: 1px solid var(--hairline);
+}
+.act-head .n { font-family: var(--serif); font-weight: 700; color: var(--gold); font-size: 1.5rem; }
+.act-head h3 { font-size: 1.7rem; }
+.act-head .span { color: var(--faint); font-size: var(--step--1); margin-inline-start: auto; }
+
+.cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(232px, 1fr)); gap: 30px 22px; }
+.card { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.thumb {
+  display: block; padding: 0; border: 0; background: none; cursor: zoom-in;
+  border-radius: 20px; overflow: hidden;
+  box-shadow: 0 0 0 1px var(--hairline), 0 18px 40px rgba(0, 0, 0, 0.35);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.thumb:hover { box-shadow: 0 0 0 1px rgba(200, 169, 81, 0.6), 0 18px 40px rgba(0, 0, 0, 0.45); transform: translateY(-2px); }
+.thumb img { display: block; width: 100%; height: auto; aspect-ratio: 9 / 16; object-fit: cover; }
+.card-body { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.card-head { display: flex; align-items: baseline; gap: 10px; }
+.card-head .num { font-weight: 700; color: var(--gold); font-variant-numeric: tabular-nums; }
+.card-head h4 { margin: 0; font-size: 1.05rem; font-weight: 600; }
+.card-head .t { margin-inline-start: auto; font-size: 0.8rem; color: var(--faint); font-variant-numeric: tabular-nums; }
+.vo {
+  font-family: var(--serif); font-size: 1.12rem; line-height: 1.75; color: var(--text);
+  border-right: 2px solid var(--gold-deep); padding-right: 12px;
+}
+.vo.quiet { font-family: var(--sans); font-size: var(--step--1); color: var(--faint); border-right-color: var(--hairline); }
+.notes { margin: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 10px; font-size: 0.86rem; line-height: 1.7; }
+.notes dt { color: var(--faint); font-weight: 600; }
+.notes dd { margin: 0; color: var(--body); }
+
+/* hooks */
+.hooks { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(330px, 100%), 1fr)); gap: 22px; }
+.hook {
+  display: flex; flex-direction: column; gap: 16px; min-width: 0;
+  background: var(--glass); border: 1px solid var(--hairline); border-radius: 24px; padding: 20px;
+}
+.hook h3 { font-size: 1.5rem; color: var(--gold); }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pair figure { margin: 0; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.pair .vo { font-size: 1rem; }
+.hook p { color: var(--body); font-size: 0.92rem; }
+.hook p b { color: var(--text); font-weight: 600; }
+
+/* formats */
+.formats { display: grid; grid-template-columns: 0.72fr 1fr 1fr; gap: 22px; align-items: start; }
+.formats figure { margin: 0; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.formats .thumb img.r45 { aspect-ratio: 4 / 5; }
+.formats figcaption b { display: block; font-weight: 600; }
+.formats figcaption span { color: var(--faint); font-size: 0.86rem; }
+
+/* cut-downs */
+.cuts { display: flex; flex-direction: column; gap: 22px; }
+.cut h3 { font-family: var(--sans); font-size: 1.05rem; font-weight: 600; margin-bottom: 10px; }
+.cut h3 span { color: var(--faint); font-weight: 400; font-size: 0.9rem; margin-inline-start: 8px; }
+.strip { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; }
+.strip button { flex: none; width: 64px; padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 10px; overflow: hidden; box-shadow: 0 0 0 1px var(--hairline); }
+.strip img { display: block; width: 100%; height: auto; aspect-ratio: 9 / 16; object-fit: cover; }
+
+/* notes grid */
+.craft { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 0 48px; border-top: 1px solid var(--hairline); }
+.craft div { padding-block: 20px; border-bottom: 1px solid var(--hairline); display: flex; flex-direction: column; gap: 6px; }
+.craft h3 { font-size: 1.35rem; }
+.craft p { color: var(--body); font-size: 0.95rem; }
+
+/* questions */
+.asks { counter-reset: q; list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; max-width: 52em; }
+.asks li {
+  counter-increment: q;
+  display: grid; grid-template-columns: 2.2em minmax(0, 1fr); gap: 12px; align-items: baseline;
+  background: var(--glass); border: 1px solid var(--hairline); border-radius: 18px; padding: 14px 18px;
+}
+.asks li::before { content: counter(q, arabic-indic); font-family: var(--serif); font-weight: 700; font-size: 1.4rem; color: var(--gold); text-align: center; }
+.asks li span { color: var(--text); }
+
+/* next steps: the brand thread, growing leftward from the right dot */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); position: relative; }
+.steps::before { content: ""; position: absolute; top: 7px; right: 0; left: 12%; height: 2px; background: var(--hairline); }
+.steps li { position: relative; padding-top: 30px; padding-inline-end: 16px; display: flex; flex-direction: column; gap: 4px; }
+.steps li::before { content: ""; position: absolute; top: 2px; right: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--ground); border: 2px solid #3B3B5E; }
+.steps li.on::before { background: var(--gold); border-color: var(--gold); box-shadow: 0 0 0 7px var(--halo); }
+.steps li.done::before { background: var(--gold-deep); border-color: var(--gold-deep); }
+.steps b { font-weight: 600; }
+.steps span { color: var(--faint); font-size: 0.88rem; }
+
+/* script */
+.direction { margin: 0 0 26px; padding: 0 1.2em 0 0; color: var(--body); max-width: 50em; display: flex; flex-direction: column; gap: 4px; }
+.cues { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--hairline); }
+.cues li {
+  display: grid; grid-template-columns: 2.6em minmax(0, 1fr) minmax(0, 0.8fr); gap: 6px 20px; align-items: baseline;
+  padding-block: 14px; border-bottom: 1px solid var(--hairline);
+}
+.cues .n { font-family: var(--serif); font-weight: 700; font-size: 1.35rem; color: var(--gold); text-align: center; }
+.cues .ln { font-family: var(--serif); font-size: 1.45rem; line-height: 1.7; color: var(--text); }
+.cues .sc { display: block; font-family: var(--sans); font-size: 0.8rem; color: var(--faint); margin-top: 2px; }
+.cues .pf { color: var(--body); font-size: 0.92rem; }
+.cues li.silence .ln { color: var(--faint); font-family: var(--sans); font-size: 1rem; }
+.tts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 22px; margin-top: 34px; }
+.tts-box { background: var(--glass); border: 1px solid var(--hairline); border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.tts-box h3 { font-size: 1.4rem; }
+.tts-box p { color: var(--body); font-size: 0.92rem; }
+.copytext {
+  margin: 0; padding: 14px 16px; border-radius: 14px; background: var(--deep); border: 1px solid var(--hairline);
+  color: var(--text); font-family: var(--serif); font-size: 1.05rem; line-height: 1.8;
+  white-space: pre-wrap; word-break: break-word; overflow: auto; max-height: 220px;
+}
+.copytext.tall { max-height: 340px; }
+.copytext.ltr { font-family: var(--sans); font-size: 0.86rem; line-height: 1.7; text-align: left; }
+.copy {
+  align-self: flex-start; border: 1px solid rgba(200, 169, 81, 0.55); background: rgba(17, 17, 38, 0.6); color: var(--gold);
+  border-radius: 999px; padding: 6px 18px 8px; font-weight: 600; font-size: 0.92rem; cursor: pointer;
+}
+.copy:hover { border-color: var(--gold); }
+.copy.ok { color: var(--text); border-color: var(--hairline); }
+.handoff { margin-top: 34px; display: flex; flex-direction: column; gap: 10px; max-width: 52em; }
+.handoff h3 { font-size: 1.35rem; margin-top: 8px; }
+.handoff ul { margin: 0; padding: 0 1.2em 0 0; color: var(--body); display: flex; flex-direction: column; gap: 4px; }
+.handoff ul b { color: var(--gold); font-weight: 600; }
+@media (max-width: 700px) {
+  .cues li { grid-template-columns: 2.2em minmax(0, 1fr); }
+  .cues .pf { grid-column: 2; }
+}
+
+footer.foot { margin-top: 72px; border-top: 1px solid var(--hairline); padding-block: 28px 40px; color: var(--faint); font-size: 0.86rem; }
+footer.foot code { color: var(--body); font-size: 0.85rem; }
+
+/* lightbox */
+dialog.lb {
+  border: 1px solid var(--hairline); border-radius: 24px; padding: 0;
+  background: var(--ground); color: var(--text);
+  width: min(560px, calc(100vw - 32px)); max-height: calc(100dvh - 32px);
+}
+dialog.lb::backdrop { background: rgba(4, 4, 10, 0.82); }
+.lb-in { display: flex; flex-direction: column; gap: 12px; padding: 14px; max-height: calc(100dvh - 34px); }
+.lb-img { min-height: 0; flex: 1; display: grid; place-items: center; }
+.lb-img img { max-width: 100%; max-height: calc(100dvh - 190px); border-radius: 16px; display: block; }
+.lb-bar { display: flex; align-items: center; gap: 10px; }
+.lb-cap { flex: 1; min-width: 0; font-size: 0.92rem; color: var(--body); }
+.lb-cap b { color: var(--gold); font-weight: 600; margin-inline-end: 6px; }
+.icon-btn {
+  flex: none; width: 42px; height: 42px; border-radius: 50%;
+  border: 1px solid var(--hairline); background: var(--glass); cursor: pointer;
+  display: grid; place-items: center;
+}
+.icon-btn:hover { border-color: var(--gold-deep); }
+.icon-btn svg { width: 18px; height: 18px; stroke: var(--text); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+@media (max-width: 860px) {
+  .hero-in { grid-template-columns: minmax(0, 1fr); gap: 36px; padding-block: 40px 48px; }
+  .player { width: min(300px, 100%); margin-inline: auto; }
+  .formats { grid-template-columns: 1fr 1fr; }
+  .formats figure:first-child { grid-column: 1 / -1; max-width: 260px; }
+  .steps { grid-template-columns: 1fr 1fr; row-gap: 24px; }
+  .steps::before { display: none; }
+}
+@media (max-width: 560px) {
+  .cards { grid-template-columns: minmax(0, 1fr); gap: 26px; }
+  .card { display: grid; grid-template-columns: 38% minmax(0, 1fr); gap: 14px; align-items: start; }
+  .notes { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .notes dd { margin-bottom: 6px; }
+  section.block { padding-block: 48px 4px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .screen img, .thumb { transition: none; }
+}
+</style>
+
+<header class="hero">
+  <div class="wrap hero-in">
+    <div class="hero-text">
+      <span class="mark" aria-label="الحمد"><b>الحمد</b><i></i></span>
+      <span class="eyebrow">ستوري بورد إعلان التطبيق · السكريبت النهائي جاهز للتسجيل</span>
+      <h1>النعمة لا تُرى… <span>حتى تغيب</span></h1>
+      <p class="logline" id="logline"></p>
+      <ul class="facts">
+        <li><strong>٩:١٦</strong> للريلز وتيك توك وشورتس</li>
+        <li><strong>حوالي ٥٠ ثانية</strong> بصوت بشري</li>
+        <li><strong>٢٤</strong> مشهدًا</li>
+        <li><strong>٣</strong> بدايات بديلة</li>
+        <li>كل شاشات التطبيق <strong>حقيقية</strong></li>
+      </ul>
+    </div>
+    <div class="player" aria-label="عرض تجريبي صامت للفيديو">
+      <div class="screen">
+        <img id="pA" alt="" width="720" height="1280">
+        <img id="pB" class="off" alt="" width="720" height="1280">
+      </div>
+      <div class="controls">
+        <button class="play" id="play" type="button" aria-label="تشغيل العرض التجريبي">
+          <svg viewBox="0 0 24 24" id="playIcon" aria-hidden="true"><path d="M7 5v14l11-7z"/></svg>
+        </button>
+        <div class="track" id="track" role="slider" tabindex="0" aria-label="موضع العرض" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <div class="rail"></div><div class="fill" id="fill"></div><div class="knob" id="knob"></div>
+        </div>
+        <span class="tc ltr" id="tc">0:00 / 0:00</span>
+      </div>
+      <div class="now" aria-live="polite"><span class="nm" id="nowName"></span><span class="line" id="nowLine"></span></div>
+      <p class="player-note">عرض صامت بتوقيت الصوت المؤقت. الفيديو التجريبي بالصوت مبعوت لك في الشات.</p>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="block" id="script">
+    <div class="sec-head">
+      <span class="eyebrow">السكريبت النهائي · جاهز للتسجيل</span>
+      <h2>النص اللي هيتسجّل</h2>
+      <p id="scriptLead"></p>
+    </div>
+    <ul class="direction" id="direction"></ul>
+    <ol class="cues" id="cueList"></ol>
+    <div class="tts">
+      <article class="tts-box">
+        <h3>للّصق في Google AI Studio</h3>
+        <p>حط الجملة دي في تعليمات الأسلوب، والنص تحتها في خانة الكلام.</p>
+        <pre id="ttsStyle" class="copytext"></pre>
+        <button class="copy" type="button" data-copy="ttsStyle">نسخ تعليمات الأسلوب</button>
+        <pre id="ttsText" class="copytext tall"></pre>
+        <button class="copy" type="button" data-copy="ttsText">نسخ النص</button>
+      </article>
+      <article class="tts-box">
+        <h3>SSML لـ Google Cloud Text-to-Speech</h3>
+        <p>اختار صوت عربي (ar-XA). فيه وقفة قصيرة عند «…» وثانية بين كل جملة.</p>
+        <pre id="ttsSsml" class="copytext tall ltr"></pre>
+        <button class="copy" type="button" data-copy="ttsSsml">نسخ الـ SSML</button>
+      </article>
+    </div>
+    <div class="handoff">
+      <h3>تسليم ملف الصوت</h3>
+      <ul id="delivery"></ul>
+      <h3>جمل البدايات البديلة (اختياري)</h3>
+      <ul id="hookLines"></ul>
+    </div>
+  </section>
+
+  <section class="block" id="film">
+    <div class="sec-head">
+      <span class="eyebrow">الفيلم الرئيسي</span>
+      <h2>المشاهد بالترتيب</h2>
+      <p>كل صورة هنا لقطة من الفيديو بمقاسه الحقيقي. اضغط على أي صورة لتكبيرها. التعليق الصوتي تحت كل مشهد مسودة لتوضيح الفكرة فقط؛ السكريبت النهائي يأتي بعد موافقتك.</p>
+    </div>
+    <div id="acts"></div>
+  </section>
+
+  <section class="block" id="hooks">
+    <div class="sec-head">
+      <span class="eyebrow">أول ثلاث ثوانٍ</span>
+      <h2>بدايات بديلة</h2>
+      <p>البداية هي اللي بتوقف الناس عن التمرير. نختار واحدة، أو نعمل نسختين ونشوف أيهم يجيب مشاهدات أكتر.</p>
+    </div>
+    <div class="hooks" id="hookList"></div>
+  </section>
+
+  <section class="block" id="formats">
+    <div class="sec-head">
+      <span class="eyebrow">مقاسات أخرى</span>
+      <h2>الغلاف ومنشورات الفيد</h2>
+    </div>
+    <div class="formats" id="formatList"></div>
+  </section>
+
+  <section class="block" id="cuts">
+    <div class="sec-head">
+      <span class="eyebrow">نفس المادة، مدة أقصر</span>
+      <h2>نسخ ١٥ و٣٠ ثانية</h2>
+      <p>للإعلانات الممولة والقصص. نفس المشاهد بترتيب أقصر، من غير ما نرسم حاجة جديدة.</p>
+    </div>
+    <div class="cuts" id="cutList"></div>
+  </section>
+
+  <section class="block" id="craft">
+    <div class="sec-head">
+      <span class="eyebrow">الشكل والصوت</span>
+      <h2>إزاي هيتنفّذ</h2>
+    </div>
+    <div class="craft">
+      <div><h3>هوية التطبيق نفسها</h3><p>ألوان ثيم «ليل» (الكحلي والذهبي)، وخط أميري للعناوين وIBM Plex للنصوص، وزخرفة النجمة الخفيفة في الخلفية. نفس اللي في التطبيق والموقع.</p></div>
+      <div><h3>الخيط الذهبي</h3><p>الخيط والنقطة من الشعار هما حركة الفيديو: الخيط يرسم كل نعمة، وينقطع لحظة الغياب، ويرجع يربط النِّعَم كحبّات المسبحة، وفي الآخر يبقى خط الشعار.</p></div>
+      <div><h3>شاشات حقيقية</h3><p>كل شاشات التطبيق متصوّرة من التطبيق نفسه يوم ٤ رجب ١٤٤٨ (يوم «نعمة الماء»)، عشان القصة والتطبيق يتكلموا عن نفس النعمة.</p></div>
+      <div><h3>الصوت</h3><p>فصحى، هادئ ودافئ، بسرعة حوالي كلمتين في الثانية. مقترح بدون موسيقى: مؤثرات طبيعية بس (قطرة ماء، عصافير الفجر، خطوات)، وصمت كامل لحظة الغياب.</p></div>
+      <div><h3>الترجمة على الشاشة</h3><p>كل جملة مكتوبة على الشاشة، لأن أغلب الناس بتتفرج على الريلز من غير صوت. الكلام بعيد عن أطراف الشاشة اللي بتغطيها أزرار التطبيقات.</p></div>
+      <div><h3>مراجعة النصوص</h3><p>الآية اللي بتظهر في الشاشات (سورة الملك: ٣٠) من محتوى التطبيق. تتراجع حرفيًا قبل النشر، زي باقي نصوص التطبيق.</p></div>
+    </div>
+  </section>
+
+  <section class="block" id="asks">
+    <div class="sec-head">
+      <span class="eyebrow">القرارات</span>
+      <h2>اللي مشيت عليه</h2>
+      <p>وافقت على الفكرة من غير ما تحدد الباقي، فمشيت على اقتراحاتي. أي واحدة عايز تغيّرها قولّي رقمها.</p>
+    </div>
+    <ol class="asks" id="askList"></ol>
+  </section>
+
+  <section class="block" id="next">
+    <div class="sec-head">
+      <span class="eyebrow">بعد كده</span>
+      <h2>الخطوات الجاية</h2>
+    </div>
+    <ol class="steps">
+      <li class="done"><b>الموافقة</b><span>على الفكرة</span></li>
+      <li class="done"><b>السكريبت النهائي</b><span>جاهز فوق</span></li>
+      <li class="on"><b>ملف الصوت</b><span>دورك: تسجّله أو تطلّعه من جوجل وتبعته</span></li>
+      <li><b>الفيديو النهائي</b><span>تحريك كامل على الصوت + النسخ القصيرة</span></li>
+    </ol>
+  </section>
+
+  <footer class="foot">
+    الإصدار ٢: السكريبت النهائي · ١٧ نوفمبر ٢٠٢٦ · ملفات المشاهد والسكريبت في الريبو: <code class="ltr">marketing/promo-video</code>
+  </footer>
+</main>
+
+<dialog class="lb" id="lb" aria-label="المشهد مكبّر">
+  <div class="lb-in">
+    <div class="lb-img"><img id="lbImg" alt=""></div>
+    <div class="lb-bar">
+      <button class="icon-btn" type="button" id="lbPrev" aria-label="المشهد السابق"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button>
+      <p class="lb-cap" id="lbCap"></p>
+      <button class="icon-btn" type="button" id="lbNext" aria-label="المشهد التالي"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button>
+      <button class="icon-btn" type="button" id="lbClose" aria-label="إغلاق"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+const DATA = /*__DATA__*/null;
+(function () {
+  const SB = DATA.storyboard, TM = DATA.timings;
+  const $ = (id) => document.getElementById(id);
+  const ar = (n, pad = 2) => String(n).padStart(pad, '0').replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[d]);
+  const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const src = (id) => `frames/${id}.webp`;
+
+  $('logline').textContent = SB.logline;
+
+  // ---- scene numbering, timing and the line heard over each frame
+  const order = SB.acts.flatMap((a) => a.frames);
+  const slotOf = {};
+  TM.slots.forEach((s) => { slotOf[s.id] = s; });
+  const lineOver = {};
+  let carry = '';
+  order.forEach((id) => {
+    const vo = SB.frames[id].vo;
+    if (vo) carry = vo; else if (id === 'F10') carry = '';
+    lineOver[id] = vo || (id === 'F10' ? '' : carry);
+  });
+
+  // ---- lightbox gallery (every frame on the page, in page order)
+  const gallery = [];
+  const addG = (id, cap) => { gallery.push({ id, cap }); return gallery.length - 1; };
+  const thumbBtn = (id, cap, cls = '') => {
+    const i = addG(id, cap);
+    return `<button class="thumb" type="button" data-g="${i}" aria-label="تكبير: ${esc(cap)}"><img class="${cls}" src="${src(id)}" alt="${esc(cap)}" loading="lazy" width="720" height="${cls === 'r45' ? 900 : 1280}"></button>`;
+  };
+
+  // ---- acts
+  let n = 0;
+  $('acts').innerHTML = SB.acts.map((a, ai) => {
+    const first = slotOf[a.frames[0]], last = slotOf[a.frames[a.frames.length - 1]];
+    const span = `<span class="ltr">≈ ${mmss(first.start)} – ${mmss(last.start + last.len)}</span>`;
+    const cards = a.frames.map((id) => {
+      n += 1;
+      const f = SB.frames[id];
+      const s = slotOf[id];
+      const vo = f.vo
+        ? `<p class="vo">${esc(f.vo)}</p>`
+        : `<p class="vo quiet">${id === 'F10' ? 'صمت تام' : 'تكمل الجملة اللي قبلها'}</p>`;
+      const notes = [['المشهد', f.visual], ['الحركة', f.motion], f.sound && f.sound !== '—' ? ['المؤثرات', f.sound] : null]
+        .filter(Boolean).map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('');
+      return `<li class="card">${thumbBtn(id, `${ar(n)} · ${f.name}`)}
+        <div class="card-body">
+          <div class="card-head"><span class="num">${ar(n)}</span><h4>${esc(f.name)}</h4><span class="t ltr">≈ ${mmss(s.start)}</span></div>
+          ${vo}<dl class="notes">${notes}</dl>
+        </div></li>`;
+    }).join('');
+    return `<div class="act"><div class="act-head"><span class="n">${ar(ai + 1, 1)}</span><h3>${esc(a.name)}</h3><span class="span">${span}</span></div><ol class="cards">${cards}</ol></div>`;
+  }).join('');
+
+  // ---- hooks
+  $('hookList').innerHTML = SB.hooks.map((h) => `<article class="hook">
+      <h3>${esc(h.name)}</h3>
+      <div class="pair">${h.frames.map((id, i) => `<figure>${thumbBtn(id, `بداية «${h.name}» · ${i + 1}`)}<p class="vo">${esc(h.vo[i])}</p></figure>`).join('')}</div>
+      <p><b>ليه:</b> ${esc(h.why)}</p><p><b>بعدها:</b> ${esc(h.then)}</p>
+    </article>`).join('');
+
+  // ---- formats
+  $('formatList').innerHTML = SB.formats.map((f) => `<figure>${thumbBtn(f.id, f.name, f.id.startsWith('P45') ? 'r45' : '')}
+      <figcaption><b>${esc(f.name)}</b><span>${esc(f.note)}</span></figcaption></figure>`).join('');
+
+  // ---- cut-downs
+  const numOf = {};
+  order.forEach((id, i) => { numOf[id] = ar(i + 1); });
+  $('cutList').innerHTML = SB.cutdowns.map((c) => `<div class="cut"><h3>${esc(c.name)}<span>المشاهد ${c.frames.map((id) => numOf[id]).join('، ')}</span></h3>
+      <div class="strip">${c.frames.map((id) => { const i = addG(id, `${numOf[id]} · ${SB.frames[id].name}`); return `<button type="button" data-g="${i}" aria-label="تكبير المشهد ${numOf[id]}"><img src="${src(id)}" alt="" loading="lazy" width="720" height="1280"></button>`; }).join('')}</div></div>`).join('');
+
+  // ---- assumptions (the user approved the idea and said go ahead)
+  $('askList').innerHTML = SB.script.assumptions.map((d) => `<li><span>${esc(d)}</span></li>`).join('');
+
+  // ---- final script
+  const SC = SB.script;
+  const lines = SC.cues.filter((c) => c.n);
+  $('scriptLead').textContent = `${ar(lines.length)} جملة، ${SC.duration}. سجّلها بالترتيب، وسيب ثانية سكوت بين كل جملة والتانية.`;
+  $('direction').innerHTML = SC.direction.map((d) => `<li>${esc(d)}</li>`).join('');
+  $('cueList').innerHTML = SC.cues.map((c) => {
+    const sc = `المشهد ${c.frames.map((f) => ar(order.indexOf(f) + 1)).join('، ')}`;
+    if (c.silence) return `<li class="silence"><span class="n">—</span><span class="ln">صمت<span class="sc">${sc}</span></span><span class="pf">${esc(c.note)}</span></li>`;
+    return `<li><span class="n">${ar(c.n)}</span><span class="ln">${esc(c.text)}<span class="sc">${sc}</span></span><span class="pf">${esc(c.note)}</span></li>`;
+  }).join('');
+  $('ttsStyle').textContent = SC.gemini_style;
+  $('ttsText').textContent = DATA.tts.txt.trim();
+  $('ttsSsml').textContent = DATA.tts.ssml.trim();
+  $('delivery').innerHTML = SC.delivery.map((d) => `<li>${esc(d)}</li>`).join('');
+  $('hookLines').innerHTML = SB.hooks.map((h) => `<li><b>${esc(h.name)}:</b> ${h.vo.map(esc).join(' / ')}</li>`).join('');
+  document.querySelectorAll('[data-copy]').forEach((btn) => {
+    const label = btn.textContent;
+    btn.addEventListener('click', () => {
+      const pre = $(btn.dataset.copy);
+      const done = (msg) => { btn.textContent = msg; btn.classList.add('ok'); setTimeout(() => { btn.textContent = label; btn.classList.remove('ok'); }, 2200); };
+      const select = () => { const r = document.createRange(); r.selectNodeContents(pre); const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); done('النص متحدّد، انسخه'); };
+      try {
+        navigator.clipboard.writeText(pre.textContent).then(() => done('اتنسخ'), select);
+      } catch (e) { select(); }
+    });
+  });
+
+  // ---- lightbox
+  const lb = $('lb');
+  let gi = 0;
+  const showG = (i) => {
+    gi = (i + gallery.length) % gallery.length;
+    const g = gallery[gi];
+    $('lbImg').src = src(g.id);
+    $('lbImg').alt = g.cap;
+    $('lbCap').innerHTML = `<b>${esc(g.cap)}</b>${esc(lineOver[g.id] || '')}`;
+  };
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-g]');
+    if (!b) return;
+    showG(Number(b.dataset.g));
+    if (!lb.open) lb.showModal();
+  });
+  $('lbClose').addEventListener('click', () => lb.close());
+  $('lbNext').addEventListener('click', () => showG(gi + 1));
+  $('lbPrev').addEventListener('click', () => showG(gi - 1));
+  lb.addEventListener('click', (e) => { if (e.target === lb) lb.close(); });
+  lb.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') showG(gi + 1);
+    if (e.key === 'ArrowRight') showG(gi - 1);
+  });
+
+  // ---- silent animatic player
+  const total = TM.total;
+  const slots = TM.slots;
+  const A = $('pA'), B = $('pB');
+  let front = A, back = B;
+  let cur = -1, t = 0, playing = false, last = 0;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const track = $('track');
+  track.insertAdjacentHTML('beforeend', slots.map((s) => `<span class="tick" style="right:${(s.start / total) * 100}%"></span>`).join(''));
+  slots.forEach((s) => { const im = new Image(); im.src = src(s.id); });
+
+  const indexAt = (time) => {
+    let k = 0;
+    for (let i = 0; i < slots.length; i++) if (time >= slots[i].start) k = i;
+    return k;
+  };
+  const show = (k) => {
+    if (k === cur) return;
+    cur = k;
+    const id = slots[k].id;
+    if (reduce || !playing) {
+      front.src = src(id);
+    } else {
+      back.src = src(id);
+      back.classList.remove('off');
+      front.classList.add('off');
+      [front, back] = [back, front];
+    }
+    const num = order.indexOf(id) + 1;
+    $('nowName').textContent = `${ar(num)} · ${SB.frames[id].name}`;
+    $('nowLine').textContent = lineOver[id] || '…';
+  };
+  const paint = () => {
+    const p = Math.min(1, t / total);
+    $('fill').style.width = `${p * 100}%`;
+    $('knob').style.right = `${p * 100}%`;
+    track.setAttribute('aria-valuenow', String(Math.round(p * 100)));
+    $('tc').textContent = `${mmss(t)} / ${mmss(total)}`;
+    show(indexAt(t));
+  };
+  const setPlaying = (on) => {
+    playing = on;
+    $('play').setAttribute('aria-label', on ? 'إيقاف العرض التجريبي' : 'تشغيل العرض التجريبي');
+    $('playIcon').innerHTML = on ? '<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>' : '<path d="M7 5v14l11-7z"/>';
+    if (on) { last = performance.now(); requestAnimationFrame(tick); }
+  };
+  const tick = (now) => {
+    if (!playing) return;
+    t += (now - last) / 1000;
+    last = now;
+    if (t >= total) { t = total; paint(); setPlaying(false); return; }
+    paint();
+    requestAnimationFrame(tick);
+  };
+  $('play').addEventListener('click', () => {
+    if (!playing && t >= total) { t = 0; cur = -1; }
+    setPlaying(!playing);
+  });
+  const seekFrom = (clientX) => {
+    const r = track.getBoundingClientRect();
+    const p = Math.min(1, Math.max(0, (r.right - clientX) / r.width)); // RTL: start on the right
+    t = p * total;
+    paint();
+  };
+  track.addEventListener('pointerdown', (e) => {
+    track.setPointerCapture(e.pointerId);
+    seekFrom(e.clientX);
+    const move = (ev) => seekFrom(ev.clientX);
+    const up = () => { track.removeEventListener('pointermove', move); track.removeEventListener('pointerup', up); };
+    track.addEventListener('pointermove', move);
+    track.addEventListener('pointerup', up);
+  });
+  track.addEventListener('keydown', (e) => {
+    const k = indexAt(t);
+    if (e.key === 'ArrowLeft') { t = slots[Math.min(slots.length - 1, k + 1)].start; paint(); e.preventDefault(); }
+    if (e.key === 'ArrowRight') { t = slots[Math.max(0, k - 1)].start; paint(); e.preventDefault(); }
+  });
+  paint();
+})();
+</script>

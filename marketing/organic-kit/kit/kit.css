@@ -1,0 +1,123 @@
+/*
+ * Alhamd organic kit — styles shared by every creative.
+ * Two themes from the app: «ليل» (.th-layl: night, gold) and «نهار» (.th-nahar: cream, ink, terracotta).
+ * Sizes come from kit.js in pixels already scaled to the format, so this file holds colour and type only.
+ */
+:root {
+  --serif: 'Amiri', 'Noto Naskh Arabic', serif;
+  --quran: 'Amiri Quran', 'Amiri', serif;
+  --sans: 'IBM Plex Sans Arabic', 'Noto Sans Arabic', system-ui, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #000; }
+body { -webkit-font-smoothing: antialiased; }
+#stage { position: relative; overflow: hidden; direction: rtl; }
+
+.th-layl {
+  --bg: #0C0C1C; --text: #EDEDF5; --body: #C7C4D8; --muted: #AEAECB; --faint: #6E6E92;
+  --accent: #E4C368; --accent-2: #F0D48A; --stroke: #C8A951; --hair: #2E2E4A; --dim: #3B3B5E; --dimmer: #2A2A44;
+  --card: rgba(30, 30, 56, 0.72); --card-b: rgba(200, 169, 81, 0.5); --card-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+  --cta: #6C63FF; --cta-t: #FFFFFF; --cta-glow: rgba(108, 99, 255, 0.35);
+  --word: #E4C368; --line: #C8A951; --track: #2E2E4A;
+  --chip-t: #E4C368; --chip-bg: rgba(17, 17, 38, 0.72); --chip-b: rgba(200, 169, 81, 0.55);
+  --halo: rgba(228, 195, 104, 0.18); --sticker: rgba(17, 17, 38, 0.45);
+}
+.th-nahar {
+  --bg: #F4EDE3; --text: #2A1F19; --body: #4A3B32; --muted: #6B5A4E; --faint: #9A8878;
+  --accent: #9E4A30; --accent-2: #B9573B; --stroke: #B9573B; --hair: #DCCFBE; --dim: #C9B8A6; --dimmer: #DCCFBE;
+  --card: #FBF8F3; --card-b: rgba(185, 87, 59, 0.32); --card-shadow: 0 24px 60px rgba(90, 60, 30, 0.12);
+  --cta: #B9573B; --cta-t: #FFFFFF; --cta-glow: rgba(185, 87, 59, 0.28);
+  --word: #2A1F19; --line: #B9573B; --track: #DCCFBE;
+  --chip-t: #9E4A30; --chip-bg: rgba(251, 248, 243, 0.9); --chip-b: rgba(185, 87, 59, 0.42);
+  --halo: rgba(185, 87, 59, 0.12); --sticker: rgba(255, 255, 255, 0.45);
+}
+
+.cv { position: absolute; left: 0; top: 0; overflow: hidden; color: var(--text); font-family: var(--sans); background: var(--bg); }
+.layer { position: absolute; inset: 0; }
+.bgl { position: absolute; inset: 0; }
+.bgl svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.abs { position: absolute; }
+
+/* Column / row page, padded to the format's safe zone */
+.safe { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; }
+.safe.row { flex-direction: row; align-items: stretch; }
+.slot { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; width: 100%; }
+.box { flex: 1 1 auto; min-height: 0; width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.inner { width: 100%; display: flex; flex-direction: column; align-items: center; }
+.row > .side { display: flex; flex-direction: column; justify-content: center; align-items: center; min-width: 0; }
+.left { align-items: flex-start !important; text-align: left; }
+.start { align-items: flex-start; text-align: right; }
+.start .t-title, .start .t-body, .start .t-quote, .start .t-kick { text-align: right; }
+
+/* Type */
+.t-title { font-family: var(--serif); font-weight: 700; line-height: 1.42; color: var(--text); text-align: center; text-wrap: balance; margin: 0; }
+.t-display { font-family: var(--serif); font-weight: 700; line-height: 1.32; color: var(--text); text-align: center; text-wrap: balance; }
+.t-quote { font-family: var(--serif); font-weight: 400; line-height: 1.66; color: var(--text); text-align: center; text-wrap: balance; }
+.t-body { font-family: var(--sans); font-weight: 400; line-height: 1.72; color: var(--body); text-align: center; text-wrap: balance; }
+.t-kick { font-family: var(--sans); font-weight: 600; line-height: 1.4; color: var(--muted); text-align: center; }
+.t-small { font-family: var(--sans); font-weight: 500; line-height: 1.5; color: var(--muted); text-align: center; }
+.t-verse { font-family: var(--quran); font-weight: 400; line-height: 2.05; color: var(--text); text-align: center; text-wrap: balance; }
+.t-num { font-family: var(--serif); font-weight: 700; line-height: 1; color: var(--accent); }
+.acc { color: var(--accent); }
+.mut { color: var(--muted); }
+.txt { color: var(--text); }
+.ltr { direction: ltr; unicode-bidi: isolate; display: inline-block; }
+.nowrap { white-space: nowrap; }
+/* harakat sit outside the line box in Amiri: inline-block + padding keeps them inside gradients */
+.gold { display: inline-block; padding: 0.32em 0.12em; margin: -0.32em -0.12em; background: linear-gradient(180deg, #F8E3A3 0%, #E4C368 52%, #C29E45 100%); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 28px rgba(228, 195, 104, 0.45)); }
+.th-nahar .gold { background: none; color: var(--accent); filter: none; }
+
+/* Pieces */
+.chip { display: inline-block; white-space: nowrap; border-radius: 999px; border: 2px solid var(--chip-b); background: var(--chip-bg); color: var(--chip-t); font-family: var(--sans); font-weight: 600; line-height: 1.3; }
+.chip.ghost { background: transparent; }
+.chip.solid { background: var(--stroke); border-color: var(--stroke); color: #fff; }
+.th-layl .chip.solid { color: #15152A; }
+.cta { display: inline-flex; align-items: center; justify-content: center; gap: 0.4em; white-space: nowrap; background: var(--cta); color: var(--cta-t); font-family: var(--sans); font-weight: 700; border-radius: 999px; box-shadow: 0 22px 50px var(--cta-glow); }
+.cta.ghost { background: transparent; color: var(--accent); border: 2.5px solid var(--stroke); box-shadow: none; }
+.card { background: var(--card); border: 2px solid var(--card-b); box-shadow: var(--card-shadow); }
+.th-layl .card { backdrop-filter: blur(2px); }
+.rule { background: var(--hair); height: 2px; width: 100%; }
+
+.medal { color: var(--accent); flex: 0 0 auto; }
+.medal svg, .glyph-w svg, .art-w svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.th-layl .medal svg, .th-layl .glow svg { filter: drop-shadow(0 0 16px rgba(228, 195, 104, 0.42)) drop-shadow(0 0 54px rgba(228, 195, 104, 0.16)); }
+.th-nahar .medal svg, .th-nahar .glow svg { filter: drop-shadow(0 12px 26px rgba(158, 74, 48, 0.10)); }
+.medal .fill, .glyph .fill { fill: currentColor; stroke: none; }
+.medal .soft, .glyph .soft { opacity: 0.45; }
+.medal-svg.dim { color: var(--dim); }
+.medal-svg.gone { color: var(--dim); }
+.th-layl .medal-svg.gone { color: #4A4A70; }
+
+.wm { display: inline-flex; flex-direction: column; align-items: stretch; flex: 0 0 auto; }
+.wm .w { font-family: var(--serif); font-weight: 700; line-height: 1; color: var(--word); white-space: nowrap; text-align: center; }
+.wm .l { position: relative; }
+.wm .l i { position: absolute; left: 0; right: 0; border-radius: 4px; background: var(--line); }
+.wm .l b { position: absolute; border-radius: 50%; background: var(--line); }
+
+.thread { position: relative; flex: 0 0 auto; }
+.thread .tr { position: absolute; left: 0; right: 0; height: 2px; background: var(--track); border-radius: 2px; }
+.thread .go { position: absolute; right: 0; height: 4px; border-radius: 4px; background: var(--line); }
+.thread .d0 { position: absolute; right: 0; border-radius: 50%; background: var(--line); }
+.thread .hd { position: absolute; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 7px var(--halo); }
+
+.sticker { display: flex; align-items: center; justify-content: center; text-align: center; border: 3px dashed var(--stroke); border-radius: 36px; color: var(--muted); font-family: var(--sans); font-weight: 500; background: var(--sticker); }
+.opt { display: flex; align-items: center; justify-content: center; border-radius: 999px; border: 2.5px solid var(--stroke); color: var(--text); font-family: var(--sans); font-weight: 600; }
+
+/* Phone mockup around a real app screen */
+.phone { position: relative; flex: 0 0 auto; }
+.phone .body { position: absolute; inset: 0; }
+.th-layl .phone .body { background: #15152A; border: 2px solid #34345A; box-shadow: 0 60px 140px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(200, 169, 81, 0.10); }
+.th-nahar .phone .body { background: #2A1F19; border: 2px solid #3B2D24; box-shadow: 0 50px 110px rgba(90, 60, 30, 0.28); }
+.phone .screen { position: absolute; overflow: hidden; }
+.phone .screen img { position: absolute; top: 0; left: 0; width: 100%; display: block; }
+
+.fade-b { position: absolute; left: 0; right: 0; bottom: 0; pointer-events: none; }
+
+/* Reels */
+.word-s { display: inline-block; white-space: pre; }
+.tap { position: absolute; border-radius: 50%; pointer-events: none; }
+.tap::before, .tap::after { content: ""; position: absolute; inset: 0; border-radius: 50%; }
+.tap::before { background: rgba(255, 255, 255, 0.24); transform: scale(0.42); box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.1); }
+.tap::after { border: 3px solid rgba(255, 255, 255, 0.6); transform: scale(0.95); }
+.th-nahar .tap::before { background: rgba(42, 31, 25, 0.16); box-shadow: 0 0 0 6px rgba(42, 31, 25, 0.06); }
+.th-nahar .tap::after { border-color: rgba(42, 31, 25, 0.35); }
