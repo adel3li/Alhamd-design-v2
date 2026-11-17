@@ -107,7 +107,7 @@ Counter section (`:73-197`), top to bottom:
 1. **Dhikr chips** (`:76-90`): horizontally scrolling row of the seven `DHIKR_PRESETS`. Tapping sets `selectedDhikr`. It does not reset any counter; counts are not tracked per dhikr.
 2. **Audio card** (`:93-99`): `<TasbihAudioPlayer selectedDhikr onSelectDhikr={setSelectedDhikr} triggerHaptic />`.
 3. **Selected dhikr heading** (`:102-106`).
-4. **Tap button** (`:109-162`), `id="btn-tasbih-tap"`, `aria-label` "اضغط للتسبيح", 192 px (224 px from `sm`). Contains an SVG ring (`r=92` in a 200×200 viewBox), the session count in Arabic-Indic digits, and the caption "اضغط للذكر". The ring arc is drawn only when `sessionCount > 0`; its fill is `(sessionCount % 100 || 100) / 100`, so it is full at 100, 200, … and restarts at 101 (`:140-143`).
+4. **Tap button** (`:109-162`), `id="btn-tasbih-tap"`, `aria-label` "اضغط للتسبيح", 12 rem wide (192 px at the default font size; 14 rem from `sm`). Contains an SVG ring (`r=92` in a 200×200 viewBox), the session count in Arabic-Indic digits, and the caption "اضغط للذكر". The ring arc is drawn only when `sessionCount > 0`; its fill is `(sessionCount % 100 || 100) / 100`, so it is full at 100, 200, … and restarts at 101 (`:140-143`).
 5. **Counters row** (`:166-176`): "في هذه الجلسة" (session) and "إجمالي الذكر" (lifetime total from the store).
 6. **Virtue card** (`:179-194`): heading "فضل الذكر", then `todayDhikr.text` and `todayDhikr.virtue`. Always the first entry of `dailyDhikrs`.
 
@@ -286,11 +286,26 @@ Root (`:555-562`): rounded card on `--bg-raised`; the border turns gold (`rgba(2
 
 `RECITERS` (`:37-73`). The first entry is the default:
 
-@@RECITERS@@
+| `id` | `name` (chip label) | `styleLabel` | `everyAyahFolder` (primary host) | `islamicNetworkEdition` (fallback host) | Line |
+|---|---|---|---|---|---|
+| `alafasy` | مشاري راشد العفاسي | تلاوة ندية خاشعة | `Alafasy_128kbps` | `ar.alafasy` | `:39` |
+| `husary` | محمود خليل الحصري | ترتيل متأنٍّ وواضح | `Husary_128kbps` | `ar.husary` | `:46` |
+| `muaiqly` | ماهر المعيقلي | صوت هادئ مطمئن | `MaherAlMuaiqly128kbps` | `ar.mahermuaiqly` | `:53` |
+| `minshawi` | محمد صديق المنشاوي | خشوع وسكينة | `Minshawy_Murattal_128kbps` | `ar.minshawi` | `:60` |
+| `abdulbasit` | عبد الباسط عبد الصمد | ترتيل أصيل | `Abdul_Basit_Murattal_192kbps` | `ar.abdulbasitmurattal` | `:67` |
 
 `DHIKR_AUDIO_TRACKS` (`:75-148`). Tracks 0–6 map one-to-one, in order, to `DHIKR_PRESETS` in `TasbihModal`; track 7 has no chip:
 
-@@TRACKS@@
+| Index | `id` | `dhikrPreset` | `title` | `verseText` (shown in the verse box) | `surahRef` | `surahAyahCode` | `globalAyahNumber` | Line |
+|---|---|---|---|---|---|---|---|---|
+| 0 | `hamd` | الْحَمْدُ لِلَّهِ | الحمد والثناء على الله | ﴿ الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ ﴾ | سورة الفاتحة · آية ٢ | `001002` | 2 | `:77` |
+| 1 | `tasbih` | سُبْحَانَ اللَّهِ | التسبيح في المساء والصباح | ﴿ فَسُبْحَانَ اللَّهِ حِينَ تُمْسُونَ وَحِينَ تُصْبِحُونَ ﴾ | سورة الروم · آية ١٧ | `030017` | 3426 | `:86` |
+| 2 | `takbir` | اللَّهُ أَكْبَرُ | التكبير والتعظيم لله | ﴿ وَقُلِ الْحَمْدُ لِلَّهِ الَّذِي لَمْ يَتَّخِذْ وَلَدًا ... وَكَبِّرْهُ تَكْبِيرًا ﴾ | سورة الإسراء · آية ١١١ | `017111` | 2140 | `:95` |
+| 3 | `tahlil` | لا إِلَهَ إِلا اللَّهُ | التوحيد ودعوة ذي النون | ﴿ لَا إِلَٰهَ إِلَّا أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظَّالِمِينَ ﴾ | سورة الأنبياء · آية ٨٧ | `021087` | 2570 | `:104` |
+| 4 | `istighfar` | أَسْتَغْفِرُ اللَّهَ | الاستغفار والإنابة | ﴿ فَقُلْتُ اسْتَغْفِرُوا رَبَّكُمْ إِنَّهُ كَانَ غَفَّارًا ﴾ | سورة نوح · آية ١٠ | `071010` | 5429 | `:113` |
+| 5 | `hawqala` | لا حَوْلَ وَلا قُوَّةَ إِلا بِاللَّهِ | التوكل والتفويض لله | ﴿ مَا شَاءَ اللَّهُ لَا قُوَّةَ إِلَّا بِاللَّهِ ﴾ | سورة الكهف · آية ٣٩ | `018039` | 2179 | `:122` |
+| 6 | `salawat` | اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ | الصلاة والسلام على النبي ﷺ | ﴿ إِنَّ اللَّهَ وَمَلَائِكَتَهُ يُصَلُّونَ عَلَى النَّبِيِّ ۚ يَا أَيُّهَا الَّذِينَ آمَنُوا صَلُّوا عَلَيْهِ وَسَلِّمُوا تَسْلِيمًا ﴾ | سورة الأحزاب · آية ٥٦ | `033056` | 3589 | `:131` |
+| 7 | `kursi` | آية الكرسي | آية الكرسي — حفظ وسكينة | ﴿ اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ﴾ | سورة البقرة · آية ٢٥٥ | `002255` | 262 | `:140` |
 
 `surahAyahCode` is the three-digit surah followed by the three-digit ayah. `globalAyahNumber` is the ayah's 1-based position in the whole Quran. The two columns agree for all eight tracks (checked arithmetically against surah lengths).
 
@@ -568,21 +583,84 @@ There is no review-status, grading or reference-number field, unlike the blessin
 
 The array order is the order of the pills and of the drawer list.
 
-@@CATEGORIES@@
+| `id` | `title` | `subtitle` | `badge` (pill label) | Items | Total repetitions | Line |
+|---|---|---|---|---|---|---|
+| `morning` | أذكار الصباح | حرزٌ وسكينة من طلوع الفجر إلى الضحى | الصباح | 6 | 10 | `:29` |
+| `evening` | أذكار المساء | أنسٌ وحفظ من العصر حتى المساء | المساء | 5 | 9 | `:35` |
+| `prayer` | أذكار بعد الصلاة | ما يُقال دُبُر الصلوات المكتوبة | بعد الصلاة | 4 | 36 | `:41` |
+| `sleep` | أذكار النوم والاستيقاظ | ختام اليوم بالحمد وافتتاحه بالشكر | النوم واليقظة | 3 | 3 | `:47` |
+| `home` | أذكار المنزل والخروج | التوكل على الله عند الخروج والدخول | المنزل | 2 | 2 | `:53` |
+| `dua` | أذكار الكرب وجوامع الدعاء | مفاتيح الفرج والالتجاء إلى الله | جوامع الدعاء | 3 | 7 | `:59` |
 
 ### Adhkar
 
 23 items; 3 are marked `isQuran`; 16 have `count` 1, 6 have `count` 3, 1 has `count` 33; the targets sum to 67. Every item has a `virtue`. Ids are unique.
 
-@@ADHKAR@@
+| # | `id` | `categoryId` | `title` | First words of `text` | `isQuran` | `count` | `source` | Line |
+|---|---|---|---|---|---|---|---|---|
+| 1 | `morning-ayat-kursi` | `morning` | آية الكرسي | اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ … | yes | 1 | سورة البقرة : ٢٥٥ | `:69` |
+| 2 | `morning-sayyid-istighfar` | `morning` | سيد الاستغفار | اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ … | no | 1 | رواه البخاري | `:79` |
+| 3 | `morning-asbahna-mulk` | `morning` | أصبحنا وأصبح الملك لله | أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ وَالْحَمْدُ … | no | 1 | رواه مسلم | `:88` |
+| 4 | `morning-niamah-shukr` | `morning` | ذكر شكر النعمة صباحًا | اللَّهُمَّ مَا أَصْبَحَ بِي مِنْ … | no | 1 | رواه أبو داود والنسائي | `:97` |
+| 5 | `morning-bismillah-la-yadurr` | `morning` | حرز الحفظ من الضر | بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ … | no | 3 | رواه أبو داود والترمذي | `:106` |
+| 6 | `morning-radhitu-billah` | `morning` | الرضا بالله ربًا | رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، … | no | 3 | رواه أحمد وأبو داود | `:115` |
+| 7 | `evening-amsayna-mulk` | `evening` | أمسينا وأمسى الملك لله | أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ وَالْحَمْدُ … | no | 1 | رواه مسلم | `:126` |
+| 8 | `evening-niamah-shukr` | `evening` | ذكر شكر النعمة مساءً | اللَّهُمَّ مَا أَمْسَى بِي مِنْ … | no | 1 | رواه أبو داود | `:135` |
+| 9 | `evening-kalimat-tammah` | `evening` | التعوذ بكلمات الله التامات | أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ … | no | 3 | رواه مسلم | `:144` |
+| 10 | `evening-afiyah` | `evening` | سؤال العفو والعافية | اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ … | no | 1 | رواه أبو داود وابن ماجه | `:153` |
+| 11 | `evening-ya-hayyu-qayyum` | `evening` | الاستغاثة برحمة الله | يَا حَيُّ يَا قَيُّومُ بِرَحْمَتِكَ … | no | 3 | رواه الحاكم والنسائي | `:162` |
+| 12 | `prayer-istighfar-salam` | `prayer` | الاستغفار والسلام بعد التسليم | أَسْتَغْفِرُ اللَّهَ (ثَلَاثًا) — اللَّهُمَّ … | no | 1 | رواه مسلم | `:173` |
+| 13 | `prayer-aenni-ala-dhikrik` | `prayer` | الإعانة على الذكر والشكر | اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ، وَشُكْرِكَ، … | no | 1 | رواه أبو داود والنسائي | `:182` |
+| 14 | `prayer-tahlil` | `prayer` | التهليل والتوحيد دبر الصلاة | لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ … | no | 1 | متفق عليه | `:191` |
+| 15 | `prayer-tasbih-tahmid-takbir` | `prayer` | التسبيح والتحميد والتكبير | سُبْحَانَ اللَّهِ، وَالْحَمْدُ لِلَّهِ، وَاللَّهُ … | no | 33 | رواه مسلم | `:200` |
+| 16 | `sleep-bismika-rabbi` | `sleep` | عند وضع الجنب للنوم | بِاسْمِكَ رَبِّي وَضَعْتُ جَنْبِي، وَبِكَ … | no | 1 | متفق عليه | `:211` |
+| 17 | `sleep-alhamdulillah-kafani` | `sleep` | حمد الله على الكفاية والإيواء | الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا، … | no | 1 | رواه مسلم | `:220` |
+| 18 | `sleep-waking-up` | `sleep` | ذكر الاستيقاظ من النوم | الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ … | no | 1 | رواه البخاري | `:229` |
+| 19 | `home-leaving` | `home` | ذكر الخروج من المنزل | بِسْمِ اللَّهِ، تَوَكَّلْتُ عَلَى اللَّهِ، … | no | 1 | رواه أبو داود والترمذي | `:240` |
+| 20 | `home-entering` | `home` | ذكر دخول المنزل | بِسْمِ اللَّهِ وَلَجْنَا، وَبِسْمِ اللَّهِ … | no | 1 | رواه أبو داود | `:249` |
+| 21 | `dua-yunus` | `dua` | دعوة ذي النون عند الكرب | لَّا إِلَٰهَ إِلَّا أَنتَ سُبْحَانَكَ … | yes | 3 | سورة الأنبياء : ٨٧ | `:260` |
+| 22 | `dua-hamm-huzn` | `dua` | دعاء تفريج الهم والحزن | اللَّهُمَّ إِنِّي عَبْدُكَ، ابْنُ عَبْدِكَ، … | no | 1 | رواه أحمد | `:270` |
+| 23 | `dua-rabbana-atina` | `dua` | من أجمع الدعاء القرآني | رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً … | yes | 3 | سورة البقرة : ٢٠١ | `:279` |
 
 Virtue texts:
 
-@@VIRTUES@@
+| # | `id` | `virtue` (verbatim) |
+|---|---|---|
+| 1 | `morning-ayat-kursi` | من قالها حين يصبح أجير من الجن حتى يمسي، ومن قالها حين يمسي أجير من الجن حتى يصبح. |
+| 2 | `morning-sayyid-istighfar` | من قالها من النهار موقنًا بها فمات من يومه قبل أن يمسي فهو من أهل الجنة. |
+| 3 | `morning-asbahna-mulk` | إعلان التوحيد والحمد وسؤال الله خير اليوم والبركة فيه. |
+| 4 | `morning-niamah-shukr` | من قالها حين يصبح فقد أدّى شكر يومه. |
+| 5 | `morning-bismillah-la-yadurr` | من قالها ثلاث مرات لم تصبه فجأة بلاء ولم يضره شيء. |
+| 6 | `morning-radhitu-billah` | من قالها ثلاثًا حين يصبح وثلاثًا حين يمسي كان حقًا على الله أن يرضيه يوم القيامة. |
+| 7 | `evening-amsayna-mulk` | تفويض الأمر لله في ختام النهار وسؤاله خير الليلة. |
+| 8 | `evening-niamah-shukr` | من قالها حين يمسي فقد أدّى شكر ليلته. |
+| 9 | `evening-kalimat-tammah` | من قالها حين يمسي ثلاث مرات لم تضره حُمَة تلك الليلة. |
+| 10 | `evening-afiyah` | لم يكن رسول الله ﷺ يدع هؤلاء الدعوات حين يمسي وحين يصبح. |
+| 11 | `evening-ya-hayyu-qayyum` | من أوصى به النبي ﷺ فاطمة رضي الله عنها صباحًا ومساءً. |
+| 12 | `prayer-istighfar-salam` | أول ما كان يقوله النبي ﷺ إذا انصرف من صلاته. |
+| 13 | `prayer-aenni-ala-dhikrik` | وصية النبي ﷺ لمعاذ بن جبل ألا يدعها دبر كل صلاة. |
+| 14 | `prayer-tahlil` | إقرار بوحدانية الله وتفرّده بالعطاء والمنع. |
+| 15 | `prayer-tasbih-tahmid-takbir` | من سبّح الله دبر كل صلاة ثلاثًا وثلاثين وحمد ثلاثًا وثلاثين وكبّر ثلاثًا وثلاثين غُفرت خطاياه. |
+| 16 | `sleep-bismika-rabbi` | حفظٌ للنفس واستيداعها عند الله حين المنام. |
+| 17 | `sleep-alhamdulillah-kafani` | استشعار نعمة المأوى والكفاية قبل النوم. |
+| 18 | `sleep-waking-up` | افتتاح اليوم بحمد الله على نعمة الحياة وتجدّد الأنفاس. |
+| 19 | `home-leaving` | يُقال له حينئذ: هُديتَ وكُفيتَ ووُقيتَ، فيتنحى له الشيطان. |
+| 20 | `home-entering` | تحلّ البركة في البيت ويُحفظ أهله بذكر الله. |
+| 21 | `dua-yunus` | لم يدعُ بها رجل مسلم في شيء قط إلا استجاب الله له. |
+| 22 | `dua-hamm-huzn` | ما قالها أحد قط إلا أذهب الله همّه وحزنه وأبدله مكانه فرحًا. |
+| 23 | `dua-rabbana-atina` | أكثر دعاء النبي ﷺ، جامعٌ لخيري الدنيا والآخرة. |
 
 ### Daily tips
 
-@@TIPS@@
+| Index | `id` | `title` | `content` | `evidence` | `source` | Line |
+|---|---|---|---|---|---|---|
+| 0 | `tip-1` | مواطأة القلب للسان | أعظم الذكر أثرًا ما تواطأ عليه القلب واللسان؛ فتمهّل عند قراءة كل ذكر واستحضر معناه وكأنك تخاطب ربك به لأول مرة. | ﴿أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ﴾ | سورة الرعد : ٢٨ | `:300` |
+| 1 | `tip-2` | الذكر غِراس الجنة وحياة الروح | اجعل لك في مطلع يومك وختامه دقائق خاشعة لا يزاحمها شاغل؛ فالذكر للقلب مثل الماء للسمك، متى فارقه اضطرب. | «مَثَلُ الَّذِي يَذْكُرُ رَبَّهُ وَالَّذِي لَا يَذْكُرُ رَبَّهُ مَثَلُ الْحَيِّ وَالْمَيِّتِ» | رواه البخاري | `:307` |
+| 2 | `tip-3` | قليلٌ دائم خيرٌ من كثيرٍ منقطع | إذا ضاق وقتك فلا تترك وردك بالكلية؛ بل اقرأ ما تيسّر منه بتدبر وحضور قلب، فالمداومة تورث الأنس بالله. | «أَحَبُّ الْأَعْمَالِ إِلَى اللَّهِ أَدْوَمُهَا وَإِنْ قَلَّ» | متفق عليه | `:314` |
+| 3 | `tip-4` | ربط الذكر باستشعار النعم | حين تقول: «اللهم ما أصبح بي من نعمة فمنك وحدك»، استحضر في قلبك نعمةً بعينها من عافيةٍ أو سترٍ أو إيمان، ليجتمع لك الذكر والتدبر. | ﴿فَاذْكُرُونِي أَذْكُرْكُمْ وَاشْكُرُوا لِي وَلَا تَكْفُرُونِ﴾ | سورة البقرة : ١٥٢ | `:321` |
+| 4 | `tip-5` | الذكر حصنٌ من الهموم والغفلة | الأذكار اليومية ليست كلماتٍ تُردَّد فحسب، بل هي درعٌ يقي القلب من القلق ويُجدّد التوكل على الله في كل صباح ومساء. | «لَا يَزَالُ لِسَانُكَ رَطْبًا مِنْ ذِكْرِ اللَّهِ» | رواه الترمذي وابن ماجه | `:328` |
+| 5 | `tip-6` | التدبر مفتاح الخشوع | توقّف لثوانٍ بين الذكر والآخر وتأمّل أسماء الله الحسنى الواردة فيه (الحي القيوم، السميع العليم)؛ فمعرفة الله تملأ القلب سكينةً ويقينًا. | ﴿وَاذْكُر رَّبَّكَ فِي نَفْسِكَ تَضَرُّعًا وَخِيفَةً﴾ | سورة الأعراف : ٢٠٥ | `:335` |
+| 6 | `tip-7` | ختام الصلوات بالذكر المتأني | لا تستعجل الانصراف فور التسليم من الصلاة؛ فدقائق التسبيح والتحميد دُبُر الصلاة بالتدبر تزيد أثر صلاتك في سائر يومك. | ﴿فَإِذَا قَضَيْتُمُ الصَّلَاةَ فَاذْكُرُوا اللَّهَ قِيَامًا وَقُعُودًا وَعَلَىٰ جُنُوبِكُمْ﴾ | سورة النساء : ١٠٣ | `:342` |
 
 ### `getDailyHisnTip(date = new Date())`
 
@@ -664,7 +742,7 @@ No memos.
 - `FileReader.readAsText` (`:129-138`).
 - `navigator.share`, falling back to `navigator.clipboard.writeText` (`:148-156`).
 - `window.location.href` (`:146`).
-- No `Notification` API, service worker, `matchMedia` or `Intl` use here, and none anywhere in `src` for notifications.
+- This file does not use `Notification`, `matchMedia` or `Intl`. No file under `src` uses the `Notification` API or registers a service worker.
 - No network requests.
 
 ### UI structure and behaviour
@@ -743,7 +821,7 @@ Share flow (`:142-157`): builds `{ title: "تطبيق «الحمد» — نعم�
 
 **Modals** (`:763-787`): `AboutModal`, `ContentReviewModal`, `PrivacyPolicyModal`, and `PremiumPaywallScreen` with `onClose` and an `onUnlocked` that sets `devPremium` and closes. No `triggerReason` is passed, so the paywall uses its default `'free_limit_reached'` and shows the "free preview finished" notice *(runtime-checked)*.
 
-Overlay positioning *(runtime-checked)*: the time picker and all four modals are `fixed inset-0` elements rendered inside the Settings root, which keeps a transform after `animate-fade-in` finishes (computed `matrix(1, 0, 0, 1, 0, 0)`; `src/index.css:261-273`). They are therefore laid out against the Settings content box (about 2330 px tall at the default size) rather than the viewport, and they scroll with the page. Measured: the time-picker overlay was 390×2351 px; the About modal, opened with the link list in view, was centred about 340 px above the top of the viewport with only its bottom edge visible; the paywall preview, opened from the bottom of the page, was placed at the top of the page and was entirely off-screen. The bottom tab bar stays above all of them.
+Overlay positioning *(runtime-checked)*: the time picker and all four modals are `fixed inset-0` elements rendered inside the Settings root, which keeps a transform after `animate-fade-in` finishes (computed `matrix(1, 0, 0, 1, 0, 0)`; `src/index.css:261-273`). They are therefore laid out against the Settings content box (about 2330 px tall at the default size) rather than the viewport, and they scroll with the page. Measured: the time-picker overlay was 390×2351 px; the About modal, opened with the link list in view, was centred about 340 px above the top of the viewport with only its bottom edge visible; the paywall preview, opened from the developer tools at the bottom of the page, was placed at the top of the page, about 800 px above the visible area, so nothing appeared to happen. The bottom tab bar stays above all of them.
 
 ### Helpers, sub-components, constants
 
@@ -807,7 +885,7 @@ A modal that presents the premium "رحلتي" plan: three benefits, an annual a
 
 `JourneyPathScreen` imports it through a re-export shim, `src/components/journey/PremiumPaywallScreen.tsx`. A second shim, `src/components/journey/JourneyPaywall.tsx`, re-exports it under the alias `JourneyPaywall` and is imported by nothing.
 
-Because `App` shows the paywall instead of opening the journey tab for non-premium users, the journey screen's own mount (the one that passes the free-limit props) is not reachable through the tab bars without the developer flag.
+The journey screen's own mount (the only one that passes the free-limit props) appears unreachable in normal use: without the developer flag `App` shows its paywall instead of opening the journey tab, and with the flag the journey screen treats the user as premium and never calls `openPaywall` (every call is guarded by `!premiumStatus`, for example `src/components/journey/JourneyPathScreen.tsx:394` and `src/components/journey/JourneyPathScreen.tsx:575`).
 
 ### Exports
 
@@ -886,7 +964,17 @@ What the buttons do:
 
 Any user can therefore enable premium in two taps from the paywall (call-to-action, then the developer button).
 
-Sizing *(runtime-checked, default font size, mounted from `App`)*: the card and the overlay both clip overflow and neither scrolls. The content is 782 px tall without the free-limit notice. It fits exactly at 390×844. At 360×640 the card is 614 px tall and at 320×568 it is 542 px; in both, the call-to-action, restore link, dismiss link and closing line fall below the card's lower edge and cannot be reached. Only the close button at the top remains.
+Sizing *(runtime-checked, default font size)*: the card and the overlay both clip overflow (`:82`, `:88`) and neither scrolls.
+
+| Viewport | Variant | Content height | Card height | Result |
+|---|---|---|---|---|
+| 390×844 | no notice (from `App`) | 782 px | 782 px | Fits |
+| 360×640 | no notice | 782 px | 614 px | Call-to-action, restore link, dismiss link and closing line are cut off and unreachable |
+| 320×568 | no notice | 821 px | 542 px | Same; the plan cards are partly cut as well |
+| 390×844 | with free-limit notice | 871 px | 818 px | The last 53 px are cut off: the closing line and at least part of the restore / dismiss row |
+| 412×915 | with free-limit notice | 814 px | 814 px | Fits |
+
+When the bottom is cut off, the close button at the top is the only way out. All sizes are in rem, so a larger font-size setting needs more height.
 
 ### Helpers, sub-components, constants
 
