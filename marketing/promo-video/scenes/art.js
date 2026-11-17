@@ -53,13 +53,14 @@
     s += `<path d="${arch}" fill="${lit ? `url(#${id}sky)` : C.hole}"/>`;
     s += `<g clip-path="url(#${id}clip)">`;
     if (lit) {
-      s += `<circle cx="300" cy="514" r="72" fill="url(#${id}sun)" ${stroke(sunC, 6)}/>`;
+      s += `<g class="sun"><circle cx="300" cy="514" r="72" fill="url(#${id}sun)" ${stroke(sunC, 6)}/>`;
       [150, 120, 90, 60, 30].forEach((deg) => {
         const a = (deg * Math.PI) / 180;
         const x1 = 300 + 98 * Math.cos(a), y1 = 514 - 98 * Math.sin(a);
         const x2 = 300 + 142 * Math.cos(a), y2 = 514 - 142 * Math.sin(a);
-        s += `<path d="M${x1.toFixed(1)},${y1.toFixed(1)} L${x2.toFixed(1)},${y2.toFixed(1)}" ${stroke(sunC, 6)}/>`;
+        s += `<path class="ray" d="M${x1.toFixed(1)},${y1.toFixed(1)} L${x2.toFixed(1)},${y2.toFixed(1)}" ${stroke(sunC, 6)}/>`;
       });
+      s += `</g>`;
     } else if (state === 'dim') {
       s += `<circle cx="300" cy="514" r="72" ${stroke(C.dim, 5)}/>`;
     }
@@ -70,8 +71,8 @@
     s += `<path d="M84,624 L516,624" ${stroke(c, 6.5, d)}/>`;
     s += `<path d="M110,656 L490,656" ${stroke(c, 5, d + ' opacity="0.7"')}/>`;
     if (lit) {
-      s += `<path d="M202,268 q12,-12 24,0 q12,-12 24,0" ${stroke(c, 4.5)}/>`;
-      s += `<path d="M262,236 q9,-9 18,0 q9,-9 18,0" ${stroke(c, 4, 'opacity="0.8"')}/>`;
+      s += `<path class="bird" d="M202,268 q12,-12 24,0 q12,-12 24,0" ${stroke(c, 4.5)}/>`;
+      s += `<path class="bird" d="M262,236 q9,-9 18,0 q9,-9 18,0" ${stroke(c, 4, 'opacity="0.8"')}/>`;
     }
     return svg('0 0 600 700', s);
   }
@@ -88,8 +89,8 @@
       s += `<ellipse cx="300" cy="300" rx="139" ry="22" ${stroke(C.gold, 4.5, `opacity="${state === 'dissolve' ? 0.35 : 0.95}" ${d}`)}/>`;
     }
     if (lit && opts.ripple) {
-      s += `<ellipse cx="300" cy="300" rx="54" ry="8" ${stroke(C.goldSoft, 3.5, 'opacity="0.85"')}/>`;
-      s += `<ellipse cx="300" cy="300" rx="96" ry="15" ${stroke(C.gold, 3, 'opacity="0.45"')}/>`;
+      s += `<ellipse class="ripple" cx="300" cy="300" rx="54" ry="8" ${stroke(C.goldSoft, 3.5, 'opacity="0.85"')}/>`;
+      s += `<ellipse class="ripple" cx="300" cy="300" rx="96" ry="15" ${stroke(C.gold, 3, 'opacity="0.45"')}/>`;
     }
     if (state === 'gone') {
       // a dry ring where the water used to be
@@ -108,8 +109,8 @@
         });
       }
       if (opts.drop) {
-        s += `<path d="M300,24 C300,24 271,68 271,90 A29,29 0 0 0 329,90 C329,68 300,24 300,24 Z" fill="${C.gold}" fill-opacity="0.28" ${stroke(C.gold, 5.5)}/>`;
-        s += `<path d="M289,86 Q291,100 302,106" ${stroke('#FFF3CF', 3.5, 'opacity="0.6"')}/>`;
+        s += `<g class="drop"><path d="M300,24 C300,24 271,68 271,90 A29,29 0 0 0 329,90 C329,68 300,24 300,24 Z" fill="${C.gold}" fill-opacity="0.28" ${stroke(C.gold, 5.5)}/>`;
+        s += `<path d="M289,86 Q291,100 302,106" ${stroke('#FFF3CF', 3.5, 'opacity="0.6"')}/></g>`;
       }
     }
     return svg('0 0 600 700', s);
@@ -126,8 +127,9 @@
       [[152, 0.95], [200, 0.6], [248, 0.3]].forEach(([r, o]) => {
         const dx = r * Math.cos((35 * Math.PI) / 180);
         const dy = r * Math.sin((35 * Math.PI) / 180);
-        s += `<path d="M${(300 + dx).toFixed(1)},${(330 - dy).toFixed(1)} A${r},${r} 0 0 1 ${(300 + dx).toFixed(1)},${(330 + dy).toFixed(1)}" ${stroke(C.gold, 6.5, `opacity="${o}"`)}/>`;
-        s += `<path d="M${(300 - dx).toFixed(1)},${(330 - dy).toFixed(1)} A${r},${r} 0 0 0 ${(300 - dx).toFixed(1)},${(330 + dy).toFixed(1)}" ${stroke(C.gold, 6.5, `opacity="${o}"`)}/>`;
+        const k = [152, 200, 248].indexOf(r);
+        s += `<path class="arc" data-k="${k}" d="M${(300 + dx).toFixed(1)},${(330 - dy).toFixed(1)} A${r},${r} 0 0 1 ${(300 + dx).toFixed(1)},${(330 + dy).toFixed(1)}" ${stroke(C.gold, 6.5, `opacity="${o}"`)}/>`;
+        s += `<path class="arc" data-k="${k}" d="M${(300 - dx).toFixed(1)},${(330 - dy).toFixed(1)} A${r},${r} 0 0 0 ${(300 - dx).toFixed(1)},${(330 + dy).toFixed(1)}" ${stroke(C.gold, 6.5, `opacity="${o}"`)}/>`;
       });
     }
     s += `<rect x="190" y="110" width="220" height="440" rx="42" ${stroke(c, 6.5, d)} fill="${lit ? 'rgba(228,195,104,0.06)' : 'none'}"/>`;
@@ -206,7 +208,7 @@
           const px = x + nx * 13 * side, py = y + ny * 13 * side;
           const ang = (Math.atan2(dx, -dy) * 180) / Math.PI;
           const op = (0.35 + 0.65 * (k / (total - 1))).toFixed(2);
-          s += `<g transform="translate(${px.toFixed(1)},${py.toFixed(1)}) rotate(${ang.toFixed(1)})" opacity="${op}">
+          s += `<g class="foot" data-k="${k}" transform="translate(${px.toFixed(1)},${py.toFixed(1)}) rotate(${ang.toFixed(1)})" opacity="${op}">
             <ellipse cx="0" cy="-8" rx="7.5" ry="12" fill="${C.gold}"/>
             <ellipse cx="0" cy="12.5" rx="5.5" ry="6.5" fill="${C.gold}"/>
           </g>`;
@@ -277,7 +279,7 @@
       const op = omin + r() * (omax - omin);
       s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rad.toFixed(1)}" fill="${color}" opacity="${op.toFixed(2)}"/>`;
     }
-    return `<svg class="abs" style="left:0;top:0;width:1080px;height:${stageH}px;overflow:visible;filter:drop-shadow(0 0 6px rgba(228,195,104,0.55))" viewBox="0 0 1080 ${stageH}">${s}</svg>`;
+    return `<svg class="abs particles" style="left:0;top:0;width:1080px;height:${stageH}px;overflow:visible;filter:drop-shadow(0 0 6px rgba(228,195,104,0.55))" viewBox="0 0 1080 ${stageH}">${s}</svg>`;
   }
 
   window.ART = { C, windowArt, glassArt, callArt, stepsArt, breathArt, shieldArt, lockArt, particles, rng, bez, bezD, stroke };

@@ -16,12 +16,14 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from timeline import FADE, VOICE_LEAD, compute_slots  # noqa: E402
+
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "out"
 FRAMES = OUT / "frames"
 TTS = OUT / "tts"
 FPS = 30
-FADE = 0.3
 
 SILENT = "--silent" in sys.argv
 
@@ -60,39 +62,19 @@ def main() -> None:
     sb = json.loads((ROOT / "storyboard.json").read_text(encoding="utf-8"))
     order = [f for act in sb["acts"] for f in act["frames"]]
 
-    hold = {"F02": 0.5, "F07": 0.3, "F08": 0.4, "F09": 0.3, "F13": 1.1, "F14": 0.3, "F24": 1.8}
-    default_len = {"F10": 1.6}
-    slots = []
-    i = 0
-    while i < len(order):
-        fid = order[i]
-        fr = sb["frames"][fid]
-        vo = fr["vo"].strip()
-        span = int(fr.get("span", 1))
-        clip, dur = None, 0.0
-        if vo and not SILENT:
-            clip = tts(fid, vo)
-            dur = probe_duration(clip)
-        group = order[i:i + span]
-        if clip:
-            total_len = max(1.4 * span, dur + 0.3 + hold.get(fid, 0.0))
-        else:
-            total_len = sum(default_len.get(g, 2.0 * (1.0 if not SILENT else 1.1) + hold.get(g, 0.0)) for g in group)
-        for k, g in enumerate(group):
-            slots.append({
-                "id": g,
-                "clip": str(clip) if (clip and k == 0) else None,
-                "vo_dur": round(dur, 2) if k == 0 else 0.0,
-                "len": round(total_len / len(group), 2),
-            })
-        i += span
-
-    # timeline: slot i is fully visible from start_i + FADE (cross-fade into it starts at start_i)
-    t = 0.0
+    clips, durations = {}, {}
+    if not SILENT:
+        for fid in order:
+            vo = sb["frames"][fid]["vo"].strip()
+            if vo:
+                clips[fid] = tts(fid, vo)
+                durations[fid] = probe_duration(clips[fid])
+    slots = compute_slots(sb, durations)
     for s in slots:
-        s["start"] = round(t, 3)
-        t += s["len"]
-    total = t + FADE
+        s["clip"] = str(clips[s["line"]]) if s["line"] else None
+        s["vo_dur"] = round(durations.get(s["line"], 0.0), 2) if s["line"] else 0.0
+    # slot i is fully visible from start_i + FADE (the cross-fade into it starts at start_i)
+    total = slots[-1]["start"] + slots[-1]["len"] + FADE
 
     cmd = ["ffmpeg", "-y", "-v", "error"]
     for s in slots:
@@ -122,7 +104,7 @@ def main() -> None:
         amix_in = []
         for k, s in enumerate(clips):
             idx = n + k
-            delay = int((s["start"] + FADE + 0.1) * 1000)
+            delay = int((s["start"] + FADE + VOICE_LEAD) * 1000)
             parts.append(f"[{idx}:a]aresample=44100,adelay={delay}|{delay}[a{k}]")
             amix_in.append(f"[a{k}]")
         parts.append(

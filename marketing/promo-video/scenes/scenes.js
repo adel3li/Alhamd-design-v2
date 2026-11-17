@@ -40,7 +40,7 @@
   const ART = (svgStr, { x, y, w, h, cls = 'glow', extra = '' }) =>
     `<div class="art ${cls}" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px;${extra}">${svgStr}</div>`;
   const pool = (cx, cy, w = 520, h = 90, a = 0.22) =>
-    `<div class="abs" style="left:${cx - w / 2}px;top:${cy - h / 2}px;width:${w}px;height:${h}px;background:radial-gradient(ellipse at center, rgba(228,195,104,${a}), transparent 70%)"></div>`;
+    `<div class="abs pool" style="left:${cx - w / 2}px;top:${cy - h / 2}px;width:${w}px;height:${h}px;background:radial-gradient(ellipse at center, rgba(228,195,104,${a}), transparent 70%)"></div>`;
   const FADE = (h = 460, color = '#0B0B1A') =>
     `<div class="fade-bottom" style="height:${h}px;background:linear-gradient(to bottom, rgba(11,11,26,0), ${color} 82%)"></div>`;
   // inline-block + padding so the gradient also covers harakat that sit above/below the line box
@@ -64,9 +64,9 @@
   function stepsThread({ y, active = 1 }) {
     const labels = ['التهيئة', 'تخيّل الغياب', 'التعمّق', 'العودة', 'الحمد'];
     const x2 = 930, x1 = 150, gap = (x2 - x1) / 4;
-    let s = `<div class="abs" style="left:${x1}px;top:${y + 6}px;width:${x2 - x1}px;height:2px;background:#2E2E4A"></div>`;
+    let s = `<div class="abs st-rail" style="left:${x1}px;top:${y + 6}px;width:${x2 - x1}px;height:2px;background:#2E2E4A"></div>`;
     const doneW = gap * (active - 1);
-    if (doneW > 0) s += `<div class="abs" style="left:${x2 - doneW}px;top:${y + 5}px;width:${doneW}px;height:4px;border-radius:4px;background:var(--gold-deep)"></div>`;
+    if (doneW > 0) s += `<div class="abs st-done" style="left:${x2 - doneW}px;top:${y + 5}px;width:${doneW}px;height:4px;border-radius:4px;background:var(--gold-deep);transform-origin:right center"></div>`;
     labels.forEach((t, i) => {
       const x = x2 - gap * i;
       const state = i + 1 < active ? 'done' : i + 1 === active ? 'on' : 'todo';
@@ -74,9 +74,9 @@
       const bgc = state === 'todo' ? '#15152A' : state === 'on' ? 'var(--gold)' : 'var(--gold-deep)';
       const border = state === 'todo' ? '2px solid #3B3B5E' : 'none';
       const glow = state === 'on' ? 'box-shadow:0 0 0 9px rgba(200,169,81,0.18),0 0 26px rgba(228,195,104,0.6);' : '';
-      s += `<div class="abs" style="left:${x - size / 2}px;top:${y + 7 - size / 2}px;width:${size}px;height:${size}px;border-radius:50%;background:${bgc};border:${border};${glow}"></div>`;
+      s += `<div class="abs st-dot" data-i="${i}" data-state="${state}" style="left:${x - size / 2}px;top:${y + 7 - size / 2}px;width:${size}px;height:${size}px;border-radius:50%;background:${bgc};border:${border};${glow}"></div>`;
       const color = state === 'on' ? 'var(--gold)' : state === 'done' ? 'var(--body)' : '#6E6E92';
-      s += `<div class="abs" style="left:${x - 110}px;width:220px;top:${y + 34}px;text-align:center;font-family:var(--sans);font-weight:${state === 'on' ? 700 : 500};font-size:28px;color:${color}">${t}</div>`;
+      s += `<div class="abs st-label" data-i="${i}" style="left:${x - 110}px;width:220px;top:${y + 34}px;text-align:center;font-family:var(--sans);font-weight:${state === 'on' ? 700 : 500};font-size:28px;color:${color}">${t}</div>`;
     });
     return s;
   }
@@ -98,7 +98,7 @@
     const pad = Math.round(width * 0.026);
     const screenW = width - pad * 2 - 4;
     const k = screenW / 390;
-    return `<div class="phone" style="left:${cx - width / 2}px;top:${top}px;width:${width}px;padding:${pad}px;border-radius:${Math.round(width * 0.155)}px;transform:rotate(${rotate}deg);z-index:${z};${extra}">
+    return `<div class="phone" data-src="${src}" style="left:${cx - width / 2}px;top:${top}px;width:${width}px;padding:${pad}px;border-radius:${Math.round(width * 0.155)}px;transform:rotate(${rotate}deg);z-index:${z};${extra}">
       <div class="screen" style="border-radius:${Math.round(width * 0.13)}px"><img src="app/${src}.png" style="transform:translateY(${(-scroll * k).toFixed(1)}px)" alt=""></div>
     </div>`;
   }
@@ -118,8 +118,8 @@
       .map((c, i) => {
         const st = Array.isArray(state) ? state[i] : state;
         const o = fades[i];
-        return `<div class="tile ${tile === 'off' ? 'off' : ''}" style="left:${c.x}px;top:${c.y}px;width:${T}px;height:${T}px;opacity:${o}"></div>` +
-          ART(c.art(st), { x: c.x + (T - c.w) / 2, y: c.y + (T - c.h) / 2 + 4, w: c.w, h: c.h, cls: st === 'lit' ? 'glow-soft' : '', extra: `opacity:${o}` });
+        return `<div class="tile ${tile === 'off' ? 'off' : ''}" data-i="${i}" style="left:${c.x}px;top:${c.y}px;width:${T}px;height:${T}px;opacity:${o}"></div>` +
+          ART(c.art(st), { x: c.x + (T - c.w) / 2, y: c.y + (T - c.h) / 2 + 4, w: c.w, h: c.h, cls: `tile-art ${st === 'lit' ? 'glow-soft' : ''}`, extra: `opacity:${o}` }).replace('<div class="art', `<div data-i="${i}" class="art`);
       })
       .join('');
   }
@@ -129,7 +129,7 @@
   function beads({ upto = 1, lit = [1, 1, 1, 1], r = 122, glowAll = true }) {
     const [p0, p1, p2, p3] = BEAD_CURVE;
     const d = `M${p0} C${p1} ${p2} ${p3}`;
-    let s = `<svg class="abs" style="left:0;top:0;width:1080px;height:1920px;overflow:visible" viewBox="0 0 1080 1920">
+    let s = `<svg class="abs bead-thread" style="left:0;top:0;width:1080px;height:1920px;overflow:visible" viewBox="0 0 1080 1920">
       <path d="${d}" fill="none" stroke="rgba(228,195,104,0.18)" stroke-width="16" stroke-linecap="round" pathLength="1" stroke-dasharray="${upto} 1" style="filter:blur(6px)"/>
       <path d="${d}" fill="none" stroke="#E4C368" stroke-width="5" stroke-linecap="round" pathLength="1" stroke-dasharray="${upto} 1"/>
     </svg>`;
@@ -142,9 +142,9 @@
       if (on === 0) return;
       const st = on === 1 ? 'lit' : 'dim';
       const ring = on === 1 ? `border:4px solid #E4C368;box-shadow:0 0 0 10px rgba(200,169,81,0.10), 0 0 60px rgba(228,195,104,${glowAll ? 0.35 : 0.2}), inset 0 0 40px rgba(228,195,104,0.10)` : 'border:3px solid #3B3B5E';
-      s += `<div class="abs" style="left:${x - r}px;top:${y - r}px;width:${r * 2}px;height:${r * 2}px;border-radius:50%;background:radial-gradient(circle at 50% 40%, #1C1C38, #111126 70%);${ring}"></div>`;
+      s += `<div class="abs bead" data-i="${i}" data-on="${on}" style="left:${x - r}px;top:${y - r}px;width:${r * 2}px;height:${r * 2}px;border-radius:50%;background:radial-gradient(circle at 50% 40%, #1C1C38, #111126 70%);${ring}"></div>`;
       const aw = i === 3 ? 150 : 162, ah = i === 3 ? 190 : 189;
-      s += ART(arts[i](st), { x: x - aw / 2, y: y - ah / 2 + 2, w: aw, h: ah, cls: on === 1 ? 'glow-soft' : '' });
+      s += ART(arts[i](st), { x: x - aw / 2, y: y - ah / 2 + 2, w: aw, h: ah, cls: `bead-art ${on === 1 ? 'glow-soft' : ''}` }).replace('<div class="art', `<div data-i="${i}" class="art`);
     });
     return s;
   }
@@ -168,16 +168,16 @@
       if (best && bd < 190) lines += `<line x1="${p[0].toFixed(1)}" y1="${p[1].toFixed(1)}" x2="${best[0].toFixed(1)}" y2="${best[1].toFixed(1)}" stroke="#C8A951" stroke-opacity="0.16" stroke-width="2"/>`;
     });
     const dots = pts.map((p) => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${p[2].toFixed(1)}" fill="#E4C368" opacity="${p[3].toFixed(2)}"/>`).join('');
-    return `<svg class="abs" style="left:0;top:0;width:1080px;height:${H}px;filter:drop-shadow(0 0 6px rgba(228,195,104,0.5))" viewBox="0 0 1080 ${H}">${lines}${dots}</svg>`;
+    return `<svg class="abs constellation" style="left:0;top:0;width:1080px;height:${H}px;filter:drop-shadow(0 0 6px rgba(228,195,104,0.5))" viewBox="0 0 1080 ${H}">${lines}${dots}</svg>`;
   }
 
   const rings = (cx, cy, list) =>
-    `<svg class="abs" style="left:0;top:0;width:1080px;height:1920px" viewBox="0 0 1080 1920">${list
+    `<svg class="abs rings" style="left:0;top:0;width:1080px;height:1920px" viewBox="0 0 1080 1920">${list
       .map(([r, o, w = 2]) => `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#E4C368" stroke-opacity="${o}" stroke-width="${w}"/>`)
       .join('')}</svg>`;
 
   const beams = (top, h = 300) =>
-    `<div class="abs" style="left:0;top:${top}px;width:1080px;height:${h}px;background:linear-gradient(180deg, rgba(228,195,104,0.16), rgba(228,195,104,0) 88%);clip-path:polygon(35% 0, 65% 0, 80% 100%, 20% 100%)"></div>`;
+    `<div class="abs beams" style="left:0;top:${top}px;width:1080px;height:${h}px;background:linear-gradient(180deg, rgba(228,195,104,0.16), rgba(228,195,104,0) 88%);clip-path:polygon(35% 0, 65% 0, 80% 100%, 20% 100%)"></div>`;
 
   /* ---------------- frames ---------------- */
   const F = {};
@@ -235,12 +235,11 @@
   // ===== Act 3 — The insight =====
   F.F08 = () =>
     bg({ cone: 0.05 }) +
-    `<div class="abs" style="right:200px;top:746px;width:3px;height:560px;background:var(--gold-deep);border-radius:3px"></div>
-     <div class="abs" style="right:194px;top:746px;width:15px;height:15px;border-radius:50%;background:var(--gold-deep)"></div>
-     <div class="abs" style="right:250px;left:90px;top:710px;text-align:right;font-family:var(--serif);font-weight:700;font-size:96px;line-height:1.6;color:var(--text)">
-       فالنعمةُ إذا دامت<br>صارت عادة…
-       <div style="height:40px"></div>
-       <span style="color:var(--muted)">والعادةُ لا تُشكر.</span>
+    `<div class="abs vthread" style="right:200px;top:746px;width:3px;height:560px;background:var(--gold-deep);border-radius:3px;transform-origin:top center"></div>
+     <div class="abs vdot" style="right:194px;top:746px;width:15px;height:15px;border-radius:50%;background:var(--gold-deep)"></div>
+     <div class="abs story" style="right:250px;left:90px;top:710px;text-align:right;font-family:var(--serif);font-weight:700;font-size:96px;line-height:1.6;color:var(--text)">
+       <span class="ln" style="display:block">فالنعمةُ إذا دامت</span><span class="ln" style="display:block">صارت عادة…</span>
+       <span class="ln" style="display:block;margin-top:40px;color:var(--muted)">والعادةُ لا تُشكر.</span>
      </div>`;
 
   // ===== Act 4 — Absence =====
@@ -251,7 +250,7 @@
 
   F.F10 = () =>
     bg({ tone: 'black', pat: 0.012, cone: 0, vignette: true }) +
-    `<div class="abs" style="left:530px;top:950px;width:20px;height:20px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 12px rgba(200,169,81,0.10),0 0 46px rgba(228,195,104,0.55)"></div>`;
+    `<div class="abs cdot" style="left:530px;top:950px;width:20px;height:20px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 12px rgba(200,169,81,0.10),0 0 46px rgba(228,195,104,0.55)"></div>`;
 
   // ===== Act 5 — Return, and Alhamd =====
   F.F11 = () =>
@@ -313,7 +312,7 @@
     H('سجلّ الحمد', 270, 100) +
     SUB('دوِّن ما وجدته في قلبك… يبقى لك وحدك', 430, 40, 'color:var(--muted)') +
     phone({ src: 'tab_journal', top: 580, width: 620 }) +
-    `<div class="abs" style="left:96px;top:1030px;display:flex;align-items:center;gap:14px;padding:16px 26px 18px;border-radius:999px;background:rgba(17,17,38,0.92);border:2px solid rgba(200,169,81,0.55);box-shadow:0 20px 50px rgba(0,0,0,0.5);transform:rotate(-4deg);z-index:5">
+    `<div class="abs pop" style="left:96px;top:1030px;display:flex;align-items:center;gap:14px;padding:16px 26px 18px;border-radius:999px;background:rgba(17,17,38,0.92);border:2px solid rgba(200,169,81,0.55);box-shadow:0 20px 50px rgba(0,0,0,0.5);transform:rotate(-4deg);z-index:5">
        <div style="width:34px;height:38px">${lockArt()}</div>
        <span style="font-family:var(--sans);font-weight:600;font-size:32px;color:var(--gold)">على جهازك فقط</span>
      </div>` +
@@ -332,7 +331,7 @@
     bg({ cone: 0.07, warm: 0.05, warmAt: '50% 60%' }) +
     H('وشارِكها…<br><span class="g">بصورةٍ جاهزة</span>', 220, 88) +
     phone({ src: 'share_modal_story', top: 590, width: 620 }) +
-    `<div class="abs" style="left:610px;top:1040px;display:flex;align-items:center;gap:12px;padding:16px 28px 18px;border-radius:999px;background:var(--violet);box-shadow:0 20px 50px rgba(108,99,255,0.45);transform:rotate(4deg);z-index:6">
+    `<div class="abs pop" style="left:610px;top:1040px;display:flex;align-items:center;gap:12px;padding:16px 28px 18px;border-radius:999px;background:var(--violet);box-shadow:0 20px 50px rgba(108,99,255,0.45);transform:rotate(4deg);z-index:6">
        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98"/><path d="m15.41 6.51-6.82 3.98"/></svg>
        <span style="font-family:var(--sans);font-weight:700;font-size:32px;color:#fff">للقصص والمنشورات</span>
      </div>` +
@@ -342,7 +341,7 @@
   F.F22 = () =>
     bg({ cone: 0.06 }) +
     ART(shieldArt(), { x: 480, y: 330, w: 120, h: 136, cls: 'glow-soft' }) +
-    H('<span class="g">بلا حساب.<br>بلا إعلانات.<br>بلا سلاسل ولا ضغط.</span>', 520, 100, 'line-height:1.62') +
+    H('<span class="g"><span class="ln" style="display:block">بلا حساب.</span><span class="ln" style="display:block">بلا إعلانات.</span><span class="ln" style="display:block">بلا سلاسل ولا ضغط.</span></span>', 520, 100, 'line-height:1.62') +
     threadBar({ y: 1060, x1: 420, x2: 660, pct: 1 }) +
     SUB('وما تكتبه في سجلّك… لا يغادر جهازك.', 1120, 48, 'color:var(--text)');
 
@@ -358,7 +357,7 @@
     wordmark({ size: 220, top: 530 }) +
     SUB('تطبيقٌ هادئ لتأمّل نِعَم الله', 940, 52, 'font-family:var(--serif);color:var(--body)') +
     `<div class="btn-cta" style="top:1060px;width:700px;height:130px;font-size:52px">ابدأ بنعمة اليوم</div>` +
-    `<div class="abs ltr" style="left:0;right:0;top:1236px;text-align:center;font-family:var(--sans);font-weight:600;font-size:58px;letter-spacing:1px;color:var(--text)">alhamd.app</div>` +
+    `<div class="abs ltr url" style="left:0;right:0;top:1236px;text-align:center;font-family:var(--sans);font-weight:600;font-size:58px;letter-spacing:1px;color:var(--text)">alhamd.app</div>` +
     SUB('مجّانًا · بالعربية الفصحى · بلا حساب', 1330, 34, 'color:var(--muted)') +
     CHIP('قريبًا على Google Play', 1410, 'muted', 'font-size:28px');
 
@@ -429,6 +428,10 @@
     FADE(330);
 
   /* ---------------- render ---------------- */
+  // The motion engine (motion.html) builds every scene itself from these.
+  window.SCENES = F;
+  window.SCENE_KIT = { bg, H, SUB, CAP, CHIP, ART, blessingGrid, beads, BEAD_CURVE, particles, phone, wordmark, threadBar };
+  if (window.MOTION_MODE) return;
   const build = F[fid];
   if (!build) {
     stage.innerHTML = `<div style="padding:80px;font-size:40px">Unknown frame ${fid}</div>`;
