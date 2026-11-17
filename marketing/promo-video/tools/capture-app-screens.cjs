@@ -2,7 +2,8 @@
  * Captures the real app screens used inside the phone mockups (3× scale, 390×844 viewport).
  *
  *   bun run dev                                   # in the repo root, serves the app on :3000
- *   node marketing/promo-video/tools/capture-app-screens.cjs
+ *   node marketing/promo-video/tools/capture-app-screens.cjs                 # «ليل» → scenes/app/
+ *   node marketing/promo-video/tools/capture-app-screens.cjs --theme light   # «نهار» → scenes/app-light/
  *
  * The clock is fixed to 13 Dec 2026 (4 Rajab 1448), the day the app shows «نعمة الماء»,
  * so the story in the film and the app screens talk about the same blessing.
@@ -10,7 +11,9 @@
 const { chromium } = require('playwright');
 const path = require('node:path');
 
-const OUT = path.resolve(__dirname, '..', 'scenes', 'app');
+const LIGHT = process.argv.includes('--theme') && process.argv[process.argv.indexOf('--theme') + 1] === 'light';
+const OUT = path.resolve(__dirname, '..', 'scenes', LIGHT ? 'app-light' : 'app');
+require('node:fs').mkdirSync(OUT, { recursive: true });
 const DAY = '2026-12-13T09:30:00';
 const JOURNAL = [
   { id: 'e1', date: '2026-12-13', displayDate: 'الأحد ٤ رجب', blessingId: 'blessing_015', shortTitle: 'الماء', categoryLabel: 'نعم الحياة والنفس', text: 'شربتُ اليوم كوب ماءٍ بارد بعد عطش، فتذكّرتُ أن هذه الشربة وحدها نعمةٌ لا أملك منها شيئًا.', offsetDays: 0 },
@@ -23,16 +26,16 @@ const JOURNAL = [
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, locale: 'ar' });
   const page = await ctx.newPage();
   await page.clock.install({ time: new Date(DAY) });
-  await page.addInitScript(([journal, day]) => {
+  await page.addInitScript(([journal, day, theme]) => {
     localStorage.setItem('alhamd_onboarded', 'true');
     localStorage.setItem('alhamd_welcome_seen', 'true');
     localStorage.setItem('alhamd:tourComplete', 'true');
     localStorage.setItem('alhamd:analytics_consent', 'false');
-    localStorage.setItem('alhamd_theme_v2', 'dark');
+    localStorage.setItem('alhamd_theme_v2', theme);
     localStorage.setItem('alhamd:dev_premium', 'true');
     const base = new Date(day).getTime();
     localStorage.setItem('alhamd_journal', JSON.stringify(journal.map(({ offsetDays, ...e }) => ({ ...e, createdAt: base - offsetDays * 86400000 }))));
-  }, [JOURNAL, DAY]);
+  }, [JOURNAL, DAY, LIGHT ? 'light' : 'dark']);
 
   // Fake time drives the app's timers; real waits let CSS transitions finish before each shot.
   const settle = async (ms = 1500) => { await page.clock.runFor(ms); await page.waitForTimeout(700); };

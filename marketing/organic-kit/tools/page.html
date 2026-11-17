@@ -1,0 +1,402 @@
+<title>خطة محتوى الحمد</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a field manual for twelve weeks — sticky section bar, the plan, then the calendar as the working tool, then the library.
+   Colour: the app's own two themes — «نهار» (cream, ink, terracotta) in light, «ليل» (night, gold) in dark. */
+:root {
+  --bg: #F4EDE3; --surface: #FBF8F3; --sunk: #EFE6D9; --ink: #2A1F19; --body: #4A3B32; --muted: #75645A; --line: #DCCFBE;
+  --accent: #B9573B; --accent-ink: #9E4A30; --on-accent: #FFFFFF; --pre: #6E7F5C; --live: #B9573B; --warn: #A0522D; --shadow: 0 10px 30px rgba(90, 60, 30, 0.08);
+  --serif: 'Amiri', 'Noto Naskh Arabic', serif; --sans: 'IBM Plex Sans Arabic', 'Noto Sans Arabic', system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0C0C1C; --surface: #14142A; --sunk: #101024; --ink: #EDEDF5; --body: #C7C4D8; --muted: #9E9EBE; --line: #2A2A48;
+  --accent: #E4C368; --accent-ink: #E4C368; --on-accent: #15152A; --pre: #9BB58A; --live: #E4C368; --warn: #E8A06A; --shadow: 0 12px 34px rgba(0, 0, 0, 0.4); color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0C0C1C; --surface: #14142A; --sunk: #101024; --ink: #EDEDF5; --body: #C7C4D8; --muted: #9E9EBE; --line: #2A2A48;
+  --accent: #E4C368; --accent-ink: #E4C368; --on-accent: #15152A; --pre: #9BB58A; --live: #E4C368; --warn: #E8A06A; --shadow: 0 12px 34px rgba(0, 0, 0, 0.4); color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--body); font-family: var(--sans); font-size: 15px; line-height: 1.75; margin: 0; direction: rtl; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--surface); }
+.wrap { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--serif); color: var(--ink); line-height: 1.35; text-wrap: balance; margin: 0; font-weight: 700; }
+h1 { font-size: clamp(30px, 5vw, 46px); }
+h2 { font-size: clamp(25px, 3.4vw, 34px); }
+h3 { font-size: 21px; }
+p { margin: 0; }
+a { color: var(--accent-ink); }
+button { font: inherit; cursor: pointer; }
+button:focus-visible, a:focus-visible, video:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.num { font-variant-numeric: tabular-nums; }
+.ltr { direction: ltr; unicode-bidi: isolate; }
+.muted { color: var(--muted); }
+
+/* header */
+header.top { padding-block: 34px 18px; }
+.mark { font-family: var(--serif); font-weight: 700; font-size: 30px; color: var(--accent-ink); display: inline-flex; flex-direction: column; line-height: 1; }
+.mark i { display: block; height: 3px; margin-top: 6px; background: var(--accent); border-radius: 3px; position: relative; }
+.mark i::after { content: ""; position: absolute; right: -3px; top: -3px; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+.lede { max-width: 66ch; margin-top: 14px; font-size: 17px; color: var(--body); }
+.stats { display: flex; flex-wrap: wrap; gap: 10px 26px; margin-top: 20px; }
+.stats div { display: flex; flex-direction: column; }
+.stats b { font-family: var(--serif); font-size: 30px; color: var(--ink); line-height: 1.2; }
+.stats span { font-size: 13px; color: var(--muted); }
+
+/* section bar */
+nav.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--surface); border-block: 1px solid var(--line); }
+nav.bar .wrap { display: flex; align-items: center; gap: 6px; padding-block: 8px; overflow-x: auto; scrollbar-width: none; }
+nav.bar a { white-space: nowrap; text-decoration: none; color: var(--body); padding: 5px 11px; border-radius: 8px; font-weight: 500; font-size: 14px; }
+nav.bar a:hover { background: var(--sunk); color: var(--ink); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; flex: 0 0 auto; margin-inline-start: auto; }
+.seg button { border: 0; background: transparent; color: var(--muted); padding: 5px 12px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+
+section { padding-block: 44px 10px; scroll-margin-top: 60px; }
+.sec-head { display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
+.sec-head p { max-width: 70ch; }
+.eyebrow { font-size: 12.5px; font-weight: 600; letter-spacing: 0.02em; color: var(--accent-ink); }
+
+/* plan */
+.recs { display: grid; gap: 12px; max-width: 76ch; margin: 0; padding: 0; list-style: none; }
+.recs li { padding-inline-start: 18px; position: relative; }
+.recs li::before { content: ""; position: absolute; right: 0; top: 0.78em; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+.note { margin-top: 14px; padding: 12px 16px; border-radius: 12px; background: var(--sunk); max-width: 76ch; }
+.phases { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 26px; }
+.phase { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.phase .when { font-size: 13px; color: var(--muted); }
+.phase ul { margin: 4px 0 0; padding-inline-start: 18px; font-size: 14px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 26px; margin-top: 30px; }
+.tbl { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: right; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 600; color: var(--ink); background: var(--sunk); white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+.bar-share { height: 6px; border-radius: 6px; background: var(--accent); }
+
+/* calendar */
+.weeks { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+.weeks button { border: 1px solid var(--line); background: var(--surface); color: var(--body); border-radius: 10px; padding: 6px 12px; min-width: 44px; font-weight: 600; }
+.weeks button[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.weeks button .ph { display: block; font-size: 11px; font-weight: 500; opacity: 0.75; }
+.week-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; margin-bottom: 14px; }
+.pill { display: inline-block; font-size: 12px; font-weight: 600; padding: 1px 10px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+.pill.pre { color: var(--pre); } .pill.live { color: var(--live); } .pill.rev { color: var(--warn); }
+.days { display: grid; gap: 12px; }
+.day { display: grid; grid-template-columns: 116px minmax(0, 1fr); gap: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px; }
+.day .when { display: flex; flex-direction: column; gap: 2px; font-size: 13px; color: var(--muted); }
+.day .when b { font-family: var(--serif); font-size: 20px; color: var(--ink); font-weight: 700; line-height: 1.3; }
+.day .when .bl { margin-top: 8px; font-size: 12.5px; color: var(--body); }
+.day .when .bl strong { display: block; color: var(--accent-ink); font-weight: 600; }
+.feed { display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 14px; align-items: start; }
+.thumb { display: block; width: 100%; border-radius: 10px; border: 1px solid var(--line); background: var(--sunk); cursor: zoom-in; padding: 0; overflow: hidden; }
+.thumb img { display: block; width: 100%; height: auto; }
+.meta-line { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; font-size: 13px; color: var(--muted); }
+.meta-line .id { font-weight: 700; color: var(--ink); }
+.cap { margin-top: 6px; white-space: pre-line; color: var(--body); font-size: 14.5px; }
+.tags { margin-top: 4px; font-size: 13px; color: var(--accent-ink); }
+.copy { border: 1px solid var(--line); background: transparent; color: var(--muted); border-radius: 8px; padding: 1px 10px; font-size: 12.5px; }
+.copy.done { color: var(--accent-ink); border-color: var(--accent); }
+.chan { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line); }
+.ch { display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 8px; align-items: start; font-size: 12.5px; line-height: 1.5; min-width: 0; }
+.ch .k { font-weight: 600; color: var(--ink); display: block; }
+.ch .thumb { border-radius: 6px; }
+.extra { margin-top: 12px; padding: 10px 12px; border-radius: 12px; background: var(--sunk); font-size: 13.5px; }
+
+/* library */
+.fams { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+.fams button { border: 1px solid var(--line); background: var(--surface); color: var(--body); border-radius: 999px; padding: 4px 13px; font-size: 13.5px; }
+.fams button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.fam { margin-bottom: 30px; }
+.fam h3 { margin-bottom: 4px; }
+.fam .sub { font-size: 13.5px; color: var(--muted); margin-bottom: 12px; max-width: 80ch; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 12px; }
+.grid.big { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+.grid.wide { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+.item { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.item .t { font-size: 12.5px; line-height: 1.45; color: var(--body); }
+.item .t b { color: var(--ink); font-weight: 600; }
+.strip { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; }
+.strip .thumb { flex: 0 0 104px; }
+.carousel-row { margin-bottom: 18px; }
+.carousel-row .h { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; margin-bottom: 6px; font-size: 14px; }
+.carousel-row .h b { color: var(--ink); }
+
+/* reels */
+.reels { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 16px; }
+.reel { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.reel video { width: 100%; aspect-ratio: 9 / 16; border-radius: 12px; background: #000; border: 1px solid var(--line); display: block; max-width: 100%; }
+.reel .t { font-size: 13px; line-height: 1.5; }
+.reel .t b { color: var(--ink); }
+
+/* setup, rules, files */
+.checks { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; max-width: 80ch; }
+.checks li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 10px; }
+.checks li::before { content: ""; width: 16px; height: 16px; margin-top: 5px; border: 2px solid var(--accent); border-radius: 5px; }
+.bio { white-space: pre-line; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; font-size: 15px; color: var(--ink); }
+.bio-wrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.files { display: grid; gap: 8px; max-width: 86ch; }
+.file { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; padding: 10px 14px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.file b { color: var(--ink); }
+footer { padding-block: 40px 60px; color: var(--muted); font-size: 13px; }
+
+/* lightbox */
+.lb { position: fixed; inset: 0; z-index: 50; background: rgba(8, 8, 16, 0.82); display: flex; align-items: center; justify-content: center; padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+.lb-card { background: var(--surface); color: var(--body); border-radius: 18px; padding: 18px; max-width: 920px; width: 100%; max-height: 100%; overflow: auto; display: grid; gap: 14px; }
+.lb-imgs { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.lb-imgs figure { margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.lb-imgs img { width: 100%; border-radius: 10px; border: 1px solid var(--line); max-width: 100%; }
+.lb-imgs figcaption { font-size: 13px; color: var(--muted); }
+.lb-close { justify-self: start; border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 10px; padding: 4px 14px; }
+
+@media (max-width: 720px) {
+  .day { grid-template-columns: 1fr; }
+  .day .when { flex-direction: row; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+  .day .when .bl { margin-top: 0; }
+  .feed { grid-template-columns: 96px minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<header class="top wrap">
+  <div class="mark">الحمد<i></i></div>
+  <h1 style="margin-top:22px">خطة المحتوى العضوي: التمهيد والإطلاق الهادئ</h1>
+  <p class="lede" id="lede"></p>
+  <div class="stats" id="stats"></div>
+</header>
+
+<nav class="bar" aria-label="أقسام الصفحة">
+  <div class="wrap">
+    <a href="#plan">التوصية</a><a href="#calendar">التقويم</a><a href="#library">المكتبة</a><a href="#reels">الريلز</a><a href="#brand">الهوية والمتجر</a><a href="#setup">الإعداد والقواعد</a><a href="#files">الملفات</a>
+    <div class="seg" role="group" aria-label="ثيم التصاميم في المعاينة">
+      <button type="button" id="th-plan" data-th="plan" aria-pressed="true">حسب الخطة</button>
+      <button type="button" id="th-nahar" data-th="nahar" aria-pressed="false">نهار</button>
+      <button type="button" id="th-layl" data-th="layl" aria-pressed="false">ليل</button>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <section id="plan" class="wrap">
+    <div class="sec-head"><span class="eyebrow">التوصية</span><h2>١٢ أسبوعًا، منشورٌ كلَّ يوم</h2></div>
+    <ul class="recs" id="recs"></ul>
+    <p class="note" id="minimum"></p>
+    <div class="phases" id="phases"></div>
+    <div class="grid2">
+      <div><h3 style="margin-bottom:12px">إيقاع الأسبوع</h3><div class="tbl"><table id="rhythm"></table></div></div>
+      <div><h3 style="margin-bottom:12px">إيقاع اليوم</h3><div class="tbl"><table id="daily"></table></div></div>
+    </div>
+    <div class="grid2">
+      <div><h3 style="margin-bottom:12px">محاور المحتوى</h3><div class="tbl"><table id="pillars"></table></div></div>
+      <div><h3 style="margin-bottom:12px">ليل ونهار في الحساب</h3><ul class="recs" id="themes"></ul></div>
+    </div>
+    <div style="margin-top:30px"><h3 style="margin-bottom:12px">المنصات</h3><div class="tbl"><table id="platforms"></table></div></div>
+  </section>
+
+  <section id="calendar" class="wrap">
+    <div class="sec-head"><span class="eyebrow">التقويم</span><h2>يومًا بيوم</h2>
+      <p>«نعمة اليوم» في كل يوم هي نفسها التي يعرضها التطبيق في ذلك التاريخ. كل منشور معه الكابشن والهاشتاجات والوقت، ومعه ما يُنشر على تيك توك والقصص وقناة واتساب. والجدول نفسه في ملف Excel مع عمود للحالة.</p></div>
+    <div class="weeks" id="weeks" role="group" aria-label="الأسابيع"></div>
+    <div class="week-head" id="week-head"></div>
+    <div class="days" id="days"></div>
+  </section>
+
+  <section id="library" class="wrap">
+    <div class="sec-head"><span class="eyebrow">المكتبة</span><h2>كل التصاميم</h2>
+      <p>كل تصميمٍ هنا موجودٌ بالثيمين وبكل مقاساته في الملفات. اضغط على أيّ صورة لترى الثيمين جنبًا إلى جنب، والمقاسات المتاحة، والنص البديل.</p></div>
+    <div class="fams" id="fams" role="group" aria-label="العائلات"></div>
+    <div id="lib"></div>
+  </section>
+
+  <section id="reels" class="wrap">
+    <div class="sec-head"><span class="eyebrow">الريلز</span><h2>فيديوهات بلا تعليق صوتي</h2>
+      <p>كلمات على الشاشة وحركة هادئة ومؤثرات طبيعية خافتة، بلا موسيقى. شغّلها بالصوت لتسمع المؤثرات. المعاينة هنا بدقّة ٣٦٠، والملفات الأصلية ١٠٨٠×١٩٢٠.</p></div>
+    <div class="fams" id="reel-fams" role="group" aria-label="نوع الريلز"></div>
+    <div class="reels" id="reel-grid"></div>
+  </section>
+
+  <section id="brand" class="wrap">
+    <div class="sec-head"><span class="eyebrow">الهوية والمتجر</span><h2>صور الحسابات والأغلفة والمتجر والخلفيات والملصقات</h2></div>
+    <div id="brand-lib"></div>
+  </section>
+
+  <section id="setup" class="wrap">
+    <div class="sec-head"><span class="eyebrow">الإعداد والقواعد</span><h2>قبل أوّل منشور</h2></div>
+    <ul class="checks" id="setup-list"></ul>
+    <h3 style="margin:28px 0 12px">البايو</h3>
+    <div class="bio-wrap" id="bios"></div>
+    <h3 style="margin:28px 0 12px">روابط البايو مع UTM</h3>
+    <div class="tbl"><table id="utm"></table></div>
+    <div class="grid2">
+      <div><h3 style="margin-bottom:12px">التفاعل</h3><ul class="recs" id="engage"></ul></div>
+      <div><h3 style="margin-bottom:12px">قواعد المحتوى</h3><ul class="recs" id="rules"></ul></div>
+    </div>
+  </section>
+
+  <section id="files" class="wrap">
+    <div class="sec-head"><span class="eyebrow">الملفات</span><h2>ما وصلك في المحادثة</h2>
+      <p>اسم كل ملف: <span class="ltr">ID_theme_format</span>، مثل <span class="ltr">PS-04_nahar_portrait.jpg</span>. الثيم <span class="ltr">layl</span> = ليل و<span class="ltr">nahar</span> = نهار.</p></div>
+    <div class="files" id="file-list"></div>
+    <div class="tbl" style="margin-top:22px"><table id="formats"></table></div>
+  </section>
+</main>
+<footer class="wrap" id="foot"></footer>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="معاينة التصميم"><div class="lb-card" id="lb-card"></div></div>
+
+<script src="thumbs-layl.js"></script>
+<script src="thumbs-nahar.js"></script>
+<script>
+const DATA = /*__DATA__*/null;
+const P = DATA.plan, S = P.strategy, LIB = DATA.lib, REELS = DATA.reels;
+const TH = { layl: window.TH_L || {}, nahar: window.TH_N || {} };
+const AR = (s) => String(s).replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[d]);
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const $ = (id) => document.getElementById(id);
+const THN = { layl: 'ليل', nahar: 'نهار' };
+let mode = 'plan';
+try { mode = localStorage.getItem('alhamd-plan-th') || 'plan'; } catch (e) { /* storage may be blocked */ }
+const pick = (planned) => (mode === 'plan' ? planned : mode);
+const img = (id, th, alt = '') => { const src = TH[th][id] || TH[th === 'layl' ? 'nahar' : 'layl'][id]; return src ? `<img src="${src}" alt="${esc(alt)}" loading="lazy" decoding="async">` : `<span class="muted" style="display:block;padding:20px 6px;font-size:12px;text-align:center">${esc(id)}</span>`; };
+const thumb = (id, th) => `<button type="button" class="thumb" data-open="${esc(id)}" aria-label="معاينة ${esc(id)}">${img(id, th, (LIB[id] || {}).name || id)}</button>`;
+
+function copyBtn(text) { return `<button type="button" class="copy" data-copy="${esc(text)}">نسخ</button>`; }
+document.addEventListener('click', (e) => {
+  const c = e.target.closest('[data-copy]');
+  if (c) {
+    const t = c.getAttribute('data-copy');
+    const ok = () => { c.textContent = 'نُسخ'; c.classList.add('done'); setTimeout(() => { c.textContent = 'نسخ'; c.classList.remove('done'); }, 1400); };
+    const fallback = () => { const ta = document.createElement('textarea'); ta.value = t; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); let done = false; try { done = document.execCommand('copy'); } catch (err) { done = false; } ta.remove(); if (done) ok(); else c.textContent = 'تعذّر النسخ'; };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(ok, fallback); else fallback();
+    return;
+  }
+  const o = e.target.closest('[data-open]');
+  if (o) { openLb(o.getAttribute('data-open')); return; }
+  if (e.target.id === 'lb' || e.target.closest('.lb-close')) closeLb();
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLb(); });
+
+/* header */
+$('lede').textContent = `من ${P.weeks[0].from} إلى ${P.weeks[11].to}: أربعة أسابيع تمهيد، ثم الإطلاق على Google Play يوم ${P.days.find((d) => d.date === P.launch).dateAr}، ثم ثمانية أسابيع إطلاقٍ هادئ تنتهي في أوّل رمضان. كل المحتوى بلا تعليق صوتي، وكل تصميمٍ بالثيمين وبكل المقاسات.`;
+const nStill = Object.values(LIB).filter((x) => x.kind === 'still').length;
+$('stats').innerHTML = [[AR(P.days.length), 'يومًا في التقويم'], [AR(nStill), 'تصميمًا ثابتًا'], [AR(DATA.counts.files.toLocaleString('en')), 'ملف صورة'], [AR(DATA.counts.videos), 'فيديو'], [AR(2), 'ثيمان']].map(([n, l]) => `<div><b class="num">${n}</b><span>${l}</span></div>`).join('');
+
+/* plan */
+$('recs').innerHTML = S.recommendation.map((x) => `<li>${esc(x)}</li>`).join('');
+$('minimum').textContent = S.minimum;
+$('phases').innerHTML = S.phases.map((p) => `<div class="phase"><h3>${esc(p.name)}</h3><span class="when">${esc(p.dates)}</span><p>${esc(p.goal)}</p><ul>${p.kpis.map((k) => `<li>${esc(k)}</li>`).join('')}</ul></div>`).join('');
+$('rhythm').innerHTML = `<tr><th>اليوم</th><th>النوع</th><th>ماذا</th></tr>` + S.rhythm.map((r) => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join('');
+$('daily').innerHTML = `<tr><th>الوقت</th><th>أين</th><th>ماذا</th></tr>` + S.daily.map((r) => `<tr><td class="num" style="white-space:nowrap">${esc(r[0])}</td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join('');
+$('pillars').innerHTML = `<tr><th>المحور</th><th>النسبة</th><th>ماذا</th><th>الهدف</th></tr>` + S.pillars.map((p) => `<tr><td><b style="color:var(--ink)">${esc(p.name)}</b></td><td class="num">${esc(p.share)}<div class="bar-share" style="width:${parseInt(p.share.replace(/[٠-٩]/g, (d) => '٠١٢٣٤٥٦٧٨٩'.indexOf(d)))}%;margin-top:4px"></div></td><td>${esc(p.what)}</td><td>${esc(p.goal)}</td></tr>`).join('');
+$('themes').innerHTML = S.themes.map((x) => `<li>${esc(x)}</li>`).join('');
+$('platforms').innerHTML = `<tr><th>المنصة</th><th>الإيقاع</th><th>المقاسات</th></tr>` + S.platforms.map((r) => `<tr><td style="white-space:nowrap"><b style="color:var(--ink)">${esc(r[0])}</b></td><td>${esc(r[1])}</td><td>${esc(r[2])}</td></tr>`).join('');
+
+/* calendar */
+let week = 1;
+try { week = +(localStorage.getItem('alhamd-plan-week') || 1); } catch (e) { /* ignore */ }
+function renderWeeks() {
+  $('weeks').innerHTML = P.weeks.map((w) => `<button type="button" id="wk-${w.n}" data-week="${w.n}" aria-pressed="${w.n === week}"><span class="num">${AR(w.n)}</span><span class="ph">${w.phase === 'pre' ? 'تمهيد' : 'إطلاق'}</span></button>`).join('');
+}
+function ch(label, id, th, note) {
+  return `<div class="ch">${thumb(id, pick(th))}<div><span class="k">${esc(label)}</span><span class="ltr">${esc(id)}</span> · ${esc(THN[pick(th)])}${note ? `<br><span class="muted">${esc(note)}</span>` : ''}</div></div>`;
+}
+function renderDays() {
+  const w = P.weeks[week - 1];
+  $('week-head').innerHTML = `<h3>الأسبوع ${AR(w.n)}: ${esc(w.title)}</h3><span class="pill ${w.phase}">${w.phase === 'pre' ? 'تمهيد' : 'إطلاق هادئ'}</span><span class="muted">${esc(w.from)} – ${esc(w.to)} · ${esc(w.goal)}</span>`;
+  $('days').innerHTML = P.days.filter((d) => d.week === week).map((d) => {
+    const f = d.feed, th = pick(f.theme);
+    const ex = d.extra ? `<div class="extra"><b style="color:var(--ink)">منشور ثانٍ ${esc(d.extra.time)}:</b> <span class="ltr">${esc(d.extra.id)}</span> ${esc(d.extra.name)} — ${esc(d.extra.caption.split('\n')[0])}</div>` : '';
+    return `<article class="day" aria-label="${esc(d.day)} ${esc(d.dateAr)}">
+      <div class="when"><b>${esc(d.day)}</b><span class="num">${esc(d.dateAr)}</span><span>${esc(d.hijri)}</span><span class="bl"><strong>نعمة اليوم</strong>${esc(d.blessing.title)}</span></div>
+      <div style="min-width:0">
+        <div class="feed">${thumb(f.id, f.theme)}<div style="min-width:0">
+          <div class="meta-line"><span class="id ltr">${esc(f.id)}</span><span>${esc(f.kind)}</span><span>${esc(f.name)}</span><span>· ${esc(THN[th])} · ${esc(f.time)}</span>${f.review ? '<span class="pill rev">مراجعة قبل النشر</span>' : ''}</div>
+          <p class="cap">${esc(f.caption)}</p><p class="tags">${esc(f.tags)}</p>
+          <div style="margin-top:6px">${copyBtn(f.caption + '\n\n' + f.tags)}</div></div></div>
+        ${ex}
+        <div class="chan">
+          ${ch('تيك توك + شورتس', d.tiktok.id, d.tiktok.theme, d.tiktok.how)}
+          ${ch('قصة الصباح', d.story_am.id, 'nahar', '٧:٣٠ ص')}
+          ${d.story_mid ? ch('قصة الظهر', d.story_mid.id, d.story_mid.theme, d.story_mid.note) : ''}
+          ${ch('قصة المساء', d.story_pm.id, 'layl', d.story_pm.note)}
+          ${ch('قناة واتساب', d.whatsapp.id, 'nahar', d.whatsapp.also ? '+ ' + d.whatsapp.also : '١:١')}
+        </div>
+      </div></article>`;
+  }).join('');
+}
+$('weeks').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-week]'); if (!b) return;
+  week = +b.dataset.week;
+  try { localStorage.setItem('alhamd-plan-week', String(week)); } catch (err) { /* ignore */ }
+  renderWeeks(); renderDays();
+});
+
+/* library */
+const FAMS = DATA.families;
+let fam = 'all';
+function renderFams() {
+  $('fams').innerHTML = [['all', 'الكل'], ...FAMS.filter((f) => !f.brand).map((f) => [f.key, f.title])].map(([k, t]) => `<button type="button" data-fam="${k}" aria-pressed="${k === fam}">${esc(t)}</button>`).join('');
+}
+function famBlock(f) {
+  const ids = f.ids;
+  let body;
+  if (f.carousel) {
+    body = f.groups.map((g) => `<div class="carousel-row"><div class="h"><b>${esc(g.name)}</b><span class="ltr muted">${esc(g.id)}</span><span class="muted">${AR(g.ids.length)} شرائح</span></div><div class="strip">${g.ids.map((id) => thumb(id, pick('layl'))).join('')}</div></div>`).join('');
+  } else {
+    body = `<div class="grid ${f.size || ''}">${ids.map((id) => { const x = LIB[id]; return `<div class="item">${thumb(id, pick(x.prefer || 'layl'))}<span class="t"><b class="ltr">${esc(id)}</b> ${esc(x.short || x.name)}</span></div>`; }).join('')}</div>`;
+  }
+  return `<div class="fam"><h3>${esc(f.title)} <span class="muted num" style="font-family:var(--sans);font-size:15px;font-weight:500">(${AR(f.count)})</span></h3><p class="sub">${esc(f.sub)}</p>${body}</div>`;
+}
+function renderLib() {
+  $('lib').innerHTML = FAMS.filter((f) => !f.brand && (fam === 'all' || f.key === fam)).map(famBlock).join('');
+  $('brand-lib').innerHTML = FAMS.filter((f) => f.brand).map(famBlock).join('');
+}
+$('fams').addEventListener('click', (e) => { const b = e.target.closest('[data-fam]'); if (!b) return; fam = b.dataset.fam; renderFams(); renderLib(); });
+
+/* reels */
+let rf = 'RL';
+function renderReels() {
+  $('reel-fams').innerHTML = [['RL', `ريلز الفكرة والمزايا (${AR(REELS.filter((r) => r.group === 'RL').length)})`], ['NR', `ريلز «نعمة اليوم» (${AR(REELS.filter((r) => r.group === 'NR').length)})`]].map(([k, t]) => `<button type="button" data-rf="${k}" aria-pressed="${k === rf}">${esc(t)}</button>`).join('');
+  $('reel-grid').innerHTML = REELS.filter((r) => r.group === rf).map((r) => {
+    const th = pick(r.prefer || 'layl');
+    const v = r.files[th] || r.files.layl || r.files.nahar;
+    const poster = TH[th]['R:' + r.id] || '';
+    return `<div class="reel"><video controls playsinline preload="none" ${poster ? `poster="${poster}"` : ''} src="${esc(v)}" aria-label="${esc(r.name)}"></video><span class="t"><b class="ltr">${esc(r.id)}</b> ${esc(r.name)}<br><span class="muted num">${AR(r.seconds.toFixed(0))} ث · ${r.square ? '٩:١٦ و١:١' : '٩:١٦'} · ${esc(THN[th])}</span>${r.review ? ' <span class="pill rev">مراجعة</span>' : ''}</span></div>`;
+  }).join('');
+}
+$('reel-fams').addEventListener('click', (e) => { const b = e.target.closest('[data-rf]'); if (!b) return; rf = b.dataset.rf; renderReels(); });
+
+/* setup, rules, files */
+$('setup-list').innerHTML = S.setup.map((x) => `<li><span>${esc(x)}</span></li>`).join('');
+$('bios').innerHTML = [['قبل الإطلاق', S.bios.pre], ['بعد الإطلاق', S.bios.live]].map(([t, b]) => `<div><div class="meta-line" style="margin-bottom:6px"><b style="color:var(--ink)">${t}</b>${copyBtn(b)}</div><div class="bio">${esc(b)}</div></div>`).join('');
+$('utm').innerHTML = `<tr><th>المنصة</th><th>الرابط</th><th></th></tr>` + S.utm.map(([p, u]) => `<tr><td>${esc(p)}</td><td class="ltr" style="word-break:break-all">${esc(u)}</td><td>${copyBtn(u)}</td></tr>`).join('');
+$('engage').innerHTML = S.engage.map((x) => `<li>${esc(x)}</li>`).join('');
+$('rules').innerHTML = S.rules.map((x) => `<li>${esc(x)}</li>`).join('');
+$('file-list').innerHTML = DATA.files.map((f) => `<div class="file"><b class="ltr">${esc(f.name)}</b><span class="muted num">${esc(f.size)}</span><span>${esc(f.what)}</span></div>`).join('');
+$('formats').innerHTML = `<tr><th>المقاس</th><th>الاسم في الملفات</th><th>الأبعاد</th><th>لأين</th></tr>` + DATA.formats.map((f) => `<tr><td class="num">${esc(f.label)}</td><td class="ltr">${esc(f.key)}</td><td class="num ltr">${esc(f.w)}×${esc(f.h)}</td><td>${esc(f.use)}</td></tr>`).join('');
+$('foot').textContent = 'الأدوات في المستودع: marketing/organic-kit — يُعاد توليد أي تصميم بأي ثيم ومقاس بأمرٍ واحد.';
+
+/* lightbox */
+function openLb(id) {
+  const x = LIB[id]; if (!x) return;
+  $('lb-card').innerHTML = `<button type="button" class="lb-close">إغلاق</button><div><div class="meta-line"><b class="ltr id" style="color:var(--ink)">${esc(id)}</b><span>${esc(x.name)}</span>${x.review ? '<span class="pill rev">مراجعة قبل النشر</span>' : ''}</div><p class="muted" style="font-size:13.5px;margin-top:4px">المقاسات: ${esc(x.formats.join(' · '))}</p></div>` +
+    `<div class="lb-imgs">${['nahar', 'layl'].filter((t) => TH[t][id]).map((t) => `<figure>${img(id, t, x.alt)}<figcaption>${THN[t]}</figcaption></figure>`).join('')}</div>` +
+    (x.alt ? `<p style="font-size:13.5px"><b style="color:var(--ink)">النص البديل:</b> ${esc(x.alt)} ${copyBtn(x.alt)}</p>` : '');
+  $('lb').hidden = false; $('lb-card').querySelector('.lb-close').focus();
+}
+function closeLb() { $('lb').hidden = true; }
+
+/* theme of previews */
+document.querySelector('.seg').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-th]'); if (!b) return;
+  mode = b.dataset.th;
+  try { localStorage.setItem('alhamd-plan-th', mode); } catch (err) { /* ignore */ }
+  document.querySelectorAll('.seg button').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.th === mode)));
+  renderDays(); renderLib(); renderReels();
+});
+document.querySelectorAll('.seg button').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.th === mode)));
+renderWeeks(); renderDays(); renderFams(); renderLib(); renderReels();
+</script>

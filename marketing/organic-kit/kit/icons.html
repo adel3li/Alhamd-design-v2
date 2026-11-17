@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>الحمد — أيقونات النِّعَم</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;600&display=block" rel="stylesheet">
+<style>
+  body { margin: 0; font-family: 'IBM Plex Sans Arabic', sans-serif; }
+  .sheet { display: grid; grid-template-columns: repeat(8, 200px); gap: 18px 10px; padding: 30px; }
+  .layl { background: #0F0F22; color: #E4C368; }
+  .nahar { background: #F4EDE3; color: #B9573B; }
+  .cell { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .cell svg { width: 150px; height: 150px; overflow: visible; }
+  .layl .cell svg { filter: drop-shadow(0 0 10px rgba(228,195,104,0.35)); }
+  .cell span { font-size: 22px; color: #AEAECB; }
+  .nahar .cell span { color: #6B5A4E; }
+  .fill { fill: currentColor; stroke: none; }
+  .soft { opacity: 0.45; }
+</style>
+</head>
+<body>
+<div class="sheet layl" id="a"></div>
+<div class="sheet nahar" id="b"></div>
+<script src="icons.js"></script>
+<script>
+  const T = { islam: 'الإسلام', marifa: 'معرفة الله', quran: 'القرآن', nabi: 'النبي ﷺ', salah: 'الصلاة', duaa: 'الدعاء', tawba: 'التوبة', thabat: 'الثبات', dhikr: 'الذكر', satr: 'الستر', fitra: 'الفطرة', ramadan: 'رمضان', hayat: 'الحياة', nawm: 'النوم', maa: 'الماء', taam: 'الطعام', nafas: 'النَّفَس', laylnahar: 'الليل والنهار', aql: 'العقل', ilm: 'العلم', bayan: 'البيان', umm: 'الأم', ab: 'الأب', zawj: 'السكن', awlad: 'الأولاد', arham: 'الأرحام', suhba: 'الصحبة', rizq: 'الرزق', mal: 'المال', amal: 'العمل', qanaa: 'القناعة', amn: 'الأمن', bayt: 'البيت', hifz: 'حفظ الله', afiya: 'العافية', sam: 'السمع', basar: 'البصر', haraka: 'الحركة', waqt: 'الوقت', janna: 'الجنة' };
+  const html = ICONS.names.map((n) => `<div class="cell">${ICONS.medal(n)}<span>${T[n] || n}</span></div>`).join('');
+  document.getElementById('a').innerHTML = html;
+  document.getElementById('b').innerHTML = html;
+  document.fonts.ready.then(() => { document.body.dataset.ready = '1'; });
+</script>
+</body>
+</html>
