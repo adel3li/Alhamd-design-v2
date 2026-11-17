@@ -1,5 +1,7 @@
 # Design system
 
+> **Changed since this was written** (commit `d3dfd92`, 17 November 2026): `.animate-fade-in` and `.animate-scale-up` no longer keep their end state (no `forwards`), so they leave no transform on the element and dialogs inside a screen are positioned against the viewport. The rest of this file is unchanged.
+
 State of the code at commit `68e723a` (`main`, 2026-11-16). Line references are `path:line` against that commit.
 
 Sources read in full for this file: `src/index.css` (548 lines), `src/constants/tokens.ts` (50 lines), `index.html` (21 lines), the two design sheets in `public/assets/aistudio/` (342 and 338 lines) and `app-icon-palette_a8ddd79f.png`. `src/App.tsx` and `src/lib/store.tsx` were read for the parts that drive theming. Statements marked "verified at run time" were observed in headless Chrome 153 against a production build (`vite build`); the sandbox could not fetch Google Fonts, so run-time measurements used fallback fonts.

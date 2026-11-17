@@ -2,6 +2,8 @@
 
 Covers `src/lib/store.tsx`, `src/lib/journeyStore.ts`, `src/lib/entitlements.ts`, `src/lib/analytics.ts` and the state types in `src/types.ts`. Everything the app remembers is in the browser's `localStorage`; there is no server.
 
+> Updated for commit `d3dfd92` (17 November 2026): new users start empty, the welcome blessing is recorded, day keys are local, and the journey is behind a switch. Sections 1.1, 1.2, 1.4, 1.5, 2 and 5 describe the code after that commit. Line numbers still refer to `68e723a`; in `src/lib/store.tsx` they have moved.
+
 ## 1. The store (`src/lib/store.tsx`, 753 lines)
 
 `StoreProvider` (`src/lib/store.tsx:111`) is a single React Context provider. Each field is its own `useState` with a lazy initialiser that reads `localStorage`. `useStore()` (`src/lib/store.tsx:749`) returns the context and throws when used outside the provider.
@@ -13,7 +15,8 @@ The context value is a fresh object literal on every render (`src/lib/store.tsx:
 | Field | Type | Default for a new user | Storage key | Written |
 |---|---|---|---|---|
 | `onboardingComplete` | boolean | `false` | `alhamd_onboarded` | in `completeOnboarding` |
-| `welcomeSeen` | boolean | `false` | `alhamd_welcome_seen` | in `markWelcomeSeen` (never called, see 1.5) |
+| `welcomeSeen` | boolean | `false` | `alhamd_welcome_seen` | effect, once the welcome reflection is finished (see 1.5) |
+| `welcomeDate` | local `YYYY-MM-DD` \| null | `null` | `alhamd_welcome_date` | same effect |
 | `tourCompleted` | boolean | `false` | `alhamd:tourComplete` | in `completeTour`; removed by `replayTour` |
 | `analyticsConsent` | boolean \| null | `null` (not asked) | `alhamd:analytics_consent` | in `setAnalyticsConsent` |
 | `theme` | `ThemeMode` | `'dark'` | `alhamd_theme_v2` | effect, `src/lib/store.tsx:335` |
@@ -24,9 +27,9 @@ The context value is a fresh object literal on every render (`src/lib/store.tsx:
 | `fontSize` | number, 12–24 px in 0.5 steps | `16` | `alhamd_font_size_v2` | effect, `:375` |
 | `notificationsEnabled` | boolean | `true` (anything except the string `'false'`) | `alhamd_notif_enabled` | in setter |
 | `notificationTime` | `"HH:mm"` | `'21:00'` | `alhamd_notif_time` | in setter |
-| `completedReflections` | string[] of `YYYY-MM-DD` | three seeded past days (see 1.4) | `alhamd_completed_reflections` | effect, `:396` |
-| `journalEntries` | `JournalEntry[]` | two seeded entries (see 1.4) | `alhamd_journal` | effect, `:388` |
-| `userBlessings` | `UserBlessing[]` | one seeded blessing (see 1.4) | `alhamd:userBlessings:v1` | effect, `:392` |
+| `completedReflections` | string[] of local `YYYY-MM-DD` | `[]` | `alhamd_completed_reflections` | effect |
+| `journalEntries` | `JournalEntry[]` | `[]` | `alhamd_journal` | effect |
+| `userBlessings` | `UserBlessing[]` | `[]` | `alhamd:userBlessings:v1` | effect |
 | `tasbihCount` | number | `0` | `alhamd_tasbih_count` | in `incrementTasbih` / `resetTasbih` |
 | `journeyState` | `JourneyState` | built by `createDefaultJourneyState()` | `alhamd:journey_state:v1` | effect `:220` and `saveJourneyState` |
 
@@ -43,9 +46,10 @@ Notes:
 
 | Value | How it is computed |
 |---|---|
-| `todayBlessing` | `resolveTodayExperience(new Date(), welcomeSeen, allBlessings).blessing`, memoised on `welcomeSeen` (`src/lib/store.tsx:317`). It is computed once per mount, so a session left open past midnight keeps yesterday's blessing until reload |
-| `todayInspiration` | `getTodayInspiration(getDayNumber(new Date()))`, memoised with no dependencies |
-| `isCompletedToday` | `completedReflections.includes(new Date().toISOString().split('T')[0])`: the **UTC** date |
+| `today` (internal) | `useLocalDay()`: the local `YYYY-MM-DD`, re-read when the tab becomes visible and once a minute |
+| `todayBlessing`, `todayRole` | `resolveTodayExperience(today, welcomeSeen, allBlessings, welcomeDate)`. `todayRole` is `'welcome'` or `'daily'`. Recomputed when the day changes |
+| `todayInspiration` | `getTodayInspiration(getDayNumber(today))`, recomputed when the day changes |
+| `isCompletedToday` | `completedReflections.includes(today)`: the local day |
 | `entries` | alias of `journalEntries` |
 | `completedDays` | alias of `completedReflections` |
 | `onboardingCompleted` | alias of `onboardingComplete` |
@@ -56,7 +60,7 @@ Notes:
 | Action | Effect | Haptic |
 |---|---|---|
 | `completeOnboarding()` | Sets the flag and key | success |
-| `markWelcomeSeen()` | Sets the flag and key | none |
+| `markWelcomeSeen()` | Sets the flag and, once, the local day. `App` calls it when a reflection is finished while `todayRole` is `'welcome'` | none |
 | `completeTour()` / `replayTour()` | Sets / clears `alhamd:tourComplete` | none |
 | `setAnalyticsConsent(bool)` | Stores `'true'` or `'false'` | none |
 | `setTheme(mode)` | Sets theme; choosing `light` turns night-reading off | none |
@@ -89,19 +93,30 @@ Notes:
 
 Because `incrementTasbih` calls `triggerHaptic` and writes `localStorage` inside a `setState` updater (`src/lib/store.tsx:565`), React StrictMode runs those side effects twice per tap in development.
 
-### 1.4 Seeded sample data
+### 1.4 First run, and the samples earlier builds seeded
 
-A browser with no saved data starts with content the user did not create:
+Since `d3dfd92` a new user starts with an empty journal, no personal blessings and no completed days.
+
+Builds before that commit started every new user with content the user did not create:
 
 - `alhamd_completed_reflections`: yesterday, two days ago and four days ago (`src/lib/store.tsx:181`–`190`).
 - `alhamd_journal`: two entries, «الأم» and «الماء», with the fixed display dates «الأحد ٢٥ ذو الحجة» and «السبت ٢٤ ذو الحجة» (`src/lib/store.tsx:71`–`92`).
 - `alhamd:userBlessings:v1`: one personal blessing, «صوت المطر على نافذتي», marked favourite (`src/lib/store.tsx:94`–`107`).
 
-The persistence effects write these to `localStorage` on first render, so they become indistinguishable from real data. This was confirmed by loading a clean browser profile against the production build.
+The persistence effects wrote these to `localStorage` on first render, so existing users still have them. `readInitialHistory()` removes them when the store starts, and `importBackupJSON()` removes them from imported files:
 
-### 1.5 The welcome blessing flag
+- The journal entries (`sample_entry_1`, `sample_entry_2`) and the personal blessing (`sample_user_blessing_1`) are dropped by id.
+- The three days are recomputed from the first-launch time, which is recovered from the seeded journal entry (created exactly one day before first launch) or from `createdAt` in the journey state. They are removed only when all three are present, so a day the user really completed is never dropped. A user who deleted the seeded journal entry and first launched before the journey existed keeps the three days.
 
-`resolveTodayExperience` returns the blessing with id `islam` whenever `welcomeSeen` is false (`src/lib/dailyLogic.ts:47`). `welcomeSeen` only becomes true through `markWelcomeSeen()`, and no component calls it. In v1 the flag was set after the first reflection (`legacy/src/App.tsx:160`, `177`). The result, confirmed in a headless browser on three different dates: Home shows «نعمة الإسلام» every day, and the daily rotation only appears when `alhamd_welcome_seen` is set by hand.
+### 1.5 The welcome blessing
+
+`resolveTodayExperience` returns the blessing with id `islam` (role `'welcome'`) while `welcomeSeen` is false, and also on `welcomeDate`, the day the welcome reflection was finished. From the next day it returns the daily blessing.
+
+- `App.handleReflectionComplete` calls `markWelcomeSeen()` when the finished reflection was the welcome one. Closing the reflection without finishing it does not count.
+- On the day it is finished, Home keeps showing «نعمة الإسلام», marked as done; the rotation starts the following local day. v1 switched to the daily blessing immediately. v2 records completion per day, not per blessing, so an immediate switch would show the new blessing as already done.
+- Migration: a user whose history, after the clean-up in 1.4, has at least one completed day is treated as having finished the welcome reflection, with `welcomeDate` set to their latest completed day.
+
+Before `d3dfd92`, `welcomeSeen` only became true through `markWelcomeSeen()`, and no component called it. In v1 the flag was set after the first reflection (`legacy/src/App.tsx:160`, `177`). The result, confirmed in a headless browser on three different dates: Home shows «نعمة الإسلام» every day, and the daily rotation only appears when `alhamd_welcome_seen` is set by hand.
 
 ### 1.6 Effects that touch the document
 
@@ -123,6 +138,7 @@ Every key the current code reads or writes. The two naming styles (`alhamd_snake
 |---|---|---|
 | `alhamd_onboarded` | store | `'true'` |
 | `alhamd_welcome_seen` | store | `'true'` |
+| `alhamd_welcome_date` | store | local `YYYY-MM-DD` on which the welcome reflection was finished |
 | `alhamd:tourComplete` | store | `'true'` |
 | `alhamd:analytics_consent` | store, analytics | `'true'` / `'false'` |
 | `alhamd_theme_v2` | store | `'dark'` / `'light'` |
@@ -205,7 +221,7 @@ Station ids are deterministic: `` `${stageId}_station_${index + 1}` `` (`makeSta
 
 | Function | Behaviour |
 |---|---|
-| `getLocalDateString(date?)` | Local `YYYY-MM-DD`. The journey uses local dates; the main store uses UTC dates |
+| `getLocalDateString(date?)` | Local `YYYY-MM-DD`; delegates to `toLocalDateString` in `src/lib/dates.ts`, which the whole app uses since `d3dfd92` |
 | `getAllStageTemplates()` / `getStageContent(id, theme?)` / `getStationContent(stageId, index, blessingId)` | Read `journey_content.json`. `getStationContent` falls back to a generic prompt and action marked `pending_review` when nothing matches |
 | `buildStagesFromThemes(themes)` | Maps theme keys (also `focusLabel`, stage id, and four Arabic aliases) to stage templates in the order chosen, de-duplicated; falls back to the first two templates when nothing matches; takes the first 7 stations of each |
 | `createDefaultJourneyState()` | Themes `din` and `afiyah`, pace 1, reminder 21:00, nothing completed |
@@ -235,6 +251,7 @@ The daily pacing rule (`pace` versus `unlockedTodayCount`) and the free-tier lim
 | `DEV_PREMIUM_STORAGE_KEY` | `'alhamd:dev_premium'` |
 | `ENTITLEMENT_CHANGED_EVENT` | `'alhamd:entitlement_changed'` |
 | `FREE_STATION_LIMIT` | `2` |
+| `JOURNEY_ENABLED` | `import.meta.env.VITE_ENABLE_JOURNEY === 'true'`; false by default. When false, the journey tab, the paywall and the developer tools in Settings are not rendered, in the app and on the landing page. Saved journey data is not touched |
 | `isPremium()` | async; returns `getDeveloperPremiumSync()` |
 | `getEntitlementStatus()` | async; `{ isPremium, plan: 'lifetime' \| 'free', source: 'local_dev' }`. Imported by nothing |
 | `getDeveloperPremiumSync()` | `localStorage['alhamd:dev_premium'] === 'true'` |
@@ -242,7 +259,7 @@ The daily pacing rule (`pace` versus `unlockedTodayCount`) and the free-tier lim
 | `toggleDeveloperPremium()` | Imported by nothing |
 | `subscribeEntitlementChange(listener)` | Listens for the event, returns an unsubscribe function |
 
-There is no payment provider. Premium is whatever that `localStorage` key says. It is set to `'true'` by the paywall (`src/components/screens/PremiumPaywallScreen.tsx:54`) and by a switch in Settings (`src/components/screens/SettingsScreen.tsx:669`), both of which ship in the production build. Three `TODO: RevenueCat` comments mark where a real check would go (`src/lib/entitlements.ts:17`, `26`, `34`).
+There is no payment provider. Premium is whatever that `localStorage` key says. It is set to `'true'` by the paywall (`src/components/screens/PremiumPaywallScreen.tsx:54`) and by a switch in Settings (`src/components/screens/SettingsScreen.tsx:669`). Since `d3dfd92` both are rendered only when `JOURNEY_ENABLED` is true, so neither is in the default production build; the unlock must be replaced by a real purchase check before that switch is turned on. Three `TODO: RevenueCat` comments mark where a real check would go (`src/lib/entitlements.ts:17`, `26`, `34`).
 
 Callers: `App.tsx:67` (tab gate), `JourneyPathScreen.tsx` (station gating), `SettingsScreen.tsx` (developer switch), `PremiumPaywallScreen.tsx` (unlock).
 

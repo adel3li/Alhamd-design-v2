@@ -113,6 +113,20 @@ All of this phase was done in Claude Code sessions on branches and merged by the
 
 See section 9 for the contents of the two branches.
 
+### Phase 7 — First fixes after the read-through (17 November)
+
+The documentation in this folder was written on 17 November. The same day, on the same branch, the owner chose a first set of findings to act on, and commit `d3dfd92` made the first changes to application code since 7 November:
+
+- The blessing of the day works as intended: «نعمة الإسلام» until its reflection is finished, then the daily rotation from the next day.
+- Every day key follows the user's local day, and daily content rolls over at midnight while the app is open.
+- New users start with empty history; the samples older builds saved are cleaned up.
+- Dialogs opened from inside a screen are positioned against the viewport.
+- «رحلتي», the paywall and the developer unlock are hidden behind one build switch until a decision on premium is made.
+- The React type packages are installed and strict type checking is on.
+- By the owner's decision, the "under review" badges are no longer shown to users.
+
+The owner also remembered writing more than 40 blessings. A search of the other Alhamd repositories found none: `adel3li/alhamd` holds the same 40, byte for byte, across its whole history; `adel3li/Alhmd-MVP-V2` (a Flutter build from June) holds one; `adel3li/Alhmd-MVP-V1` holds only a README. The build specification in `Alhmd-MVP-V2` plans a database of 365 blessings, launching with 30 to 60, so the larger number was a plan. If more were written, they are somewhere other than GitHub.
+
 ## 5. Versions
 
 The repository has no tags and `package.json` is still `0.0.0`, so "version" means different things in different places.
@@ -286,5 +300,6 @@ Points that matter for the work ahead.
 
 - `main` and production: `68e723a`. Application code as of 7 November.
 - Open: draft PR #4 (marketing kit).
-- Unmerged and without a pull request: `claude/trusting-rubin-9ue5hh`, which holds six fixes for problems that are live.
+- Branch `claude/gracious-tesla-3wpebg` (pull request #5): this documentation and the first fixes (`d3dfd92`). Not merged yet.
+- Unmerged and without a pull request: `claude/trusting-rubin-9ue5hh`. Of its six fixes, the seeded-history one is superseded by `d3dfd92`, and the one that marks unreviewed text on screen goes against the owner's later decision. The other four (streak removal, one stated duration, reflection events, the promise check) are still worth applying on their own.
 - Not started: payments (RevenueCat), scholarly review of the content (0 of 40 blessings approved), reminders, tests, native packaging.

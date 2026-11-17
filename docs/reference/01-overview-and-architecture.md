@@ -34,7 +34,7 @@ The product makes four promises, repeated in onboarding, the landing page and th
 
 Declared in `package.json` but imported by nothing in `src/` or `vite.config.ts`: `@google/genai`, `express`, `dotenv`, `@types/express`, `autoprefixer`, `esbuild`, `tsx`. They are leftovers of the Google AI Studio project template (see `metadata.json`, `.env.example`).
 
-There is no test runner, no linter other than `tsc --noEmit`, no formatter config and no CI workflow in the repository. The React type packages are missing, so that type check does not cover component props or JSX (see [11](11-build-and-deployment.md), section 2).
+There is no test runner, no linter other than `tsc --noEmit`, no formatter config and no CI workflow in the repository. Since `d3dfd92` the React type packages are installed and `strict` is on, so that check covers component props and JSX; before, it did not (see [11](11-build-and-deployment.md), section 2).
 
 ## 3. Repository map
 
@@ -110,9 +110,9 @@ There is no router, no URL state and no code splitting. The whole app is one Jav
 
 Behaviour:
 
-- **Tab change** (`handleTabChange`, `src/App.tsx:66`). Selecting `journey` while `getDeveloperPremiumSync()` is false opens the paywall instead of changing tab. Selecting `tasbih` resets the sub-view to the counter.
+- **Tab change** (`handleTabChange`, `src/App.tsx:66`). Selecting `journey` while `getDeveloperPremiumSync()` is false opens the paywall instead of changing tab. Selecting `tasbih` resets the sub-view to the counter. Since `d3dfd92` the journey is hidden unless the build sets `VITE_ENABLE_JOURNEY=true` (`JOURNEY_ENABLED` in `src/lib/entitlements.ts`): the tab is in neither nav bar, and `App` renders neither the journey screen nor the paywall, which leaves four tabs.
 - **Onboarding gate** (`src/App.tsx:78`). While `onboardingCompleted` is false only `OnboardingScreen` is rendered, wrapped in a div that carries the theme classes.
-- **Reflection completion** (`handleReflectionComplete`, `src/App.tsx:92`). Fires the `success` haptic, calls `markTodayCompleted()`, adds a journal entry when the user wrote text, closes the modal and shows particles for 3,200 ms.
+- **Reflection completion** (`handleReflectionComplete`, `src/App.tsx:92`). Fires the `success` haptic, calls `markTodayCompleted()`, calls `markWelcomeSeen()` when the reflection was the welcome one (since `d3dfd92`), adds a journal entry when the user wrote text, closes the modal and shows particles for 3,200 ms.
 - **Root classes** (`src/App.tsx:105`–`116`). `theme-light` or `theme-dark` with hard-coded background and text colours, plus `text-scale-normal|large|xlarge` derived from `textSize`.
 - **Home shortcuts** (`src/App.tsx:146`–`154`). `App` passes `onOpenTasbih` (switch to the Tasbih tab on the counter) and `onOpenHisn(category)` (switch to the Tasbih tab on Hisn Al-Muslim with that category), together with `tasbihCount`. `HomeScreen` declares all three props and uses none of them (`src/components/screens/HomeScreen.tsx:14`–`17`), so Home has no shortcut to either, and `hisnCategory` is never set.
 - **Paywall unlock** (`src/App.tsx:213`). `onUnlocked` closes the paywall and switches to the Journey tab.

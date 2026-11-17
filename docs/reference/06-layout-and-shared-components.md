@@ -1,5 +1,7 @@
 # Layout and shared components
 
+> **Changed since this was written** (commit `d3dfd92`, 17 November 2026): the journey tab is filtered out of `BottomTabBar` and `DesktopNavBar` unless `JOURNEY_ENABLED` is true, which leaves four tabs. Dialogs rendered inside a screen are now positioned against the viewport.
+
 State of the code at commit `68e723a` (`main`, 2026-11-16). Line references are `path:line` against that commit.
 
 This file covers the eight components in `src/components/common/` and the three in `src/components/layout/`. Every line of the eleven files was read. "Verified at run time" means the behaviour was observed in headless Chrome 153 against a production build; web fonts could not be fetched there, so pixel measurements were taken with fallback fonts. Colours, variables and the remapping of hex classes are explained in [05-design-system.md](05-design-system.md).

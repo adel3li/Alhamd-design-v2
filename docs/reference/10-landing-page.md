@@ -1,5 +1,7 @@
 # Landing page
 
+> **Changed since this was written** (commit `d3dfd92`, 17 November 2026): the «رحلتي» feature card and the mockup's «رحلتي» tab are shown only when the build sets `VITE_ENABLE_JOURNEY=true`; the «نصوصٌ موثّقة» card now reads «الآيات بنصّها مع اسم السورة ورقم الآية، والأحاديث بمصدرها ودرجتها.»
+
 State of the code at commit `68e723a` (`main`, 2026-11-16). Line references are `path:line` against that commit.
 
 The landing page is a single static marketing page in Arabic (RTL) for the Alhamd app. It is a second Vite entry that lives beside the app in the same repository and is served at the root of `alhamd.app`. It was added in commit `55ccf2e` (2026-11-10); commit `70602c1` (2026-11-11) changed one line of it (the app URL) and added the host routing.

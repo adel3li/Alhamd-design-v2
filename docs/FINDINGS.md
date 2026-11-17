@@ -5,7 +5,28 @@ Written on 2026-11-17 against commit `68e723a`. This file has two parts:
 - **Part A** lists the areas where the knowledge in this documentation can be put to work, with a suggested starting point for each.
 - **Part B** is the register of concrete findings from the read-through, each with an id, a severity, the evidence and a direction.
 
-Nothing here has been fixed. This file records what was found; fixing is separate work.
+## Status
+
+The first round of fixes is in commit `d3dfd92` (17 November 2026). The rows below keep their original text; this table says what changed. Every finding not listed here is open.
+
+| Id | Status | What changed |
+|---|---|---|
+| B-01 | Fixed | Finishing the welcome reflection records it and its day; the daily rotation starts the next day. Existing users with any completed reflection move straight on |
+| B-02, B-06, B-10 | Fixed | Every day key comes from `src/lib/dates.ts` (the local day): completed days, journal dates, the calendar's today marker, the consistency statistics, the Hisn Al-Muslim counters. Days saved by earlier builds are left as they are |
+| B-04 | Fixed | The verse of the day is formatted as a verse. Found by the type check once the React types were installed |
+| B-05 | Fixed | The blessing, the verse and "done today" are recomputed when the local day changes, without a reload |
+| B-07 | Fixed | A `YYYY-MM-DD` string is read as a local day |
+| B-09 | Fixed | Reflection text is split without a regex lookbehind. The error boundary (M-03) is still missing |
+| P-01 | Fixed | New users start empty. The samples earlier builds saved are removed on load and on backup import; the three seeded days are removed only when all three are found. Written here, not taken from the unmerged branch |
+| U-01 | Fixed | The entrance animations no longer keep their end state, so no transform is left on the screens. Checked on all five screens |
+| M-10 | Fixed | `@types/react` and `@types/react-dom` are installed and `strict` is on; the type check passes |
+| S-01 | Hidden, not fixed | The journey tab, the paywall and the developer unlock are behind one switch, `JOURNEY_ENABLED` (`VITE_ENABLE_JOURNEY`), which is off. Before it is turned on for real users, the developer unlock must be replaced by a real purchase check |
+| S-04, U-02, U-12, P-05, B-03, C-02, all of J | Hidden, still open | Not reachable while the journey is hidden. They should be fixed before it is switched back on |
+| C-01 | Changed by the owner's decision | The "under review" badges are no longer shown to users. The content sheet reads its count from the data, and neither it nor the landing page now says the texts were reviewed or approved. The review itself has not been done |
+| C-08 | Partly changed | The landing page's sourcing sentence no longer claims scholarly review or the Uthmani script. The content sheet's sourcing paragraphs and the landing page's "free" are unchanged |
+| M-09 | Partly fixed | The `getDayNumber` and `fontSize` comments were corrected |
+
+How the fixes were checked: 22 behaviour checks and 9 overlay checks in a headless browser against the production build (a new user at 01:30 Riyadh time, the welcome reflection end to end, the next day without a reload, an existing user with seeded and real data, every screen's overlays), plus `bun run lint` and `bun run build`.
 
 How each finding was established is stated in its row: **run time** means the behaviour was observed in a headless browser against the production build; **code** means it was read in the source and, for "nothing calls X" claims, confirmed with a repository-wide search; **run time (reviewer)** means it was observed in a browser by one of the parallel reviewers that read each area line by line; **branch** means a fix already exists on the unmerged branch `claude/trusting-rubin-9ue5hh` (see [HISTORY.md](HISTORY.md), section 9).
 

@@ -45,6 +45,10 @@ Read 01 first; the rest can be read in any order.
 - "Verified at run time" means the behaviour was observed in a browser against the production build. Everything else was read from the code.
 - Statements about what the code does not do (for example "no component calls X") were checked with a repository-wide search.
 
+## After the read-through
+
+The first round of fixes (commit `d3dfd92`, 17 November 2026) changed application code. [FINDINGS.md](FINDINGS.md) opens with a status table for the findings it touched. Reference files 01 to 04 and 11 were updated in place; files 05 to 10 carry a short note at the top saying what changed.
+
 ## Keeping this current
 
 The reference files describe a snapshot. When a module changes, update its section in the same pull request. When a finding in [FINDINGS.md](FINDINGS.md) is fixed, mark it there with the commit that fixed it.

@@ -122,7 +122,7 @@ By category: din 13, nafs 6, nasl 6, rizq 4, afiyah 4, aql 3, amn 3, mal 1.
 
 ### 1.6 What the review fields do at run time
 
-They are data only. No component reads `quran.verified`, `hadith.gradeVerified`, `scholarQuote.verifiedVerbatim` or a blessing's `reviewStatus`. Unreviewed verses and hadith are displayed exactly like reviewed ones would be. `ContentReviewModal` tells the user the number of approved blessings is 40 while the data says 0; see [07-screens-core.md](07-screens-core.md).
+They are data only. No component reads `quran.verified`, `hadith.gradeVerified`, `scholarQuote.verifiedVerbatim` or a blessing's `reviewStatus`. Unreviewed verses and hadith are displayed exactly like reviewed ones would be. Until `d3dfd92`, `ContentReviewModal` showed an "under review" badge and also stated that 40 blessings were approved while the data says 0. By the owner's decision the badge was removed; the sheet now shows the number of blessings, read from the data, with no statement about review. See [07-screens-core.md](07-screens-core.md).
 
 ## 2. Journey content (`src/data/journey_content.json`)
 
@@ -139,7 +139,7 @@ Schema types live in `src/lib/journeyStore.ts:6`–`50` (`JourneyContentFile`, `
 | `stage_ahl` | `nasl` | الأهل والمودة | منزل نعمة الأهل | 022, 023, 024, 025, 026, 027, 033 |
 | `stage_rizq` | `rizq` | الرزق والسكينة | منزل نعمة الرزق والسكينة | 015, 016, 028, 030, 031, 032, 039 |
 
-All 28 `journalPrompt` and `dailyAction` texts are `pending_review`. 14 stations carry a `sacredPlaceholder` (10 with `[[AYAH_TOKEN]]`, 4 with `[[HADITH_TOKEN]]`) and 14 carry a `dhikrPlaceholder` (`[[HADITH_TOKEN]]`); all have `verifiedVerbatim: false`. The tokens are stand-ins for sacred text that has not been written into the file. The only review field read at run time is `dailyAction.reviewStatus` (`src/components/journey/JourneyStationFlow.tsx:460`).
+All 28 `journalPrompt` and `dailyAction` texts are `pending_review`. 14 stations carry a `sacredPlaceholder` (10 with `[[AYAH_TOKEN]]`, 4 with `[[HADITH_TOKEN]]`) and 14 carry a `dhikrPlaceholder` (`[[HADITH_TOKEN]]`); all have `verifiedVerbatim: false`. The tokens are stand-ins for sacred text that has not been written into the file. At `68e723a` the only review field read at run time was `dailyAction.reviewStatus` (`src/components/journey/JourneyStationFlow.tsx:460`), which showed a label; `d3dfd92` removed it, so no review field is read at run time now.
 
 Twelve blessings are not part of any stage: 004, 008, 010, 011, 012, 013, 018, 019, 020, 029, 034, 040.
 

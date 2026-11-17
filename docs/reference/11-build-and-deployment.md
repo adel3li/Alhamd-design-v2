@@ -10,7 +10,7 @@ Defined in `package.json:6`–`12`. Bun is the package manager (`bun.lock`); npm
 | `bun run dev` | `vite --port=3000 --host=0.0.0.0` | App at `http://localhost:3000/`, landing page at `http://localhost:3000/landing/` |
 | `bun run build` | `vite build && mv dist/index.html dist/app.html` | About 4 s. The rename is what makes host routing work, see section 4 |
 | `bun run preview` | `vite preview` | Serves `dist/`. Because of the rename, `/` returns 404 locally; open `/app.html` and `/landing/index.html` |
-| `bun run lint` | `tsc --noEmit` | Type check only. Passes with no errors at `68e723a`, but does not cover React code (section 2) |
+| `bun run lint` | `tsc --noEmit` | Type check only. Since `d3dfd92` it runs with `strict` on and React types installed (section 2) |
 | `bun run clean` | `rm -rf dist server.js` | `server.js` is an AI Studio template leftover; no such file exists |
 
 There is no `test` script.
@@ -28,11 +28,11 @@ There is no `test` script.
 
 Target and lib ES2022 with DOM; `module: ESNext`; `moduleResolution: bundler`; `jsx: react-jsx`; `isolatedModules`; `allowJs`; `allowImportingTsExtensions`; `noEmit`; `skipLibCheck`; `experimentalDecorators` and `useDefineForClassFields: false` (template defaults, nothing uses decorators). `include: ["src"]`, `exclude: ["legacy", "node_modules", "dist"]`. `strict` is off, so `null`/`undefined` mistakes and implicit `any` are not reported by `bun run lint`.
 
-`@types/react` and `@types/react-dom` are not installed and React ships no types of its own, so `react` is typed `any`. Component props and JSX are therefore not checked at all: `bun run lint` passes, while `tsc --strict` reports 3,119 errors, 2,808 of them for untyped JSX.
+Until `d3dfd92`, `@types/react` and `@types/react-dom` were not installed. React ships no types of its own, so `react` was typed `any` and component props and JSX were not checked at all: `bun run lint` passed, while `tsc --strict` reported 3,119 errors, 2,808 of them for untyped JSX. That commit installed both packages and turned `strict` on. With the types in place the strict check reported seven real errors, which were fixed; `bun run lint` now runs the strict check and passes.
 
 ### Environment
 
-The app reads no environment variables. `.env.example` (`GEMINI_API_KEY`, `APP_URL`) and `metadata.json` (`MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API`) come from the AI Studio template; no code calls Gemini.
+The app reads one build-time variable, `VITE_ENABLE_JOURNEY` (typed in `src/vite-env.d.ts`, added in `d3dfd92`). Set to `true`, the build includes the journey tab, the paywall and the developer tools; unset, they are left out. `.env.example` (`GEMINI_API_KEY`, `APP_URL`) and `metadata.json` (`MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API`) come from the AI Studio template; no code calls Gemini.
 
 ### `.gitignore`
 
@@ -40,7 +40,7 @@ The app reads no environment variables. `.env.example` (`GEMINI_API_KEY`, `APP_U
 
 ## 3. Build output
 
-Measured on `68e723a` with Vite 6.4.4:
+Measured on `68e723a` with Vite 6.4.4. With the journey left out (`d3dfd92`), the app chunk is 951 kB (262 kB gzipped) and the app stylesheet 91 kB (15 kB gzipped); the other files are unchanged.
 
 | File | Size | Gzip |
 |---|---:|---:|

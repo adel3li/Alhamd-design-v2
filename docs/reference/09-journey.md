@@ -1,5 +1,7 @@
 # My Journey (رحلتي) — premium feature
 
+> **Changed since this was written** (commit `d3dfd92`, 17 November 2026): the whole feature is hidden unless the build sets `VITE_ENABLE_JOURNEY=true` (`JOURNEY_ENABLED` in `src/lib/entitlements.ts`). The label «محتوى توجيهي (قيد المراجعة)» was removed from the daily-action card, and the station flow splits text without a regex lookbehind. Nothing else here changed: the defects listed in FINDINGS, section J, are still present behind the switch.
+
 This document covers every file in `src/components/journey/`, the one-line shim `src/components/screens/JourneyPathScreen.tsx`, and the content file `src/data/journey_content.json`.
 
 The logic these components call (`src/lib/journeyStore.ts`, `src/lib/entitlements.ts`, `src/lib/analytics.ts`, `src/lib/store.tsx`) is described in [02-state-and-persistence.md](02-state-and-persistence.md). The real paywall component, `src/components/screens/PremiumPaywallScreen.tsx`, is described with the other screens. Both are referenced here only where a journey component calls into them.
