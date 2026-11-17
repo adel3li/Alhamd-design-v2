@@ -1,7 +1,8 @@
 import React from 'react';
-import { X, CheckCircle2, Clock } from 'lucide-react';
+import { X } from 'lucide-react';
 import { GlassCard } from '../common/GlassCard';
 import { toArabicNumerals } from '../../lib/arabic';
+import { getAllBlessings } from '../../data/loader';
 
 interface ContentReviewModalProps {
   onClose: () => void;
@@ -24,17 +25,6 @@ export const ContentReviewModal: React.FC<ContentReviewModalProps> = ({ onClose 
         </div>
 
         <div className="space-y-4 my-5 text-right">
-          {/* Honest Status Badge */}
-          <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center gap-3">
-            <Clock size={20} className="text-amber-400 flex-shrink-0" />
-            <div>
-              <span className="text-xs font-bold text-amber-300 block">حالة المحتوى: قيد المراجعة العلمية</span>
-              <p className="text-[11px] text-amber-200/80 leading-relaxed mt-0.5">
-                تخضع نصوص النعم والأحاديث للمراجعة والتدقيق الشرعي لضمان أعلى درجات التثبت.
-              </p>
-            </div>
-          </div>
-
           <GlassCard padding="p-4" className="space-y-2">
             <h4 className="text-xs font-bold text-[#E4C368]">الآيات القرآنية</h4>
             <p className="text-xs text-[#C7C4D8] leading-relaxed">
@@ -59,7 +49,7 @@ export const ContentReviewModal: React.FC<ContentReviewModalProps> = ({ onClose 
 
         <div className="pt-2 text-center">
           <span className="text-xs text-[#AEAECB]">
-            إجمالي النعم المعتمدة في التطبيق: {toArabicNumerals(40)} نعمة
+            إجمالي النعم في التطبيق: {toArabicNumerals(getAllBlessings().length)} نعمة
           </span>
         </div>
       </div>

@@ -17,12 +17,13 @@ import { ContentReviewModal } from './components/screens/ContentReviewModal';
 import { PrivacyPolicyModal } from './components/screens/PrivacyPolicyModal';
 import { SpotlightTour } from './components/common/SpotlightTour';
 import { CompletionParticles } from './components/common/CompletionParticles';
-import { getDeveloperPremiumSync } from './lib/entitlements';
+import { getDeveloperPremiumSync, PAYWALL_ENABLED } from './lib/entitlements';
 import { PremiumPaywallScreen } from './components/screens/PremiumPaywallScreen';
 
 const MainAppContent: React.FC = () => {
   const {
     todayBlessing,
+    todayRole,
     todayInspiration,
     entries,
     userBlessings,
@@ -38,6 +39,7 @@ const MainAppContent: React.FC = () => {
     isCompletedToday,
     completeOnboarding,
     completeTour,
+    markWelcomeSeen,
     markTodayCompleted,
     incrementTasbih,
     resetTasbih,
@@ -64,7 +66,7 @@ const MainAppContent: React.FC = () => {
   const [showJourneyPaywall, setShowJourneyPaywall] = useState(false);
 
   const handleTabChange = (tab: TabId) => {
-    if (tab === 'journey' && !getDeveloperPremiumSync()) {
+    if (tab === 'journey' && PAYWALL_ENABLED && !getDeveloperPremiumSync()) {
       setShowJourneyPaywall(true);
       return;
     }
@@ -82,7 +84,7 @@ const MainAppContent: React.FC = () => {
           onComplete={completeOnboarding}
           notificationsEnabled={notificationsEnabled}
           onToggleNotifications={setNotificationsEnabled}
-          analyticsConsent={analyticsConsent}
+          analyticsConsent={analyticsConsent === true}
           onToggleAnalytics={setAnalyticsConsent}
         />
       </div>
@@ -92,6 +94,10 @@ const MainAppContent: React.FC = () => {
   const handleReflectionComplete = (journalText?: string) => {
     triggerHaptic('success');
     markTodayCompleted();
+    // Finishing the welcome reflection («نعمة الإسلام») starts the daily rotation from tomorrow.
+    if (todayRole === 'welcome') {
+      markWelcomeSeen();
+    }
     if (journalText) {
       addJournalEntry(journalText);
     }
@@ -206,7 +212,7 @@ const MainAppContent: React.FC = () => {
       </div>
 
       {/* Paywall Modal when clicking رحلتي without Developer Mode enabled */}
-      {showJourneyPaywall && (
+      {PAYWALL_ENABLED && showJourneyPaywall && (
         <PremiumPaywallScreen
           triggerReason="preview"
           onClose={() => setShowJourneyPaywall(false)}

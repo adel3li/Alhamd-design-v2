@@ -158,7 +158,7 @@ export interface AppState {
   nightReadingMode: boolean;
   fontFamily: DisplayFontFamily;
   textSize: TextSize;
-  fontSize: number; // Numeric root font size in px (range 12 - 24, default 15)
+  fontSize: number; // Numeric root font size in px (range 12 - 24, default 16)
   firstLaunchDate: string | null;
   welcomeSeen: boolean;
   analyticsConsent: boolean | null;
@@ -169,6 +169,8 @@ export interface AppState {
 export interface StoreContextType extends AppState {
   onboardingCompleted: boolean;
   todayBlessing: Blessing;
+  /** 'welcome' while the first-time blessing («نعمة الإسلام») is showing, then 'daily'. */
+  todayRole: 'welcome' | 'daily';
   todayInspiration: InspirationItem;
   entries: JournalEntry[];
   completedDays: string[];

@@ -86,7 +86,7 @@ export const AboutModal: React.FC<AboutModalProps> = ({
             onClick={onOpenContentReview}
             className="w-full py-2.5 px-4 rounded-xl bg-[#1E1E38] hover:bg-[#25232E] border border-[#2E2E4A] text-xs font-semibold text-[#EDEDF5] flex items-center justify-between transition-colors"
           >
-            <span>عن المحتوى والمراجعة العلمية</span>
+            <span>عن المحتوى والتوثيق</span>
             <BookMarked size={15} className="text-[#C8A951]" />
           </button>
 

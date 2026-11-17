@@ -26,8 +26,10 @@ import {
   isPremium,
   getDeveloperPremiumSync,
   setDeveloperPremium,
-  subscribeEntitlementChange
+  subscribeEntitlementChange,
+  PAYWALL_ENABLED
 } from '../../lib/entitlements';
+import { toLocalDateString } from '../../lib/dates';
 import { devResetTodayPacingLock, devResetEntireJourney } from '../../lib/journeyStore';
 import { AboutModal } from './AboutModal';
 import { ContentReviewModal } from './ContentReviewModal';
@@ -112,7 +114,7 @@ export const SettingsScreen: React.FC = () => {
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `alhamd-backup-${new Date().toISOString().split('T')[0]}.json`;
+      link.download = `alhamd-backup-${toLocalDateString()}.json`;
       link.click();
       URL.revokeObjectURL(url);
       triggerHaptic('success');
@@ -589,9 +591,8 @@ export const SettingsScreen: React.FC = () => {
         >
           <div className="flex items-center gap-2.5">
             <BookMarked size={16} className="text-[#C8A951]" />
-            <span>عن المحتوى والمراجعة العلمية</span>
+            <span>عن المحتوى والتوثيق</span>
           </div>
-          <span className="text-[11px] text-amber-400 font-medium">قيد المراجعة</span>
         </button>
 
         <button
@@ -638,7 +639,9 @@ export const SettingsScreen: React.FC = () => {
           <span className="text-[11px] text-[#AEAECB]">الدال على الخير</span>
         </button>
 
-        {/* Developer Mode Toggle ('وضع المطور: تفعيل الرحلة') for testing «رحلتي» locally before subscribing */}
+        {/* Developer Mode Toggle ('وضع المطور: تفعيل الرحلة') for testing «رحلتي» locally before subscribing.
+            Rendered only when there is a paywall to test (see PAYWALL_ENABLED). */}
+        {PAYWALL_ENABLED && (
         <div className="pt-2">
           <div className="p-4 rounded-2xl bg-[#1E1E38]/90 border border-dashed border-[#2E2E4A] space-y-3">
             <div className="flex items-center justify-between gap-3">
@@ -734,6 +737,7 @@ export const SettingsScreen: React.FC = () => {
             )}
           </div>
         </div>
+        )}
       </div>
 
       {/* Time Picker Modal */}
@@ -776,7 +780,7 @@ export const SettingsScreen: React.FC = () => {
         <PrivacyPolicyModal onClose={() => setModalType('none')} />
       )}
 
-      {modalType === 'paywall' && (
+      {PAYWALL_ENABLED && modalType === 'paywall' && (
         <PremiumPaywallScreen
           onClose={() => setModalType('none')}
           onUnlocked={() => {

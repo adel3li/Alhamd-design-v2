@@ -7,6 +7,7 @@ import { StarLattice } from '../common/StarLattice';
 import { CompletionParticles } from '../common/CompletionParticles';
 import { ShareCardModal } from '../common/ShareCardModal';
 import { toArabicNumerals } from '../../lib/arabic';
+import { trackEvent } from '../../lib/analytics';
 
 interface ReflectionModalProps {
   blessing: Blessing;
@@ -50,7 +51,8 @@ export const ReflectionModal: React.FC<ReflectionModalProps> = ({
   // Split text into sentences for peaceful pacing
   const sentences = currentStep
     ? currentStep.text
-        .split(/(?<=[.،؟!…])\s+/)
+        .replace(/([.،؟!…])\s+/g, '$1\n')
+        .split('\n')
         .map(s => s.trim())
         .filter(Boolean)
     : [];
@@ -108,6 +110,20 @@ export const ReflectionModal: React.FC<ReflectionModalProps> = ({
     setTimerCompleted(false);
     setTimerRemaining(timerDuration);
   };
+
+  // Consent-gated, metadata-only: which blessing, and which of the five steps was reached.
+  useEffect(() => {
+    trackEvent('reflection_started', { blessing_id: blessing.id });
+  }, [blessing.id]);
+
+  useEffect(() => {
+    if (!currentStep) return;
+    trackEvent('reflection_step_viewed', {
+      blessing_id: blessing.id,
+      step_index: currentStepIdx,
+      step_type: currentStep.type
+    });
+  }, [blessing.id, currentStepIdx, currentStep?.type]);
 
   // Reset sentence index on step change and pace through sentences
   useEffect(() => {
@@ -167,6 +183,7 @@ export const ReflectionModal: React.FC<ReflectionModalProps> = ({
   const handleFinishJournal = (saveText: boolean) => {
     setShowAcceptedOverlay(true);
     triggerHaptic('success');
+    trackEvent('reflection_completed', { blessing_id: blessing.id });
 
     setTimeout(() => {
       onComplete(saveText && journalText.trim() ? journalText.trim() : undefined);

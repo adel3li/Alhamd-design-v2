@@ -258,22 +258,30 @@ html {
 }
 
 /* Animations */
+/* Neither animation keeps its end state (no `forwards`). A kept end state
+   leaves a transform on the element for good, even when the last keyframe says
+   `transform: none`, because the browser interpolates it as an identity
+   transform. Any transform makes the element the containing block of its
+   `position: fixed` descendants, so dialogs opened from inside a screen were
+   sized and centred against the whole scrolling screen instead of the viewport.
+   Every element using these classes rests at opacity 1 with no transform, so
+   nothing changes visually when the animation ends and lets go. */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+  to { opacity: 1; transform: none; }
 }
 
 @keyframes scaleUp {
   from { opacity: 0; transform: scale(0.92); }
-  to { opacity: 1; transform: scale(1); }
+  to { opacity: 1; transform: none; }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .animate-scale-up {
-  animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ==========================================================================

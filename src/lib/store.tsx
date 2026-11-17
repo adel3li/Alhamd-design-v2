@@ -12,6 +12,7 @@ import {
 import { mapOldCategoryToCanonical } from '../constants/categories';
 import { getAllBlessings } from '../data/loader';
 import { resolveTodayExperience, getDayNumber, getTodayInspiration } from './dailyLogic';
+import { parseLocalDateString, toLocalDateString, useLocalDay } from './dates';
 import {
   loadJourneyState,
   saveJourneyState,
@@ -65,46 +66,117 @@ const STORAGE_KEYS = {
   ONBOARDED: 'alhamd_onboarded',
   TOUR: 'alhamd:tourComplete',
   CONSENT: 'alhamd:analytics_consent',
-  JOURNEY: 'alhamd:journey_state:v1'
+  JOURNEY: 'alhamd:journey_state:v1',
+  WELCOME_SEEN: 'alhamd_welcome_seen',
+  WELCOME_DATE: 'alhamd_welcome_date'
 };
 
-const initialSampleJournal: JournalEntry[] = [
-  {
-    id: 'sample_entry_1',
-    date: new Date(Date.now() - 86400000).toISOString().split('T')[0],
-    displayDate: 'الأحد ٢٥ ذو الحجة',
-    blessingId: 'blessing_022',
-    shortTitle: 'الأم',
-    categoryLabel: 'نعم الأهل',
-    text: 'اتصلتُ بها اليوم لأشكرها فقط، فدعت لي دعوةً أذابت قلبي.',
-    createdAt: Date.now() - 86400000
-  },
-  {
-    id: 'sample_entry_2',
-    date: new Date(Date.now() - 172800000).toISOString().split('T')[0],
-    displayDate: 'السبت ٢٤ ذو الحجة',
-    blessingId: 'blessing_015',
-    shortTitle: 'الماء',
-    categoryLabel: 'نعم الحياة والنفس',
-    text: 'انقطع الماء عن حيّنا ساعتين، فذقتُ معنى النعمة حين غابت.',
-    createdAt: Date.now() - 172800000
-  }
-];
+/**
+ * Builds before this one gave every new user two journal entries, one personal
+ * blessing and three "completed" days they never wrote. New users now start
+ * empty, and what those builds saved is removed on load and on backup import.
+ */
+const SEEDED_JOURNAL_IDS = ['sample_entry_1', 'sample_entry_2'];
+const SEEDED_BLESSING_IDS = ['sample_user_blessing_1'];
+const DAY_MS = 86_400_000;
 
-const initialSampleBlessings: UserBlessing[] = [
-  {
-    id: 'sample_user_blessing_1',
-    title: 'صوت المطر على نافذتي',
-    prompt1: 'الليلة الماضية حين انهمر المطر في هدوء الليل.',
-    prompt2: 'جفاف الأرض وصمت الطبيعة وغياب رائحة الغيث التي تشرح الصدر.',
-    prompt3: 'الحمد لله الذي يسوق السحاب رحمةً وينزل الغيث من بعد ما قنطوا.',
-    category: 'نعم الحياة والنفس',
-    isFavorite: true,
-    source: 'user',
-    createdAt: Date.now() - 259200000,
-    updatedAt: Date.now() - 259200000
+function dropSeededJournal(entries: JournalEntry[]): JournalEntry[] {
+  return entries.filter((e) => !SEEDED_JOURNAL_IDS.includes(e?.id));
+}
+
+function dropSeededBlessings(blessings: UserBlessing[]): UserBlessing[] {
+  return blessings.filter((b) => !SEEDED_BLESSING_IDS.includes(b?.id));
+}
+
+/** The three days an old build seeded for a first launch at `firstLaunchMs`, computed the way it did. */
+function seededDaysFor(firstLaunchMs: number): string[] {
+  return [1, 2, 4].map((daysBack) => {
+    const d = new Date(firstLaunchMs);
+    d.setDate(d.getDate() - daysBack);
+    return d.toISOString().split('T')[0];
+  });
+}
+
+/**
+ * Removes the seeded days, and only those. The first launch time is recovered
+ * from the seeded journal entry (created "one day before" first launch) or
+ * from the journey state created on first launch; the days are removed only
+ * when all three are present, so a real completion is never dropped.
+ */
+function dropSeededDays(days: string[], rawJournal: JournalEntry[], journeyCreatedAt?: unknown): string[] {
+  const firstLaunchCandidates: number[] = [];
+  const sample = rawJournal.find((e) => e?.id === SEEDED_JOURNAL_IDS[0]);
+  if (sample && typeof sample.createdAt === 'number') firstLaunchCandidates.push(sample.createdAt + DAY_MS);
+  const journeyMs = typeof journeyCreatedAt === 'string' ? Date.parse(journeyCreatedAt) : NaN;
+  if (!Number.isNaN(journeyMs)) firstLaunchCandidates.push(journeyMs);
+
+  for (const ms of firstLaunchCandidates) {
+    const seeded = seededDaysFor(ms);
+    if (seeded.every((d) => days.includes(d))) {
+      return days.filter((d) => !seeded.includes(d));
+    }
   }
-];
+  return days;
+}
+
+function readStoredArray<T>(key: string): T[] {
+  try {
+    const stored = localStorage.getItem(key);
+    const parsed = stored ? JSON.parse(stored) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+interface InitialHistory {
+  journal: JournalEntry[];
+  userBlessings: UserBlessing[];
+  completed: string[];
+  welcomeSeen: boolean;
+  welcomeDate: string | null;
+}
+
+/** Reads the user's saved history once, without the seeded samples. */
+function readInitialHistory(): InitialHistory {
+  const rawJournal = readStoredArray<JournalEntry>('alhamd_journal');
+  const rawCompleted = readStoredArray<string>('alhamd_completed_reflections').filter(
+    (d) => typeof d === 'string'
+  );
+
+  let journeyCreatedAt: unknown;
+  try {
+    const rawJourney = localStorage.getItem(STORAGE_KEYS.JOURNEY);
+    journeyCreatedAt = rawJourney ? JSON.parse(rawJourney)?.createdAt : undefined;
+  } catch {
+    journeyCreatedAt = undefined;
+  }
+
+  const completed = dropSeededDays(rawCompleted, rawJournal, journeyCreatedAt);
+
+  let welcomeSeen = false;
+  let welcomeDate: string | null = null;
+  try {
+    welcomeSeen = localStorage.getItem(STORAGE_KEYS.WELCOME_SEEN) === 'true';
+    welcomeDate = localStorage.getItem(STORAGE_KEYS.WELCOME_DATE);
+  } catch {
+    // Storage unavailable: start as a new user.
+  }
+  // Earlier builds never recorded that the welcome reflection was finished, so
+  // everyone stayed on it. Anyone who has completed a reflection has done it.
+  if (!welcomeSeen && completed.length > 0) {
+    welcomeSeen = true;
+    welcomeDate = [...completed].sort().pop() ?? null;
+  }
+
+  return {
+    journal: dropSeededJournal(rawJournal),
+    userBlessings: dropSeededBlessings(readStoredArray<UserBlessing>(STORAGE_KEYS.USER_BLESSINGS)),
+    completed,
+    welcomeSeen,
+    welcomeDate
+  };
+}
 
 const StoreContext = createContext<StoreContextType | null>(null);
 
@@ -114,9 +186,14 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     return localStorage.getItem(STORAGE_KEYS.ONBOARDED) === 'true';
   });
 
-  const [welcomeSeen, setWelcomeSeen] = useState<boolean>(() => {
-    return localStorage.getItem('alhamd_welcome_seen') === 'true';
-  });
+  // Saved history, read once (see readInitialHistory).
+  const [initialHistory] = useState<InitialHistory>(readInitialHistory);
+
+  const [welcomeSeen, setWelcomeSeen] = useState<boolean>(initialHistory.welcomeSeen);
+  const [welcomeDate, setWelcomeDate] = useState<string | null>(initialHistory.welcomeDate);
+
+  // The user's calendar day; rolls over at local midnight while the app is open.
+  const today = useLocalDay();
 
   const [tourCompleted, setTourCompleted] = useState<boolean>(() => {
     return localStorage.getItem(STORAGE_KEYS.TOUR) === 'true';
@@ -173,43 +250,17 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     return localStorage.getItem('alhamd_notif_time') || '21:00';
   });
 
-  const [completedReflections, setCompletedReflections] = useState<string[]>(() => {
-    try {
-      const stored = localStorage.getItem('alhamd_completed_reflections');
-      if (stored) return JSON.parse(stored);
-    } catch {}
-    // Default with past 3 days completed for warm rich experience
-    const today = new Date();
-    const d1 = new Date(today); d1.setDate(today.getDate() - 1);
-    const d2 = new Date(today); d2.setDate(today.getDate() - 2);
-    const d3 = new Date(today); d3.setDate(today.getDate() - 4);
-    return [
-      d1.toISOString().split('T')[0],
-      d2.toISOString().split('T')[0],
-      d3.toISOString().split('T')[0]
-    ];
-  });
+  // Local days (YYYY-MM-DD) on which a reflection was finished. Empty for a new user.
+  const [completedReflections, setCompletedReflections] = useState<string[]>(initialHistory.completed);
 
   // Journey state (themes, pace, stage/station progress, and private journals stored strictly on local device)
   const [journeyState, setJourneyStateInternal] = useState<JourneyState>(() => {
     return loadJourneyState();
   });
 
-  const [journalEntries, setJournalEntries] = useState<JournalEntry[]>(() => {
-    try {
-      const stored = localStorage.getItem('alhamd_journal');
-      if (stored) return JSON.parse(stored);
-    } catch {}
-    return initialSampleJournal;
-  });
+  const [journalEntries, setJournalEntries] = useState<JournalEntry[]>(initialHistory.journal);
 
-  const [userBlessings, setUserBlessings] = useState<UserBlessing[]>(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEYS.USER_BLESSINGS);
-      if (stored) return JSON.parse(stored);
-    } catch {}
-    return initialSampleBlessings;
-  });
+  const [userBlessings, setUserBlessings] = useState<UserBlessing[]>(initialHistory.userBlessings);
 
   const [tasbihCount, setTasbihCount] = useState<number>(() => {
     const val = localStorage.getItem('alhamd_tasbih_count');
@@ -315,21 +366,31 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   // Blessings pool and Today's computed blessing
   const allBlessings = useMemo(() => getAllBlessings(), []);
   const todayExp = useMemo(() => {
-    return resolveTodayExperience(new Date(), welcomeSeen, allBlessings);
-  }, [welcomeSeen, allBlessings]);
+    return resolveTodayExperience(today, welcomeSeen, allBlessings, welcomeDate);
+  }, [today, welcomeSeen, welcomeDate, allBlessings]);
   const todayBlessing = todayExp.blessing;
+  const todayRole = todayExp.role;
 
   // Today's computed inspiration (Ayah or Hadith)
   const todayInspiration = useMemo(() => {
-    const dayNum = getDayNumber(new Date());
+    const dayNum = getDayNumber(parseLocalDateString(today) ?? new Date());
     return getTodayInspiration(dayNum);
-  }, []);
+  }, [today]);
 
   // Today's reflection completion state
   const isCompletedToday = useMemo(() => {
-    const todayStr = new Date().toISOString().split('T')[0];
-    return completedReflections.includes(todayStr);
-  }, [completedReflections]);
+    return completedReflections.includes(today);
+  }, [completedReflections, today]);
+
+  // Remember that the welcome reflection was finished, and on which day.
+  useEffect(() => {
+    try {
+      if (welcomeSeen) localStorage.setItem(STORAGE_KEYS.WELCOME_SEEN, 'true');
+      if (welcomeDate) localStorage.setItem(STORAGE_KEYS.WELCOME_DATE, welcomeDate);
+    } catch {
+      // Ignore storage errors
+    }
+  }, [welcomeSeen, welcomeDate]);
 
   // Synchronize with document element classes for Theme & High Contrast
   useEffect(() => {
@@ -403,9 +464,11 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     triggerHaptic('success');
   }, [triggerHaptic]);
 
+  // Called when the welcome reflection («نعمة الإسلام») is finished. The welcome
+  // blessing stays for the rest of that day; the daily rotation starts the next.
   const markWelcomeSeen = useCallback(() => {
     setWelcomeSeen(true);
-    localStorage.setItem('alhamd_welcome_seen', 'true');
+    setWelcomeDate((current) => current ?? toLocalDateString());
   }, []);
 
   const completeTour = useCallback(() => {
@@ -476,7 +539,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
   const addJournalEntry = useCallback((entry: string | { blessingId?: string; shortTitle?: string; categoryLabel?: string; text: string; date?: string }) => {
     const now = new Date();
-    const isoDate = typeof entry === 'object' && entry.date ? entry.date : now.toISOString().split('T')[0];
+    const isoDate = typeof entry === 'object' && entry.date ? entry.date : toLocalDateString(now);
     
     // Arabic formatted date
     let displayDate = 'اليوم';
@@ -548,7 +611,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   }, [triggerHaptic]);
 
   const markReflectionCompleted = useCallback((isoDate?: string) => {
-    const targetDate = isoDate || new Date().toISOString().split('T')[0];
+    const targetDate = isoDate || toLocalDateString();
     setCompletedReflections(prev => {
       if (prev.includes(targetDate)) return prev;
       return [targetDate, ...prev];
@@ -557,8 +620,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   }, [triggerHaptic]);
 
   const isReflectionCompletedToday = useCallback(() => {
-    const today = new Date().toISOString().split('T')[0];
-    return completedReflections.includes(today);
+    return completedReflections.includes(toLocalDateString());
   }, [completedReflections]);
 
   const incrementTasbih = useCallback(() => {
@@ -609,15 +671,24 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       const data = JSON.parse(jsonStr);
       if (data.version === 2) {
         // v2 format
+        // Backups made by earlier builds may still carry the seeded samples.
+        const importedJournal: JournalEntry[] = Array.isArray(data.journal) ? data.journal : [];
         if (data.journal && Array.isArray(data.journal)) {
-          setJournalEntries(data.journal);
+          setJournalEntries(dropSeededJournal(importedJournal));
         }
         if (data.completedDays && Array.isArray(data.completedDays)) {
-          setCompletedReflections(data.completedDays);
+          const importedDays = dropSeededDays(
+            data.completedDays.filter((d: unknown) => typeof d === 'string'),
+            importedJournal,
+            data.journeyState?.createdAt
+          );
+          setCompletedReflections(importedDays);
+          if (importedDays.length > 0) setWelcomeSeen(true);
         }
         if (data.personalBlessings && Array.isArray(data.personalBlessings)) {
-          setUserBlessings(data.personalBlessings);
+          setUserBlessings(dropSeededBlessings(data.personalBlessings));
         }
+        if (data.settings?.welcomeSeen === true) setWelcomeSeen(true);
         if (data.journeyState && typeof data.journeyState === 'object') {
           const cleanJourney = sanitizeJourneyState(data.journeyState);
           saveJourneyState(cleanJourney);
@@ -639,7 +710,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         if (oldState.journalEntries && Array.isArray(oldState.journalEntries)) {
           const mappedJournal: JournalEntry[] = oldState.journalEntries.map((entry: any) => ({
             id: entry.id || String(Date.now()),
-            date: entry.date && entry.date.includes('-') ? entry.date : new Date().toISOString().split('T')[0],
+            date: entry.date && entry.date.includes('-') ? entry.date : toLocalDateString(),
             displayDate: entry.date,
             blessingId: entry.blessingId || 'islam',
             shortTitle: entry.shortTitle || entry.blessingTitle || 'نعمة',
@@ -652,7 +723,9 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
         if (oldState.completedReflections && Array.isArray(oldState.completedReflections)) {
           setCompletedReflections(oldState.completedReflections);
+          if (oldState.completedReflections.length > 0) setWelcomeSeen(true);
         }
+        if (oldState.welcomeSeen === true) setWelcomeSeen(true);
 
         if (data.userBlessings && Array.isArray(data.userBlessings)) {
           const mappedBlessings: UserBlessing[] = data.userBlessings.map((b: any) => ({
@@ -685,6 +758,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         onboardingComplete,
         onboardingCompleted: onboardingComplete,
         todayBlessing,
+        todayRole,
         todayInspiration,
         entries: journalEntries,
         journalEntries,

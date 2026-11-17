@@ -25,6 +25,7 @@ import {
   getDailyHisnTip
 } from '../../data/hisnAlMuslim';
 import { toArabicNumerals } from '../../lib/arabic';
+import { useLocalDay } from '../../lib/dates';
 
 interface HisnScreenProps {
   triggerHaptic: (type?: 'light' | 'medium' | 'heavy' | 'success') => void;
@@ -122,20 +123,36 @@ export const HisnScreen: React.FC<HisnScreenProps> = ({
     }
   }, [initialCategory]);
 
-  // Daily progress keyed by today's ISO date
-  const todayKey = useMemo(() => {
-    const iso = new Date().toISOString().split('T')[0];
-    return `alhamd_hisn_counts_${iso}`;
-  }, []);
+  // Daily progress, keyed by the user's local day. The counts are kept together
+  // with the key they belong to, so that when the day changes while this screen
+  // is open, yesterday's counts are never written under today's key.
+  const today = useLocalDay();
+  const todayKey = `alhamd_hisn_counts_${today}`;
 
-  const [counts, setCounts] = useState<Record<string, number>>(() => {
+  const readCounts = (key: string): Record<string, number> => {
     try {
-      const saved = localStorage.getItem(todayKey);
-      return saved ? JSON.parse(saved) : {};
+      const saved = localStorage.getItem(key);
+      const parsed = saved ? JSON.parse(saved) : {};
+      return parsed && typeof parsed === 'object' ? parsed : {};
     } catch {
       return {};
     }
-  });
+  };
+
+  const [dailyCounts, setDailyCounts] = useState(() => ({ key: todayKey, counts: readCounts(todayKey) }));
+  if (dailyCounts.key !== todayKey) {
+    // A new day started: switch to that day's (empty or saved) counts.
+    setDailyCounts({ key: todayKey, counts: readCounts(todayKey) });
+  }
+  const counts = dailyCounts.counts;
+  const setCounts = (
+    update: Record<string, number> | ((prev: Record<string, number>) => Record<string, number>)
+  ) => {
+    setDailyCounts((prev) => ({
+      key: prev.key,
+      counts: typeof update === 'function' ? update(prev.counts) : update
+    }));
+  };
 
   // Pinned / Quick-access favorite dhikr IDs
   const [favoriteIds, setFavoriteIds] = useState<string[]>(() => {
@@ -151,9 +168,9 @@ export const HisnScreen: React.FC<HisnScreenProps> = ({
 
   useEffect(() => {
     try {
-      localStorage.setItem(todayKey, JSON.stringify(counts));
+      localStorage.setItem(dailyCounts.key, JSON.stringify(dailyCounts.counts));
     } catch {}
-  }, [counts, todayKey]);
+  }, [dailyCounts]);
 
   useEffect(() => {
     try {
