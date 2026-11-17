@@ -7,7 +7,10 @@ import { toArabicNumerals, formatArabicTime } from '../../lib/arabic';
 export interface JourneyOnboardingProps {
   initialThemes?: string[];
   initialPace?: 1 | 2;
-  initialReminderTime?: string;
+  /** The journey's saved reminder: a time, or null when the reminder is off. */
+  initialReminderTime?: string | null;
+  /** Time to offer when the user switches the reminder on and none was saved. */
+  defaultReminderTime?: string;
   isEditing?: boolean;
   onComplete: (params: {
     focusThemes: string[];
@@ -28,6 +31,7 @@ export const JourneyOnboarding: React.FC<JourneyOnboardingProps> = ({
   initialThemes = ['din', 'afiyah'],
   initialPace = 1,
   initialReminderTime = '21:00',
+  defaultReminderTime = '21:00',
   isEditing = false,
   onComplete,
   onCancel
@@ -41,7 +45,7 @@ export const JourneyOnboarding: React.FC<JourneyOnboardingProps> = ({
   const [enableReminder, setEnableReminder] = useState<boolean>(
     initialReminderTime !== null && initialReminderTime !== ''
   );
-  const [reminderTime, setReminderTime] = useState<string>(initialReminderTime || '21:00');
+  const [reminderTime, setReminderTime] = useState<string>(initialReminderTime || defaultReminderTime || '21:00');
 
   const toggleTheme = (themeKey: string) => {
     setSelectedThemes((prev) => {

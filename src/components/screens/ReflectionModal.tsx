@@ -136,7 +136,8 @@ export const ReflectionModal: React.FC<ReflectionModalProps> = ({
     const interval = setInterval(() => {
       sIndex++;
       if (sIndex < sentences.length) {
-        setSentenceIdx(sIndex);
+        // Only ever reveal more: the step's duration timer may have shown the whole text already.
+        setSentenceIdx((shown) => Math.max(shown, sIndex));
       } else {
         setCanAdvance(true);
         clearInterval(interval);

@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { X, BookOpen, Check, ShieldCheck } from 'lucide-react';
 import { getBlessingById } from '../../data/loader';
 import { makeStationId } from '../../lib/journeyStore';
 import { toArabicNumerals } from '../../lib/arabic';
 import { useStore } from '../../lib/store';
+import { useDialog } from '../../lib/useDialog';
+import { getMuhasabaDraft, setMuhasabaDraft } from '../../lib/journeyDrafts';
 
 interface JourneyMuhasabaScreenProps {
   stage: {
@@ -26,8 +28,21 @@ export const JourneyMuhasabaScreen: React.FC<JourneyMuhasabaScreenProps> = ({
   onSave
 }) => {
   const { triggerHaptic } = useStore();
-  const [q1, setQ1] = useState(initialAnswers?.q1 || '');
-  const [q2, setQ2] = useState(initialAnswers?.q2 || '');
+  // Start from what the user last typed here, saved or not.
+  const [q1, setQ1] = useState(() => getMuhasabaDraft(stage.id)?.q1 ?? initialAnswers?.q1 ?? '');
+  const [q2, setQ2] = useState(() => getMuhasabaDraft(stage.id)?.q2 ?? initialAnswers?.q2 ?? '');
+
+  // Keep unsaved answers as a draft, so closing this screen does not lose them.
+  // The draft is removed by the parent once the review is saved.
+  useEffect(() => {
+    const unchanged = q1 === (initialAnswers?.q1 ?? '') && q2 === (initialAnswers?.q2 ?? '');
+    if (!unchanged || getMuhasabaDraft(stage.id)) {
+      setMuhasabaDraft(stage.id, q1, q2);
+    }
+  }, [q1, q2, stage.id, initialAnswers?.q1, initialAnswers?.q2]);
+
+  // Focus stays inside the review, Escape closes it, and the page behind does not scroll.
+  const dialogRef = useDialog<HTMLDivElement>({ onClose });
 
   // Collect the user's own local journal entries from the 7 stations of this stage
   const stageStationsSummary = stage.stationBlessingIds.map((blessingId, idx) => {
@@ -49,7 +64,12 @@ export const JourneyMuhasabaScreen: React.FC<JourneyMuhasabaScreenProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-[#15152A] overflow-y-auto p-4 sm:p-6 animate-fade-in"
+      ref={dialogRef}
+      tabIndex={-1}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`وقفة محاسبة: ${stage.title}`}
+      className="fixed inset-0 z-50 bg-[#15152A] overflow-y-auto p-4 sm:p-6 animate-fade-in outline-none"
       dir="rtl"
     >
       <div className="w-full max-w-lg md:max-w-2xl mx-auto py-4 space-y-6">

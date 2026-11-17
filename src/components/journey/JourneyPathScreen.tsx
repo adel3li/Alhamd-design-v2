@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import {
   Check,
   SlidersHorizontal,
-  HandHeart,
   BookOpen,
   X,
   ChevronRight,
@@ -13,27 +12,34 @@ import {
   Share2,
   Sparkles,
   CheckCircle2,
-  RotateCcw
+  RotateCcw,
+  Trash2
 } from 'lucide-react';
-import { motion } from 'motion/react';
 import { getBlessingById } from '../../data/loader';
 import { useStore, JourneyStage } from '../../lib/store';
 import {
   isPremium,
   getDeveloperPremiumSync,
   ENTITLEMENT_CHANGED_EVENT,
-  FREE_STATION_LIMIT
+  FREE_STATION_LIMIT,
+  isBeyondFreeLimit
 } from '../../lib/entitlements';
 import {
   hasCompletedJourneyOnboarding,
   getStageContent,
   getStationContent,
-  makeStationId,
-  hasMissedDaysRecently
+  makeStationId
 } from '../../lib/journeyStore';
+import {
+  getStationDraft,
+  setStationDraft,
+  clearStationDraft,
+  clearMuhasabaDraft
+} from '../../lib/journeyDrafts';
+import { useDialog } from '../../lib/useDialog';
+import { useLocalDay } from '../../lib/dates';
 import { trackJourneyEvent } from '../../lib/analytics';
 import { toArabicNumerals } from '../../lib/arabic';
-import { getFormattedHijriDate } from '../../lib/hijri';
 import { GlassCard } from '../common/GlassCard';
 import { ShareCardModal } from '../common/ShareCardModal';
 import { JourneyOnboarding } from './JourneyOnboarding';
@@ -182,10 +188,10 @@ const CurvedPathConnector: React.FC<CurvedPathConnectorProps> = ({
 export const JourneyPathScreen: React.FC = () => {
   const {
     journeyState: state,
-    completedDays,
     completeJourneyOnboardingState,
     completeJourneyStationState,
     saveJourneyStageMuhasaba,
+    saveJourneyStationJournal,
     notificationTime,
     setNotificationTime,
     setNotificationsEnabled,
@@ -194,7 +200,6 @@ export const JourneyPathScreen: React.FC = () => {
   } = useStore();
 
   const [premiumStatus, setPremiumStatus] = useState<boolean>(() => getDeveloperPremiumSync());
-  const [entitlementLoaded, setEntitlementLoaded] = useState<boolean>(true);
   // First visit: start with the set-up (themes, pace, reminder). It used to open
   // only from the paywall's unlock, so a user who entered any other way never saw it.
   const [showOnboarding, setShowOnboarding] = useState<boolean>(() => !hasCompletedJourneyOnboarding());
@@ -238,6 +243,7 @@ export const JourneyPathScreen: React.FC = () => {
     open: boolean;
     type: 'ayah' | 'tadabbur';
   }>({ open: false, type: 'ayah' });
+  const [confirmDeleteNote, setConfirmDeleteNote] = useState<boolean>(false);
   const [journeyTab, setJourneyTab] = useState<'path' | 'stats'>('path');
   const [activeStageIdView, setActiveStageIdView] = useState<string | null>(null);
 
@@ -245,7 +251,25 @@ export const JourneyPathScreen: React.FC = () => {
   useEffect(() => {
     setShowPopupTadabbur(false);
     setCopiedPopupBlessing(false);
+    setConfirmDeleteNote(false);
   }, [inspectedStation?.stationId]);
+
+  // Timeouts started by this screen, cleared when it unmounts.
+  const pendingTimersRef = useRef<number[]>([]);
+  useEffect(() => {
+    return () => {
+      pendingTimersRef.current.forEach((id) => window.clearTimeout(id));
+      pendingTimersRef.current = [];
+    };
+  }, []);
+
+  // The station preview is a modal dialog: focus stays inside it and Escape closes it.
+  // While the share card is open on top of it, the share card owns the keyboard.
+  const previewDialogRef = useDialog<HTMLDivElement>({
+    onClose: () => setInspectedStation(null),
+    active: Boolean(inspectedStation) && !popupShareModalData.open,
+    focusKey: inspectedStation?.stationId
+  });
 
   const currentStationRef = useRef<HTMLDivElement | null>(null);
 
@@ -256,7 +280,6 @@ export const JourneyPathScreen: React.FC = () => {
       const prem = await isPremium();
       if (!mounted) return;
       setPremiumStatus(prem);
-      setEntitlementLoaded(true);
     };
     check();
 
@@ -317,43 +340,57 @@ export const JourneyPathScreen: React.FC = () => {
     return {
       stageIndex: state.stages.length - 1,
       stage: lastStage,
-      stationIndex: 6,
-      stationNumber: 7,
-      stationId: makeStationId(lastStage.id, 6),
-      blessingId: lastStage.stationBlessingIds[6],
+      stationIndex: lastStage.stationBlessingIds.length - 1,
+      stationNumber: lastStage.stationBlessingIds.length,
+      stationId: makeStationId(lastStage.id, lastStage.stationBlessingIds.length - 1),
+      blessingId: lastStage.stationBlessingIds[lastStage.stationBlessingIds.length - 1],
       allCompleted: true
     };
   }, [state.stages, state.completed]);
 
-  const totalCompletedCount = Object.keys(state.completed).length;
+  // Completed stations on the current path. A completion kept from a theme the
+  // user later deselected is not counted.
+  const totalCompletedCount = state.stages.reduce(
+    (count, stg) =>
+      count +
+      stg.stationBlessingIds.filter((_, idx) => Boolean(state.completed[makeStationId(stg.id, idx)]))
+        .length,
+    0
+  );
   const freeTasteLimitReached = !premiumStatus && totalCompletedCount >= FREE_STATION_LIMIT;
-  const dailyPaceReached = state.unlockedTodayCount >= state.pace;
-  const showGentleReturnBanner = hasMissedDaysRecently(state);
+  // The day's count belongs to the day it was recorded on: after midnight it no
+  // longer applies, even if the app stayed open and nothing has reset it yet.
+  const today = useLocalDay();
+  const dailyPaceReached = state.lastUnlockDate === today && state.unlockedTodayCount >= state.pace;
 
   // Scroll to current station softly on initial render
   useEffect(() => {
-    if (entitlementLoaded && !showOnboarding && currentStationRef.current) {
+    if (!showOnboarding && currentStationRef.current) {
       const timer = setTimeout(() => {
         currentStationRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }, 250);
       return () => clearTimeout(timer);
     }
-  }, [entitlementLoaded, showOnboarding]);
+  }, [showOnboarding]);
 
   const handleOnboardingComplete = (params: {
     focusThemes: string[];
     pace: 1 | 2;
     reminderTime: string | null;
   }) => {
+    const isFirstSetUp = !hasCompletedJourneyOnboarding();
     completeJourneyOnboardingState(params);
     if (params.reminderTime) {
       setNotificationTime(params.reminderTime);
       setNotificationsEnabled(true);
     }
-    trackJourneyEvent('journey_onboarded', {
-      themes_count: params.focusThemes.length,
-      pace: params.pace
-    });
+    // Later edits to the preferences are not a new onboarding.
+    if (isFirstSetUp) {
+      trackJourneyEvent('journey_onboarded', {
+        themes_count: params.focusThemes.length,
+        pace: params.pace
+      });
+    }
     setShowOnboarding(false);
     triggerHaptic('success');
   };
@@ -365,54 +402,6 @@ export const JourneyPathScreen: React.FC = () => {
     triggerHaptic('light');
     const stationId = makeStationId(stage.id, stationIndex);
     setInspectedStation({
-      stageId: stage.id,
-      stageTitle: stage.title,
-      stationIndex,
-      stationId,
-      blessingId: stage.stationBlessingIds[stationIndex]
-    });
-  };
-
-  const handleStartStation = (
-    stage: JourneyStage,
-    stationIndex: number
-  ) => {
-    triggerHaptic('light');
-    const stationId = makeStationId(stage.id, stationIndex);
-    const isCompleted = Boolean(state.completed[stationId]);
-
-    if (isCompleted) {
-      setInspectedStation({
-        stageId: stage.id,
-        stageTitle: stage.title,
-        stationIndex,
-        stationId,
-        blessingId: stage.stationBlessingIds[stationIndex]
-      });
-      return;
-    }
-
-    // Free user gating: only first FREE_STATION_LIMIT stations of stage 0 are free
-    if (!premiumStatus && (stationIndex >= FREE_STATION_LIMIT || totalCompletedCount >= FREE_STATION_LIMIT)) {
-      const targetBlessing = getBlessingById(stage.stationBlessingIds[stationIndex]);
-      openPaywall('free_limit_reached', targetBlessing?.shortTitle || targetBlessing?.title);
-      return;
-    }
-
-    // Check if this is the current next station and daily pace allows
-    const isCurrentNext = currentPointer.stationId === stationId;
-    if (!isCurrentNext || dailyPaceReached) {
-      setInspectedStation({
-        stageId: stage.id,
-        stageTitle: stage.title,
-        stationIndex,
-        stationId,
-        blessingId: stage.stationBlessingIds[stationIndex]
-      });
-      return;
-    }
-
-    setActiveSession({
       stageId: stage.id,
       stageTitle: stage.title,
       stationIndex,
@@ -453,6 +442,8 @@ export const JourneyPathScreen: React.FC = () => {
         text: trimmedText
       });
     }
+
+    clearStationDraft(stationId);
 
     if (!alreadyCompleted) {
       trackJourneyEvent('journey_station_completed', {
@@ -501,8 +492,7 @@ export const JourneyPathScreen: React.FC = () => {
     const nextIdx = stationIndex + 1;
     const nextStationId = hasNextInStage ? makeStationId(stageObj.id, nextIdx) : '';
     const isNextCompleted = hasNextInStage ? Boolean(state.completed[nextStationId]) : false;
-    const isNextBlockedByFree =
-      !premiumStatus && (nextIdx >= FREE_STATION_LIMIT || totalCompletedCount >= FREE_STATION_LIMIT);
+    const isNextBlockedByFree = !premiumStatus && isBeyondFreeLimit(nextIdx, totalCompletedCount);
     const isNextCurrentUnlocked =
       hasNextInStage &&
       currentPointer.stationId === nextStationId &&
@@ -581,32 +571,36 @@ export const JourneyPathScreen: React.FC = () => {
       setActiveMuhasabaStageId(stageId);
     } else if (!premiumStatus && Object.keys(updatedState.completed).length >= FREE_STATION_LIMIT) {
       // Free user just finished their 2nd free station -> gently show paywall when they return
-      setTimeout(() => {
-        openPaywall('free_limit_reached');
-      }, 450);
+      pendingTimersRef.current.push(
+        window.setTimeout(() => {
+          openPaywall('free_limit_reached');
+        }, 450)
+      );
     }
   };
 
   const handleSaveMuhasaba = (q1: string, q2: string) => {
     if (!activeMuhasabaStageId) return;
+    const isFirstSave = !state.muhasaba[activeMuhasabaStageId];
     saveJourneyStageMuhasaba(activeMuhasabaStageId, q1, q2);
-    trackJourneyEvent('journey_stage_completed', {
-      stage_id: activeMuhasabaStageId
-    });
+    clearMuhasabaDraft(activeMuhasabaStageId);
+    // Editing a saved review later does not complete the stage a second time.
+    if (isFirstSave) {
+      trackJourneyEvent('journey_stage_completed', {
+        stage_id: activeMuhasabaStageId
+      });
+    }
     setActiveMuhasabaStageId(null);
     triggerHaptic('success');
   };
-
-  if (!entitlementLoaded) {
-    return null;
-  }
 
   if (showOnboarding) {
     return (
       <JourneyOnboarding
         initialThemes={state.focusThemes}
         initialPace={state.pace}
-        initialReminderTime={state.reminderTime || notificationTime}
+        initialReminderTime={state.reminderTime}
+        defaultReminderTime={notificationTime}
         isEditing={hasCompletedJourneyOnboarding()}
         onComplete={handleOnboardingComplete}
         onCancel={() => setShowOnboarding(false)}
@@ -648,7 +642,7 @@ export const JourneyPathScreen: React.FC = () => {
       <div className="flex items-center justify-between gap-2 flex-wrap bg-[#1E1E38]/90 border border-[#2E2E4A] rounded-2xl px-3.5 py-2.5">
         <div className="flex items-center gap-2 min-w-0">
           <span className="text-xs sm:text-sm font-bold text-[#EDEDF5] truncate">
-            المحطة {toArabicNumerals(currentPointer.stationNumber)} من {toArabicNumerals(7)} · {currentPointer.stage.title}
+            المحطة {toArabicNumerals(currentPointer.stationNumber)} من {toArabicNumerals(currentPointer.stage.stationBlessingIds.length)} · {currentPointer.stage.title}
           </span>
           <span className="hidden sm:inline text-[11px] text-[#AEAECB]">
             ({activeThemesSummary})
@@ -732,8 +726,9 @@ export const JourneyPathScreen: React.FC = () => {
         const all7Completed = completedInStage === stage.stationBlessingIds.length;
         const muhasabaSaved = Boolean(state.muhasaba[stage.id]);
 
-        const stationIndicesUpward = [6, 5, 4, 3, 2, 1, 0];
-        const topStationOffsetPx = getWindingOffsetPx(6);
+        const stationsInStage = stage.stationBlessingIds.length;
+        const stationIndicesUpward = Array.from({ length: stationsInStage }, (_, i) => stationsInStage - 1 - i);
+        const topStationOffsetPx = getWindingOffsetPx(stationsInStage - 1);
 
         return (
           <GlassCard padding="p-4 sm:p-5" className="space-y-3">
@@ -744,7 +739,7 @@ export const JourneyPathScreen: React.FC = () => {
                   <span className="font-semibold text-[#E4C368]">{stage.title}</span>
                   <span aria-hidden="true">·</span>
                   <span>
-                    {toArabicNumerals(completedInStage)} / {toArabicNumerals(7)} مكتملة
+                    {toArabicNumerals(completedInStage)} / {toArabicNumerals(stage.stationBlessingIds.length)} مكتملة
                   </span>
                   {dailyPaceReached && !freeTasteLimitReached && (
                     <>
@@ -923,7 +918,6 @@ export const JourneyPathScreen: React.FC = () => {
         <div className="space-y-5 animate-fade-in">
           <JourneyWeeklyProgressChart
             journeyState={state}
-            completedDays={completedDays}
           />
           <ReflectionCategoryCharts variant="journey" />
         </div>
@@ -951,7 +945,8 @@ export const JourneyPathScreen: React.FC = () => {
             totalStationsInStage={navInfo.totalStations}
             stageTitle={activeSession.stageTitle}
             stationContent={stContent}
-            initialJournalText={state.journal[activeSession.stationId] || ''}
+            initialJournalText={getStationDraft(activeSession.stationId) ?? state.journal[activeSession.stationId] ?? ''}
+            onDraftChange={(text) => setStationDraft(activeSession.stationId, text)}
             isStationCompleted={navInfo.isCurrentStationCompleted}
             canNavigatePrev={navInfo.canNavigatePrev}
             canNavigateNext={navInfo.canNavigateNext}
@@ -1003,7 +998,7 @@ export const JourneyPathScreen: React.FC = () => {
         const isInspectNextUncompleted =
           currentPointer.stationId === inspectedStation.stationId && !currentPointer.allCompleted;
         const isInspectBlockedByFree =
-          !premiumStatus && (inspectedStation.stationIndex >= 2 || totalCompletedCount >= 2);
+          !premiumStatus && isBeyondFreeLimit(inspectedStation.stationIndex, totalCompletedCount);
 
         const stationState: 'completed' | 'current' | 'upcoming' = isInspectCompleted
           ? 'completed'
@@ -1041,7 +1036,7 @@ export const JourneyPathScreen: React.FC = () => {
           try {
             await navigator.clipboard.writeText(formatted);
             setCopiedPopupBlessing(true);
-            setTimeout(() => setCopiedPopupBlessing(false), 2200);
+            pendingTimersRef.current.push(window.setTimeout(() => setCopiedPopupBlessing(false), 2200));
           } catch {
             // Ignore clipboard errors
           }
@@ -1049,10 +1044,12 @@ export const JourneyPathScreen: React.FC = () => {
 
         return (
           <div
+            ref={previewDialogRef}
+            tabIndex={-1}
             role="dialog"
             aria-modal="true"
             aria-label={`تفاصيل المحطة ${toArabicNumerals(inspectedStation.stationIndex + 1)}: ${blessing?.title || ''}`}
-            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/75 backdrop-blur-sm animate-fade-in overflow-y-auto"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-black/75 backdrop-blur-sm animate-fade-in overflow-y-auto outline-none"
             dir="rtl"
             onClick={() => setInspectedStation(null)}
           >
@@ -1290,6 +1287,35 @@ export const JourneyPathScreen: React.FC = () => {
                       <p className="text-xs text-[#EDEDF5] leading-relaxed">
                         «{savedJournal}»
                       </p>
+                      {/* Removes the note kept with this station. The copy made in «سجل الحمد»
+                          when the station was completed is a separate entry, deleted from there. */}
+                      <div className="flex items-center justify-end gap-3 pt-1">
+                        {confirmDeleteNote && (
+                          <button
+                            type="button"
+                            onClick={() => setConfirmDeleteNote(false)}
+                            className="text-[11px] text-[#AEAECB] hover:text-[#EDEDF5] transition-colors cursor-pointer"
+                          >
+                            تراجع
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (!confirmDeleteNote) {
+                              setConfirmDeleteNote(true);
+                              return;
+                            }
+                            saveJourneyStationJournal(inspectedStation.stationId, '');
+                            clearStationDraft(inspectedStation.stationId);
+                            setConfirmDeleteNote(false);
+                          }}
+                          className="flex items-center gap-1 text-[11px] text-[#AEAECB] hover:text-[#EDEDF5] transition-colors cursor-pointer"
+                        >
+                          <Trash2 size={12} />
+                          <span>{confirmDeleteNote ? 'تأكيد حذف التدوينة' : 'حذف التدوينة'}</span>
+                        </button>
+                      </div>
                     </div>
                   )}
 
@@ -1325,6 +1351,10 @@ export const JourneyPathScreen: React.FC = () => {
                         onClick={() => {
                           const target = inspectedStation;
                           setInspectedStation(null);
+                          if (isInspectBlockedByFree) {
+                            openPaywall('free_limit_reached', blessing?.shortTitle || blessing?.title);
+                            return;
+                          }
                           setActiveSession(target);
                         }}
                         className="w-full py-3.5 px-8 rounded-2xl bg-[#6C63FF] hover:bg-[#594DFF] active:scale-[0.98] text-white font-bold text-base sm:text-lg shadow-lg shadow-[#6C63FF]/25 transition-all duration-200 cursor-pointer"

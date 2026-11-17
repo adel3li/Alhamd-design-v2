@@ -6,6 +6,7 @@ import { ThreadProgress } from '../common/ThreadProgress';
 import { StarLattice } from '../common/StarLattice';
 import { ShareCardModal } from '../common/ShareCardModal';
 import { toArabicNumerals } from '../../lib/arabic';
+import { useDialog } from '../../lib/useDialog';
 
 interface JourneyStationFlowProps {
   blessing: Blessing;
@@ -27,6 +28,8 @@ interface JourneyStationFlowProps {
   onClose: () => void;
   onComplete: (journalText?: string) => void;
   onReachClosing?: (journalText?: string) => void;
+  /** Called on every change to the note, so the parent can keep it as a draft. */
+  onDraftChange?: (journalText: string) => void;
   triggerHaptic: (type?: 'light' | 'medium' | 'heavy' | 'success') => void;
 }
 
@@ -52,6 +55,7 @@ export const JourneyStationFlow: React.FC<JourneyStationFlowProps> = ({
   onClose,
   onComplete,
   onReachClosing,
+  onDraftChange,
   triggerHaptic
 }) => {
   const [phase, setPhase] = useState<SessionPhase>('istishar');
@@ -62,6 +66,9 @@ export const JourneyStationFlow: React.FC<JourneyStationFlowProps> = ({
   const [journalText, setJournalText] = useState(initialJournalText);
   const [showShareModal, setShowShareModal] = useState(false);
   const hasRecordedClosingRef = useRef(false);
+
+  // Focus stays inside the session, Escape closes it, and the page behind does not scroll.
+  const dialogRef = useDialog<HTMLDivElement>({ onClose, active: !showShareModal, focusKey: phase });
 
   const steps = blessing.istisharSteps || [];
   const currentStep: IstisharStep | undefined = steps[currentStepIdx];
@@ -85,7 +92,8 @@ export const JourneyStationFlow: React.FC<JourneyStationFlowProps> = ({
     const interval = setInterval(() => {
       sIndex++;
       if (sIndex < sentences.length) {
-        setSentenceIdx(sIndex);
+        // Only ever reveal more: the user may have shown the whole text already.
+        setSentenceIdx((shown) => Math.max(shown, sIndex));
       } else {
         setCanAdvance(true);
         clearInterval(interval);
@@ -140,14 +148,14 @@ export const JourneyStationFlow: React.FC<JourneyStationFlowProps> = ({
     triggerHaptic('success');
     if (!hasRecordedClosingRef.current && onReachClosing) {
       hasRecordedClosingRef.current = true;
-      onReachClosing(journalText.trim() || undefined);
+      onReachClosing(journalText.trim());
     }
     setPhase('closing');
   };
 
   const handleFinishSession = () => {
     triggerHaptic('success');
-    onComplete(journalText.trim() || undefined);
+    onComplete(journalText.trim());
   };
 
   const canTriggerPaywallForNext =
@@ -235,7 +243,12 @@ export const JourneyStationFlow: React.FC<JourneyStationFlowProps> = ({
   if (phase === 'closing') {
     return (
       <div
-        className="fixed inset-0 z-50 flex flex-col items-center justify-between bg-[#15152A] text-center p-6 sm:p-8 transition-opacity duration-500"
+        ref={dialogRef}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`المحطة ${toArabicNumerals(stationNumber)}: ${blessing.title}`}
+        className="fixed inset-0 z-50 flex flex-col items-center justify-between bg-[#15152A] text-center p-6 sm:p-8 transition-opacity duration-500 overflow-y-auto outline-none"
         dir="rtl"
       >
         <StarLattice opacity={0.03} />
@@ -311,7 +324,12 @@ export const JourneyStationFlow: React.FC<JourneyStationFlowProps> = ({
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex flex-col justify-between p-6 sm:p-8 transition-colors duration-700 ease-in-out overflow-y-auto ${getStepBgClass()}`}
+      ref={dialogRef}
+      tabIndex={-1}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`المحطة ${toArabicNumerals(stationNumber)}: ${blessing.title}`}
+      className={`fixed inset-0 z-50 flex flex-col justify-between p-6 sm:p-8 transition-colors duration-700 ease-in-out overflow-y-auto outline-none ${getStepBgClass()}`}
       dir="rtl"
     >
       <StarLattice opacity={currentStep?.type === 'deepen' ? 0.015 : 0.045} />
@@ -423,7 +441,11 @@ export const JourneyStationFlow: React.FC<JourneyStationFlowProps> = ({
             <div className="space-y-2.5">
               <textarea
                 value={journalText}
-                onChange={(e) => setJournalText(e.target.value)}
+                onChange={(e) => {
+                  setJournalText(e.target.value);
+                  onDraftChange?.(e.target.value);
+                }}
+                aria-label={stationContent.journalPrompt.text}
                 placeholder="اكتب موقفًا شعرت فيه بقيمة هذه النعمة… (اختياري)"
                 rows={4}
                 className="w-full p-4 rounded-2xl bg-[#1E1E38]/90 border border-[#2E2E4A] focus:border-[#C8A951] text-[#EDEDF5] placeholder-[#AEAECB]/50 text-base leading-[1.9] outline-none transition-colors resize-none"

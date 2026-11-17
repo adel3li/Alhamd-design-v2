@@ -1,6 +1,7 @@
 import journeyContentRaw from '../data/journey_content.json';
 import { JourneyState, JourneyStage, JourneyStation } from '../types';
 import { toLocalDateString } from './dates';
+import { clearAllJourneyDrafts } from './journeyDrafts';
 
 export type { JourneyState, JourneyStage, JourneyStation };
 
@@ -453,6 +454,9 @@ export function completeJourneyStation(params: {
     const trimmed = params.journalText.trim();
     if (trimmed.length > 0) {
       updatedJournal[params.stationId] = trimmed;
+    } else {
+      // The note was handed back empty: the user cleared it.
+      delete updatedJournal[params.stationId];
     }
   }
 
@@ -567,6 +571,7 @@ export function devResetEntireJourney(): JourneyState {
     localStorage.removeItem(JOURNEY_STORAGE_KEY);
     localStorage.removeItem(JOURNEY_ONBOARDED_KEY);
   } catch {}
+  clearAllJourneyDrafts();
   const fresh = createDefaultJourneyState();
   saveJourneyState(fresh);
   return fresh;
