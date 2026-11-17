@@ -28,7 +28,7 @@ There are no tests yet. Verify UI changes in a browser.
 - **Dates.** Every "which day is it" key comes from `src/lib/dates.ts` (`toLocalDateString`, `useLocalDay`). Never build a day key with `toISOString()`: that is the UTC day, which is still yesterday until 03:00 in Riyadh.
 - **Theming.** The light theme works by overriding specific Tailwind arbitrary-colour classes in `src/index.css`. A new hard-coded hex colour in a component will not adapt to light mode unless it is one already overridden there (`docs/reference/05-design-system.md`).
 - **Overlays.** A transform on an ancestor, even an identity one left by an animation that keeps its end state, makes a `position: fixed` dialog size itself against that ancestor instead of the viewport. The entrance animations in `src/index.css` deliberately do not use `forwards`; do not add `forwards`, `transform` or `filter` to a screen root.
-- **Premium.** «رحلتي», the paywall and the developer tools are hidden behind `JOURNEY_ENABLED` (`src/lib/entitlements.ts`; build with `VITE_ENABLE_JOURNEY=true` to show them). The owner has not decided on premium yet.
+- **Premium.** «رحلتي» is free for everyone. `PAYWALL_ENABLED` in `src/lib/entitlements.ts` is false, so the paywall and the developer tools are not rendered. Do not turn it on without a real purchase check: the only existing check is a `localStorage` flag anyone can set.
 - **Product promises.** No streaks, no points, no account, nothing leaves the device. Do not add counters of consecutive days or network calls that carry user text.
 - **`legacy/`** is the old v1 app, kept for reference. Do not edit or import it.
 - **Build rename.** `vercel.json` relies on the app being `app.html`; keep the `mv` step in the build script.

@@ -7,7 +7,7 @@ Written on 2026-11-17 against commit `68e723a`. This file has two parts:
 
 ## Status
 
-The first round of fixes is in commit `d3dfd92` (17 November 2026). The rows below keep their original text; this table says what changed. Every finding not listed here is open.
+The fixes so far are in commits `d3dfd92` to `b8db9cc` (17 November 2026). The rows below keep their original text; this table says what changed. Every finding not listed here is open.
 
 | Id | Status | What changed |
 |---|---|---|
@@ -20,13 +20,20 @@ The first round of fixes is in commit `d3dfd92` (17 November 2026). The rows bel
 | P-01 | Fixed | New users start empty. The samples earlier builds saved are removed on load and on backup import; the three seeded days are removed only when all three are found. Written here, not taken from the unmerged branch |
 | U-01 | Fixed | The entrance animations no longer keep their end state, so no transform is left on the screens. Checked on all five screens |
 | M-10 | Fixed | `@types/react` and `@types/react-dom` are installed and `strict` is on; the type check passes |
-| S-01 | Hidden, not fixed | The journey tab, the paywall and the developer unlock are behind one switch, `JOURNEY_ENABLED` (`VITE_ENABLE_JOURNEY`), which is off. Before it is turned on for real users, the developer unlock must be replaced by a real purchase check |
-| S-04, U-02, U-12, P-05, B-03, C-02, all of J | Hidden, still open | Not reachable while the journey is hidden. They should be fixed before it is switched back on |
+| S-01, P-05 | Resolved by the owner's decision | «رحلتي» is free for everyone (`b8db9cc`). One switch, `PAYWALL_ENABLED` in `src/lib/entitlements.ts`, is off: every premium check answers yes, and the paywall and the developer unlock are not rendered. If a paid tier is introduced later, the developer flag must first be replaced by a real purchase check |
+| S-04, U-02, U-12 | Not rendered, still open | The developer tools and the paywall are not shown while `PAYWALL_ENABLED` is off. Their defects remain and matter only if a paywall comes back |
+| B-03 | Fixed in `b8db9cc` | A station's note is copied into the main journal once |
+| J-01 | Fixed in `b8db9cc` | The path stays on a finished stage until its end-of-stage review is saved |
+| J-02 | Fixed in `b8db9cc` | First-time set-up opens on the first visit to the journey |
+| J-03 to J-12, C-02 | **Open, and now reachable by every user** | Making the journey free exposes these to everyone: the advisory daily pace, «إظهار النص كاملًا» being undone, the reminder switching itself on, lost drafts, the weekly chart's counting, the note stored twice, missing focus handling, and unreviewed journey content with placeholder slots. J-09 (free-limit bypass) no longer applies |
+| P-02 | Fixed in `403f633` | The streak card, the seven-day chart, the running total and the month percentage are gone from the consistency screen; the Hijri calendar stays. Cherry-picked from `e2296c2` |
+| P-03 | Fixed in `b7b2e94` | Onboarding, the tour text and the landing page all say 80 seconds. Cherry-picked from `4209f2c`, without its change to the landing page's sourcing sentence |
+| Part A, 12 | Started in `755170f` | `reflection_started`, `reflection_step_viewed` and `reflection_completed` are recorded, consent-gated and kept on the device like the journey events. Cherry-picked from `16dd14a` |
 | C-01 | Changed by the owner's decision | The "under review" badges are no longer shown to users. The content sheet reads its count from the data, and neither it nor the landing page now says the texts were reviewed or approved. The review itself has not been done |
 | C-08 | Partly changed | The landing page's sourcing sentence no longer claims scholarly review or the Uthmani script. The content sheet's sourcing paragraphs and the landing page's "free" are unchanged |
 | M-09 | Partly fixed | The `getDayNumber` and `fontSize` comments were corrected |
 
-How the fixes were checked: 22 behaviour checks and 9 overlay checks in a headless browser against the production build (a new user at 01:30 Riyadh time, the welcome reflection end to end, the next day without a reload, an existing user with seeded and real data, every screen's overlays), plus `bun run lint` and `bun run build`.
+How the fixes were checked: 43 scripted checks in a headless browser against the production build, plus `bun run lint` and `bun run build`. The checks cover a new user at 01:30 Riyadh time, the welcome reflection end to end, the next day without a reload, an existing user with seeded and real data, overlay geometry on every screen, the consistency screen without streaks, entering the journey with no paywall, its first-visit set-up, one station completed with a note, and a finished stage whose review was not saved. The scripts were written for these changes and are not in the repository; there is still no test suite.
 
 How each finding was established is stated in its row: **run time** means the behaviour was observed in a headless browser against the production build; **code** means it was read in the source and, for "nothing calls X" claims, confirmed with a repository-wide search; **run time (reviewer)** means it was observed in a browser by one of the parallel reviewers that read each area line by line; **branch** means a fix already exists on the unmerged branch `claude/trusting-rubin-9ue5hh` (see [HISTORY.md](HISTORY.md), section 9).
 

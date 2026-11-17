@@ -1,6 +1,6 @@
 # Tasbih, Hisn Al-Muslim, Settings and Paywall
 
-> **Changed since this was written** (commit `d3dfd92`, 17 November 2026): the developer block in Settings and the paywall are rendered only when `JOURNEY_ENABLED` is true (off by default); the "under review" tag on the content link was removed; Hisn Al-Muslim counters are keyed by the local day and switch at midnight while the screen is open; the backup file name uses the local day.
+> **Changed since this was written** (commit `d3dfd92`, 17 November 2026): the developer block in Settings and the paywall are rendered only when `PAYWALL_ENABLED` is true, and it is false since the journey became free (`b8db9cc`); the "under review" tag on the content link was removed; Hisn Al-Muslim counters are keyed by the local day and switch at midnight while the screen is open; the backup file name uses the local day.
 
 Reference for the worship screens (the tasbih counter, its audio player, the Hisn Al-Muslim adhkar reader and the adhkar dataset), the Settings screen and the premium paywall. State of the code at commit `68e723a` (`main`, 2026-11-16).
 

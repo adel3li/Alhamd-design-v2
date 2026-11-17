@@ -1,6 +1,6 @@
 # Layout and shared components
 
-> **Changed since this was written** (commit `d3dfd92`, 17 November 2026): the journey tab is filtered out of `BottomTabBar` and `DesktopNavBar` unless `JOURNEY_ENABLED` is true, which leaves four tabs. Dialogs rendered inside a screen are now positioned against the viewport.
+> **Changed since this was written** (commits `d3dfd92` to `b8db9cc`, 17 November 2026): dialogs rendered inside a screen are now positioned against the viewport. The five tabs are unchanged; the journey tab now opens the journey for everyone.
 
 State of the code at commit `68e723a` (`main`, 2026-11-16). Line references are `path:line` against that commit.
 

@@ -121,9 +121,10 @@ The documentation in this folder was written on 17 November. The same day, on th
 - Every day key follows the user's local day, and daily content rolls over at midnight while the app is open.
 - New users start with empty history; the samples older builds saved are cleaned up.
 - Dialogs opened from inside a screen are positioned against the viewport.
-- «رحلتي», the paywall and the developer unlock are hidden behind one build switch until a decision on premium is made.
 - The React type packages are installed and strict type checking is on.
 - By the owner's decision, the "under review" badges are no longer shown to users.
+- «رحلتي» was first hidden behind a switch. Later the same day the owner decided it should be free like the rest of the app (`b8db9cc`): the tab opens the journey for everyone, and the paywall and the developer unlock are no longer rendered. Three journey defects that this exposed were fixed with it: set-up now opens on the first visit, a station's note is copied to the journal once, and a finished stage keeps its review reachable.
+- Three fixes were cherry-picked from `claude/trusting-rubin-9ue5hh`: the streak statistics are gone from the consistency screen (`403f633`), every stated duration is 80 seconds (`b7b2e94`), and the daily reflection records consent-gated events (`755170f`).
 
 The owner also remembered writing more than 40 blessings. A search of the other Alhamd repositories found none: `adel3li/alhamd` holds the same 40, byte for byte, across its whole history; `adel3li/Alhmd-MVP-V2` (a Flutter build from June) holds one; `adel3li/Alhmd-MVP-V1` holds only a README. The build specification in `Alhmd-MVP-V2` plans a database of 365 blessings, launching with 30 to 60, so the larger number was a plan. If more were written, they are somewhere other than GitHub.
 
@@ -300,6 +301,6 @@ Points that matter for the work ahead.
 
 - `main` and production: `68e723a`. Application code as of 7 November.
 - Open: draft PR #4 (marketing kit).
-- Branch `claude/gracious-tesla-3wpebg` (pull request #5): this documentation and the first fixes (`d3dfd92`). Not merged yet.
-- Unmerged and without a pull request: `claude/trusting-rubin-9ue5hh`. Of its six fixes, the seeded-history one is superseded by `d3dfd92`, and the one that marks unreviewed text on screen goes against the owner's later decision. The other four (streak removal, one stated duration, reflection events, the promise check) are still worth applying on their own.
+- Branch `claude/gracious-tesla-3wpebg` (pull request #5): this documentation and the fixes (`d3dfd92` to `b8db9cc`). Not merged yet.
+- Unmerged and without a pull request: `claude/trusting-rubin-9ue5hh`. Of its six fixes, three are now cherry-picked into pull request #5 (streak removal, one stated duration, reflection events), the seeded-history one is superseded by `d3dfd92`, and the one that marks unreviewed text on screen goes against the owner's later decision. What remains only on that branch is the build-time promise check (`2ba90c4`, which would need its review-claim rule adjusted) and the case-study pages.
 - Not started: payments (RevenueCat), scholarly review of the content (0 of 40 blessings approved), reminders, tests, native packaging.

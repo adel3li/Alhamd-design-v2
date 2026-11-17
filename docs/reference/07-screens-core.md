@@ -1,6 +1,6 @@
 # Core screens
 
-> **Changed since this was written** (commit `d3dfd92`, 17 November 2026): Home formats a verse of the day as a verse (the code now tests for `'quran'`); new users start with empty history; day keys are local; dialogs opened from these screens are positioned against the viewport; `ContentReviewModal` has no status badge and reads its count from the data; the links to it read «عن المحتوى والتوثيق»; `ReflectionModal` splits text without a regex lookbehind; finishing the welcome reflection starts the daily rotation the next day.
+> **Changed since this was written** (commit `d3dfd92`, 17 November 2026): Home formats a verse of the day as a verse (the code now tests for `'quran'`); new users start with empty history; day keys are local; dialogs opened from these screens are positioned against the viewport; `ContentReviewModal` has no status badge and reads its count from the data; the links to it read «عن المحتوى والتوثيق»; `ReflectionModal` splits text without a regex lookbehind; finishing the welcome reflection starts the daily rotation the next day. In `403f633` the consistency screen lost its statistics card (total, consecutive days, seven-day chart) and the month percentage; the Hijri calendar and the reminder remain. In `b7b2e94` onboarding says 80 seconds. In `755170f` `ReflectionModal` records three consent-gated events.
 
 State of the code at commit `68e723a`. Line references are `path:line` against that commit. Inside a file's own section, a bare `:NN` points into that file.
 

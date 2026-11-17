@@ -1,6 +1,6 @@
 # My Journey (رحلتي) — premium feature
 
-> **Changed since this was written** (commit `d3dfd92`, 17 November 2026): the whole feature is hidden unless the build sets `VITE_ENABLE_JOURNEY=true` (`JOURNEY_ENABLED` in `src/lib/entitlements.ts`). The label «محتوى توجيهي (قيد المراجعة)» was removed from the daily-action card, and the station flow splits text without a regex lookbehind. Nothing else here changed: the defects listed in FINDINGS, section J, are still present behind the switch.
+> **Changed since this was written** (commits `d3dfd92` to `b8db9cc`, 17 November 2026): the journey is free for everyone. `PAYWALL_ENABLED` in `src/lib/entitlements.ts` is false, so the tab opens the journey directly, `premiumStatus` is always true, and neither paywall is rendered; the free-tier branches described below are dead code. Three defects described below are fixed: set-up opens on the first visit, a station's note is copied to the main journal once, and the path stays on a finished stage until its review is saved. The label «محتوى توجيهي (قيد المراجعة)» was removed, and the station flow splits text without a regex lookbehind. The other defects in FINDINGS, section J, are still present and now reachable by every user.
 
 This document covers every file in `src/components/journey/`, the one-line shim `src/components/screens/JourneyPathScreen.tsx`, and the content file `src/data/journey_content.json`.
 

@@ -47,7 +47,7 @@ Read 01 first; the rest can be read in any order.
 
 ## After the read-through
 
-The first round of fixes (commit `d3dfd92`, 17 November 2026) changed application code. [FINDINGS.md](FINDINGS.md) opens with a status table for the findings it touched. Reference files 01 to 04 and 11 were updated in place; files 05 to 10 carry a short note at the top saying what changed.
+The fixes that followed (commits `d3dfd92` to `b8db9cc`, 17 November 2026) changed application code. [FINDINGS.md](FINDINGS.md) opens with a status table for the findings it touched. Reference files 01 to 04 and 11 were updated in place; files 05 to 10 carry a short note at the top saying what changed.
 
 ## Keeping this current
 

@@ -32,7 +32,7 @@ Until `d3dfd92`, `@types/react` and `@types/react-dom` were not installed. React
 
 ### Environment
 
-The app reads one build-time variable, `VITE_ENABLE_JOURNEY` (typed in `src/vite-env.d.ts`, added in `d3dfd92`). Set to `true`, the build includes the journey tab, the paywall and the developer tools; unset, they are left out. `.env.example` (`GEMINI_API_KEY`, `APP_URL`) and `metadata.json` (`MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API`) come from the AI Studio template; no code calls Gemini.
+The app reads no environment variables. (`src/vite-env.d.ts` only pulls in Vite's client types.) `.env.example` (`GEMINI_API_KEY`, `APP_URL`) and `metadata.json` (`MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API`) come from the AI Studio template; no code calls Gemini.
 
 ### `.gitignore`
 
@@ -40,7 +40,7 @@ The app reads one build-time variable, `VITE_ENABLE_JOURNEY` (typed in `src/vite
 
 ## 3. Build output
 
-Measured on `68e723a` with Vite 6.4.4. With the journey left out (`d3dfd92`), the app chunk is 951 kB (262 kB gzipped) and the app stylesheet 91 kB (15 kB gzipped); the other files are unchanged.
+Measured on `68e723a` with Vite 6.4.4. At `b8db9cc` the app chunk is 1,021 kB (278 kB gzipped); the other files are within a kilobyte of the figures below.
 
 | File | Size | Gzip |
 |---|---:|---:|

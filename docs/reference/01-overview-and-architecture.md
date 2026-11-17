@@ -110,7 +110,7 @@ There is no router, no URL state and no code splitting. The whole app is one Jav
 
 Behaviour:
 
-- **Tab change** (`handleTabChange`, `src/App.tsx:66`). Selecting `journey` while `getDeveloperPremiumSync()` is false opens the paywall instead of changing tab. Selecting `tasbih` resets the sub-view to the counter. Since `d3dfd92` the journey is hidden unless the build sets `VITE_ENABLE_JOURNEY=true` (`JOURNEY_ENABLED` in `src/lib/entitlements.ts`): the tab is in neither nav bar, and `App` renders neither the journey screen nor the paywall, which leaves four tabs.
+- **Tab change** (`handleTabChange`, `src/App.tsx:66`). Selecting `journey` while `getDeveloperPremiumSync()` is false opens the paywall instead of changing tab. Selecting `tasbih` resets the sub-view to the counter. Since `b8db9cc` the journey is free: `PAYWALL_ENABLED` in `src/lib/entitlements.ts` is false, so the tab always opens the journey and `App` never renders the paywall.
 - **Onboarding gate** (`src/App.tsx:78`). While `onboardingCompleted` is false only `OnboardingScreen` is rendered, wrapped in a div that carries the theme classes.
 - **Reflection completion** (`handleReflectionComplete`, `src/App.tsx:92`). Fires the `success` haptic, calls `markTodayCompleted()`, calls `markWelcomeSeen()` when the reflection was the welcome one (since `d3dfd92`), adds a journal entry when the user wrote text, closes the modal and shows particles for 3,200 ms.
 - **Root classes** (`src/App.tsx:105`–`116`). `theme-light` or `theme-dark` with hard-coded background and text colours, plus `text-scale-normal|large|xlarge` derived from `textSize`.

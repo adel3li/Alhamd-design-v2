@@ -1,6 +1,6 @@
 # Landing page
 
-> **Changed since this was written** (commit `d3dfd92`, 17 November 2026): the «رحلتي» feature card and the mockup's «رحلتي» tab are shown only when the build sets `VITE_ENABLE_JOURNEY=true`; the «نصوصٌ موثّقة» card now reads «الآيات بنصّها مع اسم السورة ورقم الآية، والأحاديث بمصدرها ودرجتها.»
+> **Changed since this was written** (commits `d3dfd92` to `b8db9cc`, 17 November 2026): the «نصوصٌ موثّقة» card now reads «الآيات بنصّها مع اسم السورة ورقم الآية، والأحاديث بمصدرها ودرجتها.»; the page says 80 seconds wherever it stated a duration («ثمانين ثانية», «ثمانون ثانية، وخمس وقفات», and both meta descriptions). «رحلتي» is now free, so «مجّانًا» holds for the whole app.
 
 State of the code at commit `68e723a` (`main`, 2026-11-16). Line references are `path:line` against that commit.
 

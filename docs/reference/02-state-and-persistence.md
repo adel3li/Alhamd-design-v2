@@ -2,7 +2,7 @@
 
 Covers `src/lib/store.tsx`, `src/lib/journeyStore.ts`, `src/lib/entitlements.ts`, `src/lib/analytics.ts` and the state types in `src/types.ts`. Everything the app remembers is in the browser's `localStorage`; there is no server.
 
-> Updated for commit `d3dfd92` (17 November 2026): new users start empty, the welcome blessing is recorded, day keys are local, and the journey is behind a switch. Sections 1.1, 1.2, 1.4, 1.5, 2 and 5 describe the code after that commit. Line numbers still refer to `68e723a`; in `src/lib/store.tsx` they have moved.
+> Updated for commits `d3dfd92` to `b8db9cc` (17 November 2026): new users start empty, the welcome blessing is recorded, day keys are local, the journey is free with the paywall switched off, and the daily reflection records consent-gated events (`trackEvent` in `src/lib/analytics.ts`: `reflection_started`, `reflection_step_viewed`, `reflection_completed`, kept on the device). Sections 1.1, 1.2, 1.4, 1.5, 2 and 5 describe the code after that commit. Line numbers still refer to `68e723a`; in `src/lib/store.tsx` they have moved.
 
 ## 1. The store (`src/lib/store.tsx`, 753 lines)
 
@@ -251,7 +251,7 @@ The daily pacing rule (`pace` versus `unlockedTodayCount`) and the free-tier lim
 | `DEV_PREMIUM_STORAGE_KEY` | `'alhamd:dev_premium'` |
 | `ENTITLEMENT_CHANGED_EVENT` | `'alhamd:entitlement_changed'` |
 | `FREE_STATION_LIMIT` | `2` |
-| `JOURNEY_ENABLED` | `import.meta.env.VITE_ENABLE_JOURNEY === 'true'`; false by default. When false, the journey tab, the paywall and the developer tools in Settings are not rendered, in the app and on the landing page. Saved journey data is not touched |
+| `PAYWALL_ENABLED` | `false` since `b8db9cc`: the journey is free for everyone. While it is false, `isPremium()` and `getDeveloperPremiumSync()` return true, and the paywall and the developer block in Settings are not rendered |
 | `isPremium()` | async; returns `getDeveloperPremiumSync()` |
 | `getEntitlementStatus()` | async; `{ isPremium, plan: 'lifetime' \| 'free', source: 'local_dev' }`. Imported by nothing |
 | `getDeveloperPremiumSync()` | `localStorage['alhamd:dev_premium'] === 'true'` |
@@ -259,7 +259,7 @@ The daily pacing rule (`pace` versus `unlockedTodayCount`) and the free-tier lim
 | `toggleDeveloperPremium()` | Imported by nothing |
 | `subscribeEntitlementChange(listener)` | Listens for the event, returns an unsubscribe function |
 
-There is no payment provider. Premium is whatever that `localStorage` key says. It is set to `'true'` by the paywall (`src/components/screens/PremiumPaywallScreen.tsx:54`) and by a switch in Settings (`src/components/screens/SettingsScreen.tsx:669`). Since `d3dfd92` both are rendered only when `JOURNEY_ENABLED` is true, so neither is in the default production build; the unlock must be replaced by a real purchase check before that switch is turned on. Three `TODO: RevenueCat` comments mark where a real check would go (`src/lib/entitlements.ts:17`, `26`, `34`).
+There is no payment provider. Premium is whatever that `localStorage` key says. It is set to `'true'` by the paywall (`src/components/screens/PremiumPaywallScreen.tsx:54`) and by a switch in Settings (`src/components/screens/SettingsScreen.tsx:669`). Since `b8db9cc` the journey is free: `PAYWALL_ENABLED` is false, every premium check answers yes, and neither the paywall nor the Settings switch is rendered. If a paywall is ever switched back on, the unlock must first be replaced by a real purchase check. Three `TODO: RevenueCat` comments mark where a real check would go (`src/lib/entitlements.ts:17`, `26`, `34`).
 
 Callers: `App.tsx:67` (tab gate), `JourneyPathScreen.tsx` (station gating), `SettingsScreen.tsx` (developer switch), `PremiumPaywallScreen.tsx` (unlock).
 
