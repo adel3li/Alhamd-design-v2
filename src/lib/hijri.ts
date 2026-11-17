@@ -1,4 +1,5 @@
 import { toArabicNumerals } from './arabic';
+import { toLocalDateString } from './dates';
 
 /**
  * Native Arabic Hijri date formatter using Islamic calendar
@@ -127,7 +128,7 @@ function formatGregorianArabic(date: Date): string {
       year: 'numeric'
     }).format(date);
   } catch {
-    return date.toISOString().split('T')[0];
+    return toLocalDateString(date);
   }
 }
 
@@ -188,7 +189,7 @@ export function generateMonthCalendar(referenceDate: Date = new Date(), monthOff
   const targetMonthParts = getHijriNumericParts(cursor);
   const todayNoon = new Date();
   todayNoon.setHours(12, 0, 0, 0);
-  const todayIso = new Date().toISOString().split('T')[0];
+  const todayIso = toLocalDateString();
 
   const days: HijriCalendarDay[] = [];
   const dayCursor = new Date(cursor);

@@ -61,9 +61,11 @@ const RoundIconButton: React.FC<{size: number; children: React.ReactNode; classN
   </span>
 );
 
+const JOURNEY_ENABLED = import.meta.env.VITE_ENABLE_JOURNEY === 'true';
+
 const tabs = [
   {label: 'الرئيسية', Icon: HomeIcon, active: true},
-  {label: 'رحلتي', Icon: CompassIcon},
+  ...(JOURNEY_ENABLED ? [{label: 'رحلتي', Icon: CompassIcon}] : []),
   {label: 'سجل الحمد', Icon: BookIcon},
   {label: 'المداومة', Icon: CalendarIcon},
   {label: 'المسبحة', Icon: BeadsIcon},

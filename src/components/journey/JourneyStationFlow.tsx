@@ -68,7 +68,8 @@ export const JourneyStationFlow: React.FC<JourneyStationFlowProps> = ({
 
   const sentences = currentStep
     ? currentStep.text
-        .split(/(?<=[.،؟!…])\s+/)
+        .replace(/([.،؟!…])\s+/g, '$1\n')
+        .split('\n')
         .map((s) => s.trim())
         .filter(Boolean)
     : [];
@@ -457,9 +458,6 @@ export const JourneyStationFlow: React.FC<JourneyStationFlowProps> = ({
               </p>
               <div className="pt-2 border-t border-[#2E2E4A]/80 flex items-center justify-between text-[11px] text-[#AEAECB]">
                 <span>نعمة: {blessing.shortTitle}</span>
-                {stationContent.dailyAction.reviewStatus === 'pending_review' && (
-                  <span>محتوى توجيهي (قيد المراجعة)</span>
-                )}
               </div>
             </div>
           </div>

@@ -1,5 +1,6 @@
 import journeyContentRaw from '../data/journey_content.json';
 import { JourneyState, JourneyStage, JourneyStation } from '../types';
+import { toLocalDateString } from './dates';
 
 export type { JourneyState, JourneyStage, JourneyStation };
 
@@ -59,10 +60,7 @@ const journeyContent = journeyContentRaw as unknown as JourneyContentFile;
  * Returns local date formatted as "YYYY-MM-DD"
  */
 export function getLocalDateString(date: Date = new Date()): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
+  return toLocalDateString(date);
 }
 
 /**

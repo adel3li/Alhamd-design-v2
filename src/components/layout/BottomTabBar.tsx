@@ -1,6 +1,7 @@
 import React from 'react';
 import { Home, Compass, BookOpen, Calendar } from 'lucide-react';
 import { APP_STRINGS } from '../../constants/strings';
+import { JOURNEY_ENABLED } from '../../lib/entitlements';
 
 export type TabId = 'home' | 'journey' | 'journal' | 'consistency' | 'tasbih' | 'settings';
 
@@ -52,7 +53,7 @@ export const BottomTabBar: React.FC<BottomTabBarProps> = ({
     { id: 'journal' as TabId, label: APP_STRINGS.tabs.journal, icon: BookOpen },
     { id: 'consistency' as TabId, label: APP_STRINGS.tabs.consistency, icon: Calendar },
     { id: 'tasbih' as TabId, label: APP_STRINGS.tabs.tasbih, icon: TasbihIcon }
-  ];
+  ].filter((tab) => tab.id !== 'journey' || JOURNEY_ENABLED);
 
   return (
     <nav

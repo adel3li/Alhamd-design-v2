@@ -48,7 +48,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
   };
 
   const handleCopyInspirationText = async () => {
-    const formatted = `${inspiration.type === 'ayah' ? `﴿${inspiration.text}﴾` : `«${inspiration.text}»`}\n(${inspiration.source})\n— تطبيق «الحمد»`;
+    const formatted = `${inspiration.type === 'quran' ? `﴿${inspiration.text}﴾` : `«${inspiration.text}»`}\n(${inspiration.source})\n— تطبيق «الحمد»`;
     try {
       await navigator.clipboard.writeText(formatted);
       setCopiedInspiration(true);
@@ -92,7 +92,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
             </span>
             {!showInspiration && (
               <span className="text-xs sm:text-sm text-[#AEAECB] truncate font-serif opacity-85">
-                — {inspiration.type === 'ayah' ? `﴿${inspiration.text}﴾` : `«${inspiration.text}»`}
+                — {inspiration.type === 'quran' ? `﴿${inspiration.text}﴾` : `«${inspiration.text}»`}
               </span>
             )}
           </div>
@@ -134,8 +134,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
         {/* Expanded Content */}
         {showInspiration && (
           <div className="mt-4 pt-3 border-t border-[#2E2E4A]/60 animate-fade-in">
-            <p className={`text-lg sm:text-xl md:text-2xl leading-[2.1] text-center px-2 font-medium ${inspiration.type === 'ayah' ? 'font-quran ayah-text text-[#E4C368]' : 'font-serif text-[#EDEDF5]'}`}>
-              {inspiration.type === 'ayah' ? `﴿${inspiration.text}﴾` : `«${inspiration.text}»`}
+            <p className={`text-lg sm:text-xl md:text-2xl leading-[2.1] text-center px-2 font-medium ${inspiration.type === 'quran' ? 'font-quran ayah-text text-[#E4C368]' : 'font-serif text-[#EDEDF5]'}`}>
+              {inspiration.type === 'quran' ? `﴿${inspiration.text}﴾` : `«${inspiration.text}»`}
             </p>
 
             <div className="mt-3 text-center">

@@ -50,7 +50,8 @@ export const ReflectionModal: React.FC<ReflectionModalProps> = ({
   // Split text into sentences for peaceful pacing
   const sentences = currentStep
     ? currentStep.text
-        .split(/(?<=[.،؟!…])\s+/)
+        .replace(/([.،؟!…])\s+/g, '$1\n')
+        .split('\n')
         .map(s => s.trim())
         .filter(Boolean)
     : [];

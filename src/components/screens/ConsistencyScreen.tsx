@@ -13,6 +13,7 @@ import { GlassCard } from '../common/GlassCard';
 import { ReflectionCategoryCharts } from '../common/ReflectionCategoryCharts';
 import { generateMonthCalendar, HijriCalendarDay } from '../../lib/hijri';
 import { toArabicNumerals, formatArabicTime } from '../../lib/arabic';
+import { toLocalDateString, useLocalDay } from '../../lib/dates';
 
 interface ConsistencyScreenProps {
   completedDays: string[]; // ISO dates YYYY-MM-DD
@@ -36,9 +37,11 @@ export const ConsistencyScreen: React.FC<ConsistencyScreenProps> = ({
   const [isTimePickerOpen, setIsTimePickerOpen] = useState(false);
 
   // Generate calendar days for the current offset
+  const today = useLocalDay();
   const calendarData = useMemo(() => {
     return generateMonthCalendar(new Date(), monthOffset);
-  }, [monthOffset]);
+    // `today` is a dependency so the calendar and its today marker roll over at midnight.
+  }, [monthOffset, today]);
 
   // Count how many days in this month are completed
   const completedInThisMonthCount = useMemo(() => {
@@ -55,7 +58,7 @@ export const ConsistencyScreen: React.FC<ConsistencyScreenProps> = ({
     const uniqueSet = new Set(completedDays);
     const totalBlessings = uniqueSet.size;
 
-    const toIso = (d: Date) => d.toISOString().split('T')[0];
+    const toIso = (d: Date) => toLocalDateString(d);
 
     const getStreakAtDate = (targetDate: Date): number => {
       let streak = 0;
@@ -101,7 +104,7 @@ export const ConsistencyScreen: React.FC<ConsistencyScreenProps> = ({
       currentStreak,
       chartData,
     };
-  }, [completedDays]);
+  }, [completedDays, today]);
 
   // Weekday letters from Saturday to Friday: س ح ن ث ر خ ج (as in ref-04-calendar.png)
   const weekdayLetters = ['س', 'ح', 'ن', 'ث', 'ر', 'خ', 'ج'];

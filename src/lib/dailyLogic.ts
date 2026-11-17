@@ -1,13 +1,14 @@
 import { Blessing, InspirationItem, DhikrItem } from '../types';
 import { inspirations } from '../data/inspirations';
 import { dailyDhikrs } from '../data/dhikr';
+import { parseLocalDateString, toLocalDateString } from './dates';
 
 export const ISLAM_ID = 'islam';
 const MS_PER_DAY = 86_400_000;
 
 /**
- * Continuous day number, UTC-based so every device computes the SAME value
- * at the same moment -> global sync.
+ * Continuous day number of the user's calendar date. Everyone sees the same
+ * blessing on the same date; it changes at each user's local midnight.
  */
 export function getDayNumber(now: Date = new Date()): number {
   const utcMidnight = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
@@ -24,7 +25,11 @@ export function blessingForDate(localDate: Date | string, allBlessings: Blessing
     return allBlessings[0];
   }
 
-  const dateArg = new Date(localDate);
+  // A bare "YYYY-MM-DD" names a local day; `new Date(string)` would read it as UTC.
+  const dateArg =
+    typeof localDate === 'string'
+      ? parseLocalDateString(localDate) ?? new Date(localDate)
+      : localDate;
   const dayIndex = getDayNumber(dateArg);
   const total = dailyPool.length;
 
@@ -37,16 +42,29 @@ export interface TodayExperience {
   role: 'welcome' | 'daily';
 }
 
+/**
+ * A new user starts with the welcome blessing («نعمة الإسلام») and keeps it
+ * until they finish its reflection. It stays for the rest of that day, shown
+ * as done, and the daily rotation begins the next day.
+ *
+ * @param welcomeDate local day ("YYYY-MM-DD") on which the welcome reflection
+ *   was finished, or null if it has not been.
+ */
 export function resolveTodayExperience(
   localDate: Date | string,
   welcomeSeen: boolean,
-  allBlessings: Blessing[]
+  allBlessings: Blessing[],
+  welcomeDate: string | null = null
 ): TodayExperience {
   const todaysGlobal = blessingForDate(localDate, allBlessings);
+  const islamBlessing = allBlessings.find(b => b.id === ISLAM_ID);
 
-  if (!welcomeSeen) {
-    const islamBlessing = allBlessings.find(b => b.id === ISLAM_ID);
-    if (islamBlessing) {
+  if (islamBlessing) {
+    const today =
+      typeof localDate === 'string' && parseLocalDateString(localDate)
+        ? localDate
+        : toLocalDateString(new Date(localDate));
+    if (!welcomeSeen || welcomeDate === today) {
       return { blessing: islamBlessing, role: 'welcome' };
     }
   }

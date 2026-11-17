@@ -2,6 +2,16 @@ export const DEV_PREMIUM_STORAGE_KEY = 'alhamd:dev_premium';
 export const ENTITLEMENT_CHANGED_EVENT = 'alhamd:entitlement_changed';
 export const FREE_STATION_LIMIT = 2;
 
+/**
+ * «رحلتي» is the only premium feature. Until pricing and payments are decided
+ * it is hidden altogether: no tab, no paywall, no developer unlock in Settings.
+ * Nothing a user saved in the journey is deleted; it is only not shown.
+ *
+ * To bring it back, build with VITE_ENABLE_JOURNEY=true. Before doing that for
+ * real users, replace the developer unlock with a real purchase check.
+ */
+export const JOURNEY_ENABLED = import.meta.env.VITE_ENABLE_JOURNEY === 'true';
+
 export type EntitlementPlan = 'free' | 'annual' | 'lifetime';
 
 export interface EntitlementStatus {

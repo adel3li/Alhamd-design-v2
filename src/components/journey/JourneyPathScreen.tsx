@@ -81,7 +81,7 @@ const CurvedPathConnector: React.FC<CurvedPathConnectorProps> = ({
 
   return (
     <svg
-      dir="ltr"
+      style={{ direction: 'ltr' }}
       width={width}
       height={height}
       viewBox={`0 0 ${width} ${height}`}
@@ -712,7 +712,6 @@ export const JourneyPathScreen: React.FC = () => {
         const stage = displayedStage;
         const stageContent = getStageContent(stage.id, stage.theme);
         const intentionText =
-          stage.intention ||
           stageContent?.intention.text ||
           'في هذا المنزل نتأمل نِعَم الله التي تحيط بنا في كل حين.';
 

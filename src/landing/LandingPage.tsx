@@ -22,18 +22,23 @@ const steps = [
   {title: 'الحمد', time: '١٥ ثانية', text: 'تحمد الله عليها بقلبٍ حاضر، لا بلسانٍ معتاد.'},
 ];
 
-const features = [
+// «رحلتي» is hidden in the app until a decision on premium is made (VITE_ENABLE_JOURNEY).
+const JOURNEY_ENABLED = import.meta.env.VITE_ENABLE_JOURNEY === 'true';
+
+const allFeatures = [
   {Icon: HomeIcon, title: 'نعمة اليوم', text: 'نعمةٌ واحدة يتأمّلها الجميع في اليوم نفسه، معها آيتها وحديث اليوم.'},
-  {Icon: CompassIcon, title: 'رحلتي', text: 'مسارك أنت مع النعم، تمضي فيه نعمةً بعد نعمة.'},
+  {Icon: CompassIcon, title: 'رحلتي', text: 'مسارك أنت مع النعم، تمضي فيه نعمةً بعد نعمة.', journeyOnly: true},
   {Icon: BookIcon, title: 'سجل الحمد', text: 'دفترك الخاص، تكتب فيه ما وجدته في نفسك. يبقى على جهازك وحده.'},
   {Icon: CalendarIcon, title: 'المداومة', text: 'أيّامك مع النعم في تقويمٍ هجري، بلا عدّاد ولا أيّامٍ «فائتة».'},
   {Icon: BeadsIcon, title: 'المسبحة', text: 'تسبيحٌ بلمسة، واهتزازٌ خفيف عند كلّ ثلاثٍ وثلاثين.'},
   {
     Icon: ShieldIcon,
     title: 'نصوصٌ موثّقة',
-    text: 'الآيات بالرسم العثماني، والأحاديث بدرجتها، وكلّ نصٍّ يمرّ على أهل العلم قبل نشره.',
+    text: 'الآيات بنصّها مع اسم السورة ورقم الآية، والأحاديث بمصدرها ودرجتها.',
   },
 ];
+
+const features = allFeatures.filter((feature) => !('journeyOnly' in feature) || JOURNEY_ENABLED);
 
 const promises = [
   {title: 'بلا حساب.', text: 'تفتح التطبيق فتبدأ. لا تسجيل، ولا بريد، ولا كلمة مرور.'},
