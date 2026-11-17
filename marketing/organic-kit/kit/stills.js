@@ -250,7 +250,7 @@
       };
     } else if (p.kind === 'ramadan') {
       spec.alt = 'رمضان مبارك من تطبيق الحمد: شهرٌ تُختم آيتُه بالشكر.';
-      spec.build = (c) => post(c, { chipText: '١٤٤٨ هـ', visual: { medal: 'ramadan' }, head: `${gold('رمضانُ مبارك')}`, hs: 130, sub: `شهرٌ تُختم آيةُ صيامه بقوله: <span style="font-family:var(--quran)">﴿${(CT.verses.find((v) => v.id === 'SV-13') || { text: '' }).text.split(' ').slice(-2).join(' ')}﴾</span>`, ss: 46, bgo: { cone: 0.08, coneAt: '50% 26%', warm: 0.1, warmAt: '50% 40%' } });
+      spec.build = (c) => post(c, { chipText: '١٤٤٨ هـ', visual: { medal: 'ramadan' }, head: `${gold('رمضانُ مبارك')}`, hs: 130, sub: `شهرٌ تُختم آيتُه بقوله: <span style="font-family:var(--quran)">﴿${(CT.verses.find((v) => v.id === 'SV-13') || { text: '' }).text.split(' ').slice(-2).join(' ')}﴾</span>`, ss: 46, bgo: { cone: 0.08, coneAt: '50% 26%', warm: 0.1, warmAt: '50% 40%' } });
     } else {
       spec.alt = `${p.head.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()}${p.sub ? ` — ${p.sub}` : ''}`;
       spec.build = (c) => post(c, { chipText: p.chipText, visual: p.visual, visualSize: p.visualSize || 1, head: p.head, hs: p.hs, sub: p.sub, ss: p.ss || 42, note: p.note });
@@ -351,7 +351,7 @@
     (c, i, n) => slide(c, i, n, `<div style="display:flex;gap:${c.px(20)}px">${['#0C0C1C', '#15152A', '#E4C368', '#C8A951', '#6C63FF'].map((x) => `<div style="width:${c.px(110)}px;height:${c.px(110)}px;border-radius:50%;background:${x};box-shadow:0 0 0 3px rgba(255,255,255,0.12)"></div>`).join('')}</div>` + title(c, `«ليل»: كحليٌّ وذهب`, c.pick({ story: 96, square: 74 }, 88)) + body(c, 'لهدوء الليل… وللذين يقرؤون قبل النوم.', 42)),
     (c, i, n) => slide(c, i, n, `<div style="display:flex;gap:${c.px(20)}px">${['#F4EDE3', '#FBF8F3', '#2A1F19', '#B9573B', '#9E4A30'].map((x) => `<div style="width:${c.px(110)}px;height:${c.px(110)}px;border-radius:50%;background:${x};box-shadow:0 0 0 3px rgba(0,0,0,0.08)"></div>`).join('')}</div>` + title(c, `«نهار»: ورقٌ دافئ وحبر`, c.pick({ story: 96, square: 74 }, 88)) + body(c, 'لصفاء الصباح… كأنك تقرأ من دفترٍ قديم.', 42)),
     (c, i, n) => slide(c, i, n, thread(c, { w: 620, pct: 0.62 }) + gap(c, 30) + title(c, `الخيطُ الذهبي`, c.pick({ story: 104, square: 80 }, 94)) + body(c, 'كلُّ نعمةٍ حبّةٌ في خيطٍ واحد… والنقطة في أوّله: أنت تبدأ من هنا.', 42, { w: 860 })),
-    (c, i, n) => slide(c, i, n, display(c, 'الحمد', c.pick({ story: 230, square: 170 }, 200)) + title(c, `خطُّ «أميري»`, c.pick({ story: 96, square: 74 }, 88)) + body(c, 'إحياءٌ لحروف المطبعة الأميرية في بولاق… أوّل مطبعةٍ عربيةٍ في مصر.', 42, { w: 860 })),
+    (c, i, n) => slide(c, i, n, display(c, 'الحمد', c.pick({ story: 230, square: 170 }, 200)) + title(c, `خطُّ «أميري»`, c.pick({ story: 96, square: 74 }, 88)) + body(c, 'إحياءٌ لحروف المطبعة الأميرية في بولاق… من أعرق مطابع العربية.', 42, { w: 860 })),
     (c, i, n) => slide(c, i, n, `<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:${c.px(16)}px;max-width:${c.px(820)}px">${['islam', 'quran', 'salah', 'maa', 'basar', 'umm', 'rizq', 'janna'].map((x) => medal(c, x, { size: c.pick({ story: 150, square: 96 }, 120) })).join('')}</div>` + title(c, `أربعون نعمة…<br>${acc('أربعون رمزًا')}`, c.pick({ story: 100, square: 76 }, 90)) + body(c, 'رُسمت كلُّها بخطٍّ واحدٍ رفيع… كي لا يعلو شيءٌ على النعمة.', 42, { w: 860 })),
     (c, i, n) => ctaSlide(c, i, n, `ليلًا أو نهارًا…<br>${acc('نعمةٌ كلَّ يوم.')}`),
   ]);
@@ -370,7 +370,7 @@
     (c, i, n) => slide(c, i, n, glyph(c, 'taam', { size: c.pick({ story: 200, square: 120 }, 160) }) + quote(c, `تجوع…<br>${acc('فتعرف قدرَ اللقمة.')}`, c.pick({ story: 104, square: 78 }, 92))),
     (c, i, n) => slide(c, i, n, glyph(c, 'maa', { size: c.pick({ story: 200, square: 120 }, 160) }) + quote(c, `تعطش…<br>${acc('فتعرف قدرَ الماء.')}`, c.pick({ story: 104, square: 78 }, 92))),
     (c, i, n) => slide(c, i, n, glyph(c, 'nawm', { size: c.pick({ story: 200, square: 120 }, 160) }) + quote(c, `تسهر…<br>${acc('فتعرف قدرَ النوم.')}`, c.pick({ story: 104, square: 78 }, 92))),
-    (c, i, n) => slide(c, i, n, verseT(c, `<span class="acc">﴿</span>${(CT.verses.find((v) => v.id === 'SV-13') || {}).text || ''}<span class="acc">﴾</span>`, c.pick({ story: 86, square: 64 }, 76), { w: 900 }) + kick(c, '[البقرة: ١٨٥]', 32) + body(c, 'آيةُ الصيام… تُختم بالشكر.', 44)),
+    (c, i, n) => slide(c, i, n, verseT(c, `<span class="acc">﴿</span>${(CT.verses.find((v) => v.id === 'SV-13') || {}).text || ''}<span class="acc">﴾</span>`, c.pick({ story: 86, square: 64 }, 76), { w: 900 }) + kick(c, '[البقرة: ١٨٥]', 32) + body(c, 'آيةُ شهر رمضان… تُختم بالشكر.', 44)),
     (c, i, n) => ctaSlide(c, i, n, `في رمضان…<br>${acc('نعمةٌ كلَّ يوم.')}`),
   ]);
 

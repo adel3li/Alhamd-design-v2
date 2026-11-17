@@ -77,8 +77,15 @@ def main() -> None:
             s = d.get(slot)
             if s:
                 planned.setdefault(s["id"], s.get("theme", "layl"))
+    # unplanned designs preview in the theme their family is mostly planned in
+    from collections import Counter
+    fam_th = {}
+    for i, th in planned.items():
+        fam_th.setdefault(i.split("-")[0], Counter())[th] += 1
     for e in lib.values():
-        e["prefer"] = planned.get(e["id"], "layl" if "layl" in e["themes"] else e["themes"][0])
+        fam = e["id"].split("-")[0]
+        default = fam_th[fam].most_common(1)[0][0] if fam in fam_th else "layl"
+        e["prefer"] = planned.get(e["id"], default if default in e["themes"] else e["themes"][0])
         short = e["name"].split(": ", 1)
         e["short"] = short[1] if len(short) > 1 and e["group"] in ("NB", "NP", "ND") else e["name"]
 

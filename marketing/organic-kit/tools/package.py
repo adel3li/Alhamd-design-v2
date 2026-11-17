@@ -45,7 +45,8 @@ def human(n: int) -> str:
 
 def main() -> None:
     meta = json.loads((STILLS / "meta.json").read_text(encoding="utf-8"))
-    shutil.rmtree(STAGE, ignore_errors=True)
+    # stills are converted once (the stage keeps them); reels and zips are rebuilt every run
+    shutil.rmtree(STAGE / "06-reels", ignore_errors=True)
     for key, m in meta.items():
         src = STILLS / m["id"] / f"{key}.png"
         if not src.exists():
@@ -53,6 +54,9 @@ def main() -> None:
         fam = m["id"].split("-")[0]
         folder = STAGE / FOLDERS.get(fam, "99-other") / (m["group"] if fam in ("CR", "TR") else m["id"])
         folder.mkdir(parents=True, exist_ok=True)
+        target = folder / f"{key}.{'png' if fam == 'SK' else 'jpg'}"
+        if target.exists() and target.stat().st_mtime >= src.stat().st_mtime:
+            continue
         im = Image.open(src)
         if fam == "SK":
             im.save(folder / f"{key}.png", optimize=True)

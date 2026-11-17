@@ -260,7 +260,7 @@ const THN = { layl: 'ليل', nahar: 'نهار' };
 let mode = 'plan';
 try { mode = localStorage.getItem('alhamd-plan-th') || 'plan'; } catch (e) { /* storage may be blocked */ }
 const pick = (planned) => (mode === 'plan' ? planned : mode);
-const img = (id, th, alt = '') => { const src = TH[th][id] || TH[th === 'layl' ? 'nahar' : 'layl'][id]; return src ? `<img src="${src}" alt="${esc(alt)}" loading="lazy" decoding="async">` : `<span class="muted" style="display:block;padding:20px 6px;font-size:12px;text-align:center">${esc(id)}</span>`; };
+const img = (id, th, alt = '') => { const o = th === 'layl' ? 'nahar' : 'layl'; const src = TH[th][id] || TH[th]['R:' + id] || TH[o][id] || TH[o]['R:' + id]; return src ? `<img src="${src}" alt="${esc(alt)}" loading="lazy" decoding="async">` : `<span class="muted" style="display:block;padding:20px 6px;font-size:12px;text-align:center">${esc(id)}</span>`; };
 const thumb = (id, th) => `<button type="button" class="thumb" data-open="${esc(id)}" aria-label="معاينة ${esc(id)}">${img(id, th, (LIB[id] || {}).name || id)}</button>`;
 
 function copyBtn(text) { return `<button type="button" class="copy" data-copy="${esc(text)}">نسخ</button>`; }
@@ -282,7 +282,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLb();
 /* header */
 $('lede').textContent = `من ${P.weeks[0].from} إلى ${P.weeks[11].to}: أربعة أسابيع تمهيد، ثم الإطلاق على Google Play يوم ${P.days.find((d) => d.date === P.launch).dateAr}، ثم ثمانية أسابيع إطلاقٍ هادئ تنتهي في أوّل رمضان. كل المحتوى بلا تعليق صوتي، وكل تصميمٍ بالثيمين وبكل المقاسات.`;
 const nStill = Object.values(LIB).filter((x) => x.kind === 'still').length;
-$('stats').innerHTML = [[AR(P.days.length), 'يومًا في التقويم'], [AR(nStill), 'تصميمًا ثابتًا'], [AR(DATA.counts.files.toLocaleString('en')), 'ملف صورة'], [AR(DATA.counts.videos), 'فيديو'], [AR(2), 'ثيمان']].map(([n, l]) => `<div><b class="num">${n}</b><span>${l}</span></div>`).join('');
+$('stats').innerHTML = [[AR(P.days.length), 'يومًا في التقويم'], [AR(nStill), 'تصميمًا ثابتًا'], [AR(DATA.counts.files.toLocaleString('en')).replace(/,/g, '٬'), 'ملف صورة'], [AR(DATA.counts.videos), 'فيديو'], [AR(2), 'ثيمان']].map(([n, l]) => `<div><b class="num">${n}</b><span>${l}</span></div>`).join('');
 
 /* plan */
 $('recs').innerHTML = S.recommendation.map((x) => `<li>${esc(x)}</li>`).join('');
@@ -381,7 +381,9 @@ $('foot').textContent = 'الأدوات في المستودع: marketing/organic
 
 /* lightbox */
 function openLb(id) {
-  const x = LIB[id]; if (!x) return;
+  const x = LIB[id] || REELS.find((r) => r.id === id);
+  if (!x) return;
+  if (!LIB[id]) { document.getElementById('reels').scrollIntoView({ behavior: 'smooth' }); rf = x.group; renderReels(); return; }
   $('lb-card').innerHTML = `<button type="button" class="lb-close">إغلاق</button><div><div class="meta-line"><b class="ltr id" style="color:var(--ink)">${esc(id)}</b><span>${esc(x.name)}</span>${x.review ? '<span class="pill rev">مراجعة قبل النشر</span>' : ''}</div><p class="muted" style="font-size:13.5px;margin-top:4px">المقاسات: ${esc(x.formats.join(' · '))}</p></div>` +
     `<div class="lb-imgs">${['nahar', 'layl'].filter((t) => TH[t][id]).map((t) => `<figure>${img(id, t, x.alt)}<figcaption>${THN[t]}</figcaption></figure>`).join('')}</div>` +
     (x.alt ? `<p style="font-size:13.5px"><b style="color:var(--ink)">النص البديل:</b> ${esc(x.alt)} ${copyBtn(x.alt)}</p>` : '');

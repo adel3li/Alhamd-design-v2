@@ -242,7 +242,7 @@
       anim(t, L) { draw($(L, '.m svg'), P(t, 0, 1.6)); pop($(L, '.g'), t, 1.2, 0.8, 0.85); drift($(L, '.parts svg'), t, { fade: [0.4, 1] }); }, sfx: [[0.2, 'glint', -30], [1.2, 'breath', -27]] },
     { len: 5.0, html: page(c, { bg: { cone: 0.07 }, mid: `<div class="v">${verseT(c, `<span class="acc">﴿</span>${V13}<span class="acc">﴾</span>`, 84, { w: 940 })}</div><div class="r">${kick(c, `[البقرة: ${AR(185)}]`, 34)}</div>`, gap: 30 }),
       anim(t, L) { enter($(L, '.v'), t, 0.2, 1.2, 20); enter($(L, '.r'), t, 1.2); } },
-    textScene(c, { lines: `آيةُ الصيام…<br>${acc('تُختم بالشكر.')}`, size: 110, len: 2.8 }),
+    textScene(c, { lines: `آيةُ شهر رمضان…<br>${acc('تُختم بالشكر.')}`, size: 104, len: 2.8 }),
     endScene(c, { sub: 'رمضان مع «الحمد»: نعمةٌ كلَّ يوم' }),
   ], { review: true });
 
