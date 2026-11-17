@@ -156,6 +156,7 @@ Every key the current code reads or writes. The two naming styles (`alhamd_snake
 | `alhamd_tasbih_count` | store | integer as string |
 | `alhamd:journey_state:v1` | journeyStore, store | JSON `JourneyState` |
 | `alhamd:journey_onboarded:v1` | journeyStore | `'true'` |
+| `alhamd:journey_drafts:v1` | `src/lib/journeyDrafts.ts` (since `23a188e`) | JSON `{ stations: { stationId: text }, muhasaba: { stageId: { q1, q2 } } }`: text typed in the journey but not yet saved. Removed when empty; not part of the backup |
 | `alhamd:dev_premium` | entitlements | `'true'` / `'false'` |
 | `alhamd:analytics_events_log` | analytics | JSON array, last 50 events |
 | `alhamd_hisn_counts_<YYYY-MM-DD>` | `HisnScreen.tsx:128` | JSON map of per-dhikr counts for that day; a new key is created each day and old ones are never removed |

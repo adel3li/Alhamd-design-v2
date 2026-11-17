@@ -7,7 +7,7 @@ Written on 2026-11-17 against commit `68e723a`. This file has two parts:
 
 ## Status
 
-The fixes so far are in commits `d3dfd92` to `b8db9cc` (17 November 2026). The rows below keep their original text; this table says what changed. Every finding not listed here is open.
+The fixes so far are in commits `d3dfd92` to `23a188e` (17 November 2026). The rows below keep their original text; this table says what changed. Every finding not listed here is open.
 
 | Id | Status | What changed |
 |---|---|---|
@@ -25,7 +25,17 @@ The fixes so far are in commits `d3dfd92` to `b8db9cc` (17 November 2026). The r
 | B-03 | Fixed in `b8db9cc` | A station's note is copied into the main journal once |
 | J-01 | Fixed in `b8db9cc` | The path stays on a finished stage until its end-of-stage review is saved |
 | J-02 | Fixed in `b8db9cc` | First-time set-up opens on the first visit to the journey |
-| J-03 to J-12, C-02 | **Open, and now reachable by every user** | Making the journey free exposes these to everyone: the advisory daily pace, «إظهار النص كاملًا» being undone, the reminder switching itself on, lost drafts, the weekly chart's counting, the note stored twice, missing focus handling, and unreviewed journey content with placeholder slots. J-09 (free-limit bypass) no longer applies |
+| J-03 | Resolved in `23a188e` as a gentle limit | The station preview already tells the user they may rest until tomorrow or start now, so the pace stays advisory. The unused strict gate (`handleStartStation`) is removed, and the day's count lapses at midnight. The set-up copy («تُفتح لك في كل يوم») is unchanged; say so if the limit should be hard instead |
+| J-04 | Fixed in `23a188e` | The pacing timer only ever reveals more text. The daily reflection had the same step-back and got the same fix |
+| J-05 | Fixed in `23a188e` | Set-up shows the journey's own reminder setting; saving other preferences no longer turns app notifications on |
+| J-06 | Fixed in `23a188e` | Unsaved station notes and review answers are kept as drafts on the device (`alhamd:journey_drafts:v1`) and removed once saved |
+| J-07 | Fixed in `23a188e` | The weekly chart counts journey stations only, and "done out of total" counts stations on the current path |
+| J-08 | Fixed in part in `23a188e` | The station's note can be deleted from the station preview, and clearing it on a replay clears it. The copy added to «سجل الحمد» on completion is still a separate entry, deleted from there |
+| J-09 | Fixed in `23a188e` | The current station's start button applies the free-taste rule, which now has one definition (`isBeyondFreeLimit`). It only runs if a paywall is switched on |
+| J-10 | Fixed in `23a188e` for the journey | The station preview, the station session and the review are modal dialogs with focus handling and Escape (`src/lib/useDialog.ts`). The rest of the app's overlays are still open under A-03 |
+| J-11 | Fixed in `23a188e` | The day's count lapses at midnight; the two events are recorded once; station counts come from the stage; totals ignore deselected themes; timeouts are cleared; the misspelled content key is corrected |
+| J-12 | Fixed in `23a188e` | Dead code removed from the path screen. The free-taste rule is defined once for the places that share it |
+| C-02 | **Open, and reachable by every user** | The journey's own texts (stage intentions, journal prompts, daily actions) are still `pending_review`, and 28 sacred or dhikr slots hold placeholder tokens instead of text |
 | P-02 | Fixed in `403f633` | The streak card, the seven-day chart, the running total and the month percentage are gone from the consistency screen; the Hijri calendar stays. Cherry-picked from `e2296c2` |
 | P-03 | Fixed in `b7b2e94` | Onboarding, the tour text and the landing page all say 80 seconds. Cherry-picked from `4209f2c`, without its change to the landing page's sourcing sentence |
 | Part A, 12 | Started in `755170f` | `reflection_started`, `reflection_step_viewed` and `reflection_completed` are recorded, consent-gated and kept on the device like the journey events. Cherry-picked from `16dd14a` |
@@ -33,7 +43,7 @@ The fixes so far are in commits `d3dfd92` to `b8db9cc` (17 November 2026). The r
 | C-08 | Partly changed | The landing page's sourcing sentence no longer claims scholarly review or the Uthmani script. The content sheet's sourcing paragraphs and the landing page's "free" are unchanged |
 | M-09 | Partly fixed | The `getDayNumber` and `fontSize` comments were corrected |
 
-How the fixes were checked: 43 scripted checks in a headless browser against the production build, plus `bun run lint` and `bun run build`. The checks cover a new user at 01:30 Riyadh time, the welcome reflection end to end, the next day without a reload, an existing user with seeded and real data, overlay geometry on every screen, the consistency screen without streaks, entering the journey with no paywall, its first-visit set-up, one station completed with a note, and a finished stage whose review was not saved. The scripts were written for these changes and are not in the repository; there is still no test suite.
+How the fixes were checked: 65 scripted checks in a headless browser against the production build (43 for the first round, 22 for the journey fixes in `23a188e`), plus `bun run lint` and `bun run build`. The checks cover a new user at 01:30 Riyadh time, the welcome reflection end to end, the next day without a reload, an existing user with seeded and real data, overlay geometry on every screen, the consistency screen without streaks, entering the journey with no paywall, its first-visit set-up, one station completed with a note, and a finished stage whose review was not saved. The scripts were written for these changes and are not in the repository; there is still no test suite.
 
 How each finding was established is stated in its row: **run time** means the behaviour was observed in a headless browser against the production build; **code** means it was read in the source and, for "nothing calls X" claims, confirmed with a repository-wide search; **run time (reviewer)** means it was observed in a browser by one of the parallel reviewers that read each area line by line; **branch** means a fix already exists on the unmerged branch `claude/trusting-rubin-9ue5hh` (see [HISTORY.md](HISTORY.md), section 9).
 
