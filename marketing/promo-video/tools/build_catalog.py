@@ -35,7 +35,11 @@ def main() -> None:
     vids = []
     for v in videos:
         for ext in ("webp", "jpg"):
-            shutil.copyfile(ROOT / "out" / "videos" / f"{v['id']}.{ext}", OUT / "vid" / f"{v['id']}.{ext}")
+            src = ROOT / "out" / "videos" / f"{v['id']}.{ext}"
+            if src.exists():
+                shutil.copyfile(src, OUT / "vid" / f"{v['id']}.{ext}")
+            else:
+                print(f"missing {src.name} (not rendered yet)")
         vids.append({"id": v["id"], "name": v["name"], "idea": v["idea"], "total": sum(s[1] for s in v["scenes"]) + 0.4})
 
     data = {"catalog": catalog, "designs": meta, "videos": vids}

@@ -274,7 +274,7 @@ const DATA = /*__DATA__*/null;
   $('vidList').innerHTML = V.map((v) => {
     const m = C.video_meta[v.id] || {};
     return `<article class="vid" id="vid-${v.id}">
-      <div class="frame"><picture><source srcset="vid/${v.id}.jpg" media="(prefers-reduced-motion: reduce)"><img src="vid/${v.id}.webp" alt="${esc(v.name)}" loading="lazy" width="270" height="480"></picture><span class="dur ltr">${v.total.toFixed(0)}s</span></div>
+      <div class="frame"><picture><source srcset="vid/${v.id}.jpg" media="(prefers-reduced-motion: reduce)"><img src="vid/${v.id}.webp" alt="${esc(v.name)}" loading="lazy" width="270" height="480"></picture><span class="dur">${ar(Math.round(v.total))} ث</span></div>
       <h3><span>${v.id}</span>${esc(v.name)}</h3>
       <p>${esc(v.idea)}</p>
       <dl><dt>الصوت</dt><dd>${esc(m.sound || '')}</dd><dt>ليه</dt><dd>${esc(m.why || '')}</dd><dt>فين</dt><dd>${esc(m.use || '')}</dd></dl>
@@ -312,15 +312,17 @@ const DATA = /*__DATA__*/null;
   }).join('');
 
   // ---- launch pack (after the sections so items can point at real cards)
+  const carouselOf = (id) => C.sections.find((s) => s.groups) .groups.find((g) => g.id === id);
   const label = (id) => {
     if (V.find((v) => v.id === id)) return V.find((v) => v.id === id).name;
+    if (carouselOf(id)) return carouselOf(id).title;
     return (M[id] && M[id].name) || id;
   };
   $('pack').innerHTML = C.launch.map((w) => `<article><h3>${esc(w.name)}</h3><ol>${w.items.map((id) => {
     const isVid = !!V.find((v) => v.id === id);
     const gi = gallery.findIndex((g) => g.id === id || (g.group === id));
     const target = isVid ? `data-jump="vid-${id}"` : gi > -1 ? `data-g="${gi}"` : `data-jump="d-${id}"`;
-    const kind = isVid ? 'فيديو' : (M[id] && M[id].fmt) || '';
+    const kind = isVid ? 'فيديو' : carouselOf(id) ? 'كاروسيل' : (M[id] && M[id].fmt) || '';
     return `<li><button type="button" ${target}>${esc(label(id))}</button><span>${esc(kind)}</span></li>`;
   }).join('')}</ol></article>`).join('');
 
