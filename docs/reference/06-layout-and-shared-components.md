@@ -1,6 +1,6 @@
 # Layout and shared components
 
-> **Changed since this was written** (commits `d3dfd92` to `b8db9cc`, 17 November 2026): dialogs rendered inside a screen are now positioned against the viewport. The five tabs are unchanged; the journey tab now opens the journey for everyone.
+> **Changed since this was written** (commits `d3dfd92` to `b8db9cc`, 17 November 2026): dialogs rendered inside a screen are now positioned against the viewport. The five tabs are unchanged; the journey tab now opens the journey for everyone. With the import of blessings 41–100: the share image fits the whole verse instead of cutting it at four lines, and waits for its fonts (the `ShareCardModal` section is updated); the charts have ten categories, and the chart area is 288 px high (`h-72`) instead of 240.
 
 State of the code at commit `68e723a` (`main`, 2026-11-16). Line references are `path:line` against that commit.
 
@@ -492,7 +492,7 @@ No memoisation: `textToCopy` is rebuilt on every render (`:71`).
 | `<a target="_blank" rel="noopener noreferrer">` click | `:381-385` | Open a share URL |
 | `navigator.vibrate` through `triggerHaptic` | several | Feedback |
 
-External URLs: `https://wa.me/?text=…`, `https://twitter.com/intent/tweet?text=…`, `https://t.me/share/url?url=…&text=…` (`:373-379`). The Font Loading API (`document.fonts`) is not used.
+External URLs: `https://wa.me/?text=…`, `https://twitter.com/intent/tweet?text=…`, `https://t.me/share/url?url=…&text=…` (`:373-379`). The Font Loading API (`document.fonts`) is used in one place: `renderCardCanvas` waits for the faces it draws with.
 
 ### What can be shared
 
@@ -536,7 +536,7 @@ Lines joined with `\n`, in this order:
 — تطبيق «الحمد» لتأمل النعم
 ```
 
-For the 40 blessings in the dataset the result is roughly 190–320 characters in `ayah` mode and 560–800 in `tadabbur` mode.
+For the 100 blessings in the dataset the result is roughly 240–710 characters in `ayah` mode and 620–1,160 in `tadabbur` mode; the upper ends come from the whole-ayah verses of blessings 41–100.
 
 ### Canvas rendering pipeline (`renderCardCanvas`, `:137-311`)
 
@@ -580,10 +580,10 @@ The function is declared `async` but contains no `await`; it draws synchronously
 | 5 | Category | `600 26px "IBM Plex Sans Arabic"` | `✦ {categoryLabel} ✦` at `cardY + 95` |
 | 6 | Title | `bold 58px "Amiri"` | 80 px lower. One `fillText`, **not wrapped** |
 | 7 | Opening line | `29px "IBM Plex Sans Arabic"` | 64 px lower; wrapped to 788 px, at most 2 lines, 46 px apart |
-| 8 | Verse box | | 20 px lower; x 130, width 820, height `lines × 76 + 96`, radius 28, filled and stroked 2 px |
-| 9 | Verse | `44px "Amiri Quran", "Amiri"` | `﴿ {textUthmani} ﴾`, wrapped to 728 px, at most 4 lines; first baseline 68 px into the box, 74 px apart |
+| 8 | Verse box | | 20 px lower; x 130, width 820, height `lines × (step + 2) + 52 + size` (`lines × 76 + 96` at 44 px), radius 28, filled and stroked 2 px |
+| 9 | Verse | `{size}px "Amiri Quran", "Amiri"`, 44 px unless the verse is long | `﴿ {textUthmani} ﴾`, wrapped to 728 px with **no line limit**; first baseline `24 + size` px into the box, lines `step = round(size × 1.68)` px apart (74 at 44 px). See "Fitting the verse" below |
 | 10 | Reference | `26px "IBM Plex Sans Arabic"` | `سورة {surahName} · الآية {n}`, 8 px below the last verse line |
-| 11 | Heading «وقفة تدبّر» | `600 25px "IBM Plex Sans Arabic"` | 58 px below the box; only in `tadabbur` and `full` |
+| 11 | Heading «وقفة تدبّر» | `600 25px "IBM Plex Sans Arabic"` | 58 px below the box; only in `tadabbur` and `full`, and only if the verse left room for it |
 | 12 | Tadabbur | `28px "IBM Plex Sans Arabic"` | 48 px lower; wrapped to 788 px, at most 3 lines (4 in 9:16), 48 px apart |
 | 13 | Duʿāʾ | `italic 32px "Amiri"` | `«{duaa}»`; only in `full` and only if `cursorY < cardY + cardH − 110`; 20 px lower, wrapped to 788 px, at most 2 lines, 50 px apart |
 | 14 | Sign-off | `bold 42px "Amiri"` | «الحمد · لتأمل النعم» at y = `height − 68` |
@@ -607,13 +607,18 @@ Properties that follow from the code:
 - It breaks only at spaces. A single word wider than `maxWidth` is placed on its own line and overflows. Arabic has no hyphenation, and none is attempted.
 - Diacritics and joining are left to the browser's text shaping; the function works on whole words, so it never splits a ligature or separates a mark from its letter.
 - The ellipsis is `...` appended in logical order; with `direction = 'rtl'` it appears at the left end.
-- When the verse is truncated, the closing ornate bracket `﴾` is dropped with the cut text.
+- Text that is cut loses whatever closed it. This applies to the opening line, the reflection and the duʿāʾ, which keep their limits. The verse is called with `maxLines = Infinity` and is never cut.
 - With `maxLines = 1` it returns two lines. No caller passes 1.
 - The title bypasses the function altogether.
 
-For the current dataset the longest verse has 100 letters in 18 words and the longest title 22 letters. Whether any verse reaches the four-line limit at 44 px was not measured with the real font.
+**Fitting the verse.** Until the import of blessings 41–100 the verse was limited to four lines at 44 px and the rest was replaced by `...`, which also dropped the closing `﴾`. The longest verse was then 18 words; it is now 53 (Al-Ma'idah 2), and 24 verses are longer than 18 words. `fitAyah(availableHeight, sizes)` tries each font size in turn, wraps the whole verse at that size, and stops at the first size whose box fits in the height left in the card:
 
-**Font loading.** The canvas uses font families by name and relies on the page having already loaded the faces it needs. Nothing calls `document.fonts.load()` or waits for `document.fonts.ready` before drawing. The modal's own preview uses Amiri Quran, Amiri bold and the interface font, which makes those faces likely to be present; faces used only on the canvas at that moment (for example Amiri italic for the duʿāʾ when the preview is not in `full` mode, or IBM Plex Sans Arabic when the user's interface font is a different family) may not be, in which case the browser draws with a fallback font. This was not reproduced in a browser with network access to the fonts.
+1. With the reflection shown (`tadabbur` and `full` modes), the height left is the card's remaining height minus the room the reflection needs (`58 + 48 + maxTadabburLines × 48`), and the sizes tried are 44, 40, 36, 32, 29, 26.
+2. If the verse does not fit even at 26 px beside the reflection, the reflection is not drawn and the verse is fitted into the whole remaining height at 36 down to 20 px.
+3. In `ayah` mode the sizes are 44 down to 26, then 24, 22, 20.
+4. If nothing fits, the smallest size is used and the box may run past the card. No verse in the data comes near this: the 53-word ayah is drawn at 36 px in `ayah` mode and at 26 px beside the reflection, in the 4:5 shape (checked in a browser, both shapes and all three modes, with the closing bracket present).
+
+**Font loading.** Before drawing, `renderCardCanvas` awaits `document.fonts.load()` for the five faces it uses (Amiri Quran, Amiri bold, Amiri italic, and IBM Plex Sans Arabic at 400 and 600), each with the text it will draw so that the Arabic subset is fetched. A failure is ignored and the canvas is drawn with whatever is available. The canvas always uses IBM Plex Sans Arabic for interface text, whichever interface font the user chose.
 
 ### Export, share and download paths
 
@@ -665,7 +670,7 @@ The file name uses `shortTitle`, which is Arabic, for example `alhamd-الإسل
 
 ## ReflectionCategoryCharts
 
-**Purpose.** Summarises which of the eight blessing categories and which topics the user has engaged with, as summary cards, one of three charts, a legend and a topic list. **Used by** `screens/ConsistencyScreen.tsx:275` (default variant) and `journey/JourneyPathScreen.tsx:918` (`variant="journey"`, on the journey's statistics tab).
+**Purpose.** Summarises which of the ten blessing categories and which topics the user has engaged with, as summary cards, one of three charts, a legend and a topic list. **Used by** `screens/ConsistencyScreen.tsx:275` (default variant) and `journey/JourneyPathScreen.tsx:918` (`variant="journey"`, on the journey's statistics tab).
 
 **Exports.** `ReflectionCategoryCharts` (named), `ReflectionCategoryChartsProps` (interface; imported nowhere).
 
@@ -720,7 +725,7 @@ All sit in a 15rem-high box with `dir="ltr"` (`:356`), chosen with the switch «
 
 | Chart | Recharts elements | Data | Details |
 |---|---|---|---|
-| «الفئات» (bars) | `BarChart layout="vertical"`, `CartesianGrid`, `XAxis`, `YAxis`, `Tooltip`, `Bar`, `Cell` | `sortedByCount`, all eight categories | Horizontal bars growing left to right. Numeric axis in Arabic-Indic digits, integers only. Category axis shows `shortLabel`, 82 px wide. Bars 16 px, right corners rounded 8. Bar colour is the category colour, or `rgba(174, 174, 203, 0.2)` at count 0. Dashed vertical grid lines. Tooltip: label, percentage, «عدد مرات التدبر:» with the count, and «من النعم المتدبَّرة:» with the topics |
+| «الفئات» (bars) | `BarChart layout="vertical"`, `CartesianGrid`, `XAxis`, `YAxis`, `Tooltip`, `Bar`, `Cell` | `sortedByCount`, all ten categories | Horizontal bars growing left to right. Numeric axis in Arabic-Indic digits, integers only. Category axis shows `shortLabel`, 82 px wide, with `interval={0}` so that every category is labelled (with ten categories Recharts otherwise drops every second label). Bars 16 px, right corners rounded 8. Bar colour is the category colour, or `rgba(174, 174, 203, 0.2)` at count 0. Dashed vertical grid lines. Tooltip: label, percentage, «عدد مرات التدبر:» with the count, and «من النعم المتدبَّرة:» with the topics |
 | «ميزان الوعي» (radar) | `RadarChart`, `PolarGrid`, `PolarAngleAxis`, `PolarRadiusAxis`, `Tooltip`, `Radar` | `categoryStats`, fixed category order | Outer radius 72 %. One series «وقفات التدبر» on `count`: stroke `#E4C368` 2.2 px, fill `#6C63FF` at 38 %. Tooltip: label, «وقفات التدبر:» count and percentage |
 | «النِّسَب» (donut) | `PieChart`, `Pie`, `Cell`, `Tooltip` | `activeCategories`, or all of `categoryStats` when none is active | Inner radius 52, outer 84, 3° gap, no stroke, no labels. Tooltip: label, «النسبة:» percentage and count. With every count at 0 nothing is drawn |
 
@@ -734,7 +739,7 @@ Tick fonts are 11 px (10 px on the radar's radius axis) and tick colours read `-
    - «أكثر الفئات حضوراً في قلبك», only when the top category has a count above 0: a pill «{percentage}٪ من تدبرك» tinted with the category colour, the label with its count, and «أبرز النعم: …».
    - «أفق مقترح لتوسيع الوعي»: the least explored category, «لم يُستكشف بعد» or «{n} وقفة», and that category's hint text.
 4. The chart area.
-5. A legend grid (two columns, four from `sm`): all eight categories in `sortedByCount` order, each with a colour dot (grey at 0), the short label and the count.
+5. A legend grid (two columns, four from `sm`): all ten categories in `sortedByCount` order, each with a colour dot (grey at 0), the short label and the count.
 6. When any topic exists: «أكثر المواضيع والنعم حضوراً في تدبرك», «حسب تكرار التأمل والتدوين», and up to six chips with a colour dot, the title, the category in parentheses and `×n` when the count is above 1.
 
 **Helpers / sub-components / constants**
@@ -751,6 +756,8 @@ Tick fonts are 11 px (10 px on the radar's radius axis) and tick colours read `-
 | «نعم العقل» | `#56CFE1` | «العقل» | «تأمل نعمة الفهم، التمييز، التدبر، وحفظ الذكريات الجميلة.» |
 | «نعم الأمن» | `#80ED99` | «الأمن» | «تأمل نعمة الأمان في المسكن والوطن وطمأنينة القلب عند المساء.» |
 | «نعم المال» | `#E76F51` | «المال» | «تأمل نعمة الكفاية، الاستغناء عن الخلق، والقدرة على البذل والعطاء.» |
+| «نعم الكون» | `#4895EF` | «الكون» | «تأمل الشمس والقمر، المطر والنبات، وما سُخِّر لك في السماوات والأرض.» |
+| «نعم الوجدان» | `#F28DB2` | «الوجدان» | «تأمل نعمة السكينة، الفرح، الأمل، والأنس الذي يملأ القلب.» |
 
 A category without an entry falls back to `#E4C368` (`:170`, `:198`). Interfaces `CategoryStatItem` (`:39-47`) and `TopicStatItem` (`:49-54`) are local.
 

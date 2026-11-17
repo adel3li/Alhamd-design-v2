@@ -28,7 +28,7 @@ Read 01 first; the rest can be read in any order.
 | 01 | [Overview and architecture](reference/01-overview-and-architecture.md) | Product, stack, repository map, runtime structure, `App.tsx`, navigation, feature inventory |
 | 02 | [State and persistence](reference/02-state-and-persistence.md) | The store, every `localStorage` key, backup format, journey store, entitlements, analytics, types |
 | 03 | [Domain logic](reference/03-domain-logic.md) | Blessing of the day, Hijri calendar, Arabic formatting, the UTC/local date matrix, test targets |
-| 04 | [Content and data](reference/04-content-and-data.md) | The 40 blessings, journey content, adhkar, strings, categories, review status |
+| 04 | [Content and data](reference/04-content-and-data.md) | The 100 blessings, journey content, adhkar, strings, categories, review status |
 | 05 | [Design system](reference/05-design-system.md) | Themes, CSS custom properties, fonts, text scaling, contrast modes, tokens, design sheets |
 | 06 | [Layout and shared components](reference/06-layout-and-shared-components.md) | Navigation bars, share cards, charts, tour, particles, brand mark, cards |
 | 07 | [Core screens](reference/07-screens-core.md) | Home, reflection, onboarding, journal, compose, consistency, about, content review, privacy |

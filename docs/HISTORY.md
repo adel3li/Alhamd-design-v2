@@ -49,7 +49,7 @@ Three things show that the project is older than its first commit.
 
 **There was a complete earlier app.** `legacy/` holds version 1: six tabs (home, tasbih, my blessings, journal, consistency, settings), a slate-and-indigo palette, Capacitor plugins for native haptics, local notifications and preferences, PostHog analytics, `html-to-image` for share cards, and one unit-test file. It is documented in [reference/12-legacy-v1.md](reference/12-legacy-v1.md). The repository's name, `Alhamd-design-v2`, and its description on GitHub ("the alhamd app with the new design") refer to the redesign of that app.
 
-**The content already existed.** `blessings_ar.json`, with its 40 blessings, is byte-identical in `legacy/` and `src/`. Four storage keys are shared between v1 and v2, and the v2 backup importer accepts v1 files.
+**The content already existed.** `blessings_ar.json`, with its 40 blessings, was byte-identical in `legacy/` and `src/` (until the v2 file grew to 100 in November 2026). Four storage keys are shared between v1 and v2, and the v2 backup importer accepts v1 files.
 
 ## 4. Phases
 
@@ -129,6 +129,8 @@ The documentation in this folder was written on 17 November. The same day, on th
 Pull request #5, carrying all of the above, was merged the same day. A follow-up (`23a188e`) then fixed the journey defects that making it free had exposed: lost drafts, a note that could not be deleted, text that stepped back while being read, a reminder that switched itself on, a chart that counted the wrong things, and overlays without focus handling.
 
 The owner also remembered writing more than 40 blessings. A search of the other Alhamd repositories found none: `adel3li/alhamd` holds the same 40, byte for byte, across its whole history; `adel3li/Alhmd-MVP-V2` (a Flutter build from June) holds one; `adel3li/Alhmd-MVP-V1` holds only a README. The build specification in `Alhmd-MVP-V2` plans a database of 365 blessings, launching with 30 to 60, so the larger number was a plan. If more were written, they are somewhere other than GitHub.
+
+They were on the owner's machine. The same day he supplied a file of 100 blessings. Its first 40 were the 40 in the app, differing in one corrected word; the other 60 had their titles, reflections, supplications and verse references, but no verse text and no hadith. At his instruction the 60 verses were taken, by those references, from the Tanzil Project's text and the blessings were added (`9f6b4a0`). Comparing the existing 40 against the same text showed that they had come from it too. The import brought two new categories, «نعم الكون» and «نعم الوجدان», lengthened the daily cycle from 39 days to 99, and made the share image's four-line limit on verses untenable, so that was fixed with it (`d42c2b0`). Details are in [reference/04-content-and-data.md](reference/04-content-and-data.md), section 1.7.
 
 ## 5. Versions
 
@@ -305,4 +307,4 @@ Points that matter for the work ahead.
 - Open: draft PR #4 (marketing kit).
 - Branch `claude/gracious-tesla-3wpebg` (pull request #5): this documentation and the fixes (`d3dfd92` to `b8db9cc`). Not merged yet.
 - Unmerged and without a pull request: `claude/trusting-rubin-9ue5hh`. Of its six fixes, three are now cherry-picked into pull request #5 (streak removal, one stated duration, reflection events), the seeded-history one is superseded by `d3dfd92`, and the one that marks unreviewed text on screen goes against the owner's later decision. What remains only on that branch is the build-time promise check (`2ba90c4`, which would need its review-claim rule adjusted) and the case-study pages.
-- Not started: payments (RevenueCat), scholarly review of the content (0 of 40 blessings approved), reminders, tests, native packaging.
+- Not started: payments (RevenueCat), scholarly review of the content (0 of 40 blessings approved; 0 of 100 after the import of `9f6b4a0`), reminders, tests, native packaging.
