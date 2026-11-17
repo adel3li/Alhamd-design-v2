@@ -1,0 +1,209 @@
+/*
+ * Alhamd promo video — scene styles.
+ * Tokens follow the app's «ليل» (Layl) theme in src/constants/tokens.ts
+ * and the landing page (src/landing/landing.css).
+ */
+:root {
+  --page: #0C0C1C;
+  --deep: #111126;
+  --ground: #15152A;
+  --glass: #1E1E38;
+  --sunken: #1B1B33;
+  --hairline: #2E2E4A;
+  --text: #EDEDF5;
+  --body: #C7C4D8;
+  --muted: #AEAECB;
+  --gold: #E4C368;
+  --gold-deep: #C8A951;
+  --gold-soft: #F0D48A;
+  --violet: #6C63FF;
+  --dim: #3B3B5E;
+  --dimmer: #2A2A44;
+  --night: #07070F;
+  /* Nahar (light) accents, used only in the "open your eyes" hook */
+  --cream: #F4EDE3;
+  --ink: #2A1F19;
+  --terracotta: #B9573B;
+
+  --serif: 'Amiri', 'Noto Naskh Arabic', serif;
+  --quran: 'Amiri Quran', 'Amiri', serif;
+  --sans: 'IBM Plex Sans Arabic', 'Noto Sans Arabic', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #000; }
+body { -webkit-font-smoothing: antialiased; }
+
+#stage {
+  position: relative;
+  overflow: hidden;
+  width: 1080px;
+  height: 1920px;
+  background: var(--page);
+  color: var(--text);
+  font-family: var(--sans);
+  direction: rtl;
+}
+#stage.r45 { height: 1350px; }
+
+.abs { position: absolute; }
+.fill { position: absolute; inset: 0; }
+.center-x { left: 0; right: 0; margin-inline: auto; }
+
+/* ---------- Backgrounds ---------- */
+.bg-base { position: absolute; inset: 0; }
+.bg-pattern { position: absolute; inset: 0; width: 100%; height: 100%; }
+.bg-vignette {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 75% 60% at 50% 48%, transparent 55%, rgba(0, 0, 0, 0.5) 100%);
+}
+
+/* ---------- Type ---------- */
+.headline {
+  position: absolute;
+  left: 90px; right: 90px;
+  text-align: center;
+  font-family: var(--serif);
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--text);
+  text-wrap: balance;
+}
+.headline .g { color: var(--gold); }
+.headline .m { color: var(--muted); }
+.headline .dim { color: var(--dim); }
+
+.sub {
+  position: absolute;
+  left: 110px; right: 110px;
+  text-align: center;
+  font-family: var(--sans);
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--body);
+}
+
+/* Burned-in caption (the voice-over line) */
+.caption {
+  position: absolute;
+  left: 100px; right: 100px;
+  top: 1388px;
+  text-align: center;
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: 50px;
+  line-height: 1.6;
+  color: var(--text);
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.85), 0 0 2px rgba(0, 0, 0, 0.6);
+  text-wrap: balance;
+}
+
+.chip {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  padding: 14px 40px 17px;
+  border-radius: 999px;
+  border: 2px solid rgba(200, 169, 81, 0.55);
+  background: rgba(17, 17, 38, 0.72);
+  color: var(--gold);
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 40px;
+  line-height: 1.3;
+}
+.chip.static { position: static; transform: none; display: inline-block; }
+.chip.muted { color: var(--muted); border-color: var(--hairline); }
+.chip.dim { color: var(--dim); border-color: var(--dimmer); background: transparent; }
+
+/* ---------- Thread (the brand's signature line) ---------- */
+.thread { position: absolute; height: 14px; }
+.thread .track { position: absolute; left: 0; right: 0; top: 6px; height: 2px; background: var(--hairline); border-radius: 2px; }
+.thread .gold { position: absolute; right: 0; top: 5px; height: 4px; background: var(--gold-deep); border-radius: 4px; }
+.thread .dot {
+  position: absolute; top: 0; width: 14px; height: 14px; border-radius: 50%;
+  background: var(--gold-deep);
+}
+.thread .dot.head { box-shadow: 0 0 0 8px rgba(200, 169, 81, 0.18), 0 0 26px rgba(228, 195, 104, 0.6); background: var(--gold); }
+
+/* ---------- Wordmark ---------- */
+.wordmark { position: absolute; left: 0; right: 0; display: flex; justify-content: center; }
+.wordmark .wm { display: inline-flex; flex-direction: column; align-items: stretch; }
+.wordmark .word {
+  font-family: var(--serif); font-weight: 700; line-height: 1; color: var(--gold);
+  text-align: center;
+}
+.wordmark .line { position: relative; }
+.wordmark .line i { position: absolute; left: 0; right: 0; background: var(--gold-deep); border-radius: 4px; }
+.wordmark .line b { position: absolute; border-radius: 50%; background: var(--gold-deep); }
+
+/* ---------- Art ---------- */
+.art { position: absolute; overflow: visible; }
+.art svg { width: 100%; height: 100%; overflow: visible; display: block; }
+.glow svg { filter: drop-shadow(0 0 18px rgba(228, 195, 104, 0.45)) drop-shadow(0 0 60px rgba(228, 195, 104, 0.18)); }
+.glow-soft svg { filter: drop-shadow(0 0 12px rgba(228, 195, 104, 0.25)); }
+
+/* ---------- Phone mockup ---------- */
+.phone {
+  position: absolute;
+  padding: 16px;
+  border-radius: 96px;
+  background: #15152A;
+  border: 2px solid #34345A;
+  box-shadow:
+    0 60px 140px rgba(0, 0, 0, 0.65),
+    0 0 0 1px rgba(200, 169, 81, 0.10),
+    inset 0 0 0 2px rgba(255, 255, 255, 0.03);
+}
+.phone .screen {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 390 / 844;
+  border-radius: 80px;
+  overflow: hidden;
+  background: #15152A;
+}
+.phone .screen img { position: absolute; top: 0; left: 0; width: 100%; display: block; }
+.phone .island {
+  position: absolute; top: 34px; left: 50%; transform: translateX(-50%);
+  width: 150px; height: 40px; border-radius: 30px; background: #05050B; z-index: 2;
+}
+
+.fade-bottom { position: absolute; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 8; }
+
+/* ---------- Misc ---------- */
+.tile {
+  position: absolute;
+  border-radius: 56px;
+  background: rgba(30, 30, 56, 0.55);
+  border: 2px solid var(--hairline);
+}
+.tile.off { background: rgba(14, 14, 28, 0.6); border-color: #1F1F36; }
+
+.tap {
+  position: absolute; width: 150px; height: 150px; border-radius: 50%; z-index: 9;
+  transform: translate(50%, -50%);
+}
+.tap::before, .tap::after {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+}
+.tap::before { background: rgba(255, 255, 255, 0.22); transform: scale(0.42); box-shadow: 0 0 0 6px rgba(255,255,255,0.10); }
+.tap::after { border: 3px solid rgba(255, 255, 255, 0.55); transform: scale(0.95); }
+
+.btn-cta {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; justify-content: center;
+  background: var(--violet); color: #fff;
+  font-family: var(--sans); font-weight: 700;
+  border-radius: 36px;
+  box-shadow: 0 24px 60px rgba(108, 99, 255, 0.35);
+  white-space: nowrap;
+}
+
+.ltr { direction: ltr; unicode-bidi: isolate; }
+
+/* Safe-zone guides for checking (render with ?guides=1) */
+.guides .g-top, .guides .g-bottom, .guides .g-side {
+  position: absolute; background: rgba(255, 0, 80, 0.18); z-index: 999;
+}
