@@ -40,7 +40,8 @@
   const ref = (v) => `[${v.surahName}: ${AR(v.ayah)}]`;
   const orn = (s) => `<span class="acc">${s}</span>`;
   const hadithSource = (h) => `${h.source}${h.number ? ` ${AR(h.number)}` : ''}${h.grade ? ` (${h.grade})` : ''}`;
-  const quoteBy = (q) => (q.scholar ? `— ${q.scholar}${q.work ? ` («${q.work}»)` : ''}${q.paraphrase ? '، بتصرّف' : ''}` : (q.paraphrase ? 'بتصرّف' : ''));
+  // a named scholar gets «بتصرّف» when the app marks the words as a paraphrase; an unnamed one shows the app's own note (e.g. «مستفاد من شرح الحديث»)
+  const quoteBy = (q) => (q.scholar ? `— ${q.scholar}${q.work ? ` («${q.work}»)` : ''}${q.paraphrase ? '، بتصرّف' : ''}` : q.note ? `— ${q.note}` : (q.paraphrase ? 'بتصرّف' : ''));
   const lit = (c) => (c.th === 'layl' ? particles(c, { n: 36, seed: 31, box: [c.W * 0.15, c.H * 0.12, c.W * 0.85, c.H * 0.55], rmax: 6, omin: 0.15, omax: 0.8 }) : '');
   /** The verse in the app's sunken ayah block. */
   const ayah = (c, v, size) => `<div class="sunken" style="width:100%;max-width:${c.px(940)}px;padding:${c.px(46)}px ${c.px(40)}px ${c.px(34)}px;display:flex;flex-direction:column;align-items:center;gap:${c.px(18)}px">` +
@@ -222,7 +223,8 @@
     }
 
     /* ===== reels ===== */
-    def(`AN-${nn}`, { kind: 'reel', name: `ريل أنيميشن: ${b.title}`, group: 'AN', family: 'ريل أنيميشن', pillar: 'باقة النعمة', formats: ['story'], alt: `ريل متحرّك بلا تعليق صوتي: ${b.opening}`, scenes: (c) => animScenes(c, b) });
+    const anim = animFor(b.n); // the animated reel is drawn for each blessing; a package without one skips it
+    if (anim) def(`AN-${nn}`, { kind: 'reel', name: `ريل أنيميشن: ${b.title}`, group: 'AN', family: 'ريل أنيميشن', pillar: 'باقة النعمة', formats: ['story'], alt: `ريل متحرّك بلا تعليق صوتي: ${b.opening}`, scenes: (c) => anim(c, b) });
     def(`VW-${nn}`, { kind: 'reel', name: `الوقفات الخمس (بلا صوت): ${b.title}`, group: 'VW', family: 'ريل الوقفات', pillar: 'باقة النعمة', formats: ['story'], alt: `الوقفات الخمس من «${b.title}» في تطبيق الحمد.`, scenes: (c) => waqfaScenes(c, b, null) });
     const vt = VOICE[String(b.n)] && VOICE[String(b.n)].waqfa;
     if (vt) def(`VV-${nn}`, { kind: 'reel', name: `وقفة صوتية (فيديو): ${b.title}`, group: 'VV', family: 'وقفة صوتية', pillar: 'باقة النعمة', formats: ['story'], audio: vt.audio, poster: vt.steps[1].start + 6, alt: `الوقفات الخمس من «${b.title}» بصوتٍ هادئ، على توقيت التطبيق.`, scenes: (c) => waqfaScenes(c, b, vt) });
@@ -243,8 +245,12 @@
   /** Words appear when the voice says them (times in seconds from the line's start). */
   function revealAt(el, t, start, times) {
     const ws = M.words(el);
-    if (!times || times.length !== ws.length) return reveal(el, t, start, { stagger: 0.2 });
-    ws.forEach((w, i) => { const p = out3(P(t, start + times[i] - 0.05, 0.45)); w.style.opacity = String(p); w.style.transform = `translateY(${((1 - p) * 16).toFixed(2)}px)`; });
+    // the voice times words only; a lone dash or mark keeps the time of the word before it
+    const real = ws.filter((w) => /[ء-ي]/.test(w.textContent));
+    if (!times || times.length !== real.length) return reveal(el, t, start, { stagger: 0.2 });
+    const at = new Map(real.map((w, i) => [w, times[i]]));
+    let last = 0;
+    ws.forEach((w) => { if (at.has(w)) last = at.get(w); const p = out3(P(t, start + last - 0.05, 0.45)); w.style.opacity = String(p); w.style.transform = `translateY(${((1 - p) * 16).toFixed(2)}px)`; });
     return start + times[times.length - 1] + 0.45;
   }
   const progress = (c, w = 640) => `<div class="prog" style="width:${c.px(w)}px"><i></i><b></b></div>`;
@@ -351,7 +357,8 @@
   }
   const splitLine = (s) => { const i = s.indexOf('…'); return i > 0 ? [s.slice(0, i + 1), s.slice(i + 1).trim()] : [s, '']; };
 
-  function animScenes(c, b) {
+  /** «نعمة الصلاة»: the day's five appointments on the sun's path, then a door that shuts… and opens. */
+  function animSalah(c, b) {
     const [o1, o2] = splitLine(b.opening);
     const [v1, v2] = splitLine(b.steps[b.stepTypes.indexOf('visualize')]);
     const deepen = b.steps[b.stepTypes.indexOf('deepen')];
@@ -417,4 +424,98 @@
       endScene(c, { sub: `${b.title}… ودقيقتان معها في «الحمد»` }),
     ];
   }
+
+  /* ---------- «نعمة البصر»: an eye that closes… and opens ---------- */
+  let eyeN = 0;
+  /** An eye in one line; setEye() moves the lids (0 shut … 1 open) and the light around it. */
+  function eyeArt(c) {
+    const uid = `e${++eyeN}`;
+    const lightC = c.th === 'nahar' ? '#E9A866' : '#F0D48A';
+    const pupil = c.th === 'nahar' ? '#2A1F19' : 'var(--bg)', glint = c.th === 'nahar' ? '#F4EDE3' : 'currentColor';
+    const rays = Array.from({ length: 14 }, (_, k) => { const a = (k / 14) * Math.PI * 2, r0 = 232, r1 = 282; return `<path d="M${(300 + r0 * Math.cos(a)).toFixed(1)} ${(200 + r0 * 0.78 * Math.sin(a)).toFixed(1)} L${(300 + r1 * Math.cos(a)).toFixed(1)} ${(200 + r1 * 0.78 * Math.sin(a)).toFixed(1)}"/>`; }).join('');
+    const lashes = [-150, -90, -30, 30, 90, 150].map((dx) => `<path class="lash" data-dx="${dx}" d=""/>`).join('');
+    return `<svg viewBox="0 0 600 400" width="100%" height="100%" style="overflow:visible;color:var(--accent)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" data-uid="${uid}">` +
+      `<defs><radialGradient id="${uid}g" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="${lightC}" stop-opacity="0.75"/><stop offset="1" stop-color="${lightC}" stop-opacity="0"/></radialGradient>` +
+      `<clipPath id="${uid}c"><path class="clip" d=""/></clipPath></defs>` +
+      `<ellipse class="eglow" cx="300" cy="200" rx="300" ry="230" fill="url(#${uid}g)" stroke="none" opacity="0"/>` +
+      `<g class="rays" stroke-width="3" opacity="0">${rays}</g>` +
+      `<g clip-path="url(#${uid}c)"><circle cx="300" cy="200" r="92" fill="currentColor" opacity="0.16" stroke="none"/><circle class="iris" pathLength="1" cx="300" cy="200" r="92" stroke-width="3.4"/><circle cx="300" cy="200" r="64" stroke-width="1.6" opacity="0.55"/>` +
+      `<circle cx="300" cy="200" r="40" fill="${pupil}" stroke="currentColor" stroke-width="2.4"/><circle cx="318" cy="182" r="11" fill="${glint}" stroke="none"/></g>` +
+      `<path class="lid-u" pathLength="1" stroke-width="4" d=""/><path class="lid-l" pathLength="1" stroke-width="3" d=""/><g class="lashes" stroke-width="3">${lashes}</g></svg>`;
+  }
+  function setEye(L, open, light = 0) {
+    const u = 210 - 175 * open, l = 230 + 120 * open; // control points; shut, both lids meet in one soft curve
+    $$(L, 'svg[data-uid]').forEach((svg) => {
+      svg.querySelector('.lid-u').setAttribute('d', `M60 200 Q300 ${u.toFixed(1)} 540 200`);
+      svg.querySelector('.lid-l').setAttribute('d', `M60 200 Q300 ${l.toFixed(1)} 540 200`);
+      svg.querySelector('.clip').setAttribute('d', `M60 200 Q300 ${u.toFixed(1)} 540 200 Q300 ${l.toFixed(1)} 60 200 Z`);
+      svg.querySelectorAll('.lash').forEach((p) => { // lashes hang from the lid when it is down
+        const dx = +p.dataset.dx, x = 300 + dx, tq = (x - 60) / 480, y = (1 - tq) * (1 - tq) * 200 + 2 * (1 - tq) * tq * u + tq * tq * 200;
+        p.setAttribute('d', `M${x} ${y.toFixed(1)} L${(x + dx * 0.08).toFixed(1)} ${(y + 26).toFixed(1)}`);
+        p.style.opacity = String(Math.max(0, 1 - open * 2.2));
+      });
+      svg.querySelector('.eglow').setAttribute('opacity', (light * 0.9).toFixed(3));
+      svg.querySelector('.rays').setAttribute('opacity', (light * 0.8).toFixed(3));
+    });
+  }
+  /** «نعمة البصر»: two small windows; close your eyes, really; the dark that does not lift; open them. */
+  function animBasar(c, b) {
+    const [o1, o2] = splitLine(b.opening);
+    const [v1, v2] = splitLine(b.steps[b.stepTypes.indexOf('visualize')]);
+    const deepen = b.steps[b.stepTypes.indexOf('deepen')];
+    const [r1, r2] = splitLine(b.steps[b.stepTypes.indexOf('return')]);
+    const glowF = c.th === 'layl' ? 'filter:drop-shadow(0 0 16px rgba(228,195,104,0.4));' : '';
+    const eye = (w = 760) => `<div class="ew" data-w="${c.px(w)}" data-h="${c.px(w * 2 / 3)}" style="width:${c.px(w)}px;height:${c.px(w * 2 / 3)}px;flex:0 0 auto;${glowF}">${eyeArt(c)}</div>`;
+    const dark = '<div class="dark" style="position:absolute;inset:0;background:#000;opacity:0"></div>';
+    return [
+      { // 1 — two small windows
+        len: 6.6,
+        html: page(c, { bg: { cone: 0.08, coneAt: '50% 44%', warm: 0.06, warmAt: '50% 46%' }, mid: `<div class="tx1">${title(c, o1, 110)}</div>` + eye() + `<div class="tx2">${quote(c, acc(o2), 62, { w: 900 })}</div>`, gap: 40 }),
+        anim(t, L) { draw($(L, '.ew svg'), P(t, 0, 1.2), 0.15); setEye(L, inOut(P(t, 0.9, 1.4)), 0.35 * P(t, 1.4, 1.2)); reveal($(L, '.tx1 .t-title'), t, 0.3, { stagger: 0.2 }); reveal($(L, '.tx2 .t-quote'), t, 2.6, { stagger: 0.17 }); breathe($(L, '.safe'), t, 6.6, 0.02); },
+        sfx: [[0.9, 'breath', -29, { dur: 1.3 }], [2.2, 'glint', -30]],
+      },
+      { // 2 — close your eyes, really
+        len: 6.6,
+        html: page(c, { bg: { cone: 0.06, coneAt: '50% 44%' }, under: dark, mid: `<div class="tx1">${title(c, v1, 104)}</div>` + eye() + `<div class="tx2">${quote(c, v2, 68, { w: 900 })}</div>`, gap: 40 }),
+        anim(t, L) {
+          const shut = inOut(P(t, 2.0, 1.2));
+          setEye(L, 1 - shut, 0.35 * (1 - shut));
+          $(L, '.dark').style.opacity = String(0.88 * P(t, 2.2, 1.4));
+          reveal($(L, '.tx1 .t-title'), t, 0.3, { stagger: 0.2 });
+          reveal($(L, '.tx2 .t-quote'), t, 3.6, { stagger: 0.18 });
+          $(L, '.ew').style.opacity = String(1 - 0.6 * P(t, 2.6, 1.2));
+        },
+        sfx: [[2.0, 'whoosh', -29, { dur: 1.2, from: 1400, to: 300 }], [3.3, 'wind', -31, { dur: 3.0 }]],
+      },
+      { // 3 — the dark that does not lift
+        len: 6.0,
+        html: page(c, { bg: { tone: 'black', pat: 0, cone: 0, vignette: false }, mid: `<div class="ew0" style="opacity:0.28">${eye(520)}</div><div class="tx">${quote(c, deepen, 74, { w: 920 })}</div>`, gap: 50 }),
+        anim(t, L) { setEye(L, 0, 0); reveal($(L, '.tx .t-quote'), t, 0.3, { stagger: 0.22 }); breathe($(L, '.safe'), t, 6.0, 0.02); },
+        sfx: [[0.4, 'heartbeat', -26], [2.6, 'heartbeat', -28]],
+      },
+      { // 4 — now open your eyes
+        len: 7.6,
+        html: page(c, { bg: { cone: 0.14, coneAt: '50% 44%', warm: 0.14, warmAt: '50% 44%' }, under: `<div class="parts" style="position:absolute;inset:0">${lit(c)}</div>`, mid: `<div class="tx1">${title(c, gold(r1), 112)}</div>` + eye() + `<div class="tx2">${quote(c, r2, 64, { w: 920 })}</div>`, gap: 40 }),
+        anim(t, L) {
+          const o = inOut(P(t, 0.5, 1.2));
+          setEye(L, o, o);
+          L.style.filter = `brightness(${(1 + 0.6 * P(t, 0.8, 0.4) * (1 - P(t, 1.2, 1.4))).toFixed(3)})`;
+          pop($(L, '.tx1'), t, 0.1, 0.7, 0.9);
+          reveal($(L, '.tx2 .t-quote'), t, 2.0, { stagger: 0.17 });
+          drift($(L, '.parts svg'), t, { fade: [0.8, 1.2] });
+        },
+        sfx: [[0.5, 'breath', -26, { dur: 1.2 }], [0.9, 'glint', -28], [1.2, 'birds', -30, { dur: 2.6 }]],
+      },
+      { // 5 — name it, and praise
+        len: 4.2,
+        html: page(c, { bg: { cone: 0.09, coneAt: '50% 30%', warm: 0.1, warmAt: '50% 50%' }, top: chip(c, b.title, { size: 34 }), mid: `<div class="m5">${medal(c, ICON[b.id], { size: 360 })}</div>` + gap(c, 10) + `<div class="g5">${display(c, gold('الحمدُ لله'), 150)}</div>`, gap: 26 }),
+        anim(t, L) { enter($(L, '.chip'), t, 0.05, 0.5, 14); draw($(L, '.m5 svg'), P(t, 0.1, 1.6)); pop($(L, '.g5'), t, 1.4, 0.8, 0.85); breathe($(L, '.safe'), t, 4.2, 0.02); },
+        sfx: [[0.2, 'drop', -24], [1.4, 'breath', -27, { dur: 1.3 }]],
+      },
+      endScene(c, { sub: `${b.title}… ودقيقتان معها في «الحمد»` }),
+    ];
+  }
+
+  /** The animated reel of each packaged blessing: each one is drawn for its blessing. */
+  function animFor(n) { return { 5: animSalah, 37: animBasar }[n]; }
 })();

@@ -24,7 +24,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 REPO = ROOT.parent.parent
 KIT_BLESSINGS = 40   # the kit's daily families (NB, NP, ND, NR, TR…) cover the app's first 40 blessings
-BUNDLE = [5]         # blessings with a full package of formats (kit/bundle.js): «نعمة الصلاة»
+BUNDLE = [5, 37]     # blessings with a full package of formats (kit/bundle.js): «نعمة الصلاة», «نعمة البصر»
 
 
 def package(b: dict, verses: list, journey: dict) -> dict:
@@ -47,7 +47,9 @@ def package(b: dict, verses: list, journey: dict) -> dict:
         "hadith": {"text": h["text"], "source": h["source"], "number": h["number"], "grade": h["grade"],
                    "gradeVerified": h["gradeVerified"]} if h and h.get("text") else None,
         "tadabbur": b["tadabbur"],
+        # the app hides a «scholar» that only says where the meaning comes from (مستفاد / مأثور / إشارة); we print it as a note
         "quote": {"text": q["text"], "scholar": q["scholar"] if showName else "", "work": q["work"] if showName else "",
+                  "note": "" if showName else q["scholar"],
                   "paraphrase": q["attributionType"] == "paraphrase", "verified": q["verifiedVerbatim"]} if q and q.get("text") else None,
         "duaaSourced": b.get("duaaSourced"),
         "reviewStatus": b["reviewStatus"],

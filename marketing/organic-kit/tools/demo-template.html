@@ -1,4 +1,4 @@
-<title>باقة {{TITLE}}</title>
+<title>باقات النِّعَم</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,6 +54,14 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .mark { font-family: var(--display); font-weight: 700; font-size: 26px; line-height: 1; color: var(--accent); display: inline-flex; flex-direction: column; gap: 6px; text-decoration: none; }
 .mark i { display: block; height: 2px; background: var(--stroke); border-radius: 2px; position: relative; }
 .mark i::after { content: ""; position: absolute; right: -3px; top: -3px; width: 8px; height: 8px; border-radius: 50%; background: var(--stroke); }
+.pkg[hidden] { display: none; }
+.pkg, .sec { scroll-margin-top: 72px; }
+.bar .wrap { flex-wrap: wrap; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-inline-start: auto; margin-inline-end: 12px; }
+.pk-tab { font: 600 14px/1 var(--sans); text-decoration: none; color: var(--muted); border: 1px solid var(--hair); border-radius: 999px; padding: 9px 16px; background: var(--surface); }
+.pk-tab:hover { border-color: var(--stroke); color: var(--text); }
+.pk-tab[aria-current="page"] { color: var(--bg); background: var(--accent); border-color: var(--accent); }
+@media (max-width: 520px) { .tabs { order: 3; width: 100%; margin: 0; } .pk-tab { flex: 1 1 0; text-align: center; } }
 .switch { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
 .seg { display: inline-flex; border: 1px solid var(--hair); border-radius: 999px; padding: 3px; background: var(--surface); }
 .seg button { font: 600 13px/1 var(--sans); color: var(--muted); background: transparent; border: 0; border-radius: 999px; padding: 8px 14px; cursor: pointer; }
@@ -170,7 +178,8 @@ tr.r-quran td:last-child { font-family: var(--display); font-size: 17px; }
 </style>
 
 <div class="bar"><div class="wrap">
-  <a class="mark" href="#top" aria-label="الحمد">الحمد<i></i></a>
+  <span class="mark" aria-label="الحمد">الحمد<i></i></span>
+  <nav class="tabs" aria-label="النِّعَم">{{TABS}}</nav>
   <div class="switch"><span id="art-label">ثيم التصاميم</span>
     <div class="seg" role="group" aria-labelledby="art-label">
       <button type="button" id="art-layl" data-art="layl" aria-pressed="true">ليل</button>
@@ -178,19 +187,9 @@ tr.r-quran td:last-child { font-family: var(--display); font-size: 17px; }
     </div></div>
 </div></div>
 
-<header class="wrap head" id="top">
-  <span class="eyebrow">عرضٌ تجريبي · نعمةٌ واحدة بكلّ أشكال المحتوى</span>
-  <h1>{{TITLE}}</h1>
-  <p class="opening">{{OPENING}}</p>
-  <p class="intro">من {{CAT}}. كلّ ما في الصفحة مصنوعٌ من نصوص التطبيق نفسها لهذه النعمة، ومرتّبٌ من الأصغر إلى الأكبر: من تصميمٍ واحد إلى حلقة بودكاست. بدّل «ليل / نهار» من الشريط العلوي لترى التصاميم بالثيم الآخر.</p>
-  <ol class="toc">{{TOC}}</ol>
-  <div class="legend"><span><span class="tag tag-ready">جاهز</span>نصوص التطبيق كما هي</span><span><span class="tag tag-review">يُراجَع قبل النشر</span>آية أو حديث أو قول عالم</span><span><span class="tag tag-voice">صوت مؤقّت</span>صوت آليّ للعرض فقط</span></div>
-</header>
+{{PACKAGES}}
 
-<main class="wrap"><div class="thread">{{SECTIONS}}</div>
-  <section class="review" aria-labelledby="rv-h"><h2 id="rv-h">قبل النشر</h2><p class="lead">ما يحتاج مراجعةً أو قرارًا منك قبل أن يخرج أيّ شيءٍ من هذه الباقة.</p><ul>{{REVIEW}}</ul></section>
-  <p class="how">كلّ ما في الصفحة يُولَّد من ملف النِّعَم في التطبيق بأدوات <code>marketing/organic-kit</code>، فتكرار الباقة لأيّ نعمةٍ أخرى من الأربعمئة لا يحتاج تصميمًا جديدًا، بل مراجعة نصوصها، وأيقونتها، وتسجيل صوتها.</p>
-</main>
+<p class="wrap how">كلّ ما في الصفحة يُولَّد من ملف النِّعَم في التطبيق بأدوات <code>marketing/organic-kit</code>، فتكرار الباقة لأيّ نعمةٍ أخرى من الأربعمئة لا يحتاج تصميمًا جديدًا، بل مراجعة نصوصها، وأيقونتها، وتسجيل صوتها، ورسم الأنيميشن الخاصّ بها.</p>
 
 <script>
 (function () {
@@ -233,6 +232,21 @@ tr.r-quran td:last-child { font-family: var(--display); font-size: 17px; }
     window.addEventListener('resize', update);
     update();
   });
+
+  // one blessing at a time: the tab, the hash (#b05, #b05-reels…) or the first one
+  const pkgs = [...document.querySelectorAll('.pkg')];
+  const tabs = [...document.querySelectorAll('.pk-tab')];
+  const show = () => {
+    const h = (location.hash || '').slice(1);
+    const want = pkgs.find((p) => h === p.id || h.startsWith(`${p.id}-`)) || pkgs[0];
+    pkgs.forEach((p) => { p.hidden = p !== want; });
+    tabs.forEach((t) => (t.dataset.pkg === want.id ? t.setAttribute('aria-current', 'page') : t.removeAttribute('aria-current')));
+    document.querySelectorAll('video, audio').forEach((m) => m.pause());
+    window.dispatchEvent(new Event('resize'));
+    if (h === want.id) window.scrollTo(0, 0);
+  };
+  window.addEventListener('hashchange', show);
+  show();
 
   // copy captions
   document.querySelectorAll('.copy').forEach((btn) => btn.addEventListener('click', () => {

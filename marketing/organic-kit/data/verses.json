@@ -192,6 +192,18 @@
    "ref": "العنكبوت: 45",
    "use": "نعمة الصلاة: آية النعمة كما تظهر في التطبيق",
    "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"
+  },
+  {
+   "id": "BV-37",
+   "surah": 90,
+   "ayah": 8,
+   "surahName": "البلد",
+   "text": "أَلَمْ نَجْعَل لَّهُۥ عَيْنَيْنِ",
+   "full": "أَلَمْ نَجْعَل لَّهُۥ عَيْنَيْنِ",
+   "portion": false,
+   "ref": "البلد: 8",
+   "use": "نعمة البصر: آية النعمة كما تظهر في التطبيق",
+   "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"
   }
  ]
 }

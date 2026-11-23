@@ -7,7 +7,7 @@ Writes, under out/audio/<nn>/:
   waqfa.mp3            the five pauses read aloud on the app's own clock (10, 20, 20, 15, 15 s), over quiet
                        natural sound, no music (about 90 s): for WhatsApp, Spotify, YouTube Shorts
   waqfa_voice.wav      the voice alone on the same clock; the voiced reel (VV-<nn>) mixes it with its own sound
-  podcast.mp3          the episode from data/scripts/podcast_<nn>.json
+  podcast.mp3          the episode from data/scripts/podcast_<nn>.json, or else the shared data/scripts/podcast.json
   podcast_script.md    the episode as read, with timecodes, for review
 and kit/voice.js (window.VOICE): when each line starts and each word is spoken, for the voiced reel.
 
@@ -75,6 +75,40 @@ def tts(text: str, voice: str = VOICE, rate: str = "-10%") -> tuple[np.ndarray, 
     return decode(mp3), json.loads(words_f.read_text(encoding="utf-8"))
 
 
+MARKS = re.compile(r"[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED\u08D3-\u08FF\u0640]")
+
+
+def skeleton(t: str) -> str:
+    """Letters only, as tools/fetch_verses.py compares two copies of a verse."""
+    t = MARKS.sub("", t)
+    for a, b in (("ٱ", "ا"), ("أ", "ا"), ("إ", "ا"), ("آ", "ا"), ("ى", "ي"), ("ة", "ه")):
+        t = t.replace(a, b)
+    return re.sub(r"[^ء-ي]", "", t)
+
+
+def speak(text: str, b: dict, voice: str = VOICE, rate: str = "-10%") -> tuple[np.ndarray, list, bool]:
+    """A line from the app, read aloud. Words between ﴿ ﴾ are Quran: they are never synthesised. When they are the
+    blessing's own verse the reciter's recording takes their place; otherwise a short silence does (and is reported).
+    Returns samples, word timings (only for a line without Quran) and whether a verse was replaced."""
+    parts = re.split(r"(﴿[^﴾]*﴾)", text)
+    if len(parts) == 1:
+        x, words = tts(text, voice=voice, rate=rate)
+        return x, words, False
+    out = []
+    for part in parts:
+        if part.startswith("﴿"):
+            v = b["verse"]
+            same = skeleton(part) == skeleton(v["full"])
+            x = peak(recitation(v["surah"], v["ayah"]), -3) if same else silence(1.2)
+            if not same:
+                print(f"  note: a verse inside a line is not the blessing's verse, left silent: {part}")
+            out += [silence(0.3), x, silence(0.3)]
+        elif re.search(r"[ء-ي]", part):
+            x, _ = tts(part.strip(" —-:،"), voice=voice, rate=rate)
+            out.append(peak(x, -3))
+    return np.concatenate(out), [], True
+
+
 def decode(path: Path) -> np.ndarray:
     raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(path), "-ac", "1", "-ar", str(SR), "-f", "f32le", "-"],
                          check=True, capture_output=True).stdout
@@ -136,7 +170,7 @@ def steps_timeline(b: dict, rate: str, tail: float = 2.5) -> tuple[np.ndarray, n
     durationSec, or the line plus a breath if the line is longer. Returns voice, effects, segments."""
     voice, fx, segs, t = np.zeros(0), np.zeros(0), [], 0.0
     for k, (line, kind, secs) in enumerate(zip(b["steps"], b["stepTypes"], b["stepSecs"])):
-        x, words = tts(line, rate=rate)
+        x, words, _ = speak(line, b, rate=rate)
         x = peak(x, -3)
         length = max(float(secs), len(x) / SR + tail)
         voice = place(voice, x, t)
@@ -175,6 +209,24 @@ def build_waqfa(b: dict, out: Path) -> dict:
             "steps": segs, "end": {"start": round(total - end_len, 3), "len": end_len}}
 
 
+HADITH_SOURCE = {"متفق عليه": "متفقٌ عليه.", "صحيح البخاري": "رواه البخاري.", "صحيح مسلم": "رواه مسلم."}
+
+
+def fill(text: str, b: dict) -> str:
+    """The shared script's slots, filled from the blessing: {title} {surah} {hadithSource} {quoteIntro}."""
+    q = b.get("quote") or {}
+    if q.get("scholar"):
+        intro = f"ومن كلام {q['scholar']} رحمه الله" + (f" في «{q['work']}»" if q.get("work") else "") + ("، بمعناه:" if q.get("paraphrase") else ":")
+    elif "شرح الحديث" in (q.get("note") or ""):
+        intro = "ومما يُستفاد من شرح هذا الحديث:"
+    else:
+        intro = "ومن كلام أهل العلم، بمعناه:"
+    h = b.get("hadith") or {}
+    return (text.replace("{title}", b["title"]).replace("{surah}", b["verse"]["surahName"])
+            .replace("{hadithSource}", HADITH_SOURCE.get(h.get("source", ""), f"{h.get('source', '')}."))
+            .replace("{quoteIntro}", intro))
+
+
 def build_podcast(b: dict, script: dict, out: Path) -> list:
     rate = script.get("rate", "-8%")
     buf, t, rows = np.zeros(0), 0.0, []
@@ -182,7 +234,9 @@ def build_podcast(b: dict, script: dict, out: Path) -> list:
 
     def say(text, label, kind="voice"):
         nonlocal buf, t
-        x, _ = tts(text, voice=script.get("voice", VOICE), rate=rate)
+        x, _, verse = speak(text, b, voice=script.get("voice", VOICE), rate=rate)
+        if verse:
+            label += " — الآية فيه بصوت القارئ"
         buf = place(buf, peak(x, -3), t)
         rows.append((t, label, kind, text))
         t += len(x) / SR
@@ -195,7 +249,7 @@ def build_podcast(b: dict, script: dict, out: Path) -> list:
             fx = place(fx, peak(sfx.SOUNDS[blk["name"]]({}), -30), t)
             t += blk.get("sec", 1.0)
         elif k == "voice":
-            say(blk["text"], blk.get("label", ""))
+            say(fill(blk["text"], b), blk.get("label", ""))
         elif k == "opening":
             say(b["opening"], "مطلع النعمة (من التطبيق)", "app")
         elif k == "tadabbur":
@@ -235,7 +289,7 @@ def build_podcast(b: dict, script: dict, out: Path) -> list:
 def script_md(b: dict, script: dict, rows: list, total: float) -> str:
     mmss = lambda s: f"{int(s // 60)}:{int(s % 60):02d}"  # noqa: E731
     tag = {"voice": "نصّ الحلقة (مسوّدة)", "app": "من التطبيق", "sacred": "نصّ شرعي — قيد المراجعة", "review": "قيد المراجعة", "quran": "تلاوة مسجّلة"}
-    out = [f"# {script['show']}: {script['episode']}", "",
+    out = [f"# {script['show']}: {fill(script['episode'], b)}", "",
            f"المدة: {mmss(total)} · الصوت مؤقّت (صوت آلي) إلى أن يُسجَّل بصوت بشري · التلاوة مسجّلة لقارئ ولا تُولَّد آليًّا.", "",
            "| الوقت | المقطع | النوع | النص |", "|---|---|---|---|"]
     for t, label, kind, text in rows:
@@ -254,6 +308,8 @@ def main() -> None:
     timing = build_waqfa(b, out)
     print(f"waqfa: {timing['total']:.1f} s")
     script_path = ROOT / "data" / "scripts" / f"podcast_{n:02d}.json"
+    if not script_path.exists():
+        script_path = ROOT / "data" / "scripts" / "podcast.json"
     if script_path.exists():
         script = json.loads(script_path.read_text(encoding="utf-8"))
         rows, total = build_podcast(b, script, out)

@@ -39,6 +39,7 @@ VERSES = [
     ("SV-15", 35, 34, "فاطر", None, None, "أذهب عنّا الحزن"),
     # blessing packages (kit/bundle.js): the verse the app shows on the blessing card, same portion
     ("BV-05", 29, 45, "العنكبوت", 7, 17, "نعمة الصلاة: آية النعمة كما تظهر في التطبيق"),
+    ("BV-37", 90, 8, "البلد", None, None, "نعمة البصر: آية النعمة كما تظهر في التطبيق"),
 ]
 
 MARKS = re.compile(r"[ؐ-ًؚ-ٰٟۖ-ۭ࣓-ࣿـ]")
