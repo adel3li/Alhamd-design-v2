@@ -94,7 +94,8 @@
       "contextFaithful": false,
       "meaningSourced": false,
       "quotedFragmentsMatch": false,
-      "authoredReviewed": false
+      "authoredReviewed": false,
+      "secondSourceMatched": true
     },
     "verification": {
       "by": "",

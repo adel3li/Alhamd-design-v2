@@ -23,7 +23,7 @@ print(count, 'files written')
 PY
 ```
 
-يجب أن يطبع `33 files written`. الناتج: `CLAUDE.md` في الجذر، والحقيبة في `docs/handoff/`.
+يجب أن يطبع `35 files written`. الناتج: `CLAUDE.md` في الجذر، والحقيبة في `docs/handoff/`.
 
 ## الخطوة ٢: ما ليس في هذه الحزمة
 
@@ -112,6 +112,7 @@ echo ".sources/" >> .gitignore
 | ٤ | **رسم المصحف: العثماني بخط مصحف المدينة** | ٢٣ نوفمبر ٢٠٢٦ | الآية تظهر للمستخدم كما في المصحف: الألف الصغيرة، والمد، والهمزات، وعلامات الوقف، ورقم الآية داخل علامة نهايتها. الخط KFGQPC Uthmanic Script HAFS مع نص المجمع المصمَّم له (من `api.quran.com`)، في التطبيق وفي بطاقة المشاركة. والإملائي من Tanzil للبحث وحده. **بقي:** تأكيد شروط استخدام الخط والنص (§٤) |
 | ٥ | **الاستضافة: Vercel بنطاقه المجاني مؤقتًا** | ٢٣ نوفمبر ٢٠٢٦ | التطبيق على عنوان `vercel.app` إلى أن يُحجز نطاق. **انتبه:** بيانات المستخدم مربوطة بالعنوان، فالانتقال لاحقًا إلى نطاق خاص يحتاج خطوة نقل (§٧) |
 | ٦ | **البطاقات تظهر بعد التحقق الأول، دون انتظار المراجع الشرعي** | ٢٣ نوفمبر ٢٠٢٦ | `CONTENT_MIN_LEVEL=verified`. «عن المحتوى» تقول بدقة إن النصوص طوبقت على مصادرها وإن المراجعة العلمية جارية (§٩) |
+| ٧ | **درجة الحديث: القاعدة ب، والأحكام من sunnah.com الآن** | ٢٣ نوفمبر ٢٠٢٦ | يدخل ما في الصحيحين، وما صححه أو حسّنه الألباني ولم يضعّفه الأرنؤوط أو أحمد شاكر أو بشار عواد؛ والمختلف فيه للمراجع. النص والأحكام يُنسخان آليًا من sunnah.com (عبر مجموعة البيانات المفتوحة). الدرر السنية مصدر ثانٍ يُضاف لاحقًا، وهو شرط لمرحلة `approved` (§٦). القاعدة كود مختبَر في `reusable-code/hadithGrade.ts` |
 
 ## ينتظرك
 
@@ -145,7 +146,7 @@ echo ".sources/" >> .gitignore
 
 **حدّ الدقة:** الخط الرقمي مبني على خط عثمان طه نفسه، لكنه ليس صورة الصفحة المطبوعة. السطور تنكسر حسب عرض الشاشة لا كما في صفحة المصحف. المطابقة التامة لشكل الصفحة لا تكون إلا بخطوط الصفحات (QCF)، ولا تصلح لنا كما سبق.
 
-### ٥. المرجع المعتمد في درجة الحديث (لم يُحسم)
+### ٥. المرجع المعتمد في درجة الحديث (حُسم: الخيار ب)
 
 **المسألة ببساطة:** أحاديث البخاري ومسلم ثابتة، ولا سؤال فيها. أما الأحاديث في الكتب الأخرى (أبو داود، والترمذي، والنسائي، وابن ماجه، وأحمد) فحكم عليها العلماء بعد ذلك: هذا صحيح، وهذا حسن، وهذا ضعيف. وأحيانًا يختلفون في الحديث الواحد. فنحتاج قاعدة واحدة نطبقها كل مرة: **بحكم مَن نأخذ؟**
 
@@ -169,9 +170,12 @@ echo ".sources/" >> .gitignore
 | **ج. اتفاق المحققين** | يدخل ما لم يضعّفه أحد من قائمة محددة | الأشد احتياطًا | يُسقط أدعية ثابتة عند الأكثرين. مثال: لو دخل زبير علي زئي في القائمة لسقط دعاء عائشة ليلة القدر |
 | **د. ما يحكم به المراجع الشرعي** | المراجع يقرر في كل حديث خارج الصحيحين | الأدق إن كان المراجع محدّثًا | يعتمد على وجوده، ولا يصلح للمرحلة الأولى وحدها |
 
-**اقتراحي: ب.** القاعدة واضحة يطبقها التحقق الأول آليًا، والحالات المختلف فيها تذهب إلى المراجع وحده. ومع قرار عرض البطاقات قبل المراجع (§٩)، الحديث المختلف فيه لا يظهر حتى يقرر المراجع فيه، وما سواه يظهر.
+**القرار: ب**، بأحكام sunnah.com الآن، والدرر السنية لاحقًا مصدرًا ثانيًا. طُبّقت على القائمة المرشّحة في `04b`: يدخل ٥٥ إحالة، و٣ للمراجع، ولا يُستبعد شيء. القاعدة واضحة يطبقها التحقق الأول آليًا، والحالات المختلف فيها تذهب إلى المراجع وحده. ومع قرار عرض البطاقات قبل المراجع (§٩)، الحديث المختلف فيه لا يظهر حتى يقرر المراجع فيه، وما سواه يظهر.
 
-### ٦. الدرر السنية
+### ٦. الدرر السنية (حُسم: مصدر ثانٍ لاحقًا)
+
+**القرار:** الآن مصدر واحد آلي (sunnah.com). الدرر تُضاف مصدرًا ثانيًا للنص والحكم: يدويًا برابط يُحفظ في كل بطاقة، أو آليًا من جهازك إن نجح الوصول منه. المطابقة عليها شرط لـ `approved`، لا لـ `verified`. وما فيه حرف تالف في sunnah.com لا ينتظر: يُنقل نصه من الدرر يدويًا قبل عرضه.
+
 
 - الموقع يعرض لكل حديث «خلاصة حكم المحدث» لأكثر من عالم، ومعه المصدر والرقم والراوي. هو أنسب مرجع للمراجع البشري، ولنسخ الأحكام بالعربية.
 - كان له واجهة برمجية قديمة (`dorar.net/dorar_api.json?skey=…`). **لم أستطع الوصول إلى الموقع من بيئة السحابة هنا**: حماية Cloudflare عندهم ترفض الطلبات القادمة من هذه البيئة (رد 403 «Attention Required»)، من المتصفح الآلي ومن الطلب المباشر.
@@ -615,7 +619,8 @@ echo ".sources/" >> .gitignore
 - الموسوعة الحديثية في **الدرر السنية** (dorar.net): النص، والكتاب، والرقم، وحكم المحدّث باسمه.
 - **sunnah.com**: النص العربي وأرقام الكتب. ونسخته المفتوحة (`fawazahmed0/hadith-api`) يُنسخ منها آليًا بـ `scripts/fetch-hadith.ts`، كما في [04c-catalogue-texts.md](04c-catalogue-texts.md).
 - عند الشك: الطبعة المطبوعة.
-- **مصدران على الأقل:** النسخ الآلي من مصدر واحد لا يكفي. في نسخة البيانات المفتوحة وُجد حرف تالف في نصّين من نصوص القائمة، فكل حديث يُطابق على مصدر ثانٍ قبل أن يُعدّ متحققًا منه، والحرف التالف يُنقل من المصدر الثاني ولا يُصلَح باليد.
+- **الآن مصدر واحد، والثاني لاحقًا (قرار ٧ في `00-decisions.md`):** تصل البطاقة إلى `verified` بنص sunnah.com وأحكامه وحدها إن اجتازت الفحوص الآلية (الرقم موجود، ولا حرف تالفًا، والقاعدة ب تقول «يدخل»). والمطابقة على الدرر السنية شرط لـ `approved`، وتُسجّل في `review.checks.secondSourceMatched`.
+- **مصدران على الأقل للاعتماد النهائي:** النسخ الآلي من مصدر واحد لا يكفي للاعتماد. في نسخة البيانات المفتوحة وُجد حرف تالف في نصّين من نصوص القائمة، فكل حديث يُطابق على مصدر ثانٍ قبل أن يُعدّ متحققًا منه، والحرف التالف يُنقل من المصدر الثاني ولا يُصلَح باليد.
 
 ### ما يُحفظ مع كل حديث
 
@@ -629,7 +634,7 @@ echo ".sources/" >> .gitignore
 | `sourceUrl` | الصفحة التي نُسخ منها النص، ليتحقق المراجع بضغطة |
 | `alsoIn` | تخريجات أخرى (اختياري) |
 
-### سياسة الدرجة (قرار ٥ في `00-decisions.md`، لم يُحسم)
+### سياسة الدرجة (قرار ٥ في `00-decisions.md`: الخيار ب)
 
 الخيارات الأربعة وأمثلة من أحاديث القائمة في `00-decisions.md` §٥. ما يلي ثابت أيًّا كان الاختيار:
 
@@ -945,7 +950,11 @@ draft ← pending_verification ← verified ← approved
 - ب١٩ وصية النبي ﷺ لفاطمة: الرقم في السنن الكبرى للنسائي وعند الحاكم، والدرجة.
 - كل سطر موقف في القائمة، على التفسير أو الشرح، عند تحويل الدعاء إلى بطاقة.
 
-## النتائج الحالية (وجود المراجع والأحكام المسجّلة)
+## النتائج الحالية
+
+وجود كل مرجع، والأحكام المسجّلة له في sunnah.com، وقرار **القاعدة ب** المعتمدة (`00-decisions.md` §٥): يدخل ما في الصحيحين، وما صححه أو حسّنه الألباني ولم يضعّفه شعيب الأرنؤوط أو أحمد شاكر أو بشار عواد. والباقي للمراجع الشرعي. القاعدة نفسها مكتوبة كودًا في `reusable-code/hadithGrade.ts` ومختبَرة.
+
+**الخلاصة:** من الإحالات الحديثية يدخل ٥٥ وفق القاعدة، و٣ للمراجع: مسند أحمد ٣٧١٢ والسنن الكبرى للنسائي لأنهما خارج المصدر، والترمذي ٤٦٤ لأن المصدر لا يذكر فيه حكمًا للألباني (والدعاء نفسه في أبي داود ١٤٢٥، وهو يدخل). ولا يُستبعد شيء. ونصّان فيهما حرف تالف في المصدر (البخاري ٨٣٤، ومسلم ٢٤٧٥ في روايته الثانية) يدخلان، لكن نصّهما يُنقل من مصدر ثانٍ.
 
 أرقام السور في الجدول الأول: `السورة:الآية`.
 
@@ -1014,66 +1023,66 @@ draft ← pending_verification ← verified ← approved
 
 ## ب. السنة
 
-| # | المرجع | الرقم موجود | الأحكام المسجّلة في المصدر |
-|---|---|---|---|
-| 1 | البخاري 834 | ✓ | في الصحيح |
-| 1 | مسلم 2705 | ✓ | في الصحيح |
-| 2 | أبو داود 1522 | ✓ | الألباني: صحيح، محمد محيي الدين عبد الحميد: صحيح، شعيب الأرنؤوط: صحيح، زبير علي زئي: إسناده صحيح |
-| 2 | النسائي 1303 | ✓ | أبو غدة: صحيح، الألباني: صحيح، زبير علي زئي: صحيح |
-| 3 | الترمذي 3513 | ✓ | أحمد شاكر: صحيح، الألباني: صحيح، بشار عواد معروف: حسن صحيح، زبير علي زئي: ضعيف |
-| 3 | ابن ماجه 3850 | ✓ | الألباني: صحيح، محمد فؤاد عبد الباقي: صحيح، شعيب الأرنؤوط: حسن صحيح، زبير علي زئي: ضعيف |
-| 4 | مسلم 918 | ✓ | في الصحيح |
-| 5 | مسلم 920 | ✓ | في الصحيح |
-| 6 | البخاري 6306 | ✓ | في الصحيح |
-| 7 | مسند أحمد 3712 | — | ليس في المصدر المفتوح؛ يُتحقق يدويًا |
-| 8 | الترمذي 3522 | ✓ | أحمد شاكر: صحيح، الألباني: صحيح، زبير علي زئي: إسناده حسن |
-| 8 | الترمذي 2140 | ✓ | أحمد شاكر: صحيح، الألباني: صحيح، زبير علي زئي: ضعيف |
-| 9 | مسلم 2725 | ✓ | في الصحيح |
-| 10 | البخاري 143 | ✓ | في الصحيح |
-| 10 | البخاري 75 | ✓ | في الصحيح |
-| 11 | البخاري 6334 | ✓ | في الصحيح |
-| 11 | مسلم 2480 | ✓ | في الصحيح |
-| 12 | مسلم 2697 | ✓ | في الصحيح |
-| 13 | الترمذي 3514 | ✓ | أحمد شاكر: صحيح، الألباني: صحيح، بشار عواد معروف: صحيح، زبير علي زئي: ضعيف |
-| 14 | أبو داود 5074 | ✓ | الألباني: صحيح، محمد محيي الدين عبد الحميد: صحيح، شعيب الأرنؤوط: صحيح، زبير علي زئي: إسناده صحيح |
-| 14 | ابن ماجه 3871 | ✓ | الألباني: صحيح، محمد فؤاد عبد الباقي: صحيح، شعيب الأرنؤوط: صحيح، زبير علي زئي: إسناده صحيح |
-| 15 | مسلم 2721 | ✓ | في الصحيح |
-| 16 | البخاري 2893 | ✓ | في الصحيح |
-| 17 | البخاري 6346 | ✓ | في الصحيح |
-| 17 | مسلم 2730 | ✓ | في الصحيح |
-| 18 | أبو داود 1525 | ✓ | الألباني: صحيح، محمد محيي الدين عبد الحميد: صحيح، شعيب الأرنؤوط: صحيح، زبير علي زئي: إسناده حسن |
-| 19 | السنن الكبرى للنسائي | — | ليس في المصدر المفتوح؛ يُتحقق يدويًا |
-| 20 | أبو داود 5090 | ✓ | الألباني: إسناده حسن، محمد محيي الدين عبد الحميد: إسناده حسن، زبير علي زئي: ضعيف |
-| 21 | البخاري 6382 | ✓ | في الصحيح |
-| 21 | البخاري 7390 | ✓ | في الصحيح |
-| 21 | البخاري 1166 | ✓ | في الصحيح |
-| 22 | البخاري 6398 | ✓ | في الصحيح |
-| 22 | مسلم 2719 | ✓ | في الصحيح |
-| 23 | مسلم 2720 | ✓ | في الصحيح |
-| 24 | مسلم 202 | ✓ | في الصحيح |
-| 25 | أبو داود 1510 | ✓ | الألباني: صحيح، محمد محيي الدين عبد الحميد: صحيح، زبير علي زئي: إسناده صحيح |
-| 25 | الترمذي 3551 | ✓ | أحمد شاكر: صحيح، الألباني: صحيح، بشار عواد معروف: حسن صحيح، زبير علي زئي: إسناده صحيح |
-| 26 | الترمذي 3235 | ✓ | أحمد شاكر: صحيح، الألباني: صحيح، بشار عواد معروف: حسن صحيح، زبير علي زئي: إسناده حسن |
-| 27 | مسلم 2491 | ✓ | في الصحيح |
-| 28 | البخاري 3477 | ✓ | في الصحيح |
-| 28 | مسلم 1792 | ✓ | في الصحيح |
-| 29 | أبو داود 1425 | ✓ | الألباني: صحيح، محمد محيي الدين عبد الحميد: صحيح، زبير علي زئي: صحيح |
-| 29 | الترمذي 464 | ✓ | زبير علي زئي: صحيح |
-| 30 | مسلم 1763 | ✓ | في الصحيح |
-| 31 | البخاري 2933 | ✓ | في الصحيح |
-| 31 | مسلم 1742 | ✓ | في الصحيح |
-| 32 | مسلم 2202 | ✓ | في الصحيح |
-| 33 | البخاري 5743 | ✓ | في الصحيح |
-| 33 | مسلم 2191 | ✓ | في الصحيح |
-| 34 | البخاري 3020 | ✓ | في الصحيح |
-| 34 | مسلم 2475 | ✓ | في الصحيح |
-| 35 | مسلم 2739 | ✓ | في الصحيح |
-| 36 | الترمذي 3505 | ✓ | أحمد شاكر: صحيح، الألباني: صحيح، زبير علي زئي: إسناده صحيح |
-| 37 | البخاري 6389 | ✓ | في الصحيح |
-| 37 | مسلم 2690 | ✓ | في الصحيح |
-| أ١ | مسلم 395 | ✓ | في الصحيح |
-| أ٧ | مسلم 126 | ✓ | في الصحيح |
-| أ١٢ | البخاري 4563 | ✓ | في الصحيح |
+| # | المرجع | الرقم موجود | الأحكام المسجّلة في المصدر | القاعدة ب | السبب |
+|---|---|---|---|---|---|
+| 1 | البخاري 834 | ✓ | في الصحيح | يدخل | في الصحيحين؛ وفي نص المصدر حرف تالف، فيُنقل من مصدر ثانٍ |
+| 1 | مسلم 2705 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 2 | أبو داود 1522 | ✓ | الألباني: صحيح، محمد محيي الدين عبد الحميد: صحيح، شعيب الأرنؤوط: صحيح، زبير علي زئي: إسناده صحيح | يدخل | صححه أو حسّنه الألباني ولم يضعّفه محقق من القاعدة |
+| 2 | النسائي 1303 | ✓ | أبو غدة: صحيح، الألباني: صحيح، زبير علي زئي: صحيح | يدخل | صححه أو حسّنه الألباني ولم يضعّفه محقق من القاعدة |
+| 3 | الترمذي 3513 | ✓ | أحمد شاكر: صحيح، الألباني: صحيح، بشار عواد معروف: حسن صحيح، زبير علي زئي: ضعيف | يدخل | صححه أو حسّنه الألباني ولم يضعّفه محقق من القاعدة |
+| 3 | ابن ماجه 3850 | ✓ | الألباني: صحيح، محمد فؤاد عبد الباقي: صحيح، شعيب الأرنؤوط: حسن صحيح، زبير علي زئي: ضعيف | يدخل | صححه أو حسّنه الألباني ولم يضعّفه محقق من القاعدة |
+| 4 | مسلم 918 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 5 | مسلم 920 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 6 | البخاري 6306 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 7 | مسند أحمد 3712 | — | ليس في المصدر المفتوح | للمراجع | يُتحقق يدويًا |
+| 8 | الترمذي 3522 | ✓ | أحمد شاكر: صحيح، الألباني: صحيح، زبير علي زئي: إسناده حسن | يدخل | صححه أو حسّنه الألباني ولم يضعّفه محقق من القاعدة |
+| 8 | الترمذي 2140 | ✓ | أحمد شاكر: صحيح، الألباني: صحيح، زبير علي زئي: ضعيف | يدخل | صححه أو حسّنه الألباني ولم يضعّفه محقق من القاعدة |
+| 9 | مسلم 2725 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 10 | البخاري 143 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 10 | البخاري 75 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 11 | البخاري 6334 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 11 | مسلم 2480 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 12 | مسلم 2697 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 13 | الترمذي 3514 | ✓ | أحمد شاكر: صحيح، الألباني: صحيح، بشار عواد معروف: صحيح، زبير علي زئي: ضعيف | يدخل | صححه أو حسّنه الألباني ولم يضعّفه محقق من القاعدة |
+| 14 | أبو داود 5074 | ✓ | الألباني: صحيح، محمد محيي الدين عبد الحميد: صحيح، شعيب الأرنؤوط: صحيح، زبير علي زئي: إسناده صحيح | يدخل | صححه أو حسّنه الألباني ولم يضعّفه محقق من القاعدة |
+| 14 | ابن ماجه 3871 | ✓ | الألباني: صحيح، محمد فؤاد عبد الباقي: صحيح، شعيب الأرنؤوط: صحيح، زبير علي زئي: إسناده صحيح | يدخل | صححه أو حسّنه الألباني ولم يضعّفه محقق من القاعدة |
+| 15 | مسلم 2721 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 16 | البخاري 2893 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 17 | البخاري 6346 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 17 | مسلم 2730 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 18 | أبو داود 1525 | ✓ | الألباني: صحيح، محمد محيي الدين عبد الحميد: صحيح، شعيب الأرنؤوط: صحيح، زبير علي زئي: إسناده حسن | يدخل | صححه أو حسّنه الألباني ولم يضعّفه محقق من القاعدة |
+| 19 | السنن الكبرى للنسائي | — | ليس في المصدر المفتوح | للمراجع | يُتحقق يدويًا |
+| 20 | أبو داود 5090 | ✓ | الألباني: إسناده حسن، محمد محيي الدين عبد الحميد: إسناده حسن، زبير علي زئي: ضعيف | يدخل | صححه أو حسّنه الألباني ولم يضعّفه محقق من القاعدة |
+| 21 | البخاري 6382 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 21 | البخاري 7390 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 21 | البخاري 1166 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 22 | البخاري 6398 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 22 | مسلم 2719 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 23 | مسلم 2720 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 24 | مسلم 202 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 25 | أبو داود 1510 | ✓ | الألباني: صحيح، محمد محيي الدين عبد الحميد: صحيح، زبير علي زئي: إسناده صحيح | يدخل | صححه أو حسّنه الألباني ولم يضعّفه محقق من القاعدة |
+| 25 | الترمذي 3551 | ✓ | أحمد شاكر: صحيح، الألباني: صحيح، بشار عواد معروف: حسن صحيح، زبير علي زئي: إسناده صحيح | يدخل | صححه أو حسّنه الألباني ولم يضعّفه محقق من القاعدة |
+| 26 | الترمذي 3235 | ✓ | أحمد شاكر: صحيح، الألباني: صحيح، بشار عواد معروف: حسن صحيح، زبير علي زئي: إسناده حسن | يدخل | صححه أو حسّنه الألباني ولم يضعّفه محقق من القاعدة |
+| 27 | مسلم 2491 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 28 | البخاري 3477 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 28 | مسلم 1792 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 29 | أبو داود 1425 | ✓ | الألباني: صحيح، محمد محيي الدين عبد الحميد: صحيح، زبير علي زئي: صحيح | يدخل | صححه أو حسّنه الألباني ولم يضعّفه محقق من القاعدة |
+| 29 | الترمذي 464 | ✓ | زبير علي زئي: صحيح | للمراجع | لا حكم للألباني في المصدر |
+| 30 | مسلم 1763 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 31 | البخاري 2933 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 31 | مسلم 1742 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 32 | مسلم 2202 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 33 | البخاري 5743 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 33 | مسلم 2191 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 34 | البخاري 3020 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 34 | مسلم 2475 | ✓ | في الصحيح | يدخل | في الصحيحين؛ وفي نص المصدر حرف تالف، فيُنقل من مصدر ثانٍ |
+| 35 | مسلم 2739 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 36 | الترمذي 3505 | ✓ | أحمد شاكر: صحيح، الألباني: صحيح، زبير علي زئي: إسناده صحيح | يدخل | صححه أو حسّنه الألباني ولم يضعّفه محقق من القاعدة |
+| 37 | البخاري 6389 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| 37 | مسلم 2690 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| أ١ | مسلم 395 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| أ٧ | مسلم 126 | ✓ | في الصحيح | يدخل | في الصحيحين |
+| أ١٢ | البخاري 4563 | ✓ | في الصحيح | يدخل | في الصحيحين |
 <!-- ===== END FILE ===== -->
 
 <!-- ===== FILE: docs/handoff/05-technical-blueprint.md ===== -->
@@ -1112,7 +1121,7 @@ draft ← pending_verification ← verified ← approved
 │   └── themes.json               # وسوم الحاجة وأسماؤها
 ├── scripts/
 │   ├── fetch-quran.ts            # ينسخ quran.fullText من نص المجمع في content/sources بالسورة والآية، ويقارن حروفه بنص Tanzil
-│   ├── fetch-hadith.ts           # ينسخ hadith.fullNarration من مجموعة بيانات الحديث بالكتاب والرقم
+│   ├── fetch-hadith.ts           # ينسخ hadith.fullNarration والأحكام من sunnah.com بالكتاب والرقم، ويطبق القاعدة ب
 │   ├── validate-content.ts       # الفحوص في 03 القسم ٧، ويفشل البناء عند أي خطأ
 │   ├── build-content.ts          # يجمع البطاقات المعتمدة في ملف واحد للتطبيق
 │   └── check-promises.ts         # يفحص الوعود (انظر القسم ١٠)
@@ -1173,7 +1182,8 @@ export interface HadithSource {
   numbering: string;     // «ترقيم محمد فؤاد عبد الباقي»
   narrator: string;
   fullNarration: string; // يُلصق من المصدر
-  grade: 'صحيح' | 'حسن';
+  gradings: { by: string; grade: string }[]; // كما في sunnah.com، منسوخة آليًا
+  grade: 'صحيح' | 'حسن';  // نتيجة القاعدة ب (reusable-code/hadithGrade.ts)
   gradeNote: string;     // «متفق عليه» / «صححه الألباني في صحيح سنن أبي داود»
   sourceUrl: string;
   alsoIn?: string[];
@@ -1194,6 +1204,7 @@ export interface ReviewChecks {
   meaningSourced: boolean;
   quotedFragmentsMatch: boolean;
   authoredReviewed: boolean;
+  secondSourceMatched: boolean; // للسنة: طوبق على الدرر السنية (شرط لـ approved). للقرآن: حروفه طوبقت على Tanzil آليًا
 }
 
 export interface Review {
@@ -1378,6 +1389,7 @@ resolveToday({ today, welcomeDoneOn, all, welcomeId })
 | `src/lib/dailyLogic.ts` | `reusable-code/daily.ts` | معمّم، ومعه `effectiveFrom`، ومختبَر |
 | — | `reusable-code/arabicSearch.ts` | جديد: تطبيع العربية للبحث، وتقسيم الجمل بلا lookbehind، ومختبَر |
 | — | `reusable-code/calendarReminder.ts` | جديد: ملف تقويم بحدث يومي، ومختبَر |
+| — | `reusable-code/hadithGrade.ts` | جديد: القاعدة ب لدرجة الحديث على أحكام sunnah.com، ومختبَرة |
 | `src/components/common/ShareCardModal.tsx` | لا | يُنقل منطق الرسم واللف منه، مع إعادة كتابة الواجهة |
 | `src/landing/landing.css` | لا | مثال لطريقة الثيمات الصحيحة |
 | `src/components/screens/ReflectionModal.tsx` | لا | مرجع للإيقاع والسلوك، لا للنسخ: فيه التوقيت المتشابك والألوان الثابتة |
@@ -1580,6 +1592,7 @@ CI على GitHub Actions: `lint` (tsc strict)، و`test`، و`validate-content`�
 
 - [ ] ٦٠ بطاقة على الأقل بلغت حد البوابة: `approved` باسم المراجع وتاريخه للإطلاق العام، أو `verified` بتقرير تحقق لإطلاق تجريبي (`03` §٨).
 - [ ] «عن المحتوى» تقول بدقة أي مرحلة مراجعة بلغتها البطاقات المعروضة.
+- [ ] لا حديث معروض نصّه من مصدر فيه حرف تالف؛ ما كان كذلك نُقل من الدرر السنية.
 - [ ] فحص المحتوى ناجح، ولا رمز مؤقت في أي بطاقة معتمدة.
 - [ ] «عن المحتوى» تذكر المصادر وتراخيصها، وسياسة الدرجة، واسم المراجع، والعدد المقروء من البيانات.
 - [ ] ترخيص نص القرآن مستوفًى (ذكر المصدر، والرابط، وإبقاء نص الترخيص).
@@ -1663,7 +1676,7 @@ CI على GitHub Actions: `lint` (tsc strict)، و`test`، و`validate-content`�
 - scripts/check-promises.ts كما في المخطط §١٠.
 - خط المحتوى: src/content/types.ts وschema.ts (Zod)، وscripts/validate-content.ts بالفحوص في 03 §٧، وscripts/build-content.ts مع بوابة المراجعة: الحد الأدنى لما يدخل الإنتاج متغير واحد (CONTENT_MIN_LEVEL، والمعتمد الآن verified بقرار صاحب المشروع؛ انظر 03 §٨)، والمعاينة CONTENT_PREVIEW=1 تضم الكل بشارة «مسودة».
 - scripts/fetch-quran.ts: يقرأ ملف نص القرآن من content/sources/ ويملأ quran.fullText بالسورة والآية. ضع في content/sources/: نص المجمع منسوخًا من api.quran.com (حقل text_qpc_hafs لكل آية، من /api/v4/quran/verses/qpc_hafs) للعرض، ونسختي Tanzil (uthmani للمقارنة، وsimple للبحث) مع ترخيصهما. وخط المصحف KFGQPC Uthmanic Script HAFS: الملف UthmanicHafs1Ver18.woff2 من المستودع المفتوح quran/quran.com-frontend-next (public/fonts/quran/hafs/uthmanic_hafs/)، مستضاف ذاتيًا. الآية تظهر للمستخدم كما في المصحف. إن لم يكن الملف موجودًا، أو لم تستطع تنزيله من tanzil.net بسبب سياسة الشبكة، فتوقف واطلب مني الملف. لا تكتب نص آية أو حديث من ذاكرتك أبدًا، ولا جزءًا منه: النص يُنسخ حرفيًا من مصدره بالسكريبت، ويظهر للمستخدم كما نُسخ. وفي رسائلك لي أشر إليه بمرجعه.
-- scripts/fetch-hadith.ts: ينسخ نص الحديث كاملًا من مجموعة البيانات المفتوحة (fawazahmed0/hadith-api، الكتب الستة) بالكتاب والرقم إلى hadith.fullNarration، مع اسم المصدر ونظام ترقيمه. نص الدعاء (text) جزء حرفي منه يحدده المراجع، والسكريبت يتحقق أنه جزء منه. لا يُعدّ الحديث متحققًا منه قبل مطابقته على مصدر ثانٍ. انظر docs/handoff/04c-catalogue-texts.md لمثال الناتج وتنبيه الحروف التالفة.
+- scripts/fetch-hadith.ts: ينسخ نص الحديث كاملًا من مجموعة البيانات المفتوحة (fawazahmed0/hadith-api، الكتب الستة) بالكتاب والرقم إلى hadith.fullNarration، مع اسم المصدر ونظام ترقيمه. نص الدعاء (text) جزء حرفي منه يحدده المراجع، والسكريبت يتحقق أنه جزء منه. ويحفظ أحكام المحققين كما في sunnah.com في hadith.gradings، ويطبق عليها القاعدة ب بـ docs/handoff/reusable-code/hadithGrade.ts (انسخه إلى src/lib/). الحديث الذي فيه حرف تالف لا يُعرض حتى يُنقل نصه من مصدر ثانٍ. والدرر السنية مصدر ثانٍ يُضاف لاحقًا. انظر docs/handoff/04c-catalogue-texts.md لمثال الناتج وتنبيه الحروف التالفة.
 - ثلاث بطاقات تجريبية في content/duas/ بحالة draft، مبنية على docs/handoff/templates/dua.example.json وdua.example.quran.json: دعاء الترحيب (الفاتحة ٦–٧)، ودعاء يونس (الأنبياء ٨٧)، ودعاء معاذ (سنن أبي داود ١٥٢٢). نص الآيات يأتي من السكريبت. نص الحديث وكل حقل نصي مقدس للسنة يبقى مكانًا فارغًا بالشكل <<يُلصق من المصدر: سنن أبي داود ١٥٢٢>>. الطبقة المؤلَّفة اكتب لها نصًّا قصيرًا واضحًا أنه للتجربة: «[نص تجريبي]».
 
 ### الجزء ٢: أول حلقة كاملة
@@ -1895,7 +1908,7 @@ CONTENT_PREVIEW=1 bun run build   # preview build: drafts included, marked
 
 ## Rules that are easy to break
 
-- **Sacred text is copied, never written.** Qur'an text is copied by `scripts/fetch-quran.ts` from the source file in `content/sources/`, by surah and ayah. Hadith text is copied by `scripts/fetch-hadith.ts` from the hadith dataset, by collection and number, or pasted by a researcher from the source named in `hadith.sourceUrl`, and checked against a second source before a card is verified. Both are shown to users exactly as copied. Never type, complete, correct, re-vowel or paraphrase a verse or a hadith from memory, in any file or reply; refer to one by its reference instead. A character a source has corrupted is never repaired by hand: copy that text from a second source. Tests use neutral Arabic text.
+- **Sacred text is copied, never written.** Qur'an text is copied by `scripts/fetch-quran.ts` from the source file in `content/sources/`, by surah and ayah. Hadith text is copied by `scripts/fetch-hadith.ts` from the hadith dataset, by collection and number, or pasted by a researcher from the source named in `hadith.sourceUrl`, with the gradings sunnah.com records; `src/lib/hadithGrade.ts` applies the owner's grading rule (option B) to them. For now sunnah.com is the only source for `verified`; a match against Dorar (`review.checks.secondSourceMatched`) is required for `approved`. A narration with a corrupted character is not shown until it is copied from a second source. Both are shown to users exactly as copied. Never type, complete, correct, re-vowel or paraphrase a verse or a hadith from memory, in any file or reply; refer to one by its reference instead. A character a source has corrupted is never repaired by hand: copy that text from a second source. Tests use neutral Arabic text.
 - **Three content layers.** Sacred text (verbatim), transmitted information (with a citation), authored text (reviewed). Authored text adds no event, name, quote or ruling that is not in the first two layers. Anything quoted inside authored text between ﴿ ﴾ or « » must match its source; `validate-content` checks the Qur'an fragments.
 - **Review gate.** Two stages: `verified` (source verification by Claude, with a report in `review.verification`) then `approved` (the named scholarly reviewer, in `review.approval`). Production shows cards at `CONTENT_MIN_LEVEL` or above (`verified`, by the owner's decision, until a reviewer exists). Never set `approval` or the `approved` status yourself, and never write in the interface that the content was reviewed by scholars unless every card shown is `approved`.
 - **Dates.** Every day key comes from `src/lib/dates.ts` (`toLocalDateString`, `parseLocalDateString`, `useLocalDay`). Never `toISOString().slice(0, 10)` or `new Date("YYYY-MM-DD")`: those are UTC, which is still yesterday until 03:00 in Riyadh.
@@ -1935,8 +1948,26 @@ Type check, unit tests and the content and promise checks must pass. For UI, che
     "numbering": "ترقيم sunnah.com (يُطابق على الطبعة المعتمدة)",
     "narrator": "معاذ بن جبل رضي الله عنه",
     "fullNarration": "حَدَّثَنَا عُبَيْدُ اللَّهِ بْنُ عُمَرَ بْنِ مَيْسَرَةَ، حَدَّثَنَا عَبْدُ اللَّهِ بْنُ يَزِيدَ الْمُقْرِئُ، حَدَّثَنَا حَيْوَةُ بْنُ شُرَيْحٍ، قَالَ سَمِعْتُ عُقْبَةَ بْنَ مُسْلِمٍ، يَقُولُ حَدَّثَنِي أَبُو عَبْدِ الرَّحْمَنِ الْحُبُلِيُّ، عَنِ الصُّنَابِحِيِّ، عَنْ مُعَاذِ بْنِ جَبَلٍ، أَنَّ رَسُولَ اللَّهِ صلى الله عليه وسلم أَخَذَ بِيَدِهِ وَقَالَ ‏\"‏ يَا مُعَاذُ وَاللَّهِ إِنِّي لأُحِبُّكَ وَاللَّهِ إِنِّي لأُحِبُّكَ ‏\"‏ ‏.‏ فَقَالَ ‏\"‏ أُوصِيكَ يَا مُعَاذُ لاَ تَدَعَنَّ فِي دُبُرِ كُلِّ صَلاَةٍ تَقُولُ اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ ‏\"‏ ‏.‏ وَأَوْصَى بِذَلِكَ مُعَاذٌ الصُّنَابِحِيَّ وَأَوْصَى بِهِ الصُّنَابِحِيُّ أَبَا عَبْدِ الرَّحْمَنِ ‏.‏",
+    "gradings": [
+      {
+        "by": "Al-Albani",
+        "grade": "Sahih"
+      },
+      {
+        "by": "Muhammad Muhyi Al-Din Abdul Hamid",
+        "grade": "Sahih"
+      },
+      {
+        "by": "Shuaib Al Arnaut",
+        "grade": "Sahih"
+      },
+      {
+        "by": "Zubair Ali Zai",
+        "grade": "Isnaad Sahih"
+      }
+    ],
     "grade": "صحيح",
-    "gradeNote": "<<يُكتب بعد قرار مرجع الدرجة. المسجّل في المصدر المفتوح: صحيح عند الألباني وشعيب الأرنؤوط>>",
+    "gradeNote": "صححه الألباني، ووافقه شعيب الأرنؤوط (كما في sunnah.com). القاعدة ب: يدخل",
     "sourceUrl": "https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/ara-abudawud/1522.json",
     "alsoIn": [
       "سنن النسائي 1303 (يُتحقق)"
@@ -2024,7 +2055,8 @@ Type check, unit tests and the content and promise checks must pass. For UI, che
       "contextFaithful": false,
       "meaningSourced": false,
       "quotedFragmentsMatch": false,
-      "authoredReviewed": false
+      "authoredReviewed": false,
+      "secondSourceMatched": false
     },
     "verification": {
       "by": "",
@@ -2138,7 +2170,8 @@ Type check, unit tests and the content and promise checks must pass. For UI, che
       "contextFaithful": false,
       "meaningSourced": false,
       "quotedFragmentsMatch": false,
-      "authoredReviewed": false
+      "authoredReviewed": false,
+      "secondSourceMatched": true
     },
     "verification": {
       "by": "",
@@ -2168,9 +2201,10 @@ Small modules for the new project. Copy them into `src/lib/` with their tests.
 | `useDialog.ts` | Alhamd `src/lib/useDialog.ts`, unchanged | Focus moves into a dialog, Tab stays inside, Escape closes, the page behind does not scroll, focus returns on close |
 | `daily.ts` | Generalised from Alhamd `src/lib/dailyLogic.ts` | Item of the day for everyone on the same local date, the welcome item until it is finished, and `effectiveFrom` so a content release does not change today's item |
 | `arabicSearch.ts` | New | `normalizeArabic` and `matchesQuery` for search that ignores vowel marks and letter forms; `splitSentences` for the paced reader, without a regex lookbehind |
+| `hadithGrade.ts` | New | The owner's grading rule (option B) over the gradings sunnah.com records: include what is in al-Bukhari or Muslim, or accepted by al-Albani with no weakening by al-Arna'ut, Ahmad Shakir or Bashar Awad Ma'ruf; otherwise the reviewer decides. Arabic names for the graders and labels for the common grades |
 | `calendarReminder.ts` | New | Builds an `.ics` file with one event repeating daily at a local time, so the user's own calendar does the reminding. No server and no notification permission |
 
-Tests: `dates.test.ts`, `daily.test.ts`, `arabicSearch.test.ts`, `calendarReminder.test.ts` (32 tests). They import from `vitest`. They were run with Bun's test runner in three time zones, and all pass:
+Tests: `dates.test.ts`, `daily.test.ts`, `arabicSearch.test.ts`, `calendarReminder.test.ts`, `hadithGrade.test.ts` (43 tests). They import from `vitest`. They were run with Bun's test runner in three time zones, and all pass:
 
 ```bash
 TZ=Asia/Riyadh bun test
@@ -2851,6 +2885,196 @@ export function useLocalDay(): string {
 }
 <!-- ===== END FILE ===== -->
 
+<!-- ===== FILE: docs/handoff/reusable-code/hadithGrade.test.ts ===== -->
+import { describe, expect, it } from 'vitest';
+import { classifyGrade, decideByRuleB, gradeLabelAr } from './hadithGrade';
+
+describe('classifyGrade', () => {
+  it('accepts sahih and hasan in their common wordings', () => {
+    for (const g of ['Sahih', 'Hasan', 'Hasan Sahih', 'Isnaad Sahih', 'Sahih Isnaad', 'Isnaad Hasan', 'Hasan Isnaad', 'Sahih Lighairihi', 'Sahih Muslim (1480)']) {
+      expect(classifyGrade(g)).toBe('accepted');
+    }
+  });
+
+  it('treats any weak wording as weak, even next to an accepted word', () => {
+    for (const g of ['Daif', 'Very Daif', 'Daif Isnaad', 'Sanad Daif', 'Mawdu', 'Munkar', 'Shadh', 'Batil', 'Daif Munkar', 'Hasan Daif']) {
+      expect(classifyGrade(g)).toBe('weak');
+    }
+  });
+
+  it('flags gradings that do not attribute the words to the Prophet', () => {
+    for (const g of ['Sahih Muquf', 'Sahih Maqtu', 'Sahih Isnaad Mauquf', 'Sahih Isnaad Mursal']) {
+      expect(classifyGrade(g)).toBe('not_marfu');
+    }
+  });
+
+  it('does not guess at unknown wordings', () => {
+    expect(classifyGrade('-')).toBe('unknown');
+    expect(classifyGrade('')).toBe('unknown');
+  });
+});
+
+describe('decideByRuleB', () => {
+  it('includes anything in al-Bukhari or Muslim', () => {
+    expect(decideByRuleB('bukhari', []).decision).toBe('include');
+    expect(decideByRuleB('muslim', []).decision).toBe('include');
+  });
+
+  it('includes what al-Albani accepts when no dissent grader weakens it', () => {
+    const d = decideByRuleB('abudawud', [
+      { by: 'Al-Albani', grade: 'Sahih' },
+      { by: 'Shuaib Al Arnaut', grade: 'Sahih' },
+      { by: 'Zubair Ali Zai', grade: 'Daif' },
+    ]);
+    expect(d.decision).toBe('include');
+  });
+
+  it('ignores graders outside the rule', () => {
+    const d = decideByRuleB('tirmidhi', [
+      { by: 'Al-Albani', grade: 'Sahih' },
+      { by: 'Ahmad Muhammad Shakir', grade: 'Sahih' },
+      { by: 'Zubair Ali Zai', grade: 'Daif' },
+    ]);
+    expect(d.decision).toBe('include');
+  });
+
+  it('sends to the reviewer when a dissent grader weakens what al-Albani accepts', () => {
+    const d = decideByRuleB('tirmidhi', [
+      { by: 'Al-Albani', grade: 'Hasan' },
+      { by: 'Bashar Awad Maarouf', grade: 'Daif Isnaad' },
+    ]);
+    expect(d.decision).toBe('review');
+    expect(d.reason).toContain('بشار عواد معروف');
+  });
+
+  it('excludes what al-Albani weakens', () => {
+    expect(decideByRuleB('ibnmajah', [{ by: 'Al-Albani', grade: 'Daif' }]).decision).toBe('exclude');
+  });
+
+  it('sends to the reviewer without a grading from al-Albani, or with an unclear one', () => {
+    expect(decideByRuleB('nasai', [{ by: 'Abu Ghuddah', grade: 'Sahih' }]).decision).toBe('review');
+    expect(decideByRuleB('nasai', [{ by: 'Al-Albani', grade: '-' }]).decision).toBe('review');
+    expect(decideByRuleB('abudawud', [{ by: 'Al-Albani', grade: 'Sahih Maqtu' }]).decision).toBe('review');
+  });
+});
+
+describe('gradeLabelAr', () => {
+  it('labels the common accepted grades and leaves the rest to a person', () => {
+    expect(gradeLabelAr('Sahih')).toBe('صحيح');
+    expect(gradeLabelAr('Hasan Isnaad')).toBe('إسناده حسن');
+    expect(gradeLabelAr('Hasan Sahih')).toBe('حسن صحيح');
+    expect(gradeLabelAr('Sahih Muslim (1480)')).toBeNull();
+  });
+});
+<!-- ===== END FILE ===== -->
+
+<!-- ===== FILE: docs/handoff/reusable-code/hadithGrade.ts ===== -->
+/**
+ * The grading rule chosen by the owner (option B in 00-decisions.md §5),
+ * applied to the gradings sunnah.com records for each hadith (as copied by
+ * scripts/fetch-hadith.ts from the open hadith-api dataset):
+ *
+ * - In al-Bukhari or Muslim: include.
+ * - Otherwise al-Albani's grading decides, unless one of the dissent graders
+ *   (Shu'ayb al-Arna'ut, Ahmad Shakir, Bashar Awad Ma'ruf) grades it weak:
+ *   then the scholarly reviewer decides.
+ * - No grading from al-Albani, a grading that is not a prophetic attribution
+ *   (mawquf, maqtu', mursal), or a wording this module does not know: the
+ *   reviewer decides.
+ *
+ * This module only reads grade labels. It contains no hadith text.
+ */
+
+export type GradeClass = 'accepted' | 'weak' | 'not_marfu' | 'unknown';
+
+export interface Grading {
+  /** Grader as sunnah.com names them, e.g. "Al-Albani". */
+  by: string;
+  /** Grade as sunnah.com writes it, e.g. "Sahih", "Isnaad Hasan", "Daif". */
+  grade: string;
+}
+
+export type DecisionKind = 'include' | 'review' | 'exclude';
+
+export interface Decision {
+  decision: DecisionKind;
+  /** Why, in Arabic, for the verification report. */
+  reason: string;
+}
+
+export const SAHIHAYN = new Set(['bukhari', 'muslim']);
+export const PRIMARY_GRADER = 'Al-Albani';
+export const DISSENT_GRADERS = ['Shuaib Al Arnaut', 'Ahmad Muhammad Shakir', 'Bashar Awad Maarouf'];
+
+export const GRADER_NAMES_AR: Record<string, string> = {
+  'Al-Albani': 'الألباني',
+  'Shuaib Al Arnaut': 'شعيب الأرنؤوط',
+  'Ahmad Muhammad Shakir': 'أحمد شاكر',
+  'Bashar Awad Maarouf': 'بشار عواد معروف',
+  'Zubair Ali Zai': 'زبير علي زئي',
+  'Muhammad Muhyi Al-Din Abdul Hamid': 'محمد محيي الدين عبد الحميد',
+  'Muhammad Fouad Abd al-Baqi': 'محمد فؤاد عبد الباقي',
+  'Abu Ghuddah': 'عبد الفتاح أبو غدة',
+};
+
+const WEAK = /\b(daif|da'if|mawdu|maudu|munkar|shadh|batil)\b/i;
+const NOT_MARFU = /\b(muquf|mauquf|mawquf|maqtu|mursal)\b/i;
+const ACCEPTED = /\b(sahih|hasan)\b/i;
+
+/** Sorts one grade label. Weak wins over anything else in the same label. */
+export function classifyGrade(grade: string): GradeClass {
+  const g = grade.trim();
+  if (WEAK.test(g)) return 'weak';
+  if (NOT_MARFU.test(g)) return 'not_marfu';
+  if (ACCEPTED.test(g)) return 'accepted';
+  return 'unknown';
+}
+
+const LABELS_AR: Array<[RegExp, string]> = [
+  [/^hasan sahih$/i, 'حسن صحيح'],
+  [/^(isnaad sahih|sahih isnaad)$/i, 'إسناده صحيح'],
+  [/^(isnaad hasan|hasan isnaad)$/i, 'إسناده حسن'],
+  [/^sahih lighairihi$/i, 'صحيح لغيره'],
+  [/^hasan lighairihi$/i, 'حسن لغيره'],
+  [/^sahih$/i, 'صحيح'],
+  [/^hasan$/i, 'حسن'],
+];
+
+/** Arabic label for the common accepted grades, or null when a person should word it. */
+export function gradeLabelAr(grade: string): string | null {
+  const g = grade.trim();
+  for (const [pattern, label] of LABELS_AR) if (pattern.test(g)) return label;
+  return null;
+}
+
+export function decideByRuleB(collection: string, gradings: readonly Grading[]): Decision {
+  if (SAHIHAYN.has(collection)) {
+    return { decision: 'include', reason: 'في الصحيحين' };
+  }
+  const primary = gradings.find((g) => g.by === PRIMARY_GRADER);
+  if (!primary) {
+    return { decision: 'review', reason: 'لا حكم للألباني في المصدر' };
+  }
+  const primaryClass = classifyGrade(primary.grade);
+  if (primaryClass === 'weak') {
+    return { decision: 'exclude', reason: 'ضعّفه الألباني' };
+  }
+  if (primaryClass !== 'accepted') {
+    return { decision: 'review', reason: `حكم الألباني يحتاج نظرًا: ${primary.grade}` };
+  }
+  const dissent = gradings.filter((g) => DISSENT_GRADERS.includes(g.by) && classifyGrade(g.grade) === 'weak');
+  if (dissent.length > 0) {
+    const who = dissent.map((g) => GRADER_NAMES_AR[g.by] ?? g.by).join('، ');
+    return { decision: 'review', reason: `صححه الألباني وضعّفه ${who}` };
+  }
+  const notMarfu = gradings.some((g) => DISSENT_GRADERS.includes(g.by) && classifyGrade(g.grade) === 'not_marfu');
+  if (notMarfu) {
+    return { decision: 'review', reason: 'أحد المحققين جعله موقوفًا أو مقطوعًا أو مرسلًا' };
+  }
+  return { decision: 'include', reason: 'صححه أو حسّنه الألباني، ولم يضعّفه أحد من المحققين المعتبرين في القاعدة' };
+}
+<!-- ===== END FILE ===== -->
+
 <!-- ===== FILE: docs/handoff/reusable-code/hijri.ts ===== -->
 import { toArabicNumerals } from './arabic';
 import { toLocalDateString } from './dates';
@@ -3418,7 +3642,8 @@ S = [  # (row, [(collection, number)]); None = not in the open dataset
 Checks that every Qur'anic reference exists in Tanzil's text and that every
 hadith number exists in the open hadith-api dataset (sunnah.com numbering;
 Muslim by Abd al-Baqi number = the integer part of `arabicnumber`), and lists
-the gradings recorded there. Prints a Markdown report.
+the gradings recorded there, and applies the grading rule (option B). Prints a
+Markdown report.
 
 This script contains no Qur'an or hadith text and must not: it never types a
 verse or a hadith. Whether the dua is really at a reference is checked when a
@@ -3458,6 +3683,32 @@ GRADERS = {'Al-Albani': 'الألباني', 'Muhammad Muhyi Al-Din Abdul Hamid':
 GRADES = {'Isnaad Sahih': 'إسناده صحيح', 'Isnaad Hasan': 'إسناده حسن', 'Hasan Isnaad': 'إسناده حسن',
           'Hasan Sahih': 'حسن صحيح', 'Sahih': 'صحيح', 'Hasan': 'حسن', 'Daif': 'ضعيف'}
 
+
+# Option B of 00-decisions.md §5, mirrored from reusable-code/hadithGrade.ts.
+import re
+WEAK = re.compile(r'\b(daif|da\'if|mawdu|maudu|munkar|shadh|batil)\b', re.I)
+NOT_MARFU = re.compile(r'\b(muquf|mauquf|mawquf|maqtu|mursal)\b', re.I)
+ACCEPTED = re.compile(r'\b(sahih|hasan)\b', re.I)
+DISSENT = ['Shuaib Al Arnaut', 'Ahmad Muhammad Shakir', 'Bashar Awad Maarouf']
+
+def classify(grade):
+    if WEAK.search(grade): return 'weak'
+    if NOT_MARFU.search(grade): return 'not_marfu'
+    if ACCEPTED.search(grade): return 'accepted'
+    return 'unknown'
+
+def rule_b(coll, gradings):
+    if coll in ('bukhari', 'muslim'): return 'يدخل', 'في الصحيحين'
+    primary = next((g for g in gradings if g['name'] == 'Al-Albani'), None)
+    if not primary: return 'للمراجع', 'لا حكم للألباني في المصدر'
+    c = classify(primary['grade'])
+    if c == 'weak': return 'لا يدخل', 'ضعّفه الألباني'
+    if c != 'accepted': return 'للمراجع', 'حكم الألباني يحتاج نظرًا'
+    dissent = [GRADERS.get(g['name'], g['name']) for g in gradings if g['name'] in DISSENT and classify(g['grade']) == 'weak']
+    if dissent: return 'للمراجع', 'صححه الألباني وضعّفه ' + '، '.join(dissent)
+    if any(g['name'] in DISSENT and classify(g['grade']) == 'not_marfu' for g in gradings): return 'للمراجع', 'جعله أحد المحققين موقوفًا أو مقطوعًا'
+    return 'يدخل', 'صححه أو حسّنه الألباني ولم يضعّفه محقق من القاعدة'
+
 print('## أ. القرآن\n\n| # | الموضع | الآيات موجودة |\n|---|---|---|')
 q_bad = 0
 for row, s, a, b in Q:
@@ -3466,18 +3717,21 @@ for row, s, a, b in Q:
     print(f'| {row} | {s}:{a}' + (f'–{b}' if b != a else '') + f' | {"✓" if ok else "✗"} |')
 print(f'\n{len(Q)} موضعًا، {len(Q) - q_bad} موجودة.\n')
 
-print('## ب. السنة\n\n| # | المرجع | الرقم موجود | الأحكام المسجّلة في المصدر |\n|---|---|---|---|')
+print('## ب. السنة\n\n| # | المرجع | الرقم موجود | الأحكام المسجّلة في المصدر | القاعدة ب | السبب |\n|---|---|---|---|---|---|')
 for row, refs in S:
     for coll, num in refs:
         if num is None:
-            print(f'| {row} | {coll} | — | ليس في المصدر المفتوح؛ يُتحقق يدويًا |')
+            print(f'| {row} | {coll} | — | ليس في المصدر المفتوح | للمراجع | يُتحقق يدويًا |')
             continue
         hs = find(coll, num)
         grades = '، '.join(f"{GRADERS.get(g['name'], g['name'])}: {GRADES.get(g['grade'], g['grade'])}"
                           for g in (hs[0].get('grades', []) if hs else []))
         if not grades and coll in ('bukhari', 'muslim'):
             grades = 'في الصحيح'
-        print(f'| {row} | {CN[coll]} {num} | {"✓" if hs else "✗"} | {grades} |')
+        decision, why = rule_b(coll, hs[0].get('grades', []) if hs else [])
+        if any('\ufffd' in h['text'] for h in hs):
+            why += '؛ وفي نص المصدر حرف تالف، فيُنقل من مصدر ثانٍ'
+        print(f'| {row} | {CN[coll]} {num} | {"✓" if hs else "✗"} | {grades} | {decision} | {why} |')
 <!-- ===== END FILE ===== -->
 
 <!-- ===== FILE: CLAUDE.md ===== -->
@@ -3508,7 +3762,7 @@ CONTENT_PREVIEW=1 bun run build   # preview build: drafts included, marked
 
 ## Rules that are easy to break
 
-- **Sacred text is copied, never written.** Qur'an text is copied by `scripts/fetch-quran.ts` from the source file in `content/sources/`, by surah and ayah. Hadith text is copied by `scripts/fetch-hadith.ts` from the hadith dataset, by collection and number, or pasted by a researcher from the source named in `hadith.sourceUrl`, and checked against a second source before a card is verified. Both are shown to users exactly as copied. Never type, complete, correct, re-vowel or paraphrase a verse or a hadith from memory, in any file or reply; refer to one by its reference instead. A character a source has corrupted is never repaired by hand: copy that text from a second source. Tests use neutral Arabic text.
+- **Sacred text is copied, never written.** Qur'an text is copied by `scripts/fetch-quran.ts` from the source file in `content/sources/`, by surah and ayah. Hadith text is copied by `scripts/fetch-hadith.ts` from the hadith dataset, by collection and number, or pasted by a researcher from the source named in `hadith.sourceUrl`, with the gradings sunnah.com records; `src/lib/hadithGrade.ts` applies the owner's grading rule (option B) to them. For now sunnah.com is the only source for `verified`; a match against Dorar (`review.checks.secondSourceMatched`) is required for `approved`. A narration with a corrupted character is not shown until it is copied from a second source. Both are shown to users exactly as copied. Never type, complete, correct, re-vowel or paraphrase a verse or a hadith from memory, in any file or reply; refer to one by its reference instead. A character a source has corrupted is never repaired by hand: copy that text from a second source. Tests use neutral Arabic text.
 - **Three content layers.** Sacred text (verbatim), transmitted information (with a citation), authored text (reviewed). Authored text adds no event, name, quote or ruling that is not in the first two layers. Anything quoted inside authored text between ﴿ ﴾ or « » must match its source; `validate-content` checks the Qur'an fragments.
 - **Review gate.** Two stages: `verified` (source verification by Claude, with a report in `review.verification`) then `approved` (the named scholarly reviewer, in `review.approval`). Production shows cards at `CONTENT_MIN_LEVEL` or above (`verified`, by the owner's decision, until a reviewer exists). Never set `approval` or the `approved` status yourself, and never write in the interface that the content was reviewed by scholars unless every card shown is `approved`.
 - **Dates.** Every day key comes from `src/lib/dates.ts` (`toLocalDateString`, `parseLocalDateString`, `useLocalDay`). Never `toISOString().slice(0, 10)` or `new Date("YYYY-MM-DD")`: those are UTC, which is still yesterday until 03:00 in Riyadh.
