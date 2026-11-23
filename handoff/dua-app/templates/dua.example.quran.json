@@ -1,0 +1,72 @@
+{
+  "id": "dua_0002",
+  "order": 2,
+  "kind": "quran",
+  "title": "دعاء يونس في الظلمات",
+  "shortTitle": "دعاء يونس",
+  "hook": "من أعمق مكان يمكن أن يصل إليه إنسان، وصل صوته.",
+  "speaker": "يونس عليه السلام",
+  "sceneLine": "نادى به يونس في الظلمات",
+  "text": "<<يُجلب آليًا: الجزء الذي هو الدعاء من الأنبياء ٨٧، بعد أن يعتمد المراجع حدوده>>",
+  "quran": {
+    "surah": 21,
+    "surahName": "الأنبياء",
+    "ayahFrom": 87,
+    "ayahTo": 87,
+    "fullText": "<<يُجلب آليًا بـ scripts/fetch-quran.ts>>",
+    "edition": "<<نسخة النص المعتمدة، مثل: tanzil-uthmani-1.1>>"
+  },
+  "context": {
+    "retelling": "ذهب يونس عليه السلام مغاضبًا، فالتقمه الحوت. وهناك، في الظلمات، نادى ربه بهذه الكلمات، فاستجاب الله له ونجّاه من الغم.",
+    "basis": [
+      { "work": "القرآن الكريم", "location": "الأنبياء ٨٧–٨٨، والصافات ١٣٩–١٤٨" },
+      { "work": "<<التفسير المعتمد>>", "location": "<<الموضع>>" }
+    ]
+  },
+  "meaning": {
+    "glossary": [
+      { "term": "مغاضبًا", "meaning": "<<من التفسير المعتمد>>" },
+      { "term": "الظلمات", "meaning": "<<من التفسير المعتمد>>" }
+    ],
+    "summary": "<<يُكتب من التفسير المعتمد: توحيد، ثم تنزيه، ثم اعتراف>>",
+    "basis": [{ "work": "<<التفسير المعتمد>>", "location": "<<الموضع>>" }]
+  },
+  "reflections": [
+    "لم يطلب يونس شيئًا صراحةً. وحّد ربه، ونزّهه، واعترف. وكان ذلك كافيًا.",
+    "لا ظلمة أبعد من أن يصل منها الدعاء."
+  ],
+  "steps": [
+    { "type": "presence", "durationSec": 10, "text": "أغمض عينيك لحظة… واستحضر أن الله يسمعك الآن." },
+    {
+      "type": "scene",
+      "durationSec": 20,
+      "text": "نبيٌّ في الظلمات، وحده، ينادي ربه. تخيّل أنك أنت من ضاقت به الأرض حتى لم يبقَ له إلا هذا النداء."
+    },
+    {
+      "type": "meaning",
+      "durationSec": 20,
+      "text": "ثلاث كلمات: توحيد، ثم تسبيح، ثم اعتراف بالتقصير. هكذا يبدأ من ضاقت به الدنيا."
+    },
+    { "type": "need", "durationSec": 15, "text": "ما الضيق الذي تحمله اليوم ولم تحدّث به أحدًا؟" },
+    { "type": "supplicate", "durationSec": 15, "text": "فقلها الآن، كما قالها يونس، من قلبك." }
+  ],
+  "journalPrompt": "متى شعرتَ أن الله أخرجك من ضيقٍ ظننتَه لا ينتهي؟",
+  "themes": ["karb", "tawbah"],
+  "review": {
+    "status": "draft",
+    "checks": {
+      "textMatchesSource": false,
+      "referenceCorrect": false,
+      "gradeConfirmed": true,
+      "excerptApproved": false,
+      "contextFaithful": false,
+      "meaningSourced": false,
+      "quotedFragmentsMatch": false,
+      "authoredReviewed": false
+    },
+    "reviewer": "",
+    "reviewedAt": null,
+    "notes": "مثال لبطاقة قرآنية. النص يُجلب آليًا، والمعنى من التفسير المعتمد."
+  },
+  "contentVersion": 1
+}
