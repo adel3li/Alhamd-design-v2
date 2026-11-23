@@ -4,7 +4,7 @@ All content ships inside the JavaScript bundle. There is no CMS and no remote fe
 
 | File | Lines | What it holds | Consumed by |
 |---|---:|---|---|
-| `src/data/blessings_ar.json` | 16,229 | 225 blessings, the core content (added in batches of 25 since 101; see 1.4) | `data/loader.ts` |
+| `src/data/blessings_ar.json` | 18,032 | 250 blessings, the core content (added in batches of 25 since 101; see 1.4) | `data/loader.ts` |
 | `src/data/loader.ts` | 17 | Access functions and the review gate | store, charts, journey |
 | `src/data/journey_content.json` | 725 | 4 journey stages × 7 stations | `lib/journeyStore.ts` |
 | `src/data/hisnAlMuslim.ts` | 358 | 6 categories, 23 adhkar, 7 daily tips | `HisnScreen`, `HomeScreen`, `App` |
@@ -297,8 +297,33 @@ Blessings 101–200 were added in four batches (101–125, 126–150, 151–175,
 | 223 | `blessing_223` | din | الاعتكاف | نعمة الاعتكاف | البقرة 2:125 |
 | 224 | `blessing_224` | din | الورع | نعمة الورع | النازعات 79:40 |
 | 225 | `blessing_225` | din | التسبيح | نعمة التسبيح | الإسراء 17:44 |
+| 226 | `blessing_226` | din | الحمد | نعمة الحمد | الفاتحة 1:2 |
+| 227 | `blessing_227` | din | الإيمان بالقدر | نعمة الإيمان بالقدر | القمر 54:49 |
+| 228 | `blessing_228` | din | رؤية الله | نعمة رؤية الله في الآخرة | القيامة 75:22 |
+| 229 | `blessing_229` | din | كلمة التوحيد | نعمة كلمة التوحيد | محمد 47:19 |
+| 230 | `blessing_230` | din | المحاسبة | نعمة محاسبة النفس | الحشر 59:18 |
+| 231 | `blessing_231` | kawn | الهواء | نعمة الهواء | الحجر 15:22 |
+| 232 | `blessing_232` | kawn | التراب | نعمة التراب | طه 20:55 |
+| 233 | `blessing_233` | kawn | الحجارة | نعمة الحجارة | البقرة 2:74 |
+| 234 | `blessing_234` | kawn | الصحراء | نعمة الصحراء | النمل 27:63 |
+| 235 | `blessing_235` | kawn | الوديان | نعمة الوديان | الرعد 13:17 |
+| 236 | `blessing_236` | kawn | الثلج | نعمة الثلج والبَرَد | النور 24:43 |
+| 237 | `blessing_237` | kawn | الندى | نعمة الندى | البقرة 2:265 |
+| 238 | `blessing_238` | kawn | الضحى | نعمة الضحى | الضحى 93:1 |
+| 239 | `blessing_239` | kawn | الغروب | نعمة الغروب | ق 50:39 |
+| 240 | `blessing_240` | kawn | النحل | نعمة النحل | النحل 16:68 |
+| 241 | `blessing_241` | kawn | النمل | نعمة النمل | النمل 27:18 |
+| 242 | `blessing_242` | kawn | الخيل | نعمة الخيل | النحل 16:8 |
+| 243 | `blessing_243` | kawn | الإبل | نعمة الإبل | يس 36:71 |
+| 244 | `blessing_244` | kawn | الأسماك | نعمة الأسماك | المائدة 5:96 |
+| 245 | `blessing_245` | kawn | الأزهار | نعمة الأزهار | النمل 27:60 |
+| 246 | `blessing_246` | kawn | العنب | نعمة العنب | المؤمنون 23:19 |
+| 247 | `blessing_247` | kawn | الرمان | نعمة الرمان | الرحمن 55:68 |
+| 248 | `blessing_248` | kawn | التين | نعمة التين | التين 95:1 |
+| 249 | `blessing_249` | kawn | السنابل | نعمة السنابل | يوسف 12:47 |
+| 250 | `blessing_250` | kawn | البساتين | نعمة البساتين | سبأ 34:15 |
 
-By category: din 68, kawn 35, nasl 23, wijdan 21, afiyah 19, nafs 16, rizq 14, aql 13, amn 9, mal 7. `kawn` («نعم الكون») and `wijdan` («نعم الوجدان») do not occur in blessings 1–40.
+By category: din 73, kawn 55, nasl 23, wijdan 21, afiyah 19, nafs 16, rizq 14, aql 13, amn 9, mal 7. `kawn` («نعم الكون») and `wijdan` («نعم الوجدان») do not occur in blessings 1–40.
 
 `legacy/src/data/blessings_ar.json` holds the first 40 as they were before the import. Two lines of those 40 were corrected in this file at the import: the opening line of blessing 19 («هذه الكلمات» for «هذه كلمات»), and in the reflection of blessing 31 a phrase of the hadith that had been set in the Qur'an brackets ﴿ ﴾ is now in « ».
 
@@ -380,6 +405,7 @@ Added on 23 November 2026 at the owner's request, so that blessings 41–125 hav
 - **Blessings 151–175** follow the same rules. Hadith outside the two Sahihs: Tirmidhi 2380, 2329 and 2819, Abu Dawud 4985 and al-Nasa'i 3939, each graded sahih, hasan or hasan sahih by al-Albani in the edition; three sourced supplications are from Abu Dawud (3851, 5088, 5074, graded sahih). Abu Dawud 4023, the supplication on wearing a new garment, was not used, because al-Albani's grade in the edition is «Hasan» for a narration whose closing words he is known to have judged weak. Four verses repeat ones already used (Al-Shu'ara' 80, Qaf 16, Al-A'raf 26, Al-Nahl 5), as do three hadith (Bukhari 2989 and 660, Muslim 2664 and 91), which the owner allowed. The Bukhari 3818 text ends mid-sentence in the edition; the span used ends before the break. Blessings 161 and 172 have no hadith; four quotes are from al-Muyassar (153, 155, 161, 174).
 - **Blessings 176–200** follow the same rules (hadith outside the Sahihs: Tirmidhi 2344, 3926, 3505, Abu Dawud 3764, 3534; sourced supplication Tirmidhi 3563, graded hasan). Blessing 178 uses Al-Insan 76:9 rather than Al-Nur 61, which was proposed first but is 76 words long. Blessings 177 and 182 have no hadith. Across 41–200, 14 blessings have no hadith (92, 96, 97, 99, 116, 122, 123, 124, 126, 127, 161, 172, 177, 182) and 52 carry a sourced supplication.
 - **Blessings 201–225**: first batch of a third hundred (201–400, eight batches of 25), all «نعم الدين». Hadith outside the Sahihs: Tirmidhi 2450, 2910, 1987, 2518 and Abu Dawud 3641, graded sahih or hasan by al-Albani; sourced supplications include Tirmidhi 3502, 3513 and 3585 and Muslim 770. Blessing 204 has no hadith.
+- **Blessings 226–250**: second batch of the third hundred: the last five «نعم الدين» and twenty «نعم الكون». Hadith outside the Sahihs: Tirmidhi 3383 and 2417, Ibn Majah 2305 (graded sahih or hasan by al-Albani); sourced supplications include al-Nasa'i 1305 and the istikhara (Bukhari 1166). Ten have no hadith (231, 234, 236, 237, 240, 245–248, 250). The verse filter now also removes the basmala Tanzil writes with a shadda before Al-Tin 1 and Al-Qadr 1 (no earlier blessing used either).
 - **Fit**: each hadith was chosen for its subject and is not a commentary on the verse. Two are only loosely tied to their blessing: 94 (القلم والكتابة) is Abu Hurayra's remark that 'Abd Allah ibn 'Amr used to write, not words of the Prophet, and 98 (الثمار) is the simile of the citron and the date for readers of the Qur'an. No sahih hadith was chosen for 92, 96, 97, 99, 116, 122, 123 and 124; 92 and 97 still have a sourced supplication.
 
 ## 2. Journey content (`src/data/journey_content.json`)
