@@ -5,6 +5,7 @@ import { JourneyStationContent } from '../../lib/journeyStore';
 import { ThreadProgress } from '../common/ThreadProgress';
 import { StarLattice } from '../common/StarLattice';
 import { ShareCardModal } from '../common/ShareCardModal';
+import { SourcedDuaa } from '../common/SourcedDuaa';
 import { toArabicNumerals } from '../../lib/arabic';
 import { useDialog } from '../../lib/useDialog';
 
@@ -421,6 +422,7 @@ export const JourneyStationFlow: React.FC<JourneyStationFlowProps> = ({
                 </p>
               </div>
             )}
+            {currentStep.type === 'hamd' && <SourcedDuaa duaa={blessing.duaaSourced} />}
           </div>
         )}
 

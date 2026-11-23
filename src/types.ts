@@ -14,6 +14,14 @@ export interface HadithReference {
   gradeVerified: boolean;
 }
 
+export interface SourcedDuaa {
+  text: string;
+  /** «القرآن الكريم» or the hadith collection, e.g. «صحيح مسلم» */
+  source: string;
+  /** Surah name and ayah for the Qur'an, hadith number otherwise */
+  reference: string;
+}
+
 export interface ScholarQuote {
   text: string;
   scholar: string;
@@ -45,6 +53,8 @@ export interface Blessing {
   istisharSteps: IstisharStep[];
   tadabbur: string;
   duaa: string;
+  /** A supplication quoted verbatim from the Qur'an or a hadith collection, or null */
+  duaaSourced: SourcedDuaa | null;
   journalPrompt: string;
   relatedPodcastEpisode: string;
   reviewStatus: string;
