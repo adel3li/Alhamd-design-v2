@@ -1,0 +1,420 @@
+/*
+ * Alhamd organic kit — a blessing package: every format for one blessing, built from the app's own card.
+ * The blessings come from CONTENT.bundle (tools/build_content.py → BUNDLE); voice timings from VOICE (tools/voice.py).
+ *
+ * IDs (nn = the blessing's order)
+ *   GH-nn-1..2   «غابت… ثم عادت»: the absence, then the return (2 slides)
+ *   HS-nn-1..6   «من الشاشة الرئيسية»: the blessing card as the app shows it (cover, verse, hadith, tadabbur, quote, app)
+ *   JR-nn-1..10  «الرحلة كاملة»: the card, then the five pauses, the duaa and the journal (10 slides)
+ *   SQ-nn        story question with room for the question sticker
+ *   AY-nn        verse card (Uthmani, checked against a second source)
+ *   PC-nn        podcast episode cover
+ *   JM-<stage>-1..9  «رحلتي»: the journey stage that holds the blessing (cover, seven stations, call)
+ *   AN-nn        animated reel (line art, no voice)
+ *   VV-nn        the five pauses, voiced, on the app's clock (needs kit/voice.js)
+ *   VW-nn        the same reel without voice, at reading pace
+ *
+ * Creatives that print the hadith or the scholar's words, or any verse, carry review: true. The hadith and the
+ * quote are still pending review in the app; nothing marked review is posted before a named reviewer approves it.
+ */
+(function () {
+  const K = window.KIT;
+  const { def } = K;
+  const { bg, title, display, quote, body, kick, verseT, acc, ltr, gold, gap, chip, medal, glyph, wm, sig, cta, pager, swipe, phone, particles, page, T } = K.C;
+  const AR = K.AR;
+  const CT = window.CONTENT;
+  const ICON = window.ICONS.BY_BLESSING;
+  const VOICE = window.VOICE || {};
+  const BY_ID = Object.fromEntries(CT.blessings.map((b) => [b.id, b]));
+  const pad2 = (n) => String(n).padStart(2, '0');
+  const F_SLIDE = ['portrait', 'story', 'square'];
+  const STEP_LABEL = { ground: 'التهيئة والحضور', visualize: 'تخيّل الغياب', deepen: 'إدراك أثر النعمة', return: 'العودة بالحمد', hamd: 'الحمد والشكر' };
+  const ABSENT = (type) => type === 'visualize' || type === 'deepen';
+  const sigSize = (c) => c.pick({ story: 62, square: 50 }, 56);
+  const deep = { tone: 'deep', pat: 0.022, cone: 0.02 };
+
+  /* ---------- shared slide furniture ---------- */
+  const slide = (c, i, n, inner, { bgo, sw = i === 1, under = '', top = '', foot = '', g } = {}) =>
+    page(c, { bg: bgo || { cone: 0.06 }, under, top, foot, mid: inner, gap: g !== undefined ? g : c.pick({ story: 40, square: 20 }, 30), over: pager(c, i, n) + (sw ? swipe(c) : '') });
+  const label = (c, text, size = 34) => `<div class="lbl fit" data-fs="${c.px(size)}" style="font-size:${c.px(size)}px">${text}</div>`;
+  const ref = (v) => `[${v.surahName}: ${AR(v.ayah)}]`;
+  const orn = (s) => `<span class="acc">${s}</span>`;
+  const hadithSource = (h) => `${h.source}${h.number ? ` ${AR(h.number)}` : ''}${h.grade ? ` (${h.grade})` : ''}`;
+  const quoteBy = (q) => (q.scholar ? `— ${q.scholar}${q.work ? ` («${q.work}»)` : ''}${q.paraphrase ? '، بتصرّف' : ''}` : (q.paraphrase ? 'بتصرّف' : ''));
+  const lit = (c) => (c.th === 'layl' ? particles(c, { n: 36, seed: 31, box: [c.W * 0.15, c.H * 0.12, c.W * 0.85, c.H * 0.55], rmax: 6, omin: 0.15, omax: 0.8 }) : '');
+  /** The verse in the app's sunken ayah block. */
+  const ayah = (c, v, size) => `<div class="sunken" style="width:100%;max-width:${c.px(940)}px;padding:${c.px(46)}px ${c.px(40)}px ${c.px(34)}px;display:flex;flex-direction:column;align-items:center;gap:${c.px(18)}px">` +
+    verseT(c, `${orn('﴿')}${v.text}${orn('﴾')}`, size, { w: 880 }) + kick(c, ref(v), 30) + '</div>';
+
+  /* ---------- the slides the carousels share (each returns (c, i, n) => html) ---------- */
+  const S = {
+    cover: (b) => (c, i, n) => slide(c, i, n,
+      chip(c, 'نعمة اليوم', { size: 32 }) + gap(c, 6) + medal(c, ICON[b.id], { size: c.pick({ story: 360, square: 200 }, 260) }) +
+      kick(c, b.catLabel, 30) + title(c, b.title, c.pick({ story: 130, square: 96 }, 112)) + body(c, b.opening, c.pick({ story: 52, square: 40 }, 46), { w: 880 }),
+      { bgo: { cone: 0.08, coneAt: '50% 24%', warm: 0.07, warmAt: '50% 36%' } }),
+    verse: (b) => (c, i, n) => slide(c, i, n,
+      label(c, 'آيةُ النعمة') + ayah(c, b.verse, c.pick({ story: 84, square: 64 }, 74)),
+      { bgo: { cone: 0.08, coneAt: '50% 34%', warm: 0.06, warmAt: '50% 46%' } }),
+    hadith: (b) => (c, i, n) => slide(c, i, n,
+      label(c, 'الحديث الشريف') + quote(c, `«${b.hadith.text}»`, c.pick({ story: 66, square: 50 }, 58), { w: 920 }) +
+      `<div class="rule" style="max-width:${c.px(140)}px;background:var(--line)"></div>` + kick(c, hadithSource(b.hadith), 30)),
+    tadabbur: (b) => (c, i, n) => slide(c, i, n,
+      `<div style="width:${c.px(90)}px;height:${c.px(90)}px;color:var(--stroke)">${window.ART.icon('sparkle', 'currentColor', c.px(90), 1.4)}</div>` +
+      label(c, 'وقفاتٌ في أثر النعمة') +
+      quote(c, b.tadabbur.replace(/([^.؛]*…[^.]*\.)\s*$/, (m) => acc(m)), c.pick({ story: 60, square: 44 }, 52), { w: 920 }),
+      { bgo: { tone: 'ground', cone: 0.06 } }),
+    quote: (b) => (c, i, n) => slide(c, i, n,
+      `<div class="qm" style="font-size:${c.px(220)}px;height:${c.px(110)}px">”</div>` +
+      quote(c, b.quote.text, c.pick({ story: 74, square: 54 }, 64), { w: 900, extra: 'font-style:italic' }) +
+      kick(c, quoteBy(b.quote), 32, { extra: 'color:var(--accent)' })),
+    step: (b, k, { withGround = false } = {}) => (c, i, n) => {
+      const type = b.stepTypes[k], absent = ABSENT(type), hamd = type === 'hamd';
+      const line = hamd ? b.steps[k].replace(/الحمد لله/, (m) => acc(m)) : b.steps[k];
+      return slide(c, i, n,
+        (withGround ? kick(c, b.steps[0], c.pick({ story: 36 }, 32), { w: 880, extra: 'opacity:0.85' }) + gap(c, 6) : '') +
+        chip(c, STEP_LABEL[type], { size: 32, cls: hamd ? 'solid' : absent ? 'ghost' : '' }) +
+        quote(c, line, c.pick({ story: 82, square: 60 }, 70), { w: 920 }) +
+        medal(c, ICON[b.id], { size: c.pick({ story: 250, square: 120 }, 180), state: absent ? 'gone' : 'lit' }),
+        { bgo: absent ? deep : { cone: 0.07, warm: hamd || type === 'return' ? 0.1 : 0, warmAt: '50% 70%' }, under: type === 'return' ? lit(c) : '' });
+    },
+    hamd: (b, k) => (c, i, n) => slide(c, i, n,
+      chip(c, STEP_LABEL.hamd, { size: 32, cls: 'solid' }) +
+      quote(c, b.steps[k].replace(/الحمد لله/, (m) => acc(m)), c.pick({ story: 74, square: 54 }, 62), { w: 920 }) +
+      `<div class="card" style="width:100%;max-width:${c.px(900)}px;border-radius:${c.px(36)}px;padding:${c.px(34)}px ${c.px(40)}px;display:flex;flex-direction:column;gap:${c.px(10)}px;align-items:center">` +
+      label(c, 'دعاء اليوم', 30) + quote(c, `«${b.duaa}»`, c.pick({ story: 58, square: 44 }, 50), { w: 840 }) + '</div>',
+      { bgo: { cone: 0.08, warm: 0.1, warmAt: '50% 62%' } }),
+    journal: (b) => (c, i, n) => slide(c, i, n,
+      `<div style="color:var(--stroke)">${window.ART.icon('book', 'currentColor', c.px(c.pick({ story: 120 }, 96)), 1.4)}</div>` +
+      title(c, 'سجلّ الحمد', c.pick({ story: 104, square: 76 }, 90)) +
+      quote(c, b.prompt.replace(/^اكتب:\s*/, ''), c.pick({ story: 70, square: 52 }, 60), { w: 900 }) +
+      kick(c, 'اكتبها في دفترك… أو في التعليقات', 30, { extra: 'color:var(--accent)' }) + gap(c, 14) +
+      cta(c, 'استشعر النعمة في «الحمد»', { size: 38 }) + kick(c, ltr('alhamd.app'), 30),
+      { bgo: { cone: 0.08, warm: 0.06, warmAt: '50% 60%' } }),
+    app: (b) => (c, i, n) => {
+      const [t, r, bb, l] = c.safe;
+      const pw = c.pick({ story: 700, portrait: 540, square: 400 }, 540);
+      return bg(c, { cone: 0.07, coneAt: '50% 18%', warm: 0.05, warmAt: '50% 70%' }) +
+        `<div class="safe" style="padding:${t}px ${r}px 0 ${l}px;gap:${c.px(c.pick({ square: 14 }, 24))}px"><div class="slot top" style="gap:${c.px(14)}px">` +
+        title(c, `دقيقتان معها…<br>${acc('في «الحمد»')}`, c.pick({ story: 100, square: 70 }, 84), { fit: false }) +
+        body(c, 'تتخيّل غيابها… ثم تعود إليها فتحمد الله.', c.pick({ square: 34 }, 40), { fit: false, w: 900 }) + '</div>' +
+        `<div class="slot" style="flex:1 1 auto;min-height:0;justify-content:flex-start">${phone(c, `b${pad2(b.n)}_home_card`, { w: pw })}</div></div>` +
+        K.C.fadeB(c, c.pick({ story: 640, square: 260 }, 380)) +
+        `<div class="abs" style="left:0;right:0;bottom:${Math.max(bb, c.px(70))}px;display:flex;flex-direction:column;align-items:center;gap:${c.px(12)}px">${cta(c, 'استشعر النعمة', { size: 38 })}${kick(c, ltr('alhamd.app'), 30)}</div>` +
+        pager(c, i, n);
+    },
+  };
+
+  function carousel(id, name, family, slides, { review = false, alt = name } = {}) {
+    slides.forEach((s, k) => def(`${id}-${k + 1}`, {
+      name, group: id, family, pillar: 'باقة النعمة', formats: F_SLIDE, slide: k + 1, slides: slides.length,
+      review: typeof review === 'function' ? review(k) : review, alt, build: (c) => s(c, k + 1, slides.length),
+    }));
+  }
+
+  Object.values(CT.bundle || {}).forEach((pk) => {
+    const base = CT.blessings.find((x) => x.n === pk.n) || {};
+    const b = { ...pk, steps: base.steps, duaa: base.duaa, prompt: base.prompt };
+    const nn = pad2(b.n);
+    const ic = ICON[b.id];
+    const hamdK = b.stepTypes.indexOf('hamd');
+
+    /* ===== GH — «غابت… ثم عادت» ===== */
+    const vis = b.stepTypes.indexOf('visualize'), ret = b.stepTypes.indexOf('return');
+    carousel(`GH-${nn}`, `غابت… ثم عادت: ${b.title}`, 'كاروسيل صغير', [
+      (c, i, n) => slide(c, i, n,
+        chip(c, 'تخيّل…', { size: 34, cls: 'ghost' }) + medal(c, ic, { size: c.pick({ story: 360, square: 190 }, 270), state: 'gone' }) +
+        quote(c, b.steps[vis], c.pick({ story: 86, square: 64 }, 76), { w: 920 }),
+        { bgo: deep, sw: false, foot: kick(c, `اسحب… ثم عُد ${'<span style="font-family:var(--sans)">←</span>'}`, 34, { extra: 'color:var(--accent)' }) }),
+      (c, i, n) => slide(c, i, n,
+        medal(c, ic, { size: c.pick({ story: 340, square: 170 }, 240) }) +
+        quote(c, b.steps[ret].replace(/(حيَّ على الصلاة)/, (m) => acc(m)), c.pick({ story: 80, square: 58 }, 68), { w: 920 }) +
+        display(c, gold('الحمدُ لله'), c.pick({ story: 130, square: 90 }, 110)),
+        { bgo: { cone: 0.1, coneAt: '50% 26%', warm: 0.1, warmAt: '50% 40%' }, under: lit(c), foot: sig(c, { size: sigSize(c) * 0.9 }), g: c.pick({ story: 34, square: 14 }, 22) }),
+    ], { alt: `كاروسيل من شريحتين: تخيّل غياب ${b.short}، ثم العودة إليها والحمد.` });
+
+    /* ===== HS — «من الشاشة الرئيسية» ===== */
+    const hs = [S.cover(b), S.verse(b)];
+    if (b.hadith) hs.push(S.hadith(b));
+    hs.push(S.tadabbur(b));
+    if (b.quote) hs.push(S.quote(b));
+    hs.push(S.app(b));
+    carousel(`HS-${nn}`, `من الشاشة الرئيسية: ${b.title}`, 'كاروسيل الشاشة الرئيسية', hs, { review: true, alt: `${b.title} كما تظهر في تطبيق الحمد: الآية، الحديث، التدبّر، وقول العالم.` });
+
+    /* ===== JR — «الرحلة كاملة» (≤ 10 slides) ===== */
+    const jr = [S.cover(b), S.verse(b)];
+    if (b.hadith) jr.push(S.hadith(b));
+    jr.push(S.tadabbur(b));
+    if (b.quote) jr.push(S.quote(b));
+    b.stepTypes.forEach((type, k) => {
+      if (type === 'ground') return; // folded into the first absence slide
+      if (type === 'hamd') jr.push(S.hamd(b, k));
+      else jr.push(S.step(b, k, { withGround: type === 'visualize' }));
+    });
+    jr.push(S.journal(b));
+    carousel(`JR-${nn}`, `الرحلة كاملة: ${b.title}`, 'كاروسيل الرحلة كاملة', jr.slice(0, 10), { review: true, alt: `${b.title} كما يعيشها المستخدم في تطبيق الحمد، من البطاقة إلى سجلّ الحمد.` });
+
+    /* ===== SQ — story question ===== */
+    def(`SQ-${nn}`, {
+      name: `ستوري سؤال: ${b.title}`, group: 'SQ', family: 'ستوري تفاعلية', pillar: 'باقة النعمة', formats: ['story'],
+      alt: `سؤال للتأمّل من «${b.title}»: ${b.prompt.replace(/^اكتب:\s*/, '')}`,
+      build: (c) => page(c, {
+        bg: { tone: 'ground', cone: 0.07, coneAt: '50% 26%' },
+        top: chip(c, 'سؤال الليلة', { size: 36 }),
+        mid: medal(c, ic, { size: 230 }) + title(c, b.prompt.replace(/^اكتب:\s*/, '').replace(/…\s*/, `…<br>${''}`), 92) + kick(c, `من «${b.title}»`, 32),
+        foot: `<div class="sticker" style="width:${c.px(820)}px;height:${c.px(300)}px;font-size:${c.px(32)}px">ضع ملصق «سؤال» هنا… ليكتب الناس إجاباتهم</div>` + gap(c, 36) + wm(c, 56),
+        gap: 36,
+      }),
+    });
+
+    /* ===== AY — verse card ===== */
+    def(`AY-${nn}`, {
+      name: `آية النعمة: ${b.verse.surahName} ${b.verse.ayah}`, group: 'AY', family: 'بطاقة آية', pillar: 'باقة النعمة', formats: ['portrait', 'story', 'square'], review: true,
+      alt: `﴿${b.verse.text}﴾ ${ref(b.verse)}`,
+      build: (c) => page(c, {
+        bg: { cone: 0.08, coneAt: '50% 30%', warm: 0.07, warmAt: '50% 48%' },
+        top: chip(c, b.title, { size: 32 }),
+        mid: glyph(c, ic, { size: c.pick({ story: 150, square: 90 }, 120) }) + verseT(c, `${orn('﴿')}${b.verse.text}${orn('﴾')}`, c.pick({ story: 92, square: 70 }, 80), { w: 940 }) +
+          `<div class="slot" style="gap:${c.px(14)}px">${K.C.thread(c, { w: 150 })}${kick(c, ref(b.verse), 32)}</div>`,
+        foot: sig(c, { size: sigSize(c) }), gap: c.pick({ story: 54, square: 26 }, 38),
+      }),
+    });
+
+    /* ===== PC — podcast episode cover ===== */
+    def(`PC-${nn}`, {
+      name: `غلاف حلقة البودكاست: ${b.title}`, group: 'PC', family: 'بودكاست', pillar: 'باقة النعمة', formats: ['square'], themes: ['layl', 'nahar'],
+      alt: `وقفات في أثر النعمة — حلقة ${b.title}، من تطبيق الحمد`,
+      build: (c) => page(c, {
+        bg: { cone: 0.1, coneAt: '50% 40%', warm: 0.08, warmAt: '50% 44%' }, under: lit(c),
+        top: chip(c, 'بودكاست', { size: 30 }),
+        mid: title(c, 'وقفات في أثر النعمة', 64, { extra: 'color:var(--muted)' }) + medal(c, ic, { size: 280 }) + display(c, b.title, 120),
+        foot: wm(c, 60), gap: 18,
+      }),
+    });
+
+    /* ===== JM — «رحلتي»: the stage that holds this blessing ===== */
+    const st = b.stage;
+    if (st && !K.REG[`JM-${st.id}-1`]) {
+      const sts = st.stations.map((x, k) => ({ ...x, k, b: BY_ID[x.id] }));
+      const path = (c, size, at = -1) => `<div style="display:flex;flex-direction:row-reverse;align-items:center;justify-content:center;gap:0;max-width:${c.px(980)}px">` +
+        sts.map((x, k) => (k ? `<div style="width:${c.px(size * 0.22)}px;height:3px;background:var(--line);opacity:${at >= 0 && k > at ? 0.35 : 0.9}"></div>` : '') +
+          `<div style="opacity:${at >= 0 && k > at ? 0.4 : 1}">${medal(c, ICON[x.id], { size: k === at ? size * 1.25 : size })}</div>`).join('') + '</div>';
+      const slides = [
+        (c, i, n) => slide(c, i, n,
+          chip(c, 'رحلتي', { size: 32 }) + kick(c, st.focus, 32) + title(c, st.title, c.pick({ story: 124, square: 88 }, 106)) +
+          body(c, st.intention, c.pick({ story: 50, square: 38 }, 44), { w: 860 }) + gap(c, 14) + path(c, c.pick({ story: 104, square: 70 }, 86)) +
+          kick(c, `سبعُ محطّات… محطّةٌ كلَّ يوم`, 30, { extra: 'color:var(--accent)' }),
+          { bgo: { cone: 0.08, coneAt: '50% 30%', warm: 0.06 } }),
+        ...sts.map((x) => (c, i, n) => slide(c, i, n,
+          kick(c, `المحطّة ${AR(x.k + 1)} من ${AR(sts.length)}`, 32, { extra: 'color:var(--accent)' }) +
+          medal(c, ICON[x.id], { size: c.pick({ story: 320, square: 160 }, 230) }) +
+          title(c, x.b.title, c.pick({ story: 116, square: 84 }, 100)) + body(c, x.b.opening, c.pick({ story: 46, square: 36 }, 40), { w: 860 }) +
+          `<div class="card" style="width:100%;max-width:${c.px(900)}px;border-radius:${c.px(36)}px;padding:${c.px(30)}px ${c.px(40)}px;display:flex;flex-direction:column;gap:${c.px(8)}px;align-items:center">` +
+          label(c, 'عملُ اليوم', 30) + quote(c, x.action, c.pick({ story: 54, square: 42 }, 48), { w: 840 }) + '</div>',
+          { bgo: { cone: 0.07, warm: x.id === b.id ? 0.1 : 0.03, warmAt: '50% 40%' } })),
+        (c, i, n) => slide(c, i, n,
+          path(c, c.pick({ story: 104, square: 70 }, 86)) + gap(c, 10) +
+          title(c, `امضِ في رحلتك…<br>${acc('بالسرعة التي تناسبك.')}`, c.pick({ story: 104, square: 76 }, 92)) +
+          body(c, '«رحلتي» في تطبيق «الحمد»: أربعةُ منازل، ومحطّةٌ كلَّ يوم… مجّانًا.', c.pick({ square: 36 }, 42), { w: 860 }) +
+          cta(c, 'ابدأ رحلتك', { size: 40 }) + kick(c, ltr('alhamd.app'), 30),
+          { bgo: { cone: 0.08, warm: 0.07, warmAt: '50% 50%' } }),
+      ];
+      carousel(`JM-${st.id}`, `رحلتي: ${st.title}`, 'كاروسيل رحلتي', slides, { alt: `${st.title} من «رحلتي» في تطبيق الحمد: سبع محطات، لكلٍّ منها عملٌ لليوم.` });
+    }
+
+    /* ===== reels ===== */
+    def(`AN-${nn}`, { kind: 'reel', name: `ريل أنيميشن: ${b.title}`, group: 'AN', family: 'ريل أنيميشن', pillar: 'باقة النعمة', formats: ['story'], alt: `ريل متحرّك بلا تعليق صوتي: ${b.opening}`, scenes: (c) => animScenes(c, b) });
+    def(`VW-${nn}`, { kind: 'reel', name: `الوقفات الخمس (بلا صوت): ${b.title}`, group: 'VW', family: 'ريل الوقفات', pillar: 'باقة النعمة', formats: ['story'], alt: `الوقفات الخمس من «${b.title}» في تطبيق الحمد.`, scenes: (c) => waqfaScenes(c, b, null) });
+    const vt = VOICE[String(b.n)] && VOICE[String(b.n)].waqfa;
+    if (vt) def(`VV-${nn}`, { kind: 'reel', name: `وقفة صوتية (فيديو): ${b.title}`, group: 'VV', family: 'وقفة صوتية', pillar: 'باقة النعمة', formats: ['story'], audio: vt.audio, poster: vt.steps[1].start + 6, alt: `الوقفات الخمس من «${b.title}» بصوتٍ هادئ، على توقيت التطبيق.`, scenes: (c) => waqfaScenes(c, b, vt) });
+  });
+
+  /* ================= reels ================= */
+  const M = K.M;
+  const { $, $$, P, clamp, out3, inOut, mv, enter, pop, reveal, readTime, draw, drift, breathe } = M;
+
+  function endScene(c, { line = 'نعمةٌ كلَّ يوم', sub = 'دقيقتان من التأمّل… في تطبيق «الحمد»', len = 2.8 } = {}) {
+    return {
+      len,
+      html: page(c, { bg: { cone: 0.1, coneAt: '50% 40%', warm: 0.06, warmAt: '50% 44%' }, mid: `<div class="e-wm">${wm(c, 210)}</div>` + gap(c, 18) + `<div class="e-l">${title(c, line, 88)}</div><div class="e-s">${body(c, sub, 40)}</div><div class="e-u">${kick(c, ltr('alhamd.app'), 36)}</div>`, gap: 24 }),
+      anim(t, L) { enter($(L, '.e-wm'), t, 0.1, 0.7, 24); enter($(L, '.e-l'), t, 0.55); enter($(L, '.e-s'), t, 0.85); enter($(L, '.e-u'), t, 1.2); },
+      sfx: [[0.15, 'pop', -30]],
+    };
+  }
+  /** Words appear when the voice says them (times in seconds from the line's start). */
+  function revealAt(el, t, start, times) {
+    const ws = M.words(el);
+    if (!times || times.length !== ws.length) return reveal(el, t, start, { stagger: 0.2 });
+    ws.forEach((w, i) => { const p = out3(P(t, start + times[i] - 0.05, 0.45)); w.style.opacity = String(p); w.style.transform = `translateY(${((1 - p) * 16).toFixed(2)}px)`; });
+    return start + times[times.length - 1] + 0.45;
+  }
+  const progress = (c, w = 640) => `<div class="prog" style="width:${c.px(w)}px"><i></i><b></b></div>`;
+  function setProg(L, p) { const pr = $(L, '.prog'); if (!pr) return; pr.querySelector('i').style.width = `${(p * 100).toFixed(2)}%`; pr.querySelector('b').style.right = `${(p * 100).toFixed(2)}%`; }
+
+  /** The five pauses. With timing (from tools/voice.py) the scenes follow the voice; without, reading pace. */
+  function waqfaScenes(c, b, vt) {
+    const ic = ICON[b.id];
+    const n = b.steps.length;
+    const STEP_FX = { ground: [[0.2, 'breath', -27, { dur: 1.6 }]], visualize: [[0.1, 'wind', -28, { dur: 5 }]], deepen: [[0.5, 'heartbeat', -27]], return: [[0.1, 'birds', -31, { dur: 2.4 }], [0.3, 'glint', -30]], hamd: [[0.2, 'glint', -30]] };
+    const scenes = [{
+      len: vt ? vt.intro.start + vt.intro.len : 3.6,
+      html: page(c, { bg: { cone: 0.08, coneAt: '50% 28%', warm: 0.06, warmAt: '50% 40%' }, top: chip(c, 'استشعر النعمة', { size: 34 }), mid: `<div class="m0">${medal(c, ic, { size: 380 })}</div>` + `<div class="t0">${title(c, b.title, 128)}</div><div class="s0">${body(c, 'خمسُ وقفات… على مهل', 46)}</div>`, gap: 30 }),
+      anim(t, L) { enter($(L, '.chip'), t, 0.05, 0.5, 14); draw($(L, '.m0 svg'), P(t, 0.1, 1.8)); enter($(L, '.t0'), t, 0.5); enter($(L, '.s0'), t, 0.9); breathe($(L, '.safe'), t, 6, 0.02); },
+      sfx: [[0.1, 'breath', -28, { dur: 1.4 }]],
+    }];
+    b.stepTypes.forEach((type, k) => {
+      const seg = vt && vt.steps[k];
+      const absent = ABSENT(type), hamd = type === 'hamd';
+      const text = b.steps[k];
+      const len = seg ? seg.len : Math.max(4.2, readTime(text, 1.4, 2.4) + 1.2);
+      const html = hamd ? text.replace(/الحمد لله/, (m) => acc(m)) : type === 'return' ? text.replace(/(حيَّ على الصلاة)/, (m) => acc(m)) : text;
+      scenes.push({
+        len,
+        html: page(c, {
+          bg: absent ? deep : { cone: 0.08, coneAt: '50% 28%', warm: hamd || type === 'return' ? 0.1 : 0.03, warmAt: '50% 40%' },
+          under: type === 'return' || hamd ? `<div class="parts" style="position:absolute;inset:0">${lit(c)}</div>` : '',
+          top: chip(c, STEP_LABEL[type], { size: 34, cls: hamd ? 'solid' : absent ? 'ghost' : '' }),
+          mid: `<div class="mk">${medal(c, ic, { size: 300, state: absent ? 'gone' : 'lit' })}</div>` + gap(c, 10) + `<div class="qk">${quote(c, html, 80, { w: 920 })}</div>`,
+          foot: `<div class="pk" style="display:flex;flex-direction:column;align-items:center;gap:${c.px(22)}px">${kick(c, `${AR(k + 1)} / ${AR(n)}`, 30)}${progress(c)}</div>`,
+          gap: 34,
+        }),
+        anim(t, L) {
+          enter($(L, '.chip'), t, 0.05, 0.6, 14);
+          const m = $(L, '.mk');
+          if (absent) mv(m, { o: 0.7 * out3(P(t, 0.1, 1.2)), s: 1 - 0.04 * P(t, 0, len) });
+          else { mv(m, { o: 1, s: 0.95 + 0.05 * out3(P(t, 0, 1.4)) }); if (type === 'return') draw($(L, '.mk svg'), P(t, 0.1, 1.8)); }
+          const q = $(L, '.qk .t-quote');
+          if (seg) revealAt(q, t, 0, seg.words.map((w) => w[0]));
+          else reveal(q, t, 0.5, { stagger: Math.min(0.24, (len - 2.4) / Math.max(1, M.wordCount(text))) });
+          setProg(L, (k + out3(P(t, 0.2, Math.min(len - 0.5, 4)))) / n);
+          drift($(L, '.parts svg'), t, { fade: [0.3, 1.0] });
+          breathe($(L, '.safe'), t, len, 0.018);
+        },
+        sfx: STEP_FX[type] || [],
+      });
+    });
+    scenes.push(endScene(c, { sub: `${b.title}… ودقيقتان معها في «الحمد»`, len: vt ? vt.end.len : 2.8 }));
+    return scenes;
+  }
+
+  /* ---------- line art for the animated reel ---------- */
+  const TIMES = [['الفجر', 14], ['الظهر', 86], ['العصر', 128], ['المغرب', 172], ['العشاء', 196]];
+  /** The sun's path over a horizon with the five prayer times on it (RTL: the day starts on the right). */
+  function arcArt(c) {
+    const W = 1000, H = 600, cx = 500, cy = 470, R = 390;
+    const pt = (deg) => [cx + R * Math.cos((deg * Math.PI) / 180), cy - R * Math.sin((deg * Math.PI) / 180)];
+    const dots = TIMES.map(([name, deg], k) => {
+      const [x, y] = pt(deg);
+      const ly = deg > 180 ? y + 58 : y - 34, lx = deg < 30 ? x - 10 : deg > 160 ? x + 10 : x;
+      return `<g class="pt pt${k}"><circle cx="${x}" cy="${y}" r="13" fill="var(--bg)" stroke="currentColor" stroke-width="3"/><circle class="core" cx="${x}" cy="${y}" r="7" fill="currentColor" opacity="0"/>` +
+        `<text x="${lx}" y="${ly}" text-anchor="middle" font-family="IBM Plex Sans Arabic" font-weight="600" font-size="38" fill="currentColor" opacity="0.9">${name}</text></g>`;
+    }).join('');
+    return `<svg viewBox="0 0 ${W} ${H}" width="100%" height="100%" style="overflow:visible;color:var(--accent)" fill="none">` +
+      `<path class="hz" pathLength="1" d="M40 ${cy} L960 ${cy}" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" opacity="0.6"/>` +
+      `<path class="arc" pathLength="1" d="M${cx + R} ${cy} A${R} ${R} 0 1 0 ${pt(200)[0]} ${pt(200)[1]}" stroke="currentColor" stroke-width="2" stroke-dasharray="0.006 0.012" opacity="0.75"/>` +
+      `${dots}<g class="sun"><circle r="34" fill="currentColor" opacity="0.18"/><circle r="17" fill="currentColor"/></g></svg>`;
+  }
+  /** An arched door with two leaves; light behind it. */
+  let doorN = 0;
+  function doorArt(c) {
+    const W = 600, H = 820, uid = `d${++doorN}`;
+    const arch = (x0, x1, top, y0) => { const m = (x0 + x1) / 2; return `M${x0} ${H - 40} L${x0} ${y0} C${x0} ${top + 70} ${m - 40} ${top + 20} ${m} ${top} C${m + 40} ${top + 20} ${x1} ${top + 70} ${x1} ${y0} L${x1} ${H - 40}`; };
+    const lightC = c.th === 'nahar' ? '#E9A866' : '#F0D48A';
+    const leaf = (side) => {
+      const x0 = side === 'r' ? 300 : 120, x1 = side === 'r' ? 480 : 300;
+      const ox = side === 'r' ? 480 : 120;
+      const curve = side === 'r' ? `M300 ${H - 40} L300 150 C345 168 480 205 480 340 L480 ${H - 40} Z` : `M300 ${H - 40} L300 150 C255 168 120 205 120 340 L120 ${H - 40} Z`;
+      const inset = side === 'r' ? 'M325 760 L325 360 L455 360 L455 760 Z M325 330 C360 300 430 285 455 300' : 'M275 760 L275 360 L145 360 L145 760 Z M275 330 C240 300 170 285 145 300';
+      const star = side === 'r' ? [390, 560] : [210, 560];
+      return `<g class="leaf leaf-${side}" style="transform-box:view-box;transform-origin:${ox}px 50%">` +
+        `<path d="${curve}" fill="var(--bg)" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>` +
+        `<path d="${inset}" stroke="currentColor" stroke-width="1.8" opacity="0.7"/>` +
+        `<g transform="translate(${star[0]} ${star[1]})" stroke="currentColor" stroke-width="1.8" opacity="0.8"><rect x="-34" y="-34" width="68" height="68"/><rect x="-34" y="-34" width="68" height="68" transform="rotate(45)"/></g>` +
+        `<circle cx="${side === 'r' ? 314 : 286}" cy="470" r="6" fill="currentColor"/></g>`;
+    };
+    return `<svg viewBox="0 0 ${W} ${H}" width="100%" height="100%" style="overflow:visible;color:var(--accent)" fill="none">` +
+      `<defs><radialGradient id="${uid}l" cx="50%" cy="62%" r="60%"><stop offset="0" stop-color="${lightC}" stop-opacity="0.95"/><stop offset="0.55" stop-color="${lightC}" stop-opacity="0.35"/><stop offset="1" stop-color="${lightC}" stop-opacity="0"/></radialGradient>` +
+      `<linearGradient id="${uid}f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${lightC}" stop-opacity="0.45"/><stop offset="1" stop-color="${lightC}" stop-opacity="0"/></linearGradient></defs>` +
+      `<path class="floor" d="M120 ${H - 40} L480 ${H - 40} L600 ${H + 120} L0 ${H + 120} Z" fill="url(#${uid}f)" opacity="0"/>` +
+      `<path class="glow" d="${arch(120, 480, 150, 340)} Z" fill="url(#${uid}l)" opacity="0"/>` +
+      leaf('l') + leaf('r') +
+      `<path class="frame" pathLength="1" d="${arch(92, 508, 112, 330)}" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round"/>` +
+      `<path class="frame" pathLength="1" d="${arch(120, 480, 150, 340)}" stroke="currentColor" stroke-width="2" stroke-linejoin="round" opacity="0.8"/>` +
+      `<path class="frame" pathLength="1" d="M40 ${H - 40} L560 ${H - 40}" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" opacity="0.7"/></svg>`;
+  }
+  /** door state: open 0..1 (leaf folded → shut), light 0..1 */
+  function setDoor(L, open, light) {
+    const sc = (1 - open) * 0.94 + 0.06;
+    $$(L, '.leaf').forEach((g) => { g.style.transform = `scaleX(${(1 - open * 0.94).toFixed(4)})`; });
+    $$(L, '.glow').forEach((g) => g.setAttribute('opacity', (light * 0.95).toFixed(3)));
+    $$(L, '.floor').forEach((g) => g.setAttribute('opacity', (light * 0.8).toFixed(3)));
+    return sc;
+  }
+  const splitLine = (s) => { const i = s.indexOf('…'); return i > 0 ? [s.slice(0, i + 1), s.slice(i + 1).trim()] : [s, '']; };
+
+  function animScenes(c, b) {
+    const [o1, o2] = splitLine(b.opening);
+    const [v1, v2] = splitLine(b.steps[b.stepTypes.indexOf('visualize')]);
+    const deepen = b.steps[b.stepTypes.indexOf('deepen')];
+    const ret = b.steps[b.stepTypes.indexOf('return')];
+    const glowF = c.th === 'layl' ? 'filter:drop-shadow(0 0 18px rgba(228,195,104,0.45));' : '';
+    const artBox = (cls, inner, w, h) => `<div class="${cls}" data-w="${c.px(w)}" data-h="${c.px(h)}" style="width:${c.px(w)}px;height:${c.px(h)}px;flex:0 0 auto;position:relative;${glowF}">${inner}</div>`;
+    return [
+      { // 1 — five appointments a day
+        len: 6.4,
+        html: page(c, { bg: { cone: 0.06, coneAt: '50% 40%', warm: 0.05, warmAt: '50% 48%' }, mid: `<div class="tx1">${title(c, o1, 104)}</div>` + gap(c, 20) + artBox('arcw', arcArt(c), 860, 516) + gap(c, 10) + `<div class="tx2">${title(c, acc(o2), 84)}</div>`, gap: 24 }),
+        anim(t, L) {
+          reveal($(L, '.tx1 .t-title'), t, 0.25, { stagger: 0.16 });
+          const svg = $(L, '.arcw svg');
+          draw(svg, P(t, 0.0, 1.3), 0.2);
+          const sun = $(L, '.sun');
+          const p = inOut(P(t, 1.1, 3.6)), deg = 14 + (196 - 14) * p;
+          const R = 390, x = 500 + R * Math.cos((deg * Math.PI) / 180), y = 470 - R * Math.sin((deg * Math.PI) / 180);
+          sun.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
+          sun.style.opacity = String(P(t, 0.9, 0.4) * (deg > 180 ? 1 - (deg - 180) / 30 : 1));
+          TIMES.forEach(([, d], k) => { const on = deg >= d - 0.5 ? 1 : 0; const pp = $(L, `.pt${k} .core`); pp.setAttribute('opacity', String(on)); $(L, `.pt${k}`).style.opacity = String(0.45 + 0.55 * on); });
+          reveal($(L, '.tx2 .t-title'), t, 4.0, { stagger: 0.18 });
+        },
+        sfx: TIMES.map(([, d], k) => [1.1 + 3.6 * ((d - 14) / 182) ** 0.85, 'glint', -30, { seed: 33 + k }]).concat([[0.2, 'breath', -30, { dur: 1.3 }]]),
+      },
+      { // 2 — imagine the door shut
+        len: 6.6,
+        html: page(c, { bg: { cone: 0.06, coneAt: '50% 40%' }, under: `<div class="dark" style="position:absolute;inset:0;background:#000;opacity:0"></div>`, mid: `<div class="tx1">${title(c, v1, 92)}</div>` + artBox('dw', doorArt(c), 470, 640) + `<div class="tx2">${quote(c, v2, 60, { w: 900 })}</div>`, gap: 30 }),
+        anim(t, L) {
+          const shut = inOut(P(t, 2.4, 1.6));
+          setDoor(L, 1 - shut, 1 - shut);
+          draw($(L, '.dw svg'), P(t, 0, 1.0), 0.1);
+          reveal($(L, '.tx1 .t-title'), t, 0.3, { stagger: 0.17 });
+          reveal($(L, '.tx2 .t-quote'), t, 4.1, { stagger: 0.16 });
+          $(L, '.dark').style.opacity = String(0.55 * P(t, 2.6, 1.8));
+          const dw = $(L, '.dw'); dw.style.opacity = String(1 - 0.45 * P(t, 3.4, 1.4));
+        },
+        sfx: [[2.4, 'whoosh', -27, { dur: 1.5, from: 1600, to: 300 }], [3.95, 'step', -20, { seed: 22 }], [4.1, 'wind', -31, { dur: 2.5 }]],
+      },
+      { // 3 — the absence
+        len: 5.6,
+        html: page(c, { bg: deep, mid: artBox('dw', doorArt(c), 300, 410) + `<div class="tx">${quote(c, deepen, 70, { w: 920 })}</div>`, gap: 40 }),
+        anim(t, L) { setDoor(L, 0, 0); const dw = $(L, '.dw'); dw.style.opacity = '0.5'; dw.style.filter = 'none'; $(L, '.dw svg').style.color = c.th === 'layl' ? '#5A5A84' : '#B7A592'; reveal($(L, '.tx .t-quote'), t, 0.3, { stagger: 0.22 }); breathe($(L, '.safe'), t, 5.6, 0.02); },
+        sfx: [[0.4, 'heartbeat', -26], [2.4, 'heartbeat', -28]],
+      },
+      { // 4 — then come back: the door opens
+        len: 7.2,
+        html: page(c, { bg: { cone: 0.1, coneAt: '50% 40%', warm: 0.12, warmAt: '50% 46%' }, under: `<div class="parts" style="position:absolute;inset:0">${lit(c)}</div>`, mid: artBox('dw', doorArt(c), 470, 640) + `<div class="tx">${quote(c, ret.replace(/(حيَّ على الصلاة)/, (m) => `<br><span class="gold" style="font-weight:700">${m}</span>`), 66, { w: 920 })}</div>`, gap: 30 }),
+        anim(t, L) {
+          const o = inOut(P(t, 0.3, 1.8));
+          setDoor(L, o, o);
+          const dw = $(L, '.dw'); mv(dw, { o: 1, s: 0.96 + 0.04 * out3(P(t, 0, 2)) });
+          reveal($(L, '.tx .t-quote'), t, 1.6, { stagger: 0.2 });
+          drift($(L, '.parts svg'), t, { fade: [0.8, 1.4] });
+        },
+        sfx: [[0.3, 'whoosh', -30, { dur: 1.8, from: 400, to: 2200 }], [1.0, 'birds', -30, { dur: 2.6 }], [1.4, 'glint', -29]],
+      },
+      { // 5 — name it, and praise
+        len: 4.2,
+        html: page(c, { bg: { cone: 0.09, coneAt: '50% 30%', warm: 0.1, warmAt: '50% 50%' }, top: chip(c, b.title, { size: 34 }), mid: `<div class="m5">${medal(c, ICON[b.id], { size: 360 })}</div>` + gap(c, 10) + `<div class="g5">${display(c, gold('الحمدُ لله'), 150)}</div>`, gap: 26 }),
+        anim(t, L) { enter($(L, '.chip'), t, 0.05, 0.5, 14); draw($(L, '.m5 svg'), P(t, 0.1, 1.6)); pop($(L, '.g5'), t, 1.4, 0.8, 0.85); breathe($(L, '.safe'), t, 4.2, 0.02); },
+        sfx: [[0.2, 'drop', -24], [1.4, 'breath', -27, { dur: 1.3 }]],
+      },
+      endScene(c, { sub: `${b.title}… ودقيقتان معها في «الحمد»` }),
+    ];
+  }
+})();

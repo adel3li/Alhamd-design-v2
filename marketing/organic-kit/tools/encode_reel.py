@@ -2,7 +2,7 @@
 Sound + encoding for one rendered reel (called by render-reels.cjs with the frames folder).
 
 Sound: the scene cues through promo-video/tools/sfx.py — effects peak at -12 dBFS over a -42 dBFS
-room tone, no music, no voice. Picture: H.264 (CRF 20; a touch of grain on «ليل» against banding in the dark gradients), plus a
+room tone, no music. A reel that carries a voice track (job "audio", from tools/voice.py) gets it mixed on top. Picture: H.264 (CRF 20; a touch of grain on «ليل» against banding in the dark gradients), plus a
 360p preview for the review page and a poster frame. The frames folder is removed afterwards.
 """
 import json
@@ -21,6 +21,14 @@ def main(frames: Path) -> None:
     out = Path(job["out"])
     wav = frames / "sfx.wav"
     total = sfx.build_cues(job["slots"], job["cues"], wav, bed_db=-42.0, peak_db=-12.0)
+    if job.get("audio"):
+        # a voiced reel: the voice leads, the effects sit about 12 dB under it, then the mix is levelled for phones
+        voice = (ROOT / "kit" / job["audio"]).resolve()
+        mixed = frames / "mix.wav"
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(voice), "-i", str(wav), "-filter_complex",
+                        "[1:a]volume=0.32[f];[0:a][f]amix=inputs=2:duration=longest:normalize=0,loudnorm=I=-16:TP=-1.5:LRA=11[a]",
+                        "-map", "[a]", "-ar", "48000", str(mixed)], check=True)
+        wav = mixed
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-framerate", "30", "-i", str(frames / "%05d.jpg"), "-i", str(wav),
                     "-map", "0:v", "-map", "1:a", "-vf", ("noise=alls=2:allf=t," if "_layl_" in job["key"] else "") + "format=yuv420p",
                     "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-profile:v", "high",

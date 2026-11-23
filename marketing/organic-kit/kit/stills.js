@@ -130,7 +130,7 @@
   });
 
   /* ===================== SV — verse cards (Fridays, Ramadan) ===================== */
-  CT.verses.forEach((v) => {
+  CT.verses.filter((v) => v.id.startsWith('SV-')).forEach((v) => {
     def(v.id, {
       name: `آية: ${v.ref}`, group: 'SV', family: 'آية الجمعة', formats: ['square', 'portrait', 'story', 'wide'],
       review: true,

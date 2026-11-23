@@ -37,6 +37,8 @@ VERSES = [
     ("SV-13", 2, 185, "البقرة", 38, 44, "آية شهر رمضان تُختم بالشكر"),
     ("SV-14", 39, 66, "الزمر", None, None, "وكن من الشاكرين"),
     ("SV-15", 35, 34, "فاطر", None, None, "أذهب عنّا الحزن"),
+    # blessing packages (kit/bundle.js): the verse the app shows on the blessing card, same portion
+    ("BV-05", 29, 45, "العنكبوت", 7, 17, "نعمة الصلاة: آية النعمة كما تظهر في التطبيق"),
 ]
 
 MARKS = re.compile(r"[ؐ-ًؚ-ٰٟۖ-ۭ࣓-ࣿـ]")
@@ -77,7 +79,8 @@ def main() -> None:
             print(f"\n{vid} {name} {a}:", " ".join(f"{i + 1}:{w}" for i, w in enumerate(words)))
         if w0:
             # whole words of the verse; a pause mark left dangling at the cut is dropped
-            portion = re.sub(r"\s*[ۖ-ۜ]\s*$", "", " ".join(words[w0 - 1:w1]))
+            # pause marks inside the portion stay as they are in the mushaf
+            portion = re.sub(r"\s*[ۖ-ۜ]\s*$", "", " ".join(tokens[at[w0 - 1]:at[w1 - 1] + 1]))
             nomark = lambda t: " ".join(re.sub(r"[ۖ-ۜ]", " ", t).split())  # noqa: E731
             if nomark(portion) not in nomark(full):
                 raise SystemExit(f"{vid}: portion not found verbatim")

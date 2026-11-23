@@ -24,6 +24,42 @@ a day-by-day calendar with captions, and every creative in both app themes — �
 | ملصقات | SK-01…12 | WhatsApp stickers (transparent) + tray icon | 512×512, 96×96 |
 | ريلز | NR-01…40, RL-01…16 | blessing reels and brand/feature reels, sound design only | 9:16 (+1:1 for hero reels) |
 
+## A blessing package (every format for one blessing)
+
+`kit/bundle.js` builds the full set of formats for one blessing from the app's own card, so a demo for one
+blessing can be repeated for any of the 400. The blessings that get a package are listed in `BUNDLE` in
+`tools/build_content.py` (today: 5, «نعمة الصلاة»).
+
+| ID | What | Formats |
+|---|---|---|
+| GH-nn-1..2 | «غابت… ثم عادت»: the absence step, then the return step | portrait, story, square |
+| HS-nn-1..6 | «من الشاشة الرئيسية»: cover, verse, hadith, tadabbur, scholar's words, the real app screen | portrait, story, square |
+| JR-nn-1..10 | «الرحلة كاملة»: the card, then the pauses, the duaa and the journal (10 slides at most) | portrait, story, square |
+| JM-&lt;stage&gt;-1..9 | «رحلتي»: the stage that holds the blessing, its seven stations and their daily actions | portrait, story, square |
+| SQ-nn, AY-nn, PC-nn | story question, verse card, podcast episode cover | story · portrait, story, square · square |
+| AN-nn | animated reel: line art (the five prayer times, a door that shuts and opens), no voice | 9:16 |
+| VV-nn | the five pauses read aloud on the app's clock (needs `kit/voice.js`) | 9:16 |
+
+The package prints the hadith and the scholar's words, which the kit's daily families never do. They are copied
+verbatim from the app with their review flags, and every creative that shows them, or a verse, is `review: true`:
+nothing marked review is posted before a named reviewer approves the text. A paraphrased quote is printed with
+«بتصرّف». The verse is the app's portion in Uthmani script from `data/verses.json` (`BV-nn`), pause marks included.
+
+```bash
+python3 tools/fetch_verses.py                        # add BV-nn for the blessing first
+python3 tools/build_content.py                       # kit/content.js (CONTENT.bundle)
+python3 tools/voice.py 5                             # out/audio/05: waqfa.mp3, podcast.mp3, podcast_script.md; kit/voice.js
+node tools/capture-blessing-screens.cjs --n 5 --day 2027-11-28   # app screen for HS/JR (needs `bun run dev`)
+node tools/render-stills.cjs --ids GH-05,HS-05,JR-05,JM-,SQ-05,AY-05,PC-05 --formats portrait
+node tools/render-reels.cjs --ids AN-05,VV-05 --themes layl
+python3 tools/build_demo.py 5                        # out/demo/05/index.html: the whole package on one page
+```
+
+Audio: `tools/voice.py` uses a temporary synthetic voice (Microsoft's neural Arabic voice through `edge-tts`,
+`pip install edge-tts`) until a person records it. The Quran is never synthesised: the podcast plays a recorded
+recitation from quran.com, which needs permission before anything is published. The podcast's linking lines are
+a draft in `data/scripts/podcast_nn.json`; every other line is read from the app's data.
+
 ## How it works
 
 - `kit/kit.html` renders any creative: `kit.html?id=PS-04&f=portrait&th=nahar` (reels: add `&t=3.2`).
@@ -53,5 +89,5 @@ Sound: `../promo-video/tools/sfx.py` (procedural effects, no music, peak −12 d
 `plan/PLAN.md` and the workbook: 84 days from Saturday 28 Nov 2026 (launch Saturday 26 Dec, end Friday 19 Feb 2027,
 12 Ramadan 1448). The daily «نعمة اليوم» is the same blessing the app shows that date (`src/lib/dailyLogic.ts`).
 
-Rules: no voice-over, no music; verse cards are reviewed before posting; no hadith or scholar quotes; no people;
+Rules: no voice-over, no music (the package's voiced pieces are the exception, and carry no music either); verse cards are reviewed before posting; no hadith or scholar quotes; no people;
 no invented numbers or reviews; no incentive for Play Store ratings.

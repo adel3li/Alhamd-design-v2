@@ -121,3 +121,15 @@ body { -webkit-font-smoothing: antialiased; }
 .tap::after { border: 3px solid rgba(255, 255, 255, 0.6); transform: scale(0.95); }
 .th-nahar .tap::before { background: rgba(42, 31, 25, 0.16); box-shadow: 0 0 0 6px rgba(42, 31, 25, 0.06); }
 .th-nahar .tap::after { border-color: rgba(42, 31, 25, 0.35); }
+
+/* Blessing packages (bundle.js): the app's card pieces */
+.sunken { border-radius: 36px; border: 2px solid rgba(200, 169, 81, 0.34); background: rgba(6, 6, 16, 0.5); }
+.th-nahar .sunken { border-color: rgba(185, 87, 59, 0.28); background: rgba(236, 225, 209, 0.75); }
+.lbl { font-family: var(--sans); font-weight: 700; color: var(--stroke); line-height: 1.4; }
+.th-layl .lbl { color: #C8A951; }
+.qm { font-family: var(--serif); font-weight: 700; line-height: 0.6; color: var(--accent); opacity: 0.55; }
+.t-quote.it { font-style: italic; }
+.prog { position: relative; height: 4px; border-radius: 4px; background: var(--track); overflow: visible; }
+.prog > i { position: absolute; right: 0; top: 0; bottom: 0; border-radius: 4px; background: var(--line); }
+.prog > b { position: absolute; top: 50%; width: 18px; height: 18px; margin-top: -9px; margin-right: -9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 7px var(--halo); }
+.review-tag { position: absolute; z-index: 50; font-family: var(--sans); font-weight: 700; letter-spacing: 0.02em; }

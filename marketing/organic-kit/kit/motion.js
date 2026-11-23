@@ -109,7 +109,8 @@
     const cues = [];
     scenes.forEach((s, k) => (s.sfx || []).forEach((q) => cues.push([`s${k}`, ...q])));
     R = { c, scenes, slots, layers, total };
-    return { w: c.W, h: c.H, total, slots, cues, fps: 30 };
+    // a reel may carry its own sound track (a voice), mixed under its effects by tools/encode_reel.py
+    return { w: c.W, h: c.H, total, slots, cues, fps: 30, audio: spec.audio || null, poster: spec.poster };
   }
   function seek(T) {
     if (!R) return;
