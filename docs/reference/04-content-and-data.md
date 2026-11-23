@@ -4,7 +4,7 @@ All content ships inside the JavaScript bundle. There is no CMS and no remote fe
 
 | File | Lines | What it holds | Consumed by |
 |---|---:|---|---|
-| `src/data/blessings_ar.json` | 25,232 | 350 blessings, the core content (added in batches of 25 since 101; see 1.4) | `data/loader.ts` |
+| `src/data/blessings_ar.json` | 27,031 | 375 blessings, the core content (added in batches of 25 since 101; see 1.4) | `data/loader.ts` |
 | `src/data/loader.ts` | 17 | Access functions and the review gate | store, charts, journey |
 | `src/data/journey_content.json` | 725 | 4 journey stages × 7 stations | `lib/journeyStore.ts` |
 | `src/data/hisnAlMuslim.ts` | 358 | 6 categories, 23 adhkar, 7 daily tips | `HisnScreen`, `HomeScreen`, `App` |
@@ -422,8 +422,33 @@ Blessings 101–200 were added in four batches (101–125, 126–150, 151–175,
 | 348 | `blessing_348` | rizq | الأسواق | نعمة الأسواق العامرة | الفرقان 25:20 |
 | 349 | `blessing_349` | rizq | الحرفة | نعمة الحرفة | الأنبياء 21:80 |
 | 350 | `blessing_350` | rizq | الزراعة | نعمة الزراعة | الواقعة 56:63 |
+| 351 | `blessing_351` | rizq | الصيد | نعمة الصيد | المائدة 5:96 |
+| 352 | `blessing_352` | rizq | الرعي | نعمة الرعي | طه 20:54 |
+| 353 | `blessing_353` | rizq | الإفطار | نعمة الإفطار | الحاقة 69:24 |
+| 354 | `blessing_354` | rizq | السحور | نعمة السحور | آل عمران 3:17 |
+| 355 | `blessing_355` | rizq | حفظ النعمة | نعمة حفظ النعمة | إبراهيم 14:7 |
+| 356 | `blessing_356` | rizq | الماء في البيت | نعمة وصول الماء إلى البيت | الملك 67:30 |
+| 357 | `blessing_357` | aql | الإدراك | نعمة الإدراك | النحل 16:78 |
+| 358 | `blessing_358` | aql | الانتباه | نعمة الانتباه | ق 50:37 |
+| 359 | `blessing_359` | aql | الحساب | نعمة الحساب والأرقام | الإسراء 17:12 |
+| 360 | `blessing_360` | aql | اللغات | نعمة تعدّد اللغات | إبراهيم 14:4 |
+| 361 | `blessing_361` | aql | الكتب | نعمة الكتب | القلم 68:1 |
+| 362 | `blessing_362` | aql | الإبداع | نعمة الإبداع | البقرة 2:117 |
+| 363 | `blessing_363` | aql | حل المشكلات | نعمة حل المشكلات | الشرح 94:5 |
+| 364 | `blessing_364` | aql | التعلم المستمر | نعمة التعلّم المستمر | طه 20:114 |
+| 365 | `blessing_365` | aql | الفطنة | نعمة الفطنة | البقرة 2:269 |
+| 366 | `blessing_366` | aql | الحوار | نعمة الحوار | النحل 16:125 |
+| 367 | `blessing_367` | aql | البصيرة | نعمة البصيرة | يوسف 12:108 |
+| 368 | `blessing_368` | aql | التخطيط | نعمة التخطيط | يوسف 12:47 |
+| 369 | `blessing_369` | aql | الاكتشاف | نعمة الاكتشاف | العنكبوت 29:20 |
+| 370 | `blessing_370` | aql | التعليم | نعمة أن تُعلِّم غيرك | آل عمران 3:79 |
+| 371 | `blessing_371` | aql | النقد البناء | نعمة النقد البنّاء | العصر 103:3 |
+| 372 | `blessing_372` | aql | التدبر | نعمة التدبّر | ص 38:29 |
+| 373 | `blessing_373` | amn | أمان الليل | نعمة الأمان في البيت ليلًا | قريش 106:3 |
+| 374 | `blessing_374` | amn | الطريق الآمن | نعمة الطريق الآمن | سبأ 34:18 |
+| 375 | `blessing_375` | amn | الحراس | نعمة المرابطين والحراس | آل عمران 3:200 |
 
-By category: din 73, kawn 60, nasl 45, wijdan 43, afiyah 39, nafs 36, rizq 25, aql 13, amn 9, mal 7. `kawn` («نعم الكون») and `wijdan` («نعم الوجدان») do not occur in blessings 1–40.
+By category: din 73, kawn 60, nasl 45, wijdan 43, afiyah 39, nafs 36, rizq 31, aql 29, amn 12, mal 7. `kawn` («نعم الكون») and `wijdan` («نعم الوجدان») do not occur in blessings 1–40.
 
 `legacy/src/data/blessings_ar.json` holds the first 40 as they were before the import. Two lines of those 40 were corrected in this file at the import: the opening line of blessing 19 («هذه الكلمات» for «هذه كلمات»), and in the reflection of blessing 31 a phrase of the hadith that had been set in the Qur'an brackets ﴿ ﴾ is now in « ».
 
@@ -510,6 +535,7 @@ Added on 23 November 2026 at the owner's request, so that blessings 41–125 hav
 - **Blessings 276–300**: fourth batch of the third hundred: the last two «نعم الأهل», all twenty-two «نعم الوجدان» and the first «نعم العافية» (الرئتان). Hadith outside the Sahihs: Abu Dawud 4811, Ibn Majah 4216 and 4252, Tirmidhi 2507 (al-Albani: sahih); sourced supplications Tirmidhi 2035 and Abu Dawud 1522. Blessing 300 has no hadith. The Tirmidhi 2507 text keeps the edition's vowelling «الْمُسْلِمَ», which the reviewer should check.
 - **Blessings 301–325**: afiyah 2–20 (organs and body functions) and nafs 1–6 (a good name, privacy, freedom, stillness, cleanliness, warm water). Eight have no hadith where none fit; Muslim 223 is given by its standard number. Al-Muyassar used for 30:22, 17:109, 39:6, 78:11.
 - **Blessings 326–350**: nafs 7–20 (stages of life, rest, play, forgetting, good dreams, stillness of habit) and rizq 1–11 (foods, provision, markets, crafts, farming). Two have no hadith (light, maturity) and one (eggs) carries only a sourced supplication. Al-Muyassar used for 25:20.
+- **Blessings 351–375**: rizq 12–17 (fishing, grazing, iftar, suhoor, guarding blessings, running water), aql 1–16 (perception to reflection) and amn 1–3 (night safety, safe roads, guards). Five have no hadith (perception, attention, arithmetic, insight, discovery).
 - **Fit**: each hadith was chosen for its subject and is not a commentary on the verse. Two are only loosely tied to their blessing: 94 (القلم والكتابة) is Abu Hurayra's remark that 'Abd Allah ibn 'Amr used to write, not words of the Prophet, and 98 (الثمار) is the simile of the citron and the date for readers of the Qur'an. No sahih hadith was chosen for 92, 96, 97, 99, 116, 122, 123 and 124; 92 and 97 still have a sourced supplication.
 
 ## 2. Journey content (`src/data/journey_content.json`)
