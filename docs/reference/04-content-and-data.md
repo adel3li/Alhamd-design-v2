@@ -4,7 +4,7 @@ All content ships inside the JavaScript bundle. There is no CMS and no remote fe
 
 | File | Lines | What it holds | Consumed by |
 |---|---:|---|---|
-| `src/data/blessings_ar.json` | 8,756 | 125 blessings, the core content (a second hundred is being added in batches; see 1.4) | `data/loader.ts` |
+| `src/data/blessings_ar.json` | 10,796 | 150 blessings, the core content (a second hundred is being added in batches; see 1.4) | `data/loader.ts` |
 | `src/data/loader.ts` | 17 | Access functions and the review gate | store, charts, journey |
 | `src/data/journey_content.json` | 725 | 4 journey stages × 7 stations | `lib/journeyStore.ts` |
 | `src/data/hisnAlMuslim.ts` | 358 | 6 categories, 23 adhkar, 7 daily tips | `HisnScreen`, `HomeScreen`, `App` |
@@ -68,7 +68,7 @@ Total: 80 seconds. UI copy elsewhere says three minutes (`src/constants/strings.
 
 Blessings 1–40 are the original set. Blessings 41–100 were written by the owner and imported in November 2026 from a file that held their titles, reflections and verse references but no verse text; section 1.7 says where the verse text came from.
 
-Blessings 101–125 are the first of four planned batches of a second hundred (101–200). The owner approved a list of 100 titles and, for this batch, each verse reference; the verse text was taken from Tanzil by reference as for 41–100; the opening line, the five reflection steps, `tadabbur` and `journalPrompt` are drafts written for the owner to review. Their hadith, scholar quote and sourced supplication were then added from published sources (1.8); their short `duaa` is a draft. Section 1.7 has the details of the verses.
+Blessings 101–125 and 126–150 are the first two of four planned batches of a second hundred (101–200). The owner approved a list of 100 titles and, for this batch, each verse reference; the verse text was taken from Tanzil by reference as for 41–100; the opening line, the five reflection steps, `tadabbur` and `journalPrompt` are drafts written for the owner to review. Their hadith, scholar quote and sourced supplication were then added from published sources (1.8); their short `duaa` is a draft. Section 1.7 has the details of the verses.
 
 | Order | Id | Category | Short title | Title | Verse |
 |---:|---|---|---|---|---|
@@ -197,8 +197,33 @@ Blessings 101–125 are the first of four planned batches of a second hundred (1
 | 123 | `blessing_123` | kawn | الألوان | نعمة اختلاف الألوان | فاطر 35:27 |
 | 124 | `blessing_124` | kawn | الزوجية | نعمة الزوجية في الخلق | الذاريات 51:49 |
 | 125 | `blessing_125` | kawn | الماء العذب | نعمة الماء العذب | الفرقان 25:53 |
+| 126 | `blessing_126` | kawn | الشجر | نعمة الشجر الأخضر | يس 36:80 |
+| 127 | `blessing_127` | kawn | البرق والرعد | نعمة البرق والرعد | الرعد 13:12 |
+| 128 | `blessing_128` | nasl | الإخوة | نعمة الإخوة والأخوات | طه 20:29–31 |
+| 129 | `blessing_129` | nasl | الأجداد | نعمة الأجداد | البقرة 2:133 |
+| 130 | `blessing_130` | nasl | الأحفاد | نعمة الأحفاد | النحل 16:72 |
+| 131 | `blessing_131` | nasl | الضيافة | نعمة الضيف والضيافة | الذاريات 51:24 |
+| 132 | `blessing_132` | nasl | الهدية | نعمة الهدية | الإنسان 76:8 |
+| 133 | `blessing_133` | nasl | السلام | نعمة إفشاء السلام | النساء 4:86 |
+| 134 | `blessing_134` | nasl | الكلمة الطيبة | نعمة الكلمة الطيبة | إبراهيم 14:24 |
+| 135 | `blessing_135` | nasl | حسن الخلق | نعمة حسن الخلق | القلم 68:4 |
+| 136 | `blessing_136` | nasl | الجماعة | نعمة المجتمع والجماعة | آل عمران 3:103 |
+| 137 | `blessing_137` | nasl | المواساة | نعمة من يواسيك في الشدة | التوبة 9:40 |
+| 138 | `blessing_138` | nasl | القدوة | نعمة القدوة الصالحة | الأحزاب 33:21 |
+| 139 | `blessing_139` | nasl | المعروف | نعمة المعروف من الناس | الرحمن 55:60 |
+| 140 | `blessing_140` | wijdan | الرحمة | نعمة الرحمة في القلب | آل عمران 3:159 |
+| 141 | `blessing_141` | wijdan | المحبة | نعمة المحبة | مريم 19:96 |
+| 142 | `blessing_142` | wijdan | التواضع | نعمة التواضع | الفرقان 25:63 |
+| 143 | `blessing_143` | wijdan | الحلم | نعمة الحلم والأناة | فصلت 41:34 |
+| 144 | `blessing_144` | wijdan | الشجاعة | نعمة الشجاعة | آل عمران 3:173 |
+| 145 | `blessing_145` | wijdan | حب الخير | نعمة حب الخير للناس | الحشر 59:9 |
+| 146 | `blessing_146` | wijdan | الإنجاز | نعمة لذة الإنجاز | الشرح 94:7–8 |
+| 147 | `blessing_147` | wijdan | الحزن | نعمة الحزن الذي يرقّق القلب | يوسف 12:86 |
+| 148 | `blessing_148` | wijdan | سلامة الصدر | نعمة سلامة الصدر | الشعراء 26:88–89 |
+| 149 | `blessing_149` | wijdan | التأمل | نعمة الدهشة والتأمل | الغاشية 88:17–20 |
+| 150 | `blessing_150` | wijdan | الصدق | نعمة الصدق | التوبة 9:119 |
 
-By category: din 43, kawn 33, nasl 11, wijdan 9, afiyah 7, nafs 6, rizq 6, aql 5, amn 3, mal 2. `kawn` («نعم الكون») and `wijdan` («نعم الوجدان») do not occur in blessings 1–40.
+By category: din 43, kawn 35, nasl 23, wijdan 20, afiyah 7, nafs 6, rizq 6, aql 5, amn 3, mal 2. `kawn` («نعم الكون») and `wijdan` («نعم الوجدان») do not occur in blessings 1–40.
 
 `legacy/src/data/blessings_ar.json` holds the first 40 as they were before the import. Two lines of those 40 were corrected in this file at the import: the opening line of blessing 19 («هذه الكلمات» for «هذه كلمات»), and in the reflection of blessing 31 a phrase of the hadith that had been set in the Qur'an brackets ﴿ ﴾ is now in « ».
 
@@ -276,6 +301,7 @@ Added on 23 November 2026 at the owner's request, so that blessings 41–125 hav
 - **Scholar quotes on 101–125**: Tafsir al-Sa'di (تيسير الكريم الرحمن) and, for blessing 124, al-Tafsir al-Muyassar, from `api.quran.com` v4 (`tafsirs/91` and `tafsirs/16`), each the commentary on the blessing's own verse except 113 (Al-Fajr 1, which covers the ten nights) and 120 (Al-Anbiya' 32, which mentions the seasons). The source's own punctuation is kept, including two ASCII commas in 103, an ASCII semicolon in 124 and a missing space in 116.
 - **Sourced supplications from the Qur'an**: Tanzil, as in 1.7. Most are an exact excerpt of an ayah, starting where the supplication starts; Ta-Ha 20:25–26 (blessing 92) joins two ayahs.
 - **Licences to confirm**: the hadith-api data is published without restriction; Tanzil's terms are in 1.7; al-Sa'di died in 1956 and al-Muyassar is published by the King Fahd Complex, whose terms the owner should confirm before release.
+- **Blessings 126–150** were built with every field at once, on the same rules. At the owner's instruction (23 November) a hadith may repeat one used elsewhere and may come from outside the two Sahihs if it is graded sahih or hasan; Dorar.net, which the owner suggested as a reference, refuses automated requests, so the one such hadith, Tirmidhi 3895 «خيركم خيركم لأهله» on blessing 128 (also cited on blessing 24), was taken from the same hadith-api edition, which records al-Albani's grade «Sahih»; `grade` holds that grade. Blessing 132 keeps Bukhari 2585: the owner's «تهادوا تحابوا» is in al-Adab al-Mufrad, which is not in the edition, so it can be added once its text is supplied with its reference. Blessing 149's hadith contains a verse in braces in the source; the braces are shown as ﴿ ﴾. 126 and 127 have no hadith, and 147's quote is from al-Muyassar.
 - **Fit**: each hadith was chosen for its subject and is not a commentary on the verse. Two are only loosely tied to their blessing: 94 (القلم والكتابة) is Abu Hurayra's remark that 'Abd Allah ibn 'Amr used to write, not words of the Prophet, and 98 (الثمار) is the simile of the citron and the date for readers of the Qur'an. No sahih hadith was chosen for 92, 96, 97, 99, 116, 122, 123 and 124; 92 and 97 still have a sourced supplication.
 
 ## 2. Journey content (`src/data/journey_content.json`)
