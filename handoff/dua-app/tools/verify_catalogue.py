@@ -3,8 +3,8 @@
 Checks that every Qur'anic reference exists in Tanzil's text and that every
 hadith number exists in the open hadith-api dataset (sunnah.com numbering;
 Muslim by Abd al-Baqi number = the integer part of `arabicnumber`), and lists
-the gradings recorded there, and applies the grading rule (option B). Prints a
-Markdown report.
+the gradings recorded there, and applies the current scope (al-Bukhari and Muslim only;
+pass --rule-b to see option B instead). Prints a Markdown report.
 
 This script contains no Qur'an or hadith text and must not: it never types a
 verse or a hadith. Whether the dua is really at a reference is checked when a
@@ -20,6 +20,7 @@ import json, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 D = sys.argv[1]
+SCOPE = 'ruleB' if '--rule-b' in sys.argv[2:] else 'sahihayn'
 
 quran = set()
 for line in open(f'{D}/quran/simple.txt', encoding='utf-8'):
@@ -60,6 +61,7 @@ def classify(grade):
 
 def rule_b(coll, gradings):
     if coll in ('bukhari', 'muslim'): return 'يدخل', 'في الصحيحين'
+    if SCOPE == 'sahihayn': return 'مؤجل', 'خارج الصحيحين'
     primary = next((g for g in gradings if g['name'] == 'Al-Albani'), None)
     if not primary: return 'للمراجع', 'لا حكم للألباني في المصدر'
     c = classify(primary['grade'])
@@ -78,11 +80,11 @@ for row, s, a, b in Q:
     print(f'| {row} | {s}:{a}' + (f'–{b}' if b != a else '') + f' | {"✓" if ok else "✗"} |')
 print(f'\n{len(Q)} موضعًا، {len(Q) - q_bad} موجودة.\n')
 
-print('## ب. السنة\n\n| # | المرجع | الرقم موجود | الأحكام المسجّلة في المصدر | القاعدة ب | السبب |\n|---|---|---|---|---|---|')
+print('## ب. السنة\n\n| # | المرجع | الرقم موجود | الأحكام المسجّلة في المصدر | القرار الآن | السبب |\n|---|---|---|---|---|---|')
 for row, refs in S:
     for coll, num in refs:
         if num is None:
-            print(f'| {row} | {coll} | — | ليس في المصدر المفتوح | للمراجع | يُتحقق يدويًا |')
+            print(f'| {row} | {coll} | — | ليس في المصدر المفتوح | مؤجل | خارج الصحيحين |')
             continue
         hs = find(coll, num)
         grades = '، '.join(f"{GRADERS.get(g['name'], g['name'])}: {GRADES.get(g['grade'], g['grade'])}"

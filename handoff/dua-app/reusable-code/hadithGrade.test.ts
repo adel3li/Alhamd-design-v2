@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { classifyGrade, decideByRuleB, gradeLabelAr } from './hadithGrade';
+import { CURRENT_SCOPE, classifyGrade, decide, decideByRuleB, gradeLabelAr } from './hadithGrade';
 
 describe('classifyGrade', () => {
   it('accepts sahih and hasan in their common wordings', () => {
@@ -76,5 +76,22 @@ describe('gradeLabelAr', () => {
     expect(gradeLabelAr('Hasan Isnaad')).toBe('إسناده حسن');
     expect(gradeLabelAr('Hasan Sahih')).toBe('حسن صحيح');
     expect(gradeLabelAr('Sahih Muslim (1480)')).toBeNull();
+  });
+});
+
+describe('decide (current scope)', () => {
+  it('is al-Bukhari and Muslim only', () => {
+    expect(CURRENT_SCOPE).toBe('sahihayn');
+    expect(decide('bukhari', []).decision).toBe('include');
+    expect(decide('muslim', []).decision).toBe('include');
+  });
+
+  it('defers every other collection, even a hadith al-Albani grades sahih', () => {
+    const d = decide('abudawud', [{ by: 'Al-Albani', grade: 'Sahih' }]);
+    expect(d.decision).toBe('defer');
+  });
+
+  it('applies option B when asked for it', () => {
+    expect(decide('abudawud', [{ by: 'Al-Albani', grade: 'Sahih' }], 'ruleB').decision).toBe('include');
   });
 });

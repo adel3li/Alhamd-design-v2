@@ -1,7 +1,12 @@
 /**
- * The grading rule chosen by the owner (option B in 00-decisions.md §5),
- * applied to the gradings sunnah.com records for each hadith (as copied by
- * scripts/fetch-hadith.ts from the open hadith-api dataset):
+ * Which hadith may enter the app.
+ *
+ * Current scope (00-decisions.md §5): al-Bukhari and Muslim only. Every other
+ * collection is deferred, whatever its grading. `decide()` applies the scope.
+ *
+ * Kept for when the scope widens: option B, applied to the gradings
+ * sunnah.com records for each hadith (as copied by scripts/fetch-hadith.ts
+ * from the open hadith-api dataset):
  *
  * - In al-Bukhari or Muslim: include.
  * - Otherwise al-Albani's grading decides, unless one of the dissent graders
@@ -23,7 +28,11 @@ export interface Grading {
   grade: string;
 }
 
-export type DecisionKind = 'include' | 'review' | 'exclude';
+export type DecisionKind = 'include' | 'review' | 'exclude' | 'defer';
+
+/** 'sahihayn': al-Bukhari and Muslim only (current). 'ruleB': option B over the sunan as well. */
+export type Scope = 'sahihayn' | 'ruleB';
+export const CURRENT_SCOPE: Scope = 'sahihayn';
 
 export interface Decision {
   decision: DecisionKind;
@@ -101,4 +110,14 @@ export function decideByRuleB(collection: string, gradings: readonly Grading[]):
     return { decision: 'review', reason: 'أحد المحققين جعله موقوفًا أو مقطوعًا أو مرسلًا' };
   }
   return { decision: 'include', reason: 'صححه أو حسّنه الألباني، ولم يضعّفه أحد من المحققين المعتبرين في القاعدة' };
+}
+
+/** The decision under the current scope, or under the scope given. */
+export function decide(collection: string, gradings: readonly Grading[], scope: Scope = CURRENT_SCOPE): Decision {
+  if (scope === 'sahihayn') {
+    return SAHIHAYN.has(collection)
+      ? { decision: 'include', reason: 'في الصحيحين' }
+      : { decision: 'defer', reason: 'خارج الصحيحين: مؤجل بقرار صاحب المشروع' };
+  }
+  return decideByRuleB(collection, gradings);
 }

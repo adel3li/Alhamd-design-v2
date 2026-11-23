@@ -33,7 +33,7 @@
 │   └── themes.json               # وسوم الحاجة وأسماؤها
 ├── scripts/
 │   ├── fetch-quran.ts            # ينسخ quran.fullText من نص المجمع في content/sources بالسورة والآية، ويقارن حروفه بنص Tanzil
-│   ├── fetch-hadith.ts           # ينسخ hadith.fullNarration والأحكام من sunnah.com بالكتاب والرقم، ويطبق القاعدة ب
+│   ├── fetch-hadith.ts           # ينسخ hadith.fullNarration والأحكام من sunnah.com بالكتاب والرقم؛ الآن البخاري ومسلم فقط
 │   ├── validate-content.ts       # الفحوص في 03 القسم ٧، ويفشل البناء عند أي خطأ
 │   ├── build-content.ts          # يجمع البطاقات المعتمدة في ملف واحد للتطبيق
 │   └── check-promises.ts         # يفحص الوعود (انظر القسم ١٠)
@@ -95,7 +95,7 @@ export interface HadithSource {
   narrator: string;
   fullNarration: string; // يُلصق من المصدر
   gradings: { by: string; grade: string }[]; // كما في sunnah.com، منسوخة آليًا
-  grade: 'صحيح' | 'حسن';  // نتيجة القاعدة ب (reusable-code/hadithGrade.ts)
+  grade: 'صحيح' | 'حسن';  // الآن «صحيح» دائمًا (الصحيحان). لاحقًا: نتيجة القاعدة ب في reusable-code/hadithGrade.ts
   gradeNote: string;     // «متفق عليه» / «صححه الألباني في صحيح سنن أبي داود»
   sourceUrl: string;
   alsoIn?: string[];
@@ -301,7 +301,7 @@ resolveToday({ today, welcomeDoneOn, all, welcomeId })
 | `src/lib/dailyLogic.ts` | `reusable-code/daily.ts` | معمّم، ومعه `effectiveFrom`، ومختبَر |
 | — | `reusable-code/arabicSearch.ts` | جديد: تطبيع العربية للبحث، وتقسيم الجمل بلا lookbehind، ومختبَر |
 | — | `reusable-code/calendarReminder.ts` | جديد: ملف تقويم بحدث يومي، ومختبَر |
-| — | `reusable-code/hadithGrade.ts` | جديد: القاعدة ب لدرجة الحديث على أحكام sunnah.com، ومختبَرة |
+| — | `reusable-code/hadithGrade.ts` | جديد: النطاق الحالي (البخاري ومسلم فقط)، والقاعدة ب جاهزة لما بعده، ومختبَر |
 | `src/components/common/ShareCardModal.tsx` | لا | يُنقل منطق الرسم واللف منه، مع إعادة كتابة الواجهة |
 | `src/landing/landing.css` | لا | مثال لطريقة الثيمات الصحيحة |
 | `src/components/screens/ReflectionModal.tsx` | لا | مرجع للإيقاع والسلوك، لا للنسخ: فيه التوقيت المتشابك والألوان الثابتة |

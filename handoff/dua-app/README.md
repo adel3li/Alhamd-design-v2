@@ -24,7 +24,7 @@
 | [09-content-drafting-prompt.md](09-content-drafting-prompt.md) | أنت | برومبت لكتابة الطبقة التأملية لكل دعاء بعد التحقق من نصه |
 | [10-identity-brief.md](10-identity-brief.md) | أنت والمصمم | ما يجب أن تغطيه الهوية الجديدة لتُركَّب على الكود، وما تتجنبه حتى لا تشبه «الحمد» |
 | [templates/CLAUDE.md](templates/CLAUDE.md) | Claude Code | ملف القواعد الذي يوضع في جذر المستودع الجديد |
-| [templates/dua.example.json](templates/dua.example.json) | الجميع | بطاقة دعاء من السنة كمثال (دعاء معاذ). النصوص المقدسة فيها أماكن فارغة تُملأ من المصدر |
+| [templates/dua.example.json](templates/dua.example.json) | الجميع | بطاقة دعاء من السنة كمثال (دعاء أبي بكر، صحيح مسلم ٢٧٠٥)، ونص الحديث فيها منسوخ من المصدر |
 | [templates/dua.example.quran.json](templates/dua.example.quran.json) | الجميع | بطاقة دعاء من القرآن كمثال (دعاء يونس) |
 | [assets/script-compare.png](assets/script-compare.png) | أنت | الرسم العثماني والإملائي جنبًا إلى جنب |
 | [tools/verify_catalogue.py](tools/verify_catalogue.py) | المطوّر | سكريبت التحقق الأول، بداية لفحص المحتوى في المشروع الجديد |

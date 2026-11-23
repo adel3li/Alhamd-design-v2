@@ -7,6 +7,7 @@ unchanged. A character the source itself has corrupted (U+FFFD) is flagged,
 never repaired by hand.
 
 Usage: python3 -I build_catalogue_texts.py DOWNLOADS_DIR > ../04c-catalogue-texts.md
+Only al-Bukhari and Muslim are copied (the current scope); pass --all for every collection.
 DOWNLOADS_DIR needs quran/uthmani.txt (Tanzil, txt-2, Uthmani) and
 hadith/<collection>.json (hadith-api editions/ara-<collection>.min.json).
 """
@@ -41,7 +42,7 @@ w('هذا الملف **مولَّد بالسكريبت** [tools/build_catalogue_
 w('| | المصدر | الحالة |\n|---|---|---|')
 w('| القرآن | Tanzil، النص العثماني (Uthmani 1.1)، الآيات كاملة | نص موثّق من مصدره. **المقطع الذي هو الدعاء** داخل الآية يحدده المراجع عند بناء البطاقة |')
 w('| السنة | مجموعة البيانات المفتوحة `fawazahmed0/hadith-api` (مأخوذة من sunnah.com)، الحديث كاملًا بإسناده | **مصدر واحد، للمراجعة لا للنشر.** يُطابَق على مصدر ثانٍ (الدرر السنية أو الطبعة المطبوعة) قبل أن يُنقل إلى بطاقة |\n')
-w('المراجع وأرقام الصفوف كما في [04-seed-catalogue.md](04-seed-catalogue.md). مسند أحمد والسنن الكبرى للنسائي ليسا في المصدر المفتوح، فنصّاهما غير موجودين هنا.\n')
+w('المراجع وأرقام الصفوف كما في [04-seed-catalogue.md](04-seed-catalogue.md). **من السنة: البخاري ومسلم فقط**، وهو النطاق الحالي بقرار صاحب المشروع؛ أحاديث الكتب الأخرى مؤجلة ولا تُنسخ هنا.\n')
 
 w('## أ. القرآن\n')
 for row, s, a, b in Q:
@@ -51,9 +52,10 @@ for row, s, a, b in Q:
         w(f'> {quran[(s, i)]} ({s}:{i})\n')
 
 w('## ب. السنة\n')
+ALL = '--all' in sys.argv[2:]
 for row, refs in S:
     for coll, num in refs:
-        if num is None:
+        if num is None or (not ALL and coll not in ('bukhari', 'muslim')):
             continue
         for h in find(coll, num):
             n = h.get('arabicnumber') if coll == 'muslim' else h.get('hadithnumber')
