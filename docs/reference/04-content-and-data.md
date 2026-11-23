@@ -4,7 +4,7 @@ All content ships inside the JavaScript bundle. There is no CMS and no remote fe
 
 | File | Lines | What it holds | Consumed by |
 |---|---:|---|---|
-| `src/data/blessings_ar.json` | 14,414 | 200 blessings, the core content (the second hundred was added in four batches; see 1.4) | `data/loader.ts` |
+| `src/data/blessings_ar.json` | 16,229 | 225 blessings, the core content (added in batches of 25 since 101; see 1.4) | `data/loader.ts` |
 | `src/data/loader.ts` | 17 | Access functions and the review gate | store, charts, journey |
 | `src/data/journey_content.json` | 725 | 4 journey stages × 7 stations | `lib/journeyStore.ts` |
 | `src/data/hisnAlMuslim.ts` | 358 | 6 categories, 23 adhkar, 7 daily tips | `HisnScreen`, `HomeScreen`, `App` |
@@ -272,8 +272,33 @@ Blessings 101–200 were added in four batches (101–125, 126–150, 151–175,
 | 198 | `blessing_198` | mal | التجارة | نعمة التجارة والبيع | الجمعة 62:10 |
 | 199 | `blessing_199` | mal | الأمانة | نعمة الأمانة في المال | النساء 4:58 |
 | 200 | `blessing_200` | mal | الميراث | نعمة الميراث | النساء 4:7 |
+| 201 | `blessing_201` | din | الوحي | نعمة الوحي | الشورى 42:52 |
+| 202 | `blessing_202` | din | الملائكة | نعمة الملائكة | فاطر 35:1 |
+| 203 | `blessing_203` | din | الإيمان بالغيب | نعمة الإيمان بالغيب | البقرة 2:3 |
+| 204 | `blessing_204` | din | اليقين | نعمة اليقين | الذاريات 51:20 |
+| 205 | `blessing_205` | din | الخوف من الله | نعمة الخوف من الله | الرحمن 55:46 |
+| 206 | `blessing_206` | din | الرجاء | نعمة الرجاء | البقرة 2:218 |
+| 207 | `blessing_207` | din | الحج | نعمة الحج | الحج 22:27 |
+| 208 | `blessing_208` | din | العمرة | نعمة العمرة | البقرة 2:158 |
+| 209 | `blessing_209` | din | صلاة الفجر | نعمة صلاة الفجر | الإسراء 17:78 |
+| 210 | `blessing_210` | din | السجود | نعمة السجود | العلق 96:19 |
+| 211 | `blessing_211` | din | التلاوة | نعمة تلاوة القرآن | فاطر 35:29 |
+| 212 | `blessing_212` | din | حفظ القرآن | نعمة حفظ القرآن | القمر 54:17 |
+| 213 | `blessing_213` | din | الصحابة | نعمة الصحابة | التوبة 9:100 |
+| 214 | `blessing_214` | din | العلماء | نعمة العلماء الربانيين | فاطر 35:28 |
+| 215 | `blessing_215` | din | الشفاعة | نعمة الشفاعة | طه 20:109 |
+| 216 | `blessing_216` | din | عفو الله | نعمة عفو الله | الشورى 42:25 |
+| 217 | `blessing_217` | din | قبول الأعمال | نعمة قبول الأعمال | الكهف 18:30 |
+| 218 | `blessing_218` | din | الحسنات الماحية | نعمة الحسنات الماحية | هود 11:114 |
+| 219 | `blessing_219` | din | الصدقة الجارية | نعمة الصدقة الجارية | يس 36:12 |
+| 220 | `blessing_220` | din | النية | نعمة النية الصالحة | الأنعام 6:162 |
+| 221 | `blessing_221` | din | الأضحية | نعمة الأضحية | الكوثر 108:1 |
+| 222 | `blessing_222` | din | يوم عرفة | نعمة يوم عرفة | البقرة 2:198 |
+| 223 | `blessing_223` | din | الاعتكاف | نعمة الاعتكاف | البقرة 2:125 |
+| 224 | `blessing_224` | din | الورع | نعمة الورع | النازعات 79:40 |
+| 225 | `blessing_225` | din | التسبيح | نعمة التسبيح | الإسراء 17:44 |
 
-By category: din 43, kawn 35, nasl 23, wijdan 21, afiyah 19, nafs 16, rizq 14, aql 13, amn 9, mal 7. `kawn` («نعم الكون») and `wijdan` («نعم الوجدان») do not occur in blessings 1–40.
+By category: din 68, kawn 35, nasl 23, wijdan 21, afiyah 19, nafs 16, rizq 14, aql 13, amn 9, mal 7. `kawn` («نعم الكون») and `wijdan` («نعم الوجدان») do not occur in blessings 1–40.
 
 `legacy/src/data/blessings_ar.json` holds the first 40 as they were before the import. Two lines of those 40 were corrected in this file at the import: the opening line of blessing 19 («هذه الكلمات» for «هذه كلمات»), and in the reflection of blessing 31 a phrase of the hadith that had been set in the Qur'an brackets ﴿ ﴾ is now in « ».
 
@@ -354,6 +379,7 @@ Added on 23 November 2026 at the owner's request, so that blessings 41–125 hav
 - **Blessings 126–150** were built with every field at once, on the same rules. At the owner's instruction (23 November) a hadith may repeat one used elsewhere and may come from outside the two Sahihs if it is graded sahih or hasan; Dorar.net, which the owner suggested as a reference, refuses automated requests, so the one such hadith, Tirmidhi 3895 «خيركم خيركم لأهله» on blessing 128 (also cited on blessing 24), was taken from the same hadith-api edition, which records al-Albani's grade «Sahih»; `grade` holds that grade. Blessing 132 keeps Bukhari 2585: the owner's «تهادوا تحابوا» is in al-Adab al-Mufrad, which is not in the edition, so it can be added once its text is supplied with its reference. Blessing 149's hadith contains a verse in braces in the source; the braces are shown as ﴿ ﴾. 126 and 127 have no hadith, and 147's quote is from al-Muyassar.
 - **Blessings 151–175** follow the same rules. Hadith outside the two Sahihs: Tirmidhi 2380, 2329 and 2819, Abu Dawud 4985 and al-Nasa'i 3939, each graded sahih, hasan or hasan sahih by al-Albani in the edition; three sourced supplications are from Abu Dawud (3851, 5088, 5074, graded sahih). Abu Dawud 4023, the supplication on wearing a new garment, was not used, because al-Albani's grade in the edition is «Hasan» for a narration whose closing words he is known to have judged weak. Four verses repeat ones already used (Al-Shu'ara' 80, Qaf 16, Al-A'raf 26, Al-Nahl 5), as do three hadith (Bukhari 2989 and 660, Muslim 2664 and 91), which the owner allowed. The Bukhari 3818 text ends mid-sentence in the edition; the span used ends before the break. Blessings 161 and 172 have no hadith; four quotes are from al-Muyassar (153, 155, 161, 174).
 - **Blessings 176–200** follow the same rules (hadith outside the Sahihs: Tirmidhi 2344, 3926, 3505, Abu Dawud 3764, 3534; sourced supplication Tirmidhi 3563, graded hasan). Blessing 178 uses Al-Insan 76:9 rather than Al-Nur 61, which was proposed first but is 76 words long. Blessings 177 and 182 have no hadith. Across 41–200, 14 blessings have no hadith (92, 96, 97, 99, 116, 122, 123, 124, 126, 127, 161, 172, 177, 182) and 52 carry a sourced supplication.
+- **Blessings 201–225**: first batch of a third hundred (201–400, eight batches of 25), all «نعم الدين». Hadith outside the Sahihs: Tirmidhi 2450, 2910, 1987, 2518 and Abu Dawud 3641, graded sahih or hasan by al-Albani; sourced supplications include Tirmidhi 3502, 3513 and 3585 and Muslim 770. Blessing 204 has no hadith.
 - **Fit**: each hadith was chosen for its subject and is not a commentary on the verse. Two are only loosely tied to their blessing: 94 (القلم والكتابة) is Abu Hurayra's remark that 'Abd Allah ibn 'Amr used to write, not words of the Prophet, and 98 (الثمار) is the simile of the citron and the date for readers of the Qur'an. No sahih hadith was chosen for 92, 96, 97, 99, 116, 122, 123 and 124; 92 and 97 still have a sourced supplication.
 
 ## 2. Journey content (`src/data/journey_content.json`)
