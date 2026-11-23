@@ -4,7 +4,7 @@ All content ships inside the JavaScript bundle. There is no CMS and no remote fe
 
 | File | Lines | What it holds | Consumed by |
 |---|---:|---|---|
-| `src/data/blessings_ar.json` | 18,032 | 250 blessings, the core content (added in batches of 25 since 101; see 1.4) | `data/loader.ts` |
+| `src/data/blessings_ar.json` | 19,835 | 275 blessings, the core content (added in batches of 25 since 101; see 1.4) | `data/loader.ts` |
 | `src/data/loader.ts` | 17 | Access functions and the review gate | store, charts, journey |
 | `src/data/journey_content.json` | 725 | 4 journey stages × 7 stations | `lib/journeyStore.ts` |
 | `src/data/hisnAlMuslim.ts` | 358 | 6 categories, 23 adhkar, 7 daily tips | `HisnScreen`, `HomeScreen`, `App` |
@@ -322,8 +322,33 @@ Blessings 101–200 were added in four batches (101–125, 126–150, 151–175,
 | 248 | `blessing_248` | kawn | التين | نعمة التين | التين 95:1 |
 | 249 | `blessing_249` | kawn | السنابل | نعمة السنابل | يوسف 12:47 |
 | 250 | `blessing_250` | kawn | البساتين | نعمة البساتين | سبأ 34:15 |
+| 251 | `blessing_251` | kawn | المراعي | نعمة المراعي | الأعلى 87:4 |
+| 252 | `blessing_252` | kawn | سعة الكون | نعمة سعة الكون | الذاريات 51:47 |
+| 253 | `blessing_253` | kawn | الدواب | نعمة الدواب | النور 24:45 |
+| 254 | `blessing_254` | kawn | الماء الجوفي | نعمة الماء الجوفي | المؤمنون 23:18 |
+| 255 | `blessing_255` | kawn | الأرض الخصبة | نعمة الأرض الخصبة | الأعراف 7:58 |
+| 256 | `blessing_256` | nasl | الأعمام والأخوال | نعمة الأعمام والأخوال | الأنفال 8:75 |
+| 257 | `blessing_257` | nasl | الأصهار | نعمة الأصهار | الفرقان 25:54 |
+| 258 | `blessing_258` | nasl | رفقة السفر | نعمة رفقة السفر | الكهف 18:60 |
+| 259 | `blessing_259` | nasl | الصديق القديم | نعمة الصديق القديم | الزخرف 43:67 |
+| 260 | `blessing_260` | nasl | البنات | نعمة البنات | الشورى 42:49 |
+| 261 | `blessing_261` | nasl | بر الأبناء | نعمة بر الأبناء | مريم 19:14 |
+| 262 | `blessing_262` | nasl | اليتيم | نعمة كفالة اليتيم | الضحى 93:6 |
+| 263 | `blessing_263` | nasl | كبار السن | نعمة كبار السن | الإسراء 17:23 |
+| 264 | `blessing_264` | nasl | الزملاء | نعمة زملاء العمل | القصص 28:26 |
+| 265 | `blessing_265` | nasl | التلاميذ | نعمة التلاميذ | آل عمران 3:79 |
+| 266 | `blessing_266` | nasl | الإمام | نعمة الإمام والخطيب | السجدة 32:24 |
+| 267 | `blessing_267` | nasl | من يخدمك | نعمة من يخدمك | الزخرف 43:32 |
+| 268 | `blessing_268` | nasl | الاعتذار | نعمة الاعتذار | يوسف 12:91 |
+| 269 | `blessing_269` | nasl | الصلح | نعمة الصلح بين المتخاصمين | النساء 4:114 |
+| 270 | `blessing_270` | nasl | الزيارة | نعمة الزيارة | النور 24:27 |
+| 271 | `blessing_271` | nasl | عيادة المريض | نعمة عيادة المريض | الشعراء 26:80 |
+| 272 | `blessing_272` | nasl | التعزية | نعمة التعزية | البقرة 2:155 |
+| 273 | `blessing_273` | nasl | الابتسامة | نعمة الابتسامة | النمل 27:19 |
+| 274 | `blessing_274` | nasl | المشورة | نعمة المشورة | الشورى 42:38 |
+| 275 | `blessing_275` | nasl | اجتماع العائلة | نعمة اجتماع العائلة | يوسف 12:99 |
 
-By category: din 73, kawn 55, nasl 23, wijdan 21, afiyah 19, nafs 16, rizq 14, aql 13, amn 9, mal 7. `kawn` («نعم الكون») and `wijdan` («نعم الوجدان») do not occur in blessings 1–40.
+By category: din 73, kawn 60, nasl 43, wijdan 21, afiyah 19, nafs 16, rizq 14, aql 13, amn 9, mal 7. `kawn` («نعم الكون») and `wijdan` («نعم الوجدان») do not occur in blessings 1–40.
 
 `legacy/src/data/blessings_ar.json` holds the first 40 as they were before the import. Two lines of those 40 were corrected in this file at the import: the opening line of blessing 19 («هذه الكلمات» for «هذه كلمات»), and in the reflection of blessing 31 a phrase of the hadith that had been set in the Qur'an brackets ﴿ ﴾ is now in « ».
 
@@ -406,6 +431,7 @@ Added on 23 November 2026 at the owner's request, so that blessings 41–125 hav
 - **Blessings 176–200** follow the same rules (hadith outside the Sahihs: Tirmidhi 2344, 3926, 3505, Abu Dawud 3764, 3534; sourced supplication Tirmidhi 3563, graded hasan). Blessing 178 uses Al-Insan 76:9 rather than Al-Nur 61, which was proposed first but is 76 words long. Blessings 177 and 182 have no hadith. Across 41–200, 14 blessings have no hadith (92, 96, 97, 99, 116, 122, 123, 124, 126, 127, 161, 172, 177, 182) and 52 carry a sourced supplication.
 - **Blessings 201–225**: first batch of a third hundred (201–400, eight batches of 25), all «نعم الدين». Hadith outside the Sahihs: Tirmidhi 2450, 2910, 1987, 2518 and Abu Dawud 3641, graded sahih or hasan by al-Albani; sourced supplications include Tirmidhi 3502, 3513 and 3585 and Muslim 770. Blessing 204 has no hadith.
 - **Blessings 226–250**: second batch of the third hundred: the last five «نعم الدين» and twenty «نعم الكون». Hadith outside the Sahihs: Tirmidhi 3383 and 2417, Ibn Majah 2305 (graded sahih or hasan by al-Albani); sourced supplications include al-Nasa'i 1305 and the istikhara (Bukhari 1166). Ten have no hadith (231, 234, 236, 237, 240, 245–248, 250). The verse filter now also removes the basmala Tanzil writes with a shadda before Al-Tin 1 and Al-Qadr 1 (no earlier blessing used either).
+- **Blessings 251–275**: third batch of the third hundred: the last five «نعم الكون» and twenty «نعم الأهل». Hadith outside the Sahihs: Abu Dawud 2548 and 4919, Tirmidhi 1919, 2685, 2499, 1956 and 2369 (al-Albani: sahih or hasan); sourced supplication Abu Dawud 3106. Six have no hadith (252, 254, 255, 257, 264, 275). Three verses repeat earlier ones (Al-Zukhruf 67, Al-Isra' 23, Al-Shu'ara' 80).
 - **Fit**: each hadith was chosen for its subject and is not a commentary on the verse. Two are only loosely tied to their blessing: 94 (القلم والكتابة) is Abu Hurayra's remark that 'Abd Allah ibn 'Amr used to write, not words of the Prophet, and 98 (الثمار) is the simile of the citron and the date for readers of the Qur'an. No sahih hadith was chosen for 92, 96, 97, 99, 116, 122, 123 and 124; 92 and 97 still have a sourced supplication.
 
 ## 2. Journey content (`src/data/journey_content.json`)
