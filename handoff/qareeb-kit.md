@@ -109,10 +109,13 @@ echo ".sources/" >> .gitignore
 | ١ | **الاسم: «قريب»** | ٢٣ نوفمبر ٢٠٢٦ | من آية الدعاء في سورة البقرة (١٨٦). في الكود وبادئة مفاتيح التخزين: `qareeb` |
 | ٢ | **دعاء الترحيب: دعاء الهداية في الفاتحة (٦–٧)** | ٢٣ نوفمبر ٢٠٢٦ | مع الحديث القدسي في قسمة الصلاة بين الله وعبده (صحيح مسلم ٣٩٥). الإحالتان تطابقان المصدرين في التحقق الأول (`04b`) |
 | ٣ | **المراجعة على مرحلتين** | ٢٣ نوفمبر ٢٠٢٦ | الأولى: تحقق Claude من كل نص ومرجع ودرجة وموقف ومعنى مقابل المصادر. الثانية: مراجع شرعي مسمّى يُختار لاحقًا. التفاصيل وحدود المرحلة الأولى في `03` §٨ |
+| ٤ | **رسم المصحف: العثماني بخط مصحف المدينة** | ٢٣ نوفمبر ٢٠٢٦ | الآية تظهر للمستخدم كما في المصحف: الألف الصغيرة، والمد، والهمزات، وعلامات الوقف، ورقم الآية داخل علامة نهايتها. الخط KFGQPC Uthmanic Script HAFS مع نص المجمع المصمَّم له (من `api.quran.com`)، في التطبيق وفي بطاقة المشاركة. والإملائي من Tanzil للبحث وحده. **بقي:** تأكيد شروط استخدام الخط والنص (§٤) |
+| ٥ | **الاستضافة: Vercel بنطاقه المجاني مؤقتًا** | ٢٣ نوفمبر ٢٠٢٦ | التطبيق على عنوان `vercel.app` إلى أن يُحجز نطاق. **انتبه:** بيانات المستخدم مربوطة بالعنوان، فالانتقال لاحقًا إلى نطاق خاص يحتاج خطوة نقل (§٧) |
+| ٦ | **البطاقات تظهر بعد التحقق الأول، دون انتظار المراجع الشرعي** | ٢٣ نوفمبر ٢٠٢٦ | `CONTENT_MIN_LEVEL=verified`. «عن المحتوى» تقول بدقة إن النصوص طوبقت على مصادرها وإن المراجعة العلمية جارية (§٩) |
 
 ## ينتظرك
 
-### ٤. رسم المصحف: عثماني أم إملائي؟
+### ٤. رسم المصحف (حُسم: العثماني بخط مصحف المدينة)
 
 المقارنة في [assets/script-compare.png](assets/script-compare.png): ثلاثة أدعية (الفاتحة ٦–٧، والأنبياء ٨٧، والقصص ٢٤). كل دعاء بالرسم العثماني في ثلاثة خطوط، أولها خط مصحف المدينة الرقمي، وبالإملائي في خط واحد. كل النصوص نُزّلت آليًا بالسورة والآية.
 
@@ -121,7 +124,7 @@ echo ".sources/" >> .gitignore
 | | KFGQPC Uthmanic Script HAFS | خطوط الصفحات (QCF) |
 |---|---|---|
 | ما هو | خط عادي مبني على كتابة عثمان طه، تُكتب به أي آية بأي حجم | خط مستقل لكل صفحة من صفحات المصحف الـ٦٠٤، يرسم الصفحة كما هي في المطبوع |
-| النص الذي يحتاجه | نص المجمع المصمَّم له، وهو المتاح في `api.quran.com` (`text_uthmani`). نص Tanzil العثماني لا يطابقه في بعض العلامات | رموز خاصة بكل صفحة، ليست حروفًا عربية |
+| النص الذي يحتاجه | نص المجمع المصمَّم له، وهو المتاح في `api.quran.com` (`text_qpc_hafs`). نص Tanzil العثماني يرمّز بعض العلامات بغير ما يرمّزها المجمع (السكون مثلًا)، فلا يُستعمل مع هذا الخط. الحروف نفسها متطابقة بين النصين بعد حذف العلامات، وهذا ما يقارنه سكريبت النسخ | رموز خاصة بكل صفحة، ليست حروفًا عربية |
 | يصلح لـ «قريب»؟ | **نعم**: في الصورة يعرض أرقام الآيات تلقائيًا داخل علامة نهاية الآية كالمصحف | **لا**: لا يُبحث فيه ولا يُنسخ منه، ويصعب اقتطاع دعاء من وسط آية |
 | ما يلزم قبل اعتماده | قراءة شروط استخدام الخط عند المجمع، وشروط نص `api.quran.com`. لم أجد نص ترخيص واضحًا في صفحة خطوط المجمع | — |
 
@@ -136,9 +139,15 @@ echo ".sources/" >> .gitignore
 | النسخ والمشاركة | يظهر سليمًا في أغلب الهواتف الحديثة، وقد تظهر بعض العلامات مربعات في أجهزة قديمة | يظهر سليمًا في كل مكان |
 | الترخيص | Tanzil Uthmani: الترخيص نفسه (CC BY 3.0، نسخ حرفي، وذكر المصدر، ورابط) | Tanzil Simple: الترخيص نفسه |
 
-**اقتراحي:** العثماني للعرض داخل التطبيق وعلى بطاقة الصورة، بخط مصحف المدينة ونص المجمع إن سمحت شروطهما؛ فهو أقرب ما يكون إلى المصحف الذي يعرفه الناس. وإن لم تسمح: Amiri Quran مع نص Tanzil العثماني. والإملائي من Tanzil للبحث ولنص النسخ في الحالين.
+**القرار:** خط مصحف المدينة مع نص المجمع، في التطبيق وفي بطاقة المشاركة، حتى يقرأ المستخدم كأنه يقرأ من المصحف. والإملائي من Tanzil للبحث وحده.
 
-### ٥. المرجع المعتمد في درجة الحديث
+**بقي قبل الإطلاق العام:** تأكيد شروط استخدام الخط والنص. صفحة خطوط المجمع (`fonts.qurancomplex.gov.sa`) تعرض الخطوط بعبارة «قريبًا» ولا تذكر ترخيصًا. الملف الذي جرّبته من المستودع المفتوح لموقع quran.com، ونصه من `api.quran.com`. الطريق: مراسلة المجمع، أو اعتماد الشروط المنشورة في مكتبة QUL (qul.tarteel.ai) إن كانت تغطي الاستخدام. وإن تعذّر، فالبديل الجاهز Amiri Quran مع نص Tanzil العثماني (رخصتاهما معروفتان)، ويتغير بسطر في الإعداد.
+
+**حدّ الدقة:** الخط الرقمي مبني على خط عثمان طه نفسه، لكنه ليس صورة الصفحة المطبوعة. السطور تنكسر حسب عرض الشاشة لا كما في صفحة المصحف. المطابقة التامة لشكل الصفحة لا تكون إلا بخطوط الصفحات (QCF)، ولا تصلح لنا كما سبق.
+
+### ٥. المرجع المعتمد في درجة الحديث (لم يُحسم)
+
+**المسألة ببساطة:** أحاديث البخاري ومسلم ثابتة، ولا سؤال فيها. أما الأحاديث في الكتب الأخرى (أبو داود، والترمذي، والنسائي، وابن ماجه، وأحمد) فحكم عليها العلماء بعد ذلك: هذا صحيح، وهذا حسن، وهذا ضعيف. وأحيانًا يختلفون في الحديث الواحد. فنحتاج قاعدة واحدة نطبقها كل مرة: **بحكم مَن نأخذ؟**
 
 **ما لن يتغير أيًّا كان اختيارك:** الصحيح والحسن فقط. ما في البخاري ومسلم يكفي فيه العزو. ولا تُعرض درجة إلا ومعها اسم من حكم بها.
 
@@ -160,7 +169,7 @@ echo ".sources/" >> .gitignore
 | **ج. اتفاق المحققين** | يدخل ما لم يضعّفه أحد من قائمة محددة | الأشد احتياطًا | يُسقط أدعية ثابتة عند الأكثرين. مثال: لو دخل زبير علي زئي في القائمة لسقط دعاء عائشة ليلة القدر |
 | **د. ما يحكم به المراجع الشرعي** | المراجع يقرر في كل حديث خارج الصحيحين | الأدق إن كان المراجع محدّثًا | يعتمد على وجوده، ولا يصلح للمرحلة الأولى وحدها |
 
-**اقتراحي: ب.** القاعدة واضحة يطبقها التحقق الأول آليًا، والحالات المختلف فيها تذهب إلى المراجع وحده.
+**اقتراحي: ب.** القاعدة واضحة يطبقها التحقق الأول آليًا، والحالات المختلف فيها تذهب إلى المراجع وحده. ومع قرار عرض البطاقات قبل المراجع (§٩)، الحديث المختلف فيه لا يظهر حتى يقرر المراجع فيه، وما سواه يظهر.
 
 ### ٦. الدرر السنية
 
@@ -169,7 +178,7 @@ echo ".sources/" >> .gitignore
 - الطرق الممكنة: (١) يُفتح يدويًا عند المراجعة، والرابط يُحفظ في `hadith.sourceUrl`. (٢) أصل إليه من جهازك أنت عبر Remote Control، فيمر الطلب من اتصالك. يُجرَّب، ولا أضمن أن Cloudflare يسمح. (٣) قبل أي سحب آلي منظّم: قراءة شروط الموقع، أو مراسلتهم.
 - ما استعملته بدلًا منه في التحقق الأول: مجموعة بيانات مفتوحة على GitHub (`fawazahmed0/hadith-api`، مأخوذة من sunnah.com) فيها النص العربي والأرقام وأحكام عدد من المحققين للسنن. وجدت فيها حرفًا تالفًا في نص واحد (البخاري ٨٣٤)، فهي للتحقق لا للنشر، ولا يُعتمد عليها وحدها.
 
-### ٧. النطاق
+### ٧. النطاق (حُسم مؤقتًا: Vercel بنطاقه المجاني)
 
 `qareeb.app` و`qareeb.com` و`qarib.app` وأغلب الأشكال القصيرة محجوزة. المتاح عند الفحص في ٢٣ نوفمبر ٢٠٢٦ (فحص فقط، لم يُحجز شيء):
 
@@ -177,18 +186,27 @@ echo ".sources/" >> .gitignore
 |---|---|
 | **qareebdua.app** و**qareebdua.com** | الاسم نفسه في النطاقين: الصفحة التعريفية على أحدهما، والتطبيق على `app.` منه، والآخر يحوّل إليه |
 | duaqareeb.com و duaqareeb.app | |
-| inniqareeb.com | من «فإني قريب»، لكنه طويل ويصعب كتابته |
+| inniqareeb.com | من آية البقرة ١٨٦، لكنه طويل ويصعب كتابته |
 | qareeb.dev | لا يناسب منتجًا للعامة |
 
-**اقتراحي:** `qareebdua.app` (مع `qareebdua.com` تحويلًا). الحجز من حسابك على Vercel أو أي مسجل نطاقات. أستطيع حجزه إن طلبت ذلك صراحة، بعد أن أعرض عليك السعر.
+**القرار الآن:** التطبيق على Vercel بعنوانه المجاني (مثل `qareeb.vercel.app`، والعنوان الفعلي يحدده اسم المشروع على Vercel وتوفره).
+
+**ما يترتب عليه:** المتصفح يحفظ بيانات المستخدم (الدفتر، و«دعواتي»، والأيام) لكل عنوان على حدة. لو بدأ الناس على `vercel.app` ثم انتقل التطبيق إلى نطاق خاص، سيفتحونه فارغًا. فإما:
+
+1. أن يُحجز النطاق قبل أن يستعمله أحد غيرك وغير المختبرين (الأبسط، واقتراحي)، أو
+2. أن تُبنى قبل الانتقال خطوة نقل: على العنوان القديم شريط «انتقلنا» وزر يصدّر النسخة الاحتياطية، وعلى الجديد زر يستوردها. هذه موجودة أصلًا في الإعدادات (`05` §٦)، فيكفي شريط وزر.
+
+والمتاح من النطاقات عند الفحص في الجدول أعلاه: `qareebdua.app` و`qareebdua.com` في مقدمته.
 
 ### ٨. المراجع الشرعي (المرحلة الثانية)
 
 لم يُسمَّ بعد. المطلوب: عالم بالحديث والتفسير، يراجع البطاقات بعد التحقق الأول بقائمة الفحص في `03` §٨، ويوقّع باسمه في `review.approval`.
 
-### ٩. ما يُعرض قبل المراجع الشرعي
+### ٩. ما يُعرض قبل المراجع الشرعي (حُسم: يُعرض ما تحققتُ منه)
 
-قرار مستقل يلزم قبل أي إطلاق: هل تظهر للناس بطاقات تحققتُ منها ولم يراجعها العالم بعد؟ انظر `03` §٨، «البوابة».
+`CONTENT_MIN_LEVEL=verified`: تظهر البطاقة بعد أن تجتاز التحقق الأول من المصادر، دون انتظار المراجع الشرعي. البطاقات التي فيها خلاف في الدرجة أو سؤال مفتوح لا تجتاز التحقق الأول أصلًا، فتنتظر المراجع.
+
+يبقى شرط واحد للأمانة، كما في درس «الحمد» (C-01 وC-08): صفحة «عن المحتوى» تقول بدقة إن كل نص طوبق على مصدره وإن المراجعة العلمية جارية، ولا تقول «مراجَع من العلماء» قبل أن يحدث. أما وسم كل بطاقة بحالتها فاختياري، ويُقرر مع التصميم.
 <!-- ===== END FILE ===== -->
 
 <!-- ===== FILE: docs/handoff/01-product-brief.md ===== -->
@@ -271,10 +289,10 @@ echo ".sources/" >> .gitignore
 
 | # | القرار | اقتراحي |
 |---:|---|---|
-| ١ | الاسم والنطاق | الاسم «قريب» (محسوم). النطاق يُحسم قبل الإطلاق، **ولا يُغيَّر بعده**: بيانات المستخدم مربوطة بالنطاق، وتغيير النطاق يضيّعها |
+| ١ | الاسم والنطاق | الاسم «قريب» (محسوم). الاستضافة مؤقتًا على Vercel بعنوانه المجاني (محسوم). النطاق الخاص يُحجز قبل أن يستعمل التطبيقَ الناسُ، لأن بيانات المستخدم مربوطة بالعنوان (`00` §٧) |
 | ٢ | المراجعة | مرحلتان (محسوم): تحقق من المصادر يقوم به Claude، ثم مراجع شرعي مسمّى. انظر `03` §٨ |
 | ٣ | المرجع المعتمد في درجة الحديث | **لم يُحسم**، والخيارات في `00-decisions.md`. الثابت: الاقتصار على الصحيح والحسن. ما في الصحيحين يكفي فيه العزو، وغيره يُذكر معه من حكم عليه (مثل: صححه الألباني في صحيح أبي داود). الضعيف لا يدخل ولو اشتهر |
-| ٤ | رسم المصحف | **لم يُحسم**، والمقارنة بين الرسمين في `assets/script-compare.png`. اقتراحي العثماني للعرض، مع نسخة إملائية للبحث. انظر `03` §٤ |
+| ٤ | رسم المصحف | **محسوم**: العثماني بخط مصحف المدينة (KFGQPC Uthmanic Script HAFS) مع نص المجمع، في التطبيق وبطاقة المشاركة، والإملائي للبحث. بقي تأكيد شروط الاستخدام (`00` §٤) |
 | ٥ | دعاء الترحيب | **محسوم**: دعاء الهداية في الفاتحة (٦–٧) مع الحديث القدسي في قسمة الصلاة بين الله وعبده (صحيح مسلم ٣٩٥). يقوله المسلم ١٧ مرة في اليوم على الأقل |
 | ٦ | ترتيب الإطلاق | القرآن والسنة معًا متداخلين، حتى لا يمر شهر كامل بلا حديث |
 | ٧ | المكتبة | في الإصدار الأول: الأدعية التي مررت بها فقط، مع المفضلة. التصفح الكامل حسب الحاجة في المرحلة الثانية |
@@ -567,7 +585,9 @@ echo ".sources/" >> .gitignore
 
 **القاعدة:** النص يُجلب بسكريبت من ملف مصدر محفوظ في المستودع، بالسورة ورقم الآية. لا يُكتب يدويًا ولا يُعدَّل بعد جلبه.
 
-### اختيار رسم المصحف (قرار ٤ في `00-decisions.md`)
+### رسم المصحف (حُسم: قرار ٤ في `00-decisions.md`)
+
+**المعتمد:** العثماني بخط مصحف المدينة (KFGQPC Uthmanic Script HAFS) مع نص المجمع المصمَّم له، منسوخًا من `api.quran.com` (`text_qpc_hafs`) إلى ملف في `content/sources/`. نص Tanzil الإملائي للبحث، ونص Tanzil العثماني مصدر ثانٍ تُقارن به الحروف. الجدول أدناه يبقى لتوثيق سبب الاختيار.
 
 المقارنة بالصورة: [assets/script-compare.png](assets/script-compare.png).
 
@@ -707,8 +727,8 @@ draft ← pending_verification ← verified ← approved
 
 | الخيار | متى | شرطه |
 |---|---|---|
-| `approved` (الافتراضي، واقتراحي للإطلاق العام) | بعد أن يراجع العالم | لا شيء إضافي |
-| `verified` | إطلاق تجريبي محدود قبل وجود المراجع | تقول «عن المحتوى» بدقة: «طابقنا كل نص مع مصدره، والمراجعة العلمية جارية»، ولا يُقال «مراجَع علميًا». وتظهر في كل بطاقة حالتها |
+| `approved` | بعد أن يراجع العالم | لا شيء إضافي |
+| `verified` (**المعتمد الآن**، قرار ٦ في `00-decisions.md`) | من أول إطلاق، قبل وجود المراجع | تقول «عن المحتوى» بدقة: «طابقنا كل نص مع مصدره، والمراجعة العلمية جارية»، ولا يُقال «مراجَع علميًا». وتظهر في كل بطاقة حالتها |
 
 ### قائمة فحص المراجع الشرعي لكل بطاقة (المرحلة الثانية)
 
@@ -1091,7 +1111,7 @@ draft ← pending_verification ← verified ← approved
 │   ├── sources/                  # ملف نص القرآن كما نُزّل، مع ترخيصه
 │   └── themes.json               # وسوم الحاجة وأسماؤها
 ├── scripts/
-│   ├── fetch-quran.ts            # ينسخ quran.fullText من content/sources بالسورة والآية
+│   ├── fetch-quran.ts            # ينسخ quran.fullText من نص المجمع في content/sources بالسورة والآية، ويقارن حروفه بنص Tanzil
 │   ├── fetch-hadith.ts           # ينسخ hadith.fullNarration من مجموعة بيانات الحديث بالكتاب والرقم
 │   ├── validate-content.ts       # الفحوص في 03 القسم ٧، ويفشل البناء عند أي خطأ
 │   ├── build-content.ts          # يجمع البطاقات المعتمدة في ملف واحد للتطبيق
@@ -1143,8 +1163,8 @@ export interface QuranSource {
   surahName: string;
   ayahFrom: number;
   ayahTo: number;
-  fullText: string;      // مجلوب آليًا، لا يُحرَّر
-  edition: string;       // "tanzil-uthmani-1.1" مثلًا
+  fullText: string;      // منسوخ آليًا ولا يُحرَّر. نص المجمع ينتهي برقم الآية، والخط يرسمه داخل علامة نهايتها
+  edition: string;       // "kfgqpc-hafs/api.quran.com:text_qpc_hafs"
 }
 
 export interface HadithSource {
@@ -1217,7 +1237,7 @@ export interface Dua {
 
 `scripts/build-content.ts` يكتب `src/content/generated/duas.json`:
 
-- في الإنتاج: البطاقات التي بلغت `CONTENT_MIN_LEVEL` فقط (`approved` افتراضيًا، أو `verified` لإطلاق تجريبي؛ انظر `03` §٨). إن قلّ عددها عن حد أدنى (مثلًا ٣٠) يفشل البناء.
+- في الإنتاج: البطاقات التي بلغت `CONTENT_MIN_LEVEL` فقط (`verified` بقرار صاحب المشروع، ويصير `approved` حين يوجد المراجع؛ انظر `03` §٨). إن قلّ عددها عن حد أدنى (مثلًا ٣٠) يفشل البناء.
 - يُحمل مستوى كل بطاقة إلى التطبيق، فتعرض «عن المحتوى» عدد ما بلغ كل مستوى.
 - في المعاينة (`CONTENT_PREVIEW=1`): كل البطاقات، والمسودات تظهر بشارة «مسودة» واضحة، والأماكن الفارغة `<<…>>` تظهر بلون تحذيري.
 
@@ -1289,7 +1309,7 @@ resolveToday({ today, welcomeDoneOn, all, welcomeId })
 - `@theme` في Tailwind يربط المتغيرات بأسماء أدوات (`bg-surface`، `text-muted`…). هكذا بُنيت الصفحة التعريفية لـ«الحمد» (`src/landing/landing.css`) وكانت سليمة، بخلاف التطبيق الذي كتب ألوان hex في المكوّنات ثم أعاد تلوينها في الوضع الفاتح بنحو ٢٠٠ سطر من `!important`، فبقي ٧٩ لونًا بلا مقابل فاتح.
 - فحص في CI: أي لون hex أو `rgb(` داخل `src/` خارج `tokens.css` يفشل الفحص.
 - Tailwind يفحص `src/` فقط (`@import "tailwindcss" source("../")` من داخل `src/styles`)، لا المستودع كله.
-- الخطوط مستضافة ذاتيًا، ومقتطعة للحروف العربية: خط للنص، وخط للمصحف. لا طلب إلى Google Fonts (يكشف عنوان IP للمستخدم، ويناقض وعد الخصوصية، ويؤخر العرض).
+- الخطوط مستضافة ذاتيًا، ومقتطعة للحروف العربية: خط للنص، وخط المصحف KFGQPC Uthmanic Script HAFS (ملف `UthmanicHafs1Ver18.woff2`، لا يُقتطع حتى لا تسقط علامة). وهو نفسه في بطاقة المشاركة، فتخرج الصورة كصفحة المصحف. لا طلب إلى Google Fonts (يكشف عنوان IP للمستخدم، ويناقض وعد الخصوصية، ويؤخر العرض).
 - مكوّن `<SacredText kind="quran|hadith">` واحد يطبّق العلامات (﴿ ﴾ أو « »)، والخط، والاتجاه، ويمنع القطع. لا يُعرض نص مقدس بغيره. (في «الحمد» كان نوع النص يُقارن بقيمة خاطئة، `'ayah'` بدل `'quran'`، فظهرت الآية بعلامات الحديث وخطه، B-04.)
 - `index.html`: `lang="ar" dir="rtl"`، وviewport بلا منع للتكبير.
 
@@ -1339,6 +1359,7 @@ resolveToday({ today, welcomeDoneOn, all, welcomeId })
 
 ## ١٢. النشر والأمان
 
+- **الآن (قرار ٥ في `00-decisions.md`):** مشروع Vercel واحد بعنوانه المجاني `*.vercel.app`، الصفحة التعريفية والتطبيق فيه معًا (التطبيق على `/app` مثلًا) إلى أن يُحجز نطاق. قبل أي انتقال إلى نطاق خاص: شريط «انتقلنا» على العنوان القديم مع زر تصدير، وزر استيراد على الجديد (`00` §٧).
 - **النطاق يُحسم قبل الإطلاق ولا يتغير**: التخزين المحلي مربوط بالمصدر (origin)، فنقل التطبيق من نطاق إلى آخر يُفقد المستخدمين بياناتهم.
 - إن كانت الصفحة التعريفية على النطاق الرئيسي والتطبيق على نطاق فرعي (كما في «الحمد»): Vercel يقدّم `index.html` الموجود قبل تطبيق قواعد إعادة الكتابة، فإما أن يُسمّى ملف التطبيق `app.html` في البناء (حل «الحمد»: `vite build && mv dist/index.html dist/app.html`) وإما أن يكون لكلٍّ منهما مشروع Vercel منفصل. المشروعان المنفصلان أبسط وأوضح.
 - ولا يجيب التطبيق إلا على نطاقه (إعادة توجيه من أي مسار آخر)، حتى لا تتوزع بيانات المستخدم على مصدرين (في «الحمد» كان `alhamd.app/app.html` يفتح التطبيق بتخزين منفصل).
@@ -1596,7 +1617,8 @@ CI على GitHub Actions: `lint` (tsc strict)، و`test`، و`validate-content`�
 
 ### النشر
 
-- [ ] النطاق النهائي (لن يتغير)، وإعادة توجيه لكل نطاق أو مسار آخر.
+- [ ] النطاق: إن بقي التطبيق على `vercel.app` فلا تغيير بعدها بلا خطوة نقل (`00` §٧). وإن حُجز نطاق: هو النهائي، وإعادة توجيه لكل نطاق أو مسار آخر.
+- [ ] شروط استخدام خط مصحف المدينة ونص المجمع مؤكدة، أو التحويل إلى البديل (`00` §٤).
 - [ ] ترويسات الأمان مفعّلة ومفحوصة.
 - [ ] لا ملفات داخلية في `public/`.
 - [ ] صورة المشاركة والوسوم في الصفحة التعريفية، ومعاينة الرابط في واتساب وX سليمة.
@@ -1636,11 +1658,11 @@ CI على GitHub Actions: `lint` (tsc strict)، و`test`، و`validate-content`�
 ### الجزء ١: الأساس
 
 - مشروع Vite + React 19 + TypeScript بوضع strict، وBun، وTailwind v4 بمتغيرات دلالية في src/styles/tokens.css (أسماؤها في docs/handoff/10-identity-brief.md). الهوية البصرية لم تُصنع بعد: ضع قيمًا محايدة مؤقتة (رماديات وأزرق واحد) واضحة أنها مؤقتة، بحيث تُستبدل الهوية بتعديل tokens.css وحده.
-- هيكل المجلدات كما في المخطط §٢. اسم التطبيق («قريب») وبادئة مفاتيح التخزين (qareeb) ونسخة نص القرآن المعتمدة للعرض (عثماني أو إملائي، لم تُحسم بعد) في ملف إعداد واحد (src/config.ts)، كلٌّ منها يتغير بسطر.
+- هيكل المجلدات كما في المخطط §٢. اسم التطبيق («قريب») وبادئة مفاتيح التخزين (qareeb) ونسخة نص القرآن المعتمدة للعرض (المعتمد: نص المجمع بخط KFGQPC Uthmanic Script HAFS؛ والبديل Amiri Quran مع Tanzil العثماني إن لم تسمح الشروط) في ملف إعداد واحد (src/config.ts)، كلٌّ منها يتغير بسطر.
 - Vitest مع اختبارات reusable-code، وPlaywright، وGitHub Actions يشغّل: lint وtest وvalidate-content وcheck-promises وbuild.
 - scripts/check-promises.ts كما في المخطط §١٠.
-- خط المحتوى: src/content/types.ts وschema.ts (Zod)، وscripts/validate-content.ts بالفحوص في 03 §٧، وscripts/build-content.ts مع بوابة المراجعة: الحد الأدنى لما يدخل الإنتاج متغير واحد (verified أو approved، انظر 03 §٨)، والمعاينة CONTENT_PREVIEW=1 تضم الكل بشارة «مسودة».
-- scripts/fetch-quran.ts: يقرأ ملف نص القرآن من content/sources/ ويملأ quran.fullText بالسورة والآية. ضع في content/sources/ نسختي Tanzil (uthmani وsimple) مع ترخيصهما: واحدة للعرض حسب الإعداد، والإملائية دائمًا للبحث. إن لم يكن الملف موجودًا، أو لم تستطع تنزيله من tanzil.net بسبب سياسة الشبكة، فتوقف واطلب مني الملف. لا تكتب نص آية أو حديث من ذاكرتك أبدًا، ولا جزءًا منه: النص يُنسخ حرفيًا من مصدره بالسكريبت، ويظهر للمستخدم كما نُسخ. وفي رسائلك لي أشر إليه بمرجعه.
+- خط المحتوى: src/content/types.ts وschema.ts (Zod)، وscripts/validate-content.ts بالفحوص في 03 §٧، وscripts/build-content.ts مع بوابة المراجعة: الحد الأدنى لما يدخل الإنتاج متغير واحد (CONTENT_MIN_LEVEL، والمعتمد الآن verified بقرار صاحب المشروع؛ انظر 03 §٨)، والمعاينة CONTENT_PREVIEW=1 تضم الكل بشارة «مسودة».
+- scripts/fetch-quran.ts: يقرأ ملف نص القرآن من content/sources/ ويملأ quran.fullText بالسورة والآية. ضع في content/sources/: نص المجمع منسوخًا من api.quran.com (حقل text_qpc_hafs لكل آية، من /api/v4/quran/verses/qpc_hafs) للعرض، ونسختي Tanzil (uthmani للمقارنة، وsimple للبحث) مع ترخيصهما. وخط المصحف KFGQPC Uthmanic Script HAFS: الملف UthmanicHafs1Ver18.woff2 من المستودع المفتوح quran/quran.com-frontend-next (public/fonts/quran/hafs/uthmanic_hafs/)، مستضاف ذاتيًا. الآية تظهر للمستخدم كما في المصحف. إن لم يكن الملف موجودًا، أو لم تستطع تنزيله من tanzil.net بسبب سياسة الشبكة، فتوقف واطلب مني الملف. لا تكتب نص آية أو حديث من ذاكرتك أبدًا، ولا جزءًا منه: النص يُنسخ حرفيًا من مصدره بالسكريبت، ويظهر للمستخدم كما نُسخ. وفي رسائلك لي أشر إليه بمرجعه.
 - scripts/fetch-hadith.ts: ينسخ نص الحديث كاملًا من مجموعة البيانات المفتوحة (fawazahmed0/hadith-api، الكتب الستة) بالكتاب والرقم إلى hadith.fullNarration، مع اسم المصدر ونظام ترقيمه. نص الدعاء (text) جزء حرفي منه يحدده المراجع، والسكريبت يتحقق أنه جزء منه. لا يُعدّ الحديث متحققًا منه قبل مطابقته على مصدر ثانٍ. انظر docs/handoff/04c-catalogue-texts.md لمثال الناتج وتنبيه الحروف التالفة.
 - ثلاث بطاقات تجريبية في content/duas/ بحالة draft، مبنية على docs/handoff/templates/dua.example.json وdua.example.quran.json: دعاء الترحيب (الفاتحة ٦–٧)، ودعاء يونس (الأنبياء ٨٧)، ودعاء معاذ (سنن أبي داود ١٥٢٢). نص الآيات يأتي من السكريبت. نص الحديث وكل حقل نصي مقدس للسنة يبقى مكانًا فارغًا بالشكل <<يُلصق من المصدر: سنن أبي داود ١٥٢٢>>. الطبقة المؤلَّفة اكتب لها نصًّا قصيرًا واضحًا أنه للتجربة: «[نص تجريبي]».
 
@@ -1822,7 +1844,7 @@ CI على GitHub Actions: `lint` (tsc strict)، و`test`، و`validate-content`�
 | الدور | شروط |
 |---|---|
 | خط الواجهة والنص | عربي واضح على الشاشات الصغيرة، بأوزان ٤٠٠ و٥٠٠ و٧٠٠ على الأقل، ورخصته تسمح بالاستضافة الذاتية (OFL مثلًا) |
-| خط المصحف | يدعم علامات الرسم الذي اخترته (العثماني أو الإملائي) كاملة. يُجرَّب على أطول الآيات وأكثرها علامات قبل اعتماده، وتُراجع رخصته |
+| خط المصحف | **محسوم:** خط مصحف المدينة (KFGQPC Uthmanic Script HAFS). لا يُستبدل ولا يُعدَّل مع الهوية؛ الهوية تختار ما حوله فقط: الحجم، وارتفاع السطر، ولون النص المقدس وإطاره |
 | خط العناوين (اختياري) | إن وُجد، فبوزن واحد ومقتطع |
 
 حجم النص الأساسي ١٦ بكسل على الأقل، وارتفاع السطر للنص المقدس واسع (١٫٩ أو أكثر) لأن التشكيل يحتاج مسافة.
@@ -1867,7 +1889,7 @@ bun run test              # vitest
 bun run e2e -- --trace off
 bun run validate-content  # schema, sacred-text and review checks on content/duas
 bun run check-promises    # product promises as code checks
-bun run build             # production build: content at CONTENT_MIN_LEVEL or above (approved by default)
+bun run build             # production build: content at CONTENT_MIN_LEVEL or above (verified, by the owner's decision)
 CONTENT_PREVIEW=1 bun run build   # preview build: drafts included, marked
 ```
 
@@ -1875,14 +1897,14 @@ CONTENT_PREVIEW=1 bun run build   # preview build: drafts included, marked
 
 - **Sacred text is copied, never written.** Qur'an text is copied by `scripts/fetch-quran.ts` from the source file in `content/sources/`, by surah and ayah. Hadith text is copied by `scripts/fetch-hadith.ts` from the hadith dataset, by collection and number, or pasted by a researcher from the source named in `hadith.sourceUrl`, and checked against a second source before a card is verified. Both are shown to users exactly as copied. Never type, complete, correct, re-vowel or paraphrase a verse or a hadith from memory, in any file or reply; refer to one by its reference instead. A character a source has corrupted is never repaired by hand: copy that text from a second source. Tests use neutral Arabic text.
 - **Three content layers.** Sacred text (verbatim), transmitted information (with a citation), authored text (reviewed). Authored text adds no event, name, quote or ruling that is not in the first two layers. Anything quoted inside authored text between ﴿ ﴾ or « » must match its source; `validate-content` checks the Qur'an fragments.
-- **Review gate.** Two stages: `verified` (source verification by Claude, with a report in `review.verification`) then `approved` (the named scholarly reviewer, in `review.approval`). Production shows cards at `CONTENT_MIN_LEVEL` or above (`approved` by default). Never set `approval` or the `approved` status yourself, and never write in the interface that the content was reviewed by scholars unless every card shown is `approved`.
+- **Review gate.** Two stages: `verified` (source verification by Claude, with a report in `review.verification`) then `approved` (the named scholarly reviewer, in `review.approval`). Production shows cards at `CONTENT_MIN_LEVEL` or above (`verified`, by the owner's decision, until a reviewer exists). Never set `approval` or the `approved` status yourself, and never write in the interface that the content was reviewed by scholars unless every card shown is `approved`.
 - **Dates.** Every day key comes from `src/lib/dates.ts` (`toLocalDateString`, `parseLocalDateString`, `useLocalDay`). Never `toISOString().slice(0, 10)` or `new Date("YYYY-MM-DD")`: those are UTC, which is still yesterday until 03:00 in Riyadh.
 - **Store what was shown.** A completion stores the dua id with the local day. Never recompute which dua a past day had from its date.
 - **Storage keys.** One registry, `src/state/keys.ts`, one pattern `qareeb:name:v1`. Never rename a key or change a stored shape without a migration, a test for it and an update to `docs/reference/storage.md`. Nothing is written on first run except what the user did.
 - **Product promises.** No streaks, consecutive-day counts, points, badges or percentages of days. No account. No network request from `src/` (the allow-list in `scripts/check-promises.ts` is empty). No user text in anything shared or exported except the user's own backup file. Do not show a setting or claim a feature that does not work.
 - **Theming.** Components use semantic tokens from `src/styles/tokens.css` through Tailwind's `@theme`. No hex, `rgb(` or named colours in components. The theme is set on `<html>` only.
 - **Overlays.** Every dialog renders through the shared `Dialog` component (portal to `document.body`, `useDialog` for focus, Escape and scroll lock). Never put `transform`, `filter` or `animation-fill-mode: forwards` on a screen root: a transformed ancestor becomes the containing block of `position: fixed` children.
-- **Sacred text display.** Only through `SacredText`. It is never truncated, in the app or on share images: shrink the type or grow the card.
+- **Sacred text display.** Only through `SacredText`. Qur'an text is the King Fahd Complex text (`text_qpc_hafs` from api.quran.com, endpoint `/api/v4/quran/verses/qpc_hafs`, kept in `content/sources/`) in the Madina Mushaf font KFGQPC Uthmanic Script HAFS, self-hosted, in the app and on share images, so it reads like the printed mushaf. Do not pair that font with Tanzil's text. It is never truncated, in the app or on share images: shrink the type or grow the card.
 - **Accessibility.** No `user-scalable=no` or `maximum-scale`. Honour `prefers-reduced-motion`. Paced text lives in a polite live region and can always be shown in full.
 - **No developer tools in production builds.** Use `import.meta.env.DEV`.
 - **Size.** Keep components under about 300 lines; pure logic goes in `src/lib/` with tests.
@@ -2035,8 +2057,8 @@ Type check, unit tests and the content and promise checks must pass. For UI, che
     "surahName": "الأنبياء",
     "ayahFrom": 87,
     "ayahTo": 87,
-    "fullText": "وَذَا ٱلنُّونِ إِذ ذَّهَبَ مُغَـٰضِبًا فَظَنَّ أَن لَّن نَّقْدِرَ عَلَيْهِ فَنَادَىٰ فِى ٱلظُّلُمَـٰتِ أَن لَّآ إِلَـٰهَ إِلَّآ أَنتَ سُبْحَـٰنَكَ إِنِّى كُنتُ مِنَ ٱلظَّـٰلِمِينَ",
-    "edition": "tanzil-uthmani-1.1"
+    "fullText": "وَذَا ٱلنُّونِ إِذ ذَّهَبَ مُغَٰضِبٗا فَظَنَّ أَن لَّن نَّقۡدِرَ عَلَيۡهِ فَنَادَىٰ فِي ٱلظُّلُمَٰتِ أَن لَّآ إِلَٰهَ إِلَّآ أَنتَ سُبۡحَٰنَكَ إِنِّي كُنتُ مِنَ ٱلظَّٰلِمِينَ ٨٧",
+    "edition": "kfgqpc-hafs/api.quran.com:text_qpc_hafs"
   },
   "context": {
     "retelling": "خرج يونس عليه السلام من بين قومه غاضبًا، فابتلعه الحوت. ومن هناك، في الظلمة، دعا ربه، فاستجاب الله له ونجّاه من كربه.",
@@ -3480,7 +3502,7 @@ bun run test              # vitest
 bun run e2e -- --trace off
 bun run validate-content  # schema, sacred-text and review checks on content/duas
 bun run check-promises    # product promises as code checks
-bun run build             # production build: content at CONTENT_MIN_LEVEL or above (approved by default)
+bun run build             # production build: content at CONTENT_MIN_LEVEL or above (verified, by the owner's decision)
 CONTENT_PREVIEW=1 bun run build   # preview build: drafts included, marked
 ```
 
@@ -3488,14 +3510,14 @@ CONTENT_PREVIEW=1 bun run build   # preview build: drafts included, marked
 
 - **Sacred text is copied, never written.** Qur'an text is copied by `scripts/fetch-quran.ts` from the source file in `content/sources/`, by surah and ayah. Hadith text is copied by `scripts/fetch-hadith.ts` from the hadith dataset, by collection and number, or pasted by a researcher from the source named in `hadith.sourceUrl`, and checked against a second source before a card is verified. Both are shown to users exactly as copied. Never type, complete, correct, re-vowel or paraphrase a verse or a hadith from memory, in any file or reply; refer to one by its reference instead. A character a source has corrupted is never repaired by hand: copy that text from a second source. Tests use neutral Arabic text.
 - **Three content layers.** Sacred text (verbatim), transmitted information (with a citation), authored text (reviewed). Authored text adds no event, name, quote or ruling that is not in the first two layers. Anything quoted inside authored text between ﴿ ﴾ or « » must match its source; `validate-content` checks the Qur'an fragments.
-- **Review gate.** Two stages: `verified` (source verification by Claude, with a report in `review.verification`) then `approved` (the named scholarly reviewer, in `review.approval`). Production shows cards at `CONTENT_MIN_LEVEL` or above (`approved` by default). Never set `approval` or the `approved` status yourself, and never write in the interface that the content was reviewed by scholars unless every card shown is `approved`.
+- **Review gate.** Two stages: `verified` (source verification by Claude, with a report in `review.verification`) then `approved` (the named scholarly reviewer, in `review.approval`). Production shows cards at `CONTENT_MIN_LEVEL` or above (`verified`, by the owner's decision, until a reviewer exists). Never set `approval` or the `approved` status yourself, and never write in the interface that the content was reviewed by scholars unless every card shown is `approved`.
 - **Dates.** Every day key comes from `src/lib/dates.ts` (`toLocalDateString`, `parseLocalDateString`, `useLocalDay`). Never `toISOString().slice(0, 10)` or `new Date("YYYY-MM-DD")`: those are UTC, which is still yesterday until 03:00 in Riyadh.
 - **Store what was shown.** A completion stores the dua id with the local day. Never recompute which dua a past day had from its date.
 - **Storage keys.** One registry, `src/state/keys.ts`, one pattern `qareeb:name:v1`. Never rename a key or change a stored shape without a migration, a test for it and an update to `docs/reference/storage.md`. Nothing is written on first run except what the user did.
 - **Product promises.** No streaks, consecutive-day counts, points, badges or percentages of days. No account. No network request from `src/` (the allow-list in `scripts/check-promises.ts` is empty). No user text in anything shared or exported except the user's own backup file. Do not show a setting or claim a feature that does not work.
 - **Theming.** Components use semantic tokens from `src/styles/tokens.css` through Tailwind's `@theme`. No hex, `rgb(` or named colours in components. The theme is set on `<html>` only.
 - **Overlays.** Every dialog renders through the shared `Dialog` component (portal to `document.body`, `useDialog` for focus, Escape and scroll lock). Never put `transform`, `filter` or `animation-fill-mode: forwards` on a screen root: a transformed ancestor becomes the containing block of `position: fixed` children.
-- **Sacred text display.** Only through `SacredText`. It is never truncated, in the app or on share images: shrink the type or grow the card.
+- **Sacred text display.** Only through `SacredText`. Qur'an text is the King Fahd Complex text (`text_qpc_hafs` from api.quran.com, endpoint `/api/v4/quran/verses/qpc_hafs`, kept in `content/sources/`) in the Madina Mushaf font KFGQPC Uthmanic Script HAFS, self-hosted, in the app and on share images, so it reads like the printed mushaf. Do not pair that font with Tanzil's text. It is never truncated, in the app or on share images: shrink the type or grow the card.
 - **Accessibility.** No `user-scalable=no` or `maximum-scale`. Honour `prefers-reduced-motion`. Paced text lives in a polite live region and can always be shown in full.
 - **No developer tools in production builds.** Use `import.meta.env.DEV`.
 - **Size.** Keep components under about 300 lines; pure logic goes in `src/lib/` with tests.

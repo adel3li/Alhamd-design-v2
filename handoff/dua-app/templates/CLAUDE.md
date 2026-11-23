@@ -19,7 +19,7 @@ bun run test              # vitest
 bun run e2e -- --trace off
 bun run validate-content  # schema, sacred-text and review checks on content/duas
 bun run check-promises    # product promises as code checks
-bun run build             # production build: content at CONTENT_MIN_LEVEL or above (approved by default)
+bun run build             # production build: content at CONTENT_MIN_LEVEL or above (verified, by the owner's decision)
 CONTENT_PREVIEW=1 bun run build   # preview build: drafts included, marked
 ```
 
@@ -27,14 +27,14 @@ CONTENT_PREVIEW=1 bun run build   # preview build: drafts included, marked
 
 - **Sacred text is copied, never written.** Qur'an text is copied by `scripts/fetch-quran.ts` from the source file in `content/sources/`, by surah and ayah. Hadith text is copied by `scripts/fetch-hadith.ts` from the hadith dataset, by collection and number, or pasted by a researcher from the source named in `hadith.sourceUrl`, and checked against a second source before a card is verified. Both are shown to users exactly as copied. Never type, complete, correct, re-vowel or paraphrase a verse or a hadith from memory, in any file or reply; refer to one by its reference instead. A character a source has corrupted is never repaired by hand: copy that text from a second source. Tests use neutral Arabic text.
 - **Three content layers.** Sacred text (verbatim), transmitted information (with a citation), authored text (reviewed). Authored text adds no event, name, quote or ruling that is not in the first two layers. Anything quoted inside authored text between ﴿ ﴾ or « » must match its source; `validate-content` checks the Qur'an fragments.
-- **Review gate.** Two stages: `verified` (source verification by Claude, with a report in `review.verification`) then `approved` (the named scholarly reviewer, in `review.approval`). Production shows cards at `CONTENT_MIN_LEVEL` or above (`approved` by default). Never set `approval` or the `approved` status yourself, and never write in the interface that the content was reviewed by scholars unless every card shown is `approved`.
+- **Review gate.** Two stages: `verified` (source verification by Claude, with a report in `review.verification`) then `approved` (the named scholarly reviewer, in `review.approval`). Production shows cards at `CONTENT_MIN_LEVEL` or above (`verified`, by the owner's decision, until a reviewer exists). Never set `approval` or the `approved` status yourself, and never write in the interface that the content was reviewed by scholars unless every card shown is `approved`.
 - **Dates.** Every day key comes from `src/lib/dates.ts` (`toLocalDateString`, `parseLocalDateString`, `useLocalDay`). Never `toISOString().slice(0, 10)` or `new Date("YYYY-MM-DD")`: those are UTC, which is still yesterday until 03:00 in Riyadh.
 - **Store what was shown.** A completion stores the dua id with the local day. Never recompute which dua a past day had from its date.
 - **Storage keys.** One registry, `src/state/keys.ts`, one pattern `qareeb:name:v1`. Never rename a key or change a stored shape without a migration, a test for it and an update to `docs/reference/storage.md`. Nothing is written on first run except what the user did.
 - **Product promises.** No streaks, consecutive-day counts, points, badges or percentages of days. No account. No network request from `src/` (the allow-list in `scripts/check-promises.ts` is empty). No user text in anything shared or exported except the user's own backup file. Do not show a setting or claim a feature that does not work.
 - **Theming.** Components use semantic tokens from `src/styles/tokens.css` through Tailwind's `@theme`. No hex, `rgb(` or named colours in components. The theme is set on `<html>` only.
 - **Overlays.** Every dialog renders through the shared `Dialog` component (portal to `document.body`, `useDialog` for focus, Escape and scroll lock). Never put `transform`, `filter` or `animation-fill-mode: forwards` on a screen root: a transformed ancestor becomes the containing block of `position: fixed` children.
-- **Sacred text display.** Only through `SacredText`. It is never truncated, in the app or on share images: shrink the type or grow the card.
+- **Sacred text display.** Only through `SacredText`. Qur'an text is the King Fahd Complex text (`text_qpc_hafs` from api.quran.com, endpoint `/api/v4/quran/verses/qpc_hafs`, kept in `content/sources/`) in the Madina Mushaf font KFGQPC Uthmanic Script HAFS, self-hosted, in the app and on share images, so it reads like the printed mushaf. Do not pair that font with Tanzil's text. It is never truncated, in the app or on share images: shrink the type or grow the card.
 - **Accessibility.** No `user-scalable=no` or `maximum-scale`. Honour `prefers-reduced-motion`. Paced text lives in a polite live region and can always be shown in full.
 - **No developer tools in production builds.** Use `import.meta.env.DEV`.
 - **Size.** Keep components under about 300 lines; pure logic goes in `src/lib/` with tests.
