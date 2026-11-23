@@ -32,7 +32,8 @@
 │   ├── sources/                  # ملف نص القرآن كما نُزّل، مع ترخيصه
 │   └── themes.json               # وسوم الحاجة وأسماؤها
 ├── scripts/
-│   ├── fetch-quran.ts            # يملأ quran.fullText من content/sources بالسورة والآية
+│   ├── fetch-quran.ts            # ينسخ quran.fullText من content/sources بالسورة والآية
+│   ├── fetch-hadith.ts           # ينسخ hadith.fullNarration من مجموعة بيانات الحديث بالكتاب والرقم
 │   ├── validate-content.ts       # الفحوص في 03 القسم ٧، ويفشل البناء عند أي خطأ
 │   ├── build-content.ts          # يجمع البطاقات المعتمدة في ملف واحد للتطبيق
 │   └── check-promises.ts         # يفحص الوعود (انظر القسم ١٠)

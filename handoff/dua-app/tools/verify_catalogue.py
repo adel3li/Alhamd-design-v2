@@ -14,7 +14,9 @@ Usage: python3 -I verify_catalogue.py DOWNLOADS_DIR, where DOWNLOADS_DIR has
 quran/simple.txt (Tanzil, txt-2 format) and hadith/<collection>.json
 (hadith-api editions/ara-<collection>.min.json).
 """
-import json, sys
+import json, os, sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 D = sys.argv[1]
 
@@ -24,19 +26,7 @@ for line in open(f'{D}/quran/simple.txt', encoding='utf-8'):
     if len(parts) == 3 and parts[0].isdigit():
         quran.add((int(parts[0]), int(parts[1])))
 
-Q = [  # (row, surah number, ayah from, ayah to)
-    (1, 1, 6, 7), (2, 2, 127, 127), (3, 2, 128, 128), (4, 2, 129, 129), (5, 2, 201, 201), (6, 2, 250, 250),
-    (7, 2, 286, 286), (8, 3, 8, 8), (9, 3, 35, 35), (10, 3, 38, 38), (11, 3, 147, 147), (12, 3, 173, 173),
-    (13, 3, 191, 194), (14, 7, 23, 23), (15, 7, 89, 89), (16, 7, 126, 126), (17, 7, 151, 151), (18, 10, 85, 86),
-    (19, 11, 47, 47), (20, 12, 33, 33), (21, 12, 86, 86), (22, 12, 101, 101), (23, 14, 35, 35), (24, 14, 37, 37),
-    (25, 14, 40, 41), (26, 17, 24, 24), (27, 17, 80, 80), (28, 18, 10, 10), (29, 19, 4, 4), (30, 20, 25, 28),
-    (31, 20, 114, 114), (32, 21, 83, 83), (33, 21, 87, 87), (34, 21, 89, 89), (35, 23, 29, 29), (36, 23, 97, 98),
-    (37, 23, 118, 118), (38, 25, 74, 74), (39, 26, 83, 85), (40, 26, 169, 169), (41, 27, 19, 19), (42, 28, 16, 16),
-    (43, 28, 21, 21), (44, 28, 22, 22), (45, 28, 24, 24), (46, 37, 100, 100), (47, 46, 15, 15), (48, 54, 10, 10),
-    (49, 59, 10, 10), (50, 66, 11, 11),
-    ('أخرى', 60, 4, 5), ('أخرى', 71, 28, 28), ('أخرى', 66, 8, 8), ('أخرى', 3, 193, 193), ('أخرى', 25, 65, 65),
-    ('أخرى', 40, 44, 44),
-]
+from catalogue_refs import Q, S  # noqa: E402
 
 H = {c: json.load(open(f'{D}/hadith/{c}.json'))['hadiths']
      for c in ['bukhari', 'muslim', 'abudawud', 'tirmidhi', 'nasai', 'ibnmajah']}
@@ -45,23 +35,6 @@ def find(coll, num):
     if coll == 'muslim':
         return [h for h in H[coll] if str(h.get('arabicnumber', '')).split('.')[0] == str(num)]
     return [h for h in H[coll] if h.get('hadithnumber') == num]
-
-S = [  # (row, [(collection, number)]); None = not in the open dataset
-    (1, [('bukhari', 834), ('muslim', 2705)]), (2, [('abudawud', 1522), ('nasai', 1303)]),
-    (3, [('tirmidhi', 3513), ('ibnmajah', 3850)]), (4, [('muslim', 918)]), (5, [('muslim', 920)]),
-    (6, [('bukhari', 6306)]), (7, [('مسند أحمد 3712', None)]), (8, [('tirmidhi', 3522), ('tirmidhi', 2140)]),
-    (9, [('muslim', 2725)]), (10, [('bukhari', 143), ('bukhari', 75)]), (11, [('bukhari', 6334), ('muslim', 2480)]),
-    (12, [('muslim', 2697)]), (13, [('tirmidhi', 3514)]), (14, [('abudawud', 5074), ('ibnmajah', 3871)]),
-    (15, [('muslim', 2721)]), (16, [('bukhari', 2893)]), (17, [('bukhari', 6346), ('muslim', 2730)]),
-    (18, [('abudawud', 1525)]), (19, [('السنن الكبرى للنسائي', None)]), (20, [('abudawud', 5090)]),
-    (21, [('bukhari', 6382), ('bukhari', 7390), ('bukhari', 1166)]), (22, [('bukhari', 6398), ('muslim', 2719)]),
-    (23, [('muslim', 2720)]), (24, [('muslim', 202)]), (25, [('abudawud', 1510), ('tirmidhi', 3551)]),
-    (26, [('tirmidhi', 3235)]), (27, [('muslim', 2491)]), (28, [('bukhari', 3477), ('muslim', 1792)]),
-    (29, [('abudawud', 1425), ('tirmidhi', 464)]), (30, [('muslim', 1763)]), (31, [('bukhari', 2933), ('muslim', 1742)]),
-    (32, [('muslim', 2202)]), (33, [('bukhari', 5743), ('muslim', 2191)]), (34, [('bukhari', 3020), ('muslim', 2475)]),
-    (35, [('muslim', 2739)]), (36, [('tirmidhi', 3505)]), (37, [('bukhari', 6389), ('muslim', 2690)]),
-    ('أ١', [('muslim', 395)]), ('أ٧', [('muslim', 126)]), ('أ١٢', [('bukhari', 4563)]),
-]
 
 CN = {'bukhari': 'البخاري', 'muslim': 'مسلم', 'abudawud': 'أبو داود', 'tirmidhi': 'الترمذي', 'nasai': 'النسائي', 'ibnmajah': 'ابن ماجه'}
 GRADERS = {'Al-Albani': 'الألباني', 'Muhammad Muhyi Al-Din Abdul Hamid': 'محمد محيي الدين عبد الحميد',
