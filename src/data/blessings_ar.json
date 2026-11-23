@@ -7001,6 +7001,1756 @@
       "reviewedBy": "",
       "reviewDate": null,
       "contentVersion": 1
+    },
+    {
+      "id": "blessing_101",
+      "order": 101,
+      "category": "din",
+      "categoryLabel": "نعم الدين",
+      "title": "نعمة الطهارة والوضوء",
+      "shortTitle": "الطهارة",
+      "openingLine": "ماءٌ قليلٌ تمرّره على وجهك ويديك، فتقوم إلى ربك نظيفًا خفيفًا، وكأنك تبدأ من جديد.",
+      "quran": {
+        "textUthmani": "يَا أَيُّهَا الَّذِينَ آمَنُوا إِذَا قُمْتُمْ إِلَى الصَّلَاةِ فَاغْسِلُوا وُجُوهَكُمْ وَأَيْدِيَكُمْ إِلَى الْمَرَافِقِ وَامْسَحُوا بِرُءُوسِكُمْ وَأَرْجُلَكُمْ إِلَى الْكَعْبَيْنِ وَإِن كُنتُمْ جُنُبًا فَاطَّهَّرُوا وَإِن كُنتُم مَّرْضَىٰ أَوْ عَلَىٰ سَفَرٍ أَوْ جَاءَ أَحَدٌ مِّنكُم مِّنَ الْغَائِطِ أَوْ لَامَسْتُمُ النِّسَاءَ فَلَمْ تَجِدُوا مَاءً فَتَيَمَّمُوا صَعِيدًا طَيِّبًا فَامْسَحُوا بِوُجُوهِكُمْ وَأَيْدِيكُم مِّنْهُ مَا يُرِيدُ اللَّهُ لِيَجْعَلَ عَلَيْكُم مِّنْ حَرَجٍ وَلَٰكِن يُرِيدُ لِيُطَهِّرَكُمْ وَلِيُتِمَّ نِعْمَتَهُ عَلَيْكُمْ لَعَلَّكُمْ تَشْكُرُونَ",
+        "surahName": "المائدة",
+        "surahNumber": 5,
+        "ayahNumber": 6,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… واستحضر برودة الماء على وجهك حين تتوضأ.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل أن تقف للصلاة بلا طهارةٍ تُعدّك لها… لا ماءَ يغسل التعب، ولا لحظةَ تفصل بين زحام الدنيا ووقوفك بين يدي الله.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "تخيّل يومًا كاملًا بلا تلك الدقائق… ثقلٌ يتراكم على الجسد والقلب، ولا شيء يُعيد إليك الصفاء.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: جعل الله لك الماء طهورًا، فإن لم تجده يسّر لك التيمّم، رفعًا للحرج عنك وإتمامًا لنعمته عليك.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي طهّرنا وأتمّ علينا نعمته.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "آية الوضوء تبدأ بأوامر الغسل والمسح، ثم تكشف الحكمة في آخرها: ما يريد الله أن يجعل عليك حرجًا، بل يريد أن يطهّرك ويتمّ نعمته عليك لعلك تشكر. فالطهارة ليست عبئًا يسبق الصلاة، بل نعمةٌ في ذاتها تتكرر كل يومٍ مرات، ولذلك خُتمت الآية بالشكر: لأنها من النعم التي تمرّ بك دون أن تنتبه لها.",
+      "duaa": "",
+      "journalPrompt": "اكتب: ما الذي تغسله عنك لحظة الوضوء غير الماء؟ تعبٌ، أو غضب، أو انشغال؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_102",
+      "order": 102,
+      "category": "din",
+      "categoryLabel": "نعم الدين",
+      "title": "نعمة الأذان",
+      "shortTitle": "الأذان",
+      "openingLine": "صوتٌ يرتفع خمس مراتٍ في اليوم، يدعوك إلى الصلاة وإلى الفلاح، دون أن تطلب منه ذلك.",
+      "quran": {
+        "textUthmani": "وَمَنْ أَحْسَنُ قَوْلًا مِّمَّن دَعَا إِلَى اللَّهِ وَعَمِلَ صَالِحًا وَقَالَ إِنَّنِي مِنَ الْمُسْلِمِينَ",
+        "surahName": "فصلت",
+        "surahNumber": 41,
+        "ayahNumber": 33,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… واستمع في ذاكرتك إلى أذانٍ تحبّ صوته.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل مدينةً لا يُرفع فيها أذان… تمرّ الساعات ولا شيء يذكّرك بأن وقت اللقاء قد حان.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "يومٌ يجري بلا علامات… تنشغل حتى يفوتك كل شيء، ولا صوتَ يقطع غفلتك.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: نداءٌ يصلك في بيتك وطريقك وعملك، يجمع الناس على كلمةٍ واحدة، ويعيدك إلى ربك خمس مراتٍ كل يوم.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي جعل لنا نداءً يدعونا إليه.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "يسأل الله في هذه الآية: من أحسن قولًا ممن دعا إلى الله وعمل صالحًا؟ والأذان من أوضح صور الدعوة إلى الله: كلماتٌ قليلة تُرفع في كل وقت صلاة، فتذكّر الغافل وتجمع المتفرّقين. تأمّل كم مرةً سمعته اليوم دون أن تتوقف عنده، وكم هو عظيمٌ أن يُنادى عليك قبل أن تطلب.",
+      "duaa": "",
+      "journalPrompt": "اكتب: أين كنت آخر مرةٍ سمعت فيها الأذان؟ وماذا كان سيتغيّر فيك لو أصغيت إليه حقًّا؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_103",
+      "order": 103,
+      "category": "din",
+      "categoryLabel": "نعم الدين",
+      "title": "نعمة الصيام",
+      "shortTitle": "الصيام",
+      "openingLine": "تمتنع عن الطعام والشراب ساعاتٍ قليلة، فتعرف قيمة اللقمة وجرعة الماء، ويصفو قلبك لما هو أبقى.",
+      "quran": {
+        "textUthmani": "يَا أَيُّهَا الَّذِينَ آمَنُوا كُتِبَ عَلَيْكُمُ الصِّيَامُ كَمَا كُتِبَ عَلَى الَّذِينَ مِن قَبْلِكُمْ لَعَلَّكُمْ تَتَّقُونَ",
+        "surahName": "البقرة",
+        "surahNumber": 2,
+        "ayahNumber": 183,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… وتذكّر لحظة الإفطار حين تمتدّ يدك إلى أول تمرةٍ أو أول رشفة ماء.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل أنك لا تعرف الجوع أبدًا… تأكل متى شئت، فلا تشعر بنعمة الطعام، ولا تتذكر من لا يجده.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "قلبٌ لا يتدرّب على الصبر… كل رغبةٍ تُلبّى فورًا، فتضعف الإرادة شيئًا فشيئًا.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: شرع الله لك الصيام كما شرعه لمن قبلك، لتتّقي، فتخرج منه أقوى إرادةً وأرقّ قلبًا.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي شرع لنا الصيام وجعله طريقًا إلى التقوى.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "تذكر الآية أن الصيام كُتب على الذين من قبلنا، فهو عبادةٌ قديمة تجمع المؤمنين عبر الزمان، وتختم بغايته: لعلكم تتقون. الصيام ليس حرمانًا، بل تدريبٌ للنفس على أن تقول: لا، وتذكيرٌ بأن الطعام الذي تأكله كل يوم نعمةٌ لا حقٌّ مضمون. وبعد رمضان يبقى باب صيام التطوّع مفتوحًا طوال العام.",
+      "duaa": "",
+      "journalPrompt": "اكتب: ما العادة التي تودّ أن تتدرّب على الامتناع عنها، كما تمتنع عن الطعام في صيامك؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_104",
+      "order": 104,
+      "category": "din",
+      "categoryLabel": "نعم الدين",
+      "title": "نعمة الصدقة",
+      "shortTitle": "الصدقة",
+      "openingLine": "تُخرج من مالك شيئًا يسيرًا، فيعود إليك أضعافًا، ويبقى أثره في قلب من أعطيته.",
+      "quran": {
+        "textUthmani": "مَّثَلُ الَّذِينَ يُنفِقُونَ أَمْوَالَهُمْ فِي سَبِيلِ اللَّهِ كَمَثَلِ حَبَّةٍ أَنبَتَتْ سَبْعَ سَنَابِلَ فِي كُلِّ سُنبُلَةٍ مِّائَةُ حَبَّةٍ وَاللَّهُ يُضَاعِفُ لِمَن يَشَاءُ وَاللَّهُ وَاسِعٌ عَلِيمٌ",
+        "surahName": "البقرة",
+        "surahNumber": 2,
+        "ayahNumber": 261,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… وتذكّر آخر مرةٍ أعطيت فيها شيئًا دون أن ينتظر أحدٌ منك ذلك.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل قلبًا لا يعرف العطاء… يجمع ولا يُخرج، ويخاف على ما في يده من كل يدٍ ممتدّة.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "مالٌ يتكدّس ولا بركة فيه… وحولك محتاجون لا تراهم، وراحةٌ في العطاء لم تذقها.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: حبّةٌ واحدةٌ تُنبت سبع سنابل، في كل سنبلةٍ مئة حبة، والله يضاعف لمن يشاء.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي رزقني ما أعطي منه.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "يضرب الله مثلًا للمنفق في سبيله بحبّةٍ تُزرع فتُنبت سبع سنابل، في كل سنبلةٍ مئة حبة، ثم يزيد: والله يضاعف لمن يشاء. تأمّل أن النعمة هنا مزدوجة: أن يكون عندك ما تعطيه، وأن يُفتح قلبك للعطاء. فما تعطيه ليس مالًا يذهب، بل بذرةٌ تُزرع.",
+      "duaa": "",
+      "journalPrompt": "اكتب: من شخصٌ تستطيع أن تعطيه شيئًا هذا الأسبوع، مالًا أو وقتًا أو كلمة؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_105",
+      "order": 105,
+      "category": "din",
+      "categoryLabel": "نعم الدين",
+      "title": "نعمة قيام الليل",
+      "shortTitle": "قيام الليل",
+      "openingLine": "حين ينام الناس وتهدأ الدنيا، تقوم إلى ربك وحدك، في ساعةٍ لا يراك فيها أحدٌ غيره.",
+      "quran": {
+        "textUthmani": "تَتَجَافَىٰ جُنُوبُهُمْ عَنِ الْمَضَاجِعِ يَدْعُونَ رَبَّهُمْ خَوْفًا وَطَمَعًا وَمِمَّا رَزَقْنَاهُمْ يُنفِقُونَ",
+        "surahName": "السجدة",
+        "surahNumber": 32,
+        "ayahNumber": 16,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… وتخيّل سكون الليل حولك، والبيت نائمٌ والقلب مستيقظ.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل لياليك كلها نومًا وسهرًا على الشاشات… لا لحظةَ خلوةٍ واحدةً مع ربك.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "عمرٌ يمضي ولم تعرف حلاوة الوقوف في الظلام… دعاءٌ لم يُقل، وحاجاتٌ لم تُرفع إلا في الزحام.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: قومٌ يتركون فُرُشهم الدافئة ليدعوا ربهم خوفًا وطمعًا، والباب مفتوحٌ لك كما فُتح لهم.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي جعل لنا الليل خلوةً معه.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "تصف الآية قومًا تتباعد جنوبهم عن فُرُشهم، يدعون ربهم خوفًا وطمعًا، ومما رزقهم ينفقون. لم تذكر عددًا من الركعات، بل ذكرت حالًا: قلبٌ يترك راحته ليقف بين يدي الله. ولو ركعتين قبل الفجر، فهي نعمةٌ أن يوقظك الله في وقتٍ ينام فيه أكثر الناس.",
+      "duaa": "",
+      "journalPrompt": "اكتب: لو قمتَ الليلة ركعتين، ما الحاجة التي ستحدّث بها ربك؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_106",
+      "order": 106,
+      "category": "din",
+      "categoryLabel": "نعم الدين",
+      "title": "نعمة الاستغفار",
+      "shortTitle": "الاستغفار",
+      "openingLine": "كلمةٌ قصيرة تقولها بلسانك وقلبك، فتُمحى بها أثقالٌ حملتها طويلًا.",
+      "quran": {
+        "textUthmani": "فَقُلْتُ اسْتَغْفِرُوا رَبَّكُمْ إِنَّهُ كَانَ غَفَّارًا",
+        "surahName": "نوح",
+        "surahNumber": 71,
+        "ayahNumber": 10,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… وقل في سرّك: أستغفر الله، واشعر بها تخرج من صدرك.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل أن كل خطأٍ ارتكبته يبقى عليك إلى الأبد… لا بابَ للرجوع، ولا كلمةَ تمحو.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "أثقالٌ تتراكم يومًا بعد يوم… وقلبٌ يقسو لأنه لا يجد طريقًا للتخفّف.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: يدعوك الله أن تستغفره، ويصف نفسه بأنه كان غفّارًا، كثير المغفرة، لا مرةً واحدة.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي فتح لنا باب الاستغفار.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "يقول نوحٌ عليه السلام لقومه: استغفروا ربكم إنه كان غفّارًا. وصيغة «غفّار» تدل على الكثرة، فالله لا يغفر مرةً ثم يغلق الباب، بل يغفر ويغفر. والآيات التي بعدها تذكر ما يتبع الاستغفار من خيرٍ في الدنيا. تأمّل أن الاستغفار ليس للمذنب الكبير وحده، بل لكل قلبٍ يريد أن يبدأ من جديد.",
+      "duaa": "",
+      "journalPrompt": "اكتب: ما الشيء الذي تريد أن تستغفر الله منه اليوم، وتبدأ بعده صفحةً جديدة؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_107",
+      "order": 107,
+      "category": "din",
+      "categoryLabel": "نعم الدين",
+      "title": "نعمة الصلاة على النبي ﷺ",
+      "shortTitle": "الصلاة على النبي ﷺ",
+      "openingLine": "كلماتٌ تقولها فتصلك بنبيّك ﷺ، وتشارك فيها ملائكة السماء.",
+      "quran": {
+        "textUthmani": "إِنَّ اللَّهَ وَمَلَائِكَتَهُ يُصَلُّونَ عَلَى النَّبِيِّ يَا أَيُّهَا الَّذِينَ آمَنُوا صَلُّوا عَلَيْهِ وَسَلِّمُوا تَسْلِيمًا",
+        "surahName": "الأحزاب",
+        "surahNumber": 33,
+        "ayahNumber": 56,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… وصلِّ على النبي ﷺ في سرّك، بهدوءٍ وحضور.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل أنك لا تعرف طريقًا تُعبّر به عن حبك لنبيك… حبٌّ في القلب لا يجد كلمة.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "اسمه يمرّ عليك كل يوم ولا يتحرك فيك شيء… مسافةٌ تكبر بينك وبين من دلّك على الله.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: الله وملائكته يصلّون على النبي، ثم يدعوك أن تصلّي عليه وتسلّم، فتنضمّ إلى هذا المقام.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي هدانا بنبيّه ﷺ.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "تبدأ الآية بخبرٍ عظيم: إن الله وملائكته يصلّون على النبي، ثم تأتي الدعوة: يا أيها الذين آمنوا صلّوا عليه وسلّموا تسليمًا. فالأمر هنا ليس عبادةً منفصلة، بل مشاركةٌ في شيءٍ يفعله الله وملائكته. تأمّل أن هذه النعمة متاحةٌ لك في أي لحظةٍ وفي أي مكان.",
+      "duaa": "",
+      "journalPrompt": "اكتب: ما الذي تعلّمته من النبي ﷺ وتعيشه اليوم دون أن تنتبه أنه منه؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_108",
+      "order": 108,
+      "category": "din",
+      "categoryLabel": "نعم الدين",
+      "title": "نعمة العيد",
+      "shortTitle": "العيد",
+      "openingLine": "أيامٌ يجتمع فيها الناس على الفرح والتكبير، فرحٌ مشروعٌ بعد عبادة.",
+      "quran": {
+        "textUthmani": "لَن يَنَالَ اللَّهَ لُحُومُهَا وَلَا دِمَاؤُهَا وَلَٰكِن يَنَالُهُ التَّقْوَىٰ مِنكُمْ كَذَٰلِكَ سَخَّرَهَا لَكُمْ لِتُكَبِّرُوا اللَّهَ عَلَىٰ مَا هَدَاكُمْ وَبَشِّرِ الْمُحْسِنِينَ",
+        "surahName": "الحج",
+        "surahNumber": 22,
+        "ayahNumber": 37,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… وتذكّر صباح عيدٍ تحبّه: الملابس الجديدة، والتكبير، ووجوه الأهل.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل أن العبادة تمضي بلا يومٍ يُحتفل فيه بتمامها… صيامٌ ينتهي وحجٌّ يتمّ، ولا فرحةَ تجمع الناس.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "سنةٌ كاملة بلا يومٍ مختلف… لا تكبيرَ يرتفع، ولا لقاءَ يجمع الأقارب، ولا طفلَ ينتظر صباحًا.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: جعل الله لك أيامًا تكبّره فيها على ما هداك، وتفرح فيها بفضله، وتصل فيها من بعُد عنك.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي جعل لنا أعيادًا نكبّره فيها على ما هدانا.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "تتحدث الآية عن الأضاحي، فتقول إنه لن يصل إلى الله لحومها ولا دماؤها، ولكن يصله التقوى منكم، ثم تذكر الغاية: لتكبّروا الله على ما هداكم. والعيد في أصله تكبيرٌ وشكرٌ بعد عبادة، لا مجرد إجازة. تأمّل أن الفرح نفسه صار عبادةً حين ارتبط بذكر الله.",
+      "duaa": "",
+      "journalPrompt": "اكتب: ما الذكرى من أعيادك التي تريد أن تصنع مثلها لمن حولك هذا العام؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_109",
+      "order": 109,
+      "category": "din",
+      "categoryLabel": "نعم الدين",
+      "title": "نعمة الحياء",
+      "shortTitle": "الحياء",
+      "openingLine": "خُلُقٌ يمنعك من القبيح قبل أن تفعله، ويجعلك تراقب نفسك حتى حين لا يراك أحد.",
+      "quran": {
+        "textUthmani": "فَجَاءَتْهُ إِحْدَاهُمَا تَمْشِي عَلَى اسْتِحْيَاءٍ قَالَتْ إِنَّ أَبِي يَدْعُوكَ لِيَجْزِيَكَ أَجْرَ مَا سَقَيْتَ لَنَا فَلَمَّا جَاءَهُ وَقَصَّ عَلَيْهِ الْقَصَصَ قَالَ لَا تَخَفْ نَجَوْتَ مِنَ الْقَوْمِ الظَّالِمِينَ",
+        "surahName": "القصص",
+        "surahNumber": 28,
+        "ayahNumber": 25,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… واستحضر لحظةً امتنعت فيها عن شيءٍ لأنك استحييت.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل عالمًا بلا حياء… كل شيءٍ يُقال ويُفعل ويُعرض، ولا شيء يُستحيى منه.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "قلبٌ لا يحمرّ له وجه… يتجرّأ على الخطأ أمام الناس، ثم يتجرّأ عليه أمام الله.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: الحياء زينةٌ في المشية والكلام والنظر، وقد ذكره الله في وصف امرأةٍ صالحةٍ جاءت تمشي على استحياء.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي زيّننا بالحياء.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "في قصة موسى عليه السلام، جاءته إحدى المرأتين تمشي على استحياء، فخلّد القرآن مشيتها. لم يذكر اسمها ولا وصف وجهها، بل ذكر حياءها. تأمّل أن الحياء يظهر في أبسط الأشياء: طريقة المشي، ونبرة الصوت، وخفض النظر. وهو نعمةٌ تحفظك من نفسك قبل أن تحفظك من الناس.",
+      "duaa": "",
+      "journalPrompt": "اكتب: في أي موقفٍ حماك حياؤك من كلمةٍ أو فعلٍ كنت ستندم عليه؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_110",
+      "order": 110,
+      "category": "din",
+      "categoryLabel": "نعم الدين",
+      "title": "نعمة الخشوع",
+      "shortTitle": "الخشوع",
+      "openingLine": "أن تقف في صلاتك وقلبك حاضرٌ معك، لا تفكّر في غير من تقف بين يديه.",
+      "quran": {
+        "textUthmani": "قَدْ أَفْلَحَ الْمُؤْمِنُونَ الَّذِينَ هُمْ فِي صَلَاتِهِمْ خَاشِعُونَ",
+        "surahName": "المؤمنون",
+        "surahNumber": 23,
+        "ayahNumber": 1,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… وتذكّر صلاةً واحدةً شعرت فيها أنك حاضرٌ تمامًا.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل صلواتك كلها حركاتٍ بلا روح… تقف وتركع وتسجد وعقلك في عملك وهاتفك.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "عمرٌ من الصلوات لم تذق فيها لحظة سكون… جسدٌ يصلّي وقلبٌ غائب.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: جعل الله الخشوع أول صفات المؤمنين المفلحين، وكل صلاةٍ قادمة فرصةٌ جديدة لتذوّقه.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي يرزق القلوب الخشوع.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "تبدأ سورة المؤمنون بإعلان الفلاح، ثم تكون أول صفةٍ تذكرها للمفلحين: الذين هم في صلاتهم خاشعون. لم تبدأ بكثرة الصلاة بل بحضور القلب فيها. تأمّل أن الخشوع نعمةٌ يرزقها الله، وأنها تبدأ بخطوةٍ صغيرة: أن تفهم ما تقرأ، وأن تتمهّل.",
+      "duaa": "",
+      "journalPrompt": "اكتب: ما الذي يشغلك عادةً في صلاتك؟ وما خطوةٌ واحدة تجرّبها لتحضر أكثر؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_111",
+      "order": 111,
+      "category": "din",
+      "categoryLabel": "نعم الدين",
+      "title": "نعمة سعة رحمة الله",
+      "shortTitle": "سعة الرحمة",
+      "openingLine": "رحمةٌ وسعت كل شيء، وأنت من هذا الشيء، فلا تيأس ولا تظنّ أنها ضاقت عنك.",
+      "quran": {
+        "textUthmani": "وَاكْتُبْ لَنَا فِي هَٰذِهِ الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ إِنَّا هُدْنَا إِلَيْكَ قَالَ عَذَابِي أُصِيبُ بِهِ مَنْ أَشَاءُ وَرَحْمَتِي وَسِعَتْ كُلَّ شَيْءٍ فَسَأَكْتُبُهَا لِلَّذِينَ يَتَّقُونَ وَيُؤْتُونَ الزَّكَاةَ وَالَّذِينَ هُم بِآيَاتِنَا يُؤْمِنُونَ",
+        "surahName": "الأعراف",
+        "surahNumber": 7,
+        "ayahNumber": 156,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… واستحضر أنك الآن، في هذه اللحظة، داخل رحمة الله.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل أن رحمة الله محدودةٌ بقدرٍ معيّن… تنفد عند ذنبٍ ما، أو تتوقف عند شخصٍ ما.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "قلبٌ يعيش في خوفٍ دائم… يظن أنه أسوأ من أن يُرحم، فيبتعد كلما احتاج أن يقترب.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: يقول الله إن رحمته وسعت كل شيء، كل شيء، فلا يخرج عنها مخلوق.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي وسعت رحمته كل شيء.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "في هذه الآية يقابل الله بين عذابه ورحمته: عذابه يصيب به من يشاء، أما رحمته فوسعت كل شيء. ثم يذكر من يكتبها لهم كتابةً خاصة: الذين يتقون ويؤتون الزكاة ويؤمنون بآياته. تأمّل الفرق بين رحمةٍ تشمل كل شيء، ورحمةٍ تُكتب لأهلها، والطريق إليها مفتوح.",
+      "duaa": "",
+      "journalPrompt": "اكتب: متى شعرت برحمة الله في وقتٍ ظننت فيه أنك لا تستحقها؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_112",
+      "order": 112,
+      "category": "din",
+      "categoryLabel": "نعم الدين",
+      "title": "نعمة مضاعفة الحسنات",
+      "shortTitle": "مضاعفة الحسنات",
+      "openingLine": "تعمل الخير مرةً فيُكتب لك عشر مرات، وتخطئ مرةً فلا يُكتب عليك إلا مثلها.",
+      "quran": {
+        "textUthmani": "مَن جَاءَ بِالْحَسَنَةِ فَلَهُ عَشْرُ أَمْثَالِهَا وَمَن جَاءَ بِالسَّيِّئَةِ فَلَا يُجْزَىٰ إِلَّا مِثْلَهَا وَهُمْ لَا يُظْلَمُونَ",
+        "surahName": "الأنعام",
+        "surahNumber": 6,
+        "ayahNumber": 160,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… وتذكّر حسنةً صغيرة عملتها اليوم: ابتسامةً، أو كلمةً، أو عونًا.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل ميزانًا لا يرحم… كل حسنةٍ بمثلها فقط، وكل سيئةٍ تُضاعف عليك.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "حياةٌ تُحاسب فيها على كل شيءٍ بأشدّ ميزان… ولا فضلَ يزيد، ولا عفوَ يخفّف.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: الحسنة بعشر أمثالها، والسيئة بمثلها فقط، ولا يُظلم أحد.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي يضاعف الحسنات.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "تكشف هذه الآية كرم الله في الحساب: من جاء بالحسنة فله عشر أمثالها، ومن جاء بالسيئة فلا يُجزى إلا مثلها. ليس ميزانًا متساويًا، بل ميزانٌ يميل لصالحك. تأمّل كيف يجعل هذا لكل خيرٍ صغيرٍ قيمةً كبيرة.",
+      "duaa": "",
+      "journalPrompt": "اكتب: ما الحسنة الصغيرة التي يمكنك أن تكررها كل يوم هذا الأسبوع؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_113",
+      "order": 113,
+      "category": "din",
+      "categoryLabel": "نعم الدين",
+      "title": "نعمة العشر من ذي الحجة",
+      "shortTitle": "العشر",
+      "openingLine": "أيامٌ تأتي كل عام فرصةً للذكر والعمل الصالح، لمن حجّ ولمن بقي في بيته.",
+      "quran": {
+        "textUthmani": "وَالْفَجْرِ وَلَيَالٍ عَشْرٍ",
+        "surahName": "الفجر",
+        "surahNumber": 89,
+        "ayahNumber": 1,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… وتذكّر أيام العشر الماضية، وأصوات التكبير في البيوت والأسواق.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل أن العام يمضي كله على وتيرةٍ واحدة… لا موسمَ يوقظك، ولا أيامَ تجدّد فيها عزمك.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "سنواتٌ تمرّ بلا محطات… تؤجّل الخير دائمًا لأن لا وقتَ أولى من وقت.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: جعل الله في العام مواسم، يُقسم ببعض لياليها، ليوقظك ويمنحك بدايةً جديدة.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي جعل لنا مواسم نتقرّب فيها إليه.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "تفتتح سورة الفجر بالقسم بالفجر وبليالٍ عشر، وقد ذهب كثيرٌ من المفسرين إلى أنها عشر ذي الحجة. والله لا يُقسم إلا بعظيم. تأمّل أن هذه الأيام ليست للحجاج وحدهم: التكبير والصيام والصدقة والذكر أبوابٌ مفتوحة لكل أحدٍ في بيته.",
+      "duaa": "",
+      "journalPrompt": "اكتب: ما العمل الصالح الذي تنوي أن تخصّ به العشر القادمة من ذي الحجة؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_114",
+      "order": 114,
+      "category": "din",
+      "categoryLabel": "نعم الدين",
+      "title": "نعمة النصيحة",
+      "shortTitle": "النصيحة",
+      "openingLine": "إنسانٌ يحبّك فيقول لك ما لا تحبّ سماعه، لأنه يريد لك الخير.",
+      "quran": {
+        "textUthmani": "وَلْتَكُن مِّنكُمْ أُمَّةٌ يَدْعُونَ إِلَى الْخَيْرِ وَيَأْمُرُونَ بِالْمَعْرُوفِ وَيَنْهَوْنَ عَنِ الْمُنكَرِ وَأُولَٰئِكَ هُمُ الْمُفْلِحُونَ",
+        "surahName": "آل عمران",
+        "surahNumber": 3,
+        "ayahNumber": 104,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… وتذكّر شخصًا نصحك يومًا فتغيّر بعدها شيءٌ فيك.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل أن لا أحد حولك يجرؤ على تنبيهك… الكل يجاملك وأنت تمضي إلى الخطأ.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "أخطاءٌ تكبر ولا يراها أحدٌ لك… وتكتشفها وحدك بعد فوات الأوان.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: أراد الله أن يكون في الناس من يدعو إلى الخير، ويأمر بالمعروف، وينهى عن المنكر، وجعلهم من المفلحين.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي رزقني من ينصحني.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "تدعو الآية أن تكون منكم أمةٌ تدعو إلى الخير وتأمر بالمعروف وتنهى عن المنكر، وتصفهم بالمفلحين. والنصيحة الصادقة صورةٌ يومية من هذا: كلمةٌ برفقٍ في وقتها. تأمّل أن النعمة هنا نعمتان: أن تجد من ينصحك، وأن يرزقك الله قلبًا يقبل النصيحة.",
+      "duaa": "",
+      "journalPrompt": "اكتب: ما النصيحة التي قيلت لك يومًا وكرهتها، ثم عرفت لاحقًا أنها كانت خيرًا لك؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_115",
+      "order": 115,
+      "category": "din",
+      "categoryLabel": "نعم الدين",
+      "title": "نعمة إرسال الرسل",
+      "shortTitle": "الرسل",
+      "openingLine": "لم يتركنا الله نبحث عنه في الظلام، بل أرسل إلينا من يبشّر ويحذّر ويدلّ على الطريق.",
+      "quran": {
+        "textUthmani": "رُّسُلًا مُّبَشِّرِينَ وَمُنذِرِينَ لِئَلَّا يَكُونَ لِلنَّاسِ عَلَى اللَّهِ حُجَّةٌ بَعْدَ الرُّسُلِ وَكَانَ اللَّهُ عَزِيزًا حَكِيمًا",
+        "surahName": "النساء",
+        "surahNumber": 4,
+        "ayahNumber": 165,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… واستحضر أن ما تعرفه عن ربك وصلك عبر سلسلةٍ طويلة من الرسل.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل البشرية بلا رسالة… كل قومٍ يخترعون إلهًا، ولا أحدَ يعرف لماذا خُلق ولا إلى أين يمضي.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "أسئلةٌ كبرى بلا جواب… من أنا؟ ولماذا أنا هنا؟ وماذا بعد الموت؟ ولا خبرَ من السماء.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: أرسل الله رسلًا مبشّرين ومنذرين، حتى لا يبقى لأحدٍ حجة، رحمةً وعدلًا.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي أرسل إلينا رسله.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "تقول الآية إن الله أرسل رسلًا مبشّرين ومنذرين لئلا يكون للناس على الله حجةٌ بعد الرسل. فإرسال الرسل عدلٌ ورحمة معًا: عدلٌ لأنه لا يحاسب أحدًا قبل أن يبلّغه، ورحمةٌ لأنه لم يتركنا نتخبّط. تأمّل أن كل رسولٍ تحمّل الأذى ليصلك هذا النور.",
+      "duaa": "",
+      "journalPrompt": "اكتب: أي قصةٍ من قصص الأنبياء أقرب إلى قلبك؟ ولماذا؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_116",
+      "order": 116,
+      "category": "kawn",
+      "categoryLabel": "نعم الكون",
+      "title": "نعمة السماء المحفوظة",
+      "shortTitle": "السماء",
+      "openingLine": "سقفٌ فوقك يحفظك ولا تشعر به، وأنت تمشي تحته كل يومٍ غافلًا.",
+      "quran": {
+        "textUthmani": "وَجَعَلْنَا السَّمَاءَ سَقْفًا مَّحْفُوظًا وَهُمْ عَنْ آيَاتِهَا مُعْرِضُونَ",
+        "surahName": "الأنبياء",
+        "surahNumber": 21,
+        "ayahNumber": 32,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… وارفع بصرك إلى السماء، ولو في خيالك.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل أرضًا بلا سقفٍ يحفظها… مكشوفةً لكل ما يأتي من فوق، ولا شيء يقف بينك وبينه.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "ليلٌ ونهارٌ بلا أمان… سماءٌ مفتوحة لا تحفظ، وأرضٌ لا تطمئن.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: جعل الله السماء سقفًا محفوظًا، تحفظ ما تحتها، ويغفل عنها الناس رغم أنها فوقهم كل يوم.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي جعل السماء سقفًا محفوظًا.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "يقول الله إنه جعل السماء سقفًا محفوظًا، ثم يعاتب: وهم عن آياتها معرضون. السماء ليست خلفيةً زرقاء نراها فحسب، بل حفظٌ مستمرٌّ لا نشعر به. تأمّل أن أعظم النعم قد تكون أكثرها حضورًا، حتى ننسى أن ننظر إليها.",
+      "duaa": "",
+      "journalPrompt": "اكتب: متى آخر مرةٍ نظرت فيها إلى السماء متأمّلًا؟ وماذا رأيت؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_117",
+      "order": 117,
+      "category": "kawn",
+      "categoryLabel": "نعم الكون",
+      "title": "نعمة الأنهار والعيون",
+      "shortTitle": "الأنهار",
+      "openingLine": "ماءٌ يجري في الأرض من حيث لا تعلم، يسقي المدن والحقول، وتقوم عليه الحياة.",
+      "quran": {
+        "textUthmani": "أَمَّن جَعَلَ الْأَرْضَ قَرَارًا وَجَعَلَ خِلَالَهَا أَنْهَارًا وَجَعَلَ لَهَا رَوَاسِيَ وَجَعَلَ بَيْنَ الْبَحْرَيْنِ حَاجِزًا أَإِلَٰهٌ مَّعَ اللَّهِ بَلْ أَكْثَرُهُمْ لَا يَعْلَمُونَ",
+        "surahName": "النمل",
+        "surahNumber": 27,
+        "ayahNumber": 61,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… وتخيّل صوت ماءٍ يجري في نهرٍ أو ينبع من عين.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل أرضًا بلا أنهارٍ ولا عيون… كل قطرةٍ تنتظر المطر، ولا ماءَ يجري بين البلاد.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "حقولٌ عطشى ومدنٌ لا تقوم… وناسٌ يهاجرون بحثًا عن ماءٍ لا يجدونه.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: جعل الله الأرض قرارًا، وشقّ خلالها أنهارًا، وثبّتها بالجبال، وجعل بين البحرين حاجزًا.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي أجرى لنا الأنهار.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "تعدّد الآية نعمًا متتالية: أرضٌ مستقرة، وأنهارٌ تجري خلالها، وجبالٌ رواسي، وحاجزٌ بين البحرين، ثم تسأل: أإلهٌ مع الله؟ كل نعمةٍ منها شاهدٌ على الخالق. تأمّل أن الماء الذي يصلك اليوم بدأ رحلته في نهرٍ أو عينٍ لم ترها.",
+      "duaa": "",
+      "journalPrompt": "اكتب: من أين يأتي الماء الذي تشربه؟ وما الذي تشعر به حين تفكّر في رحلته إليك؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_118",
+      "order": 118,
+      "category": "kawn",
+      "categoryLabel": "نعم الكون",
+      "title": "نعمة السحاب",
+      "shortTitle": "السحاب",
+      "openingLine": "غيمٌ يتجمّع ويتفرّق ويمشي في السماء، يحمل الماء من بلدٍ إلى بلد، ثم يُنزله حيث يشاء الله.",
+      "quran": {
+        "textUthmani": "اللَّهُ الَّذِي يُرْسِلُ الرِّيَاحَ فَتُثِيرُ سَحَابًا فَيَبْسُطُهُ فِي السَّمَاءِ كَيْفَ يَشَاءُ وَيَجْعَلُهُ كِسَفًا فَتَرَى الْوَدْقَ يَخْرُجُ مِنْ خِلَالِهِ فَإِذَا أَصَابَ بِهِ مَن يَشَاءُ مِنْ عِبَادِهِ إِذَا هُمْ يَسْتَبْشِرُونَ",
+        "surahName": "الروم",
+        "surahNumber": 30,
+        "ayahNumber": 48,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… وتذكّر شكل الغيوم وهي تتحرك ببطءٍ فوقك.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل سماءً صافيةً إلى الأبد… لا غيمةَ تظلّل، ولا سحابةَ تحمل مطرًا.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "شمسٌ لا يحجبها شيء، وأرضٌ تنتظر ماءً لا يأتي… ولا علامةَ في السماء تبشّر بالفرج.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: يرسل الله الرياح فتثير سحابًا، فيبسطه في السماء كيف يشاء، فإذا نزل المطر استبشر الناس.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي يسوق لنا السحاب.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "تصف الآية رحلةً كاملة: رياحٌ تثير السحاب، ثم يُبسط في السماء، ثم يُجعل قطعًا، فترى المطر يخرج من خلاله، فيستبشر من يصيبهم. تأمّل كم خطوةً تمرّ بها قطرة المطر قبل أن تصلك، وكلها بتدبير الله، وأنت لم تطلب منها شيئًا.",
+      "duaa": "",
+      "journalPrompt": "اكتب: ما الذي تنتظره في حياتك الآن كما ينتظر الناس المطر؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_119",
+      "order": 119,
+      "category": "kawn",
+      "categoryLabel": "نعم الكون",
+      "title": "نعمة الفجر والصباح",
+      "shortTitle": "الصباح",
+      "openingLine": "كل يومٍ ينشقّ النور من الظلام، فتبدأ صفحةٌ جديدة لم يُكتب فيها شيءٌ بعد.",
+      "quran": {
+        "textUthmani": "فَالِقُ الْإِصْبَاحِ وَجَعَلَ اللَّيْلَ سَكَنًا وَالشَّمْسَ وَالْقَمَرَ حُسْبَانًا ذَٰلِكَ تَقْدِيرُ الْعَزِيزِ الْعَلِيمِ",
+        "surahName": "الأنعام",
+        "surahNumber": 6,
+        "ayahNumber": 96,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… وتذكّر أول ضوءٍ رأيته في صباحٍ هادئ.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل ليلًا لا ينتهي… ظلامٌ دائم، لا صباحَ يأتي، ولا نورَ يبدّد الخوف.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "أيامٌ بلا بداية… لا لحظةَ يتجدّد فيها الأمل، ولا فجرَ يغسل تعب الأمس.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: الله فالق الإصباح، يشقّ الظلام بالنور كل يوم، وجعل الليل سكنًا، والشمس والقمر بحساب.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي فلق لنا الصباح.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "يصف الله نفسه بأنه فالق الإصباح، أي يشقّ ظلمة الليل بنور الصباح، ثم يذكر أنه جعل الليل سكنًا، والشمس والقمر بحسابٍ دقيق، ويختم الآية بأن ذلك تقدير العزيز العليم. تأمّل أن الصباح لا يأتي وحده، بل يُفلق فلقًا، وأنك تستيقظ كل يومٍ على آيةٍ تكررت حتى ألفتها.",
+      "duaa": "",
+      "journalPrompt": "اكتب: ماذا تريد أن تكتب في صفحة الغد الجديدة؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_120",
+      "order": 120,
+      "category": "kawn",
+      "categoryLabel": "نعم الكون",
+      "title": "نعمة تعاقب الفصول",
+      "shortTitle": "الفصول",
+      "openingLine": "شتاءٌ يعقبه صيف، وبردٌ يعقبه دفء، ولكل فصلٍ رزقه وجماله وحكمته.",
+      "quran": {
+        "textUthmani": "إِيلَافِهِمْ رِحْلَةَ الشِّتَاءِ وَالصَّيْفِ",
+        "surahName": "قريش",
+        "surahNumber": 106,
+        "ayahNumber": 2,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… وتذكّر رائحة أول مطرٍ في الشتاء، أو دفء أول يومٍ في الربيع.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل عامًا كاملًا على حالٍ واحد… حرٌّ لا ينكسر، أو بردٌ لا يرحل.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "لا ثمارَ تتنوّع، ولا زرعَ يتجدّد… حياةٌ رتيبة لا تتغيّر فيها السماء ولا الأرض.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: جعل الله للعام شتاءً وصيفًا، وذكّر قريشًا برحلتيهما، وما كان فيهما من رزقٍ وأمن.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي قلّب لنا الفصول.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "يذكّر الله قريشًا بإيلافهم رحلة الشتاء والصيف، رحلتين ارتبطت بهما تجارتهم ورزقهم. والفصول نفسها نعمةٌ تتعاقب: لكل موسمٍ زرعه وثماره ولباسه وعاداته. تأمّل أن هذا التغيّر لا يحدث عشوائيًا، بل بنظامٍ لا يختلّ عامًا بعد عام.",
+      "duaa": "",
+      "journalPrompt": "اكتب: أي فصلٍ تحبه أكثر؟ وما النعمة التي يحملها لك ولا يحملها غيره؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_121",
+      "order": 121,
+      "category": "kawn",
+      "categoryLabel": "نعم الكون",
+      "title": "نعمة النخل",
+      "shortTitle": "النخل",
+      "openingLine": "شجرةٌ باسقة تقف في الصحراء صابرة، تعطيك تمرها وظلها وسعفها، ولا تطلب إلا القليل من الماء.",
+      "quran": {
+        "textUthmani": "وَالنَّخْلَ بَاسِقَاتٍ لَّهَا طَلْعٌ نَّضِيدٌ",
+        "surahName": "ق",
+        "surahNumber": 50,
+        "ayahNumber": 10,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… وتخيّل نخلةً عالية، وعذوقها متدلّيةٌ بالتمر.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل صحراء بلا نخل… رمالٌ ممتدة لا ظلَّ فيها ولا ثمر.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "قرى لا تقوم، وقوافل لا تجد زادًا… وأرضٌ قاسية لا تمنح شيئًا.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: النخل باسقاتٌ عالية، لها طلعٌ منضودٌ بعضه فوق بعض، رزقًا للعباد.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي أنبت لنا النخل.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "يصف الله النخل بأنها باسقات، أي طويلةٌ عالية، لها طلعٌ نضيد، متراصٌّ بعضه فوق بعض، والآية التي بعدها تقول إنها رزقٌ للعباد. تأمّل كيف تقوم هذه الشجرة في أقسى الأرض وتعطي أطيب الثمر، وكأنها درسٌ في الصبر والعطاء.",
+      "duaa": "",
+      "journalPrompt": "اكتب: ما الذي يمكن أن تتعلمه من النخلة في صبرها وعطائها؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_122",
+      "order": 122,
+      "category": "kawn",
+      "categoryLabel": "نعم الكون",
+      "title": "نعمة الزيتون",
+      "shortTitle": "الزيتون",
+      "openingLine": "شجرةٌ مباركة تعمّر طويلًا، تعطيك زيتًا تأكله وتداوي به، وتبقى لأحفاد من زرعها.",
+      "quran": {
+        "textUthmani": "وَشَجَرَةً تَخْرُجُ مِن طُورِ سَيْنَاءَ تَنبُتُ بِالدُّهْنِ وَصِبْغٍ لِّلْآكِلِينَ",
+        "surahName": "المؤمنون",
+        "surahNumber": 23,
+        "ayahNumber": 20,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… وتذكّر طعم الزيت الأخضر على خبزٍ دافئ.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل موائد بلا زيتونٍ ولا زيت… طعامٌ جافّ، وبلادٌ فقدت أقدم أشجارها.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "لا شجرةَ تعمّر وتبقى للأحفاد… كل شيءٍ يُزرع ويزول في موسمه.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: شجرةٌ تخرج من طور سيناء، تنبت بالدهن، وإدامٌ للآكلين، ذكرها الله في كتابه.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي أنبت لنا الزيتون.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "يذكر الله شجرةً تخرج من طور سيناء تنبت بالدهن وصبغٍ للآكلين، والمفسرون على أنها الزيتون. الدهن هو الزيت، والصبغ هو الإدام الذي يُغمس فيه الخبز. تأمّل أن شجرةً واحدة تعطيك طعامًا ودواءً، وتبقى أجيالًا بعد من زرعها.",
+      "duaa": "",
+      "journalPrompt": "اكتب: ما الشيء الذي تزرعه اليوم ليبقى نفعه بعدك، كشجرة الزيتون؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_123",
+      "order": 123,
+      "category": "kawn",
+      "categoryLabel": "نعم الكون",
+      "title": "نعمة اختلاف الألوان",
+      "shortTitle": "الألوان",
+      "openingLine": "ماءٌ واحد ينزل من السماء، فتخرج به ثمارٌ بألوانٍ لا تُحصى، وجبالٌ بيضٌ وحمرٌ وسود.",
+      "quran": {
+        "textUthmani": "أَلَمْ تَرَ أَنَّ اللَّهَ أَنزَلَ مِنَ السَّمَاءِ مَاءً فَأَخْرَجْنَا بِهِ ثَمَرَاتٍ مُّخْتَلِفًا أَلْوَانُهَا وَمِنَ الْجِبَالِ جُدَدٌ بِيضٌ وَحُمْرٌ مُّخْتَلِفٌ أَلْوَانُهَا وَغَرَابِيبُ سُودٌ",
+        "surahName": "فاطر",
+        "surahNumber": 35,
+        "ayahNumber": 27,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… وانظر حولك، وعُدّ في سرّك الألوان التي تراها الآن.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل العالم بلونٍ واحد… كل شيءٍ رمادي: الثمار والجبال والوجوه والسماء.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "لا جمالَ يلفت النظر، ولا تنوّعَ يُدهش… عالمٌ يعمل لكنه باهت.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: من ماءٍ واحدٍ تخرج ثمراتٌ مختلفةٌ ألوانها، وفي الجبال طرقٌ بيضٌ وحمرٌ وسودٌ حالكة.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي لوّن لنا الدنيا.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "تلفت الآية نظرك إلى ماءٍ واحدٍ ينزل من السماء، فتخرج به ثمراتٌ مختلفةٌ ألوانها، ثم إلى الجبال بطرقها البيض والحمر والسود الحالكة. كان يمكن أن تمضي الحياة بلا ألوان، لكن الله زيّنها لك. تأمّل أن الجمال نفسه نعمة، لا ضرورة.",
+      "duaa": "",
+      "journalPrompt": "اكتب: ما اللون الذي يُدخل الفرح إلى قلبك؟ وأين رأيته اليوم؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_124",
+      "order": 124,
+      "category": "kawn",
+      "categoryLabel": "نعم الكون",
+      "title": "نعمة الزوجية في الخلق",
+      "shortTitle": "الزوجية",
+      "openingLine": "في كل شيءٍ زوجان يكمل أحدهما الآخر، فلا يكتفي مخلوقٌ بنفسه.",
+      "quran": {
+        "textUthmani": "وَمِن كُلِّ شَيْءٍ خَلَقْنَا زَوْجَيْنِ لَعَلَّكُمْ تَذَكَّرُونَ",
+        "surahName": "الذاريات",
+        "surahNumber": 51,
+        "ayahNumber": 49,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… وتأمّل أن في جسدك نفسه أزواجًا: عينين، وأذنين، ويدين.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل كل شيءٍ وحيدًا بلا ما يكمّله… لا شريكَ ولا مقابلَ ولا تكامل.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "حياةٌ لا تستمر لأن لا شيءَ يتزاوج… لا نباتَ يثمر، ولا نسلَ يبقى.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: من كل شيءٍ خلق الله زوجين، لعلك تتذكّر، فتعرف أن الواحد الذي لا مثيل له هو الله.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي خلق من كل شيءٍ زوجين.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "يقول الله إنه خلق من كل شيءٍ زوجين لعلكم تذكّرون. التكامل سنّةٌ في الخلق: في النبات والحيوان والإنسان. تأمّل أن حاجة كل مخلوقٍ إلى ما يكمّله تذكّرك بالواحد الذي لا يحتاج إلى أحد، وأن الأنس بمن يكمّلك نعمةٌ من نعمه.",
+      "duaa": "",
+      "journalPrompt": "اكتب: من الشخص أو الشيء الذي يكمّلك في حياتك؟ وكيف تشكر الله عليه؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
+    },
+    {
+      "id": "blessing_125",
+      "order": 125,
+      "category": "kawn",
+      "categoryLabel": "نعم الكون",
+      "title": "نعمة الماء العذب",
+      "shortTitle": "الماء العذب",
+      "openingLine": "ماءٌ حلوٌ تشربه، وبجواره بحرٌ ملحٌ لا يُشرب، ولا يطغى أحدهما على الآخر.",
+      "quran": {
+        "textUthmani": "وَهُوَ الَّذِي مَرَجَ الْبَحْرَيْنِ هَٰذَا عَذْبٌ فُرَاتٌ وَهَٰذَا مِلْحٌ أُجَاجٌ وَجَعَلَ بَيْنَهُمَا بَرْزَخًا وَحِجْرًا مَّحْجُورًا",
+        "surahName": "الفرقان",
+        "surahNumber": 25,
+        "ayahNumber": 53,
+        "verified": false
+      },
+      "hadith": {
+        "text": "",
+        "source": "",
+        "number": "",
+        "grade": "",
+        "gradeVerified": false
+      },
+      "scholarQuote": {
+        "text": "",
+        "scholar": "",
+        "work": "",
+        "attributionType": "",
+        "verifiedVerbatim": false
+      },
+      "istisharSteps": [
+        {
+          "step": 1,
+          "type": "ground",
+          "text": "تنفّس… وتذكّر طعم كوب ماءٍ باردٍ بعد عطشٍ طويل.",
+          "durationSec": 10
+        },
+        {
+          "step": 2,
+          "type": "visualize",
+          "text": "تخيّل أن كل الماء على الأرض ملحٌ أجاج… بحارٌ لا نهاية لها، ولا قطرةَ تُطفئ العطش.",
+          "durationSec": 20
+        },
+        {
+          "step": 3,
+          "type": "deepen",
+          "text": "ماءٌ في كل مكان وأنت تموت عطشًا… تنظر إلى البحر ولا تستطيع أن تشرب منه.",
+          "durationSec": 20
+        },
+        {
+          "step": 4,
+          "type": "return",
+          "text": "ثم تأمّل: الله مرج البحرين، هذا عذبٌ فرات، وهذا ملحٌ أجاج، وجعل بينهما برزخًا يحفظ كلًّا منهما.",
+          "durationSec": 15
+        },
+        {
+          "step": 5,
+          "type": "hamd",
+          "text": "فقل: الحمد لله الذي جعل لنا الماء عذبًا فراتًا.",
+          "durationSec": 15
+        }
+      ],
+      "tadabbur": "يقول الله إنه مرج البحرين: هذا عذبٌ فرات، وهذا ملحٌ أجاج، وجعل بينهما برزخًا وحجرًا محجورًا. أكثر ماء الأرض ملح، والعذب منه قليل، ومع ذلك يصلك كل يوم. تأمّل أن حلاوة الماء ليست أمرًا بديهيًا، بل حفظٌ من الله يفصله عن الملح.",
+      "duaa": "",
+      "journalPrompt": "اكتب: كم كوب ماءٍ شربت اليوم؟ هل شكرت الله على واحدٍ منها؟",
+      "relatedPodcastEpisode": null,
+      "reviewStatus": "pending_review",
+      "reviewedBy": "",
+      "reviewDate": null,
+      "contentVersion": 1
     }
   ]
 }

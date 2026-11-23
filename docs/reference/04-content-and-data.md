@@ -4,7 +4,7 @@ All content ships inside the JavaScript bundle. There is no CMS and no remote fe
 
 | File | Lines | What it holds | Consumed by |
 |---|---:|---|---|
-| `src/data/blessings_ar.json` | 7,006 | 100 blessings, the core content | `data/loader.ts` |
+| `src/data/blessings_ar.json` | 8,756 | 125 blessings, the core content (a second hundred is being added in batches; see 1.4) | `data/loader.ts` |
 | `src/data/loader.ts` | 17 | Access functions and the review gate | store, charts, journey |
 | `src/data/journey_content.json` | 725 | 4 journey stages × 7 stations | `lib/journeyStore.ts` |
 | `src/data/hisnAlMuslim.ts` | 358 | 6 categories, 23 adhkar, 7 daily tips | `HisnScreen`, `HomeScreen`, `App` |
@@ -63,9 +63,11 @@ Every blessing has the same sequence of step types and durations (`IstisharStep`
 
 Total: 80 seconds. UI copy elsewhere says three minutes (`src/constants/strings.ts:68`), five minutes (onboarding) and two minutes (landing page).
 
-### 1.4 The 100 blessings
+### 1.4 The blessings
 
 Blessings 1–40 are the original set. Blessings 41–100 were written by the owner and imported in November 2026 from a file that held their titles, reflections and verse references but no verse text; section 1.7 says where the verse text came from.
+
+Blessings 101–125 are the first of four planned batches of a second hundred (101–200). The owner approved a list of 100 titles and, for this batch, each verse reference; the verse text was taken from Tanzil by reference as for 41–100; the opening line, the five reflection steps, `tadabbur` and `journalPrompt` are drafts written for the owner to review. Their `hadith`, `scholarQuote` and `duaa` are deliberately empty: the owner and a named reviewer will supply them. Section 1.7 has the details.
 
 | Order | Id | Category | Short title | Title | Verse |
 |---:|---|---|---|---|---|
@@ -169,8 +171,33 @@ Blessings 1–40 are the original set. Blessings 41–100 were written by the ow
 | 98 | `blessing_098` | kawn | الثمار | نعمة الثمار | عبس 80:31 |
 | 99 | `blessing_099` | kawn | زينة البحر | نعمة زينة البحر | الرحمن 55:22 |
 | 100 | `blessing_100` | kawn | الحديد والمعادن | نعمة الحديد والمعادن | الحديد 57:25 |
+| 101 | `blessing_101` | din | الطهارة | نعمة الطهارة والوضوء | المائدة 5:6 |
+| 102 | `blessing_102` | din | الأذان | نعمة الأذان | فصلت 41:33 |
+| 103 | `blessing_103` | din | الصيام | نعمة الصيام | البقرة 2:183 |
+| 104 | `blessing_104` | din | الصدقة | نعمة الصدقة | البقرة 2:261 |
+| 105 | `blessing_105` | din | قيام الليل | نعمة قيام الليل | السجدة 32:16 |
+| 106 | `blessing_106` | din | الاستغفار | نعمة الاستغفار | نوح 71:10 |
+| 107 | `blessing_107` | din | الصلاة على النبي ﷺ | نعمة الصلاة على النبي ﷺ | الأحزاب 33:56 |
+| 108 | `blessing_108` | din | العيد | نعمة العيد | الحج 22:37 |
+| 109 | `blessing_109` | din | الحياء | نعمة الحياء | القصص 28:25 |
+| 110 | `blessing_110` | din | الخشوع | نعمة الخشوع | المؤمنون 23:1–2 |
+| 111 | `blessing_111` | din | سعة الرحمة | نعمة سعة رحمة الله | الأعراف 7:156 |
+| 112 | `blessing_112` | din | مضاعفة الحسنات | نعمة مضاعفة الحسنات | الأنعام 6:160 |
+| 113 | `blessing_113` | din | العشر | نعمة العشر من ذي الحجة | الفجر 89:1–2 |
+| 114 | `blessing_114` | din | النصيحة | نعمة النصيحة | آل عمران 3:104 |
+| 115 | `blessing_115` | din | الرسل | نعمة إرسال الرسل | النساء 4:165 |
+| 116 | `blessing_116` | kawn | السماء | نعمة السماء المحفوظة | الأنبياء 21:32 |
+| 117 | `blessing_117` | kawn | الأنهار | نعمة الأنهار والعيون | النمل 27:61 |
+| 118 | `blessing_118` | kawn | السحاب | نعمة السحاب | الروم 30:48 |
+| 119 | `blessing_119` | kawn | الصباح | نعمة الفجر والصباح | الأنعام 6:96 |
+| 120 | `blessing_120` | kawn | الفصول | نعمة تعاقب الفصول | قريش 106:2 |
+| 121 | `blessing_121` | kawn | النخل | نعمة النخل | ق 50:10 |
+| 122 | `blessing_122` | kawn | الزيتون | نعمة الزيتون | المؤمنون 23:20 |
+| 123 | `blessing_123` | kawn | الألوان | نعمة اختلاف الألوان | فاطر 35:27 |
+| 124 | `blessing_124` | kawn | الزوجية | نعمة الزوجية في الخلق | الذاريات 51:49 |
+| 125 | `blessing_125` | kawn | الماء العذب | نعمة الماء العذب | الفرقان 25:53 |
 
-By category: din 28, kawn 23, nasl 11, wijdan 9, afiyah 7, nafs 6, rizq 6, aql 5, amn 3, mal 2. `kawn` («نعم الكون») and `wijdan` («نعم الوجدان») exist only in blessings 41–100.
+By category: din 43, kawn 33, nasl 11, wijdan 9, afiyah 7, nafs 6, rizq 6, aql 5, amn 3, mal 2. `kawn` («نعم الكون») and `wijdan` («نعم الوجدان») do not occur in blessings 1–40.
 
 `legacy/src/data/blessings_ar.json` holds the first 40 as they were before the import. Two lines of those 40 were corrected in this file at the import: the opening line of blessing 19 («هذه الكلمات» for «هذه كلمات»), and in the reflection of blessing 31 a phrase of the hadith that had been set in the Qur'an brackets ﴿ ﴾ is now in « ».
 
@@ -179,7 +206,7 @@ By category: din 28, kawn 23, nasl 11, wijdan 9, afiyah 7, nafs 6, rizq 6, aql 5
 | Export | Behaviour |
 |---|---|
 | `CONTENT_REVIEW_GATE` | Hard-coded `false`. When true, `getAllBlessings()` returns only `approved` blessings; today that would return an empty list |
-| `getAllBlessings()` | The 100 blessings, subject to the gate |
+| `getAllBlessings()` | All blessings, subject to the gate |
 | `getBlessingById(id)` | Lookup over all blessings, **not** subject to the gate |
 
 ### 1.6 What the review fields do at run time
@@ -237,6 +264,8 @@ Please check updates at: http://tanzil.net/updates/
 **Verses quoted inside the reflections are a different thing.** The `tadabbur` paragraphs quote verses in ﴿ ﴾ in the author's own light vowelling; they are not copied from Tanzil. All 139 such fragments across the 100 blessings were compared, letters only, with the Qur'an text. Two did not match, and both were corrected at the import: in blessing 88, «أينما» was written as one word where Al-Hadid 4 has «أَيْنَ مَا»; in blessing 31 the bracketed phrase was not Qur'an at all but words of the hadith (see 1.4).
 
 **For the reviewer, in blessings 41–100.** No hadith is given as a hadith, but five texts lean on one without a source: the `scholarQuote` of blessing 51 (الجمعة) is close to the wording of two hadith and is labelled «مستفاد من كلام أهل العلم»; the `scholarQuote` of 54 (يُسر الدين) and the reflections of 79 (الجار), 83 (من يدعو لك بظهر الغيب) and 91 (حلاوة الإيمان) each report a hadith by meaning. In 30 of the 60 the reflection quotes a verse other than the one in `quran`; those are supporting verses, not mistakes in the reference.
+
+**Blessings 101–125.** Each verse is the whole ayah from the same Tanzil file, processed as above, except two pairs of consecutive ayahs joined by a space, as in three of the first 40: Al-Mu'minun 23:1–2 (blessing 110) and Al-Fajr 89:1–2 (blessing 113); `ayahNumber` holds the first. The processing was checked by reproducing all 60 verses of 41–100 from the downloaded file, character for character, before any new verse was taken. No ayah is used by two blessings. The longest verses are Al-Ma'idah 5:6 (65 words, blessing 101), Al-A'raf 7:156 (34) and Ar-Rum 30:48 (29); the owner kept them whole. The `tadabbur` drafts quote no verse in ﴿ ﴾; they paraphrase the verse, and they contain no hadith, by wording or by meaning. Two state an exegetical view the reviewer should confirm: blessing 113 says that many exegetes take the «ليال عشر» of Al-Fajr 89:2 to be the first ten nights of Dhu al-Hijjah, and blessing 122 says that the tree of Al-Mu'minun 23:20 is the olive. Blessing 102 uses Fussilat 41:33 for the call to prayer, which the verse does not name. With `scholarQuote.scholar` empty, Home shows no quote block (`HomeScreen.tsx:280`), and with `duaa` empty the last reflection step and the share card show no supplication.
 
 ## 2. Journey content (`src/data/journey_content.json`)
 

@@ -132,6 +132,8 @@ The owner also remembered writing more than 40 blessings. A search of the other 
 
 They were on the owner's machine. The same day he supplied a file of 100 blessings. Its first 40 were the 40 in the app, differing in one corrected word; the other 60 had their titles, reflections, supplications and verse references, but no verse text and no hadith. At his instruction the 60 verses were taken, by those references, from the Tanzil Project's text and the blessings were added (`9f6b4a0`). Comparing the existing 40 against the same text showed that they had come from it too. The import brought two new categories, «نعم الكون» and «نعم الوجدان», lengthened the daily cycle from 39 days to 99, and made the share image's four-line limit on verses untenable, so that was fixed with it (`d42c2b0`). Details are in [reference/04-content-and-data.md](reference/04-content-and-data.md), section 1.7.
 
+On 23 November 2026 the owner asked for a second hundred. No written text existed this time, so the work was split: the owner approved a list of 100 titles across the ten categories, then, in batches of about 25, a verse reference for each; the verse text is taken from Tanzil by reference as before, the other non-sacred fields are drafted for review, and the hadith, scholar quote and supplication are left empty for the owner and a named reviewer, who will supply them. Blessings 101–125, the first batch, lengthened the daily cycle to 124 days.
+
 ## 5. Versions
 
 The repository has no tags and `package.json` is still `0.0.0`, so "version" means different things in different places.
