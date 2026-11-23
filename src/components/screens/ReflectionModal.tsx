@@ -6,6 +6,7 @@ import { ThreadProgress } from '../common/ThreadProgress';
 import { StarLattice } from '../common/StarLattice';
 import { CompletionParticles } from '../common/CompletionParticles';
 import { ShareCardModal } from '../common/ShareCardModal';
+import { SourcedDuaa } from '../common/SourcedDuaa';
 import { toArabicNumerals } from '../../lib/arabic';
 import { trackEvent } from '../../lib/analytics';
 
@@ -489,6 +490,7 @@ export const ReflectionModal: React.FC<ReflectionModalProps> = ({
                 </p>
               </div>
             )}
+            {currentStep.type === 'hamd' && <SourcedDuaa duaa={blessing.duaaSourced} />}
           </div>
         ) : (
           /* Step 6: Journal Step */
