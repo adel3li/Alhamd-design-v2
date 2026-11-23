@@ -117,10 +117,12 @@ export interface ReviewChecks {
 }
 
 export interface Review {
-  status: 'draft' | 'pending_review' | 'approved' | 'needs_changes';
+  status: 'draft' | 'pending_verification' | 'verified' | 'approved' | 'needs_changes';
   checks: ReviewChecks;
-  reviewer: string;
-  reviewedAt: string | null;
+  /** المرحلة الأولى: التحقق من المصادر (Claude). */
+  verification: { by: string; at: string | null; report: string };
+  /** المرحلة الثانية: المراجع الشرعي المسمّى. */
+  approval: { reviewer: string; at: string | null };
   notes: string;
 }
 
@@ -155,7 +157,8 @@ export interface Dua {
 
 `scripts/build-content.ts` يكتب `src/content/generated/duas.json`:
 
-- في الإنتاج: البطاقات `approved` فقط. إن قلّ عددها عن حد أدنى (مثلًا ٣٠) يفشل البناء.
+- في الإنتاج: البطاقات التي بلغت `CONTENT_MIN_LEVEL` فقط (`approved` افتراضيًا، أو `verified` لإطلاق تجريبي؛ انظر `03` §٨). إن قلّ عددها عن حد أدنى (مثلًا ٣٠) يفشل البناء.
+- يُحمل مستوى كل بطاقة إلى التطبيق، فتعرض «عن المحتوى» عدد ما بلغ كل مستوى.
 - في المعاينة (`CONTENT_PREVIEW=1`): كل البطاقات، والمسودات تظهر بشارة «مسودة» واضحة، والأماكن الفارغة `<<…>>` تظهر بلون تحذيري.
 
 ملف المحتوى يُحمَّل كقطعة منفصلة (`import()` ديناميكي)، لا داخل الحزمة الرئيسية.
@@ -179,7 +182,7 @@ resolveToday({ today, welcomeDoneOn, all, welcomeId })
 
 ### قواعد
 
-- اسم واحد بنمط واحد لكل مفتاح: `APP_SLUG:اسم:v1`. في «الحمد» نمطان (`alhamd_snake` و`alhamd:colon:v1`) وثلاثة مفاتيح بلا مالك.
+- اسم واحد بنمط واحد لكل مفتاح: `qareeb:اسم:v1`. في «الحمد» نمطان (`alhamd_snake` و`alhamd:colon:v1`) وثلاثة مفاتيح بلا مالك.
 - كل المفاتيح في ملف واحد `src/state/keys.ts`، وكلها موثقة في `docs/reference/storage.md`. **المفتاح لا يُعاد تسميته والشكل لا يتغير بلا ترحيل.**
 - الترحيل عبر `version` و`migrate` في Zustand `persist`، مع اختبار لكل ترحيل.
 - لا يُكتب أي شيء في التخزين في أول تشغيل إلا ما فعله المستخدم. (في «الحمد» بدأ كل مستخدم جديد بثلاثة أيام «مكتملة» ومدخلتين في الدفتر لم يكتبهما، P-01.)
@@ -189,20 +192,20 @@ resolveToday({ today, welcomeDoneOn, all, welcomeId })
 
 | المفتاح | الشكل |
 |---|---|
-| `APP_SLUG:settings:v1` | `{ theme: 'system' \| 'light' \| 'dark', fontScale: number, fontFamily: string, showMyDuasInFlow: boolean }` |
-| `APP_SLUG:onboarding:v1` | `{ completedAt: string \| null }` |
-| `APP_SLUG:welcome:v1` | `{ doneOn: "YYYY-MM-DD" \| null }` |
-| `APP_SLUG:completions:v1` | `Array<{ date: "YYYY-MM-DD", duaId: string, completedAt: string, intention?: 'sujood' \| 'after_prayer' \| 'before_sleep' \| 'now' }>` (مدخلة واحدة لكل يوم) |
-| `APP_SLUG:notebook:v1` | `Array<{ id, date, duaId?, text, createdAt, updatedAt }>` |
-| `APP_SLUG:my-duas:v1` | `Array<{ id, text, note?, createdAt, answeredAt?: string, answerNote?: string }>` |
-| `APP_SLUG:favorites:v1` | `string[]` (معرّفات الأدعية) |
-| `APP_SLUG:drafts:v1` | `{ [duaId: string]: { notebookText?: string, updatedAt: string } }`، تُحذف عند الحفظ |
+| `qareeb:settings:v1` | `{ theme: 'system' \| 'light' \| 'dark', fontScale: number, fontFamily: string, showMyDuasInFlow: boolean }` |
+| `qareeb:onboarding:v1` | `{ completedAt: string \| null }` |
+| `qareeb:welcome:v1` | `{ doneOn: "YYYY-MM-DD" \| null }` |
+| `qareeb:completions:v1` | `Array<{ date: "YYYY-MM-DD", duaId: string, completedAt: string, intention?: 'sujood' \| 'after_prayer' \| 'before_sleep' \| 'now' }>` (مدخلة واحدة لكل يوم) |
+| `qareeb:notebook:v1` | `Array<{ id, date, duaId?, text, createdAt, updatedAt }>` |
+| `qareeb:my-duas:v1` | `Array<{ id, text, note?, createdAt, answeredAt?: string, answerNote?: string }>` |
+| `qareeb:favorites:v1` | `string[]` (معرّفات الأدعية) |
+| `qareeb:drafts:v1` | `{ [duaId: string]: { notebookText?: string, updatedAt: string } }`، تُحذف عند الحفظ |
 
 ### النسخة الاحتياطية
 
 ```jsonc
 {
-  "app": "APP_SLUG",
+  "app": "qareeb",
   "backupVersion": 1,
   "exportedAt": "2026-11-23T18:00:00.000Z",
   "data": { "settings": {…}, "completions": […], "notebook": […], "myDuas": […], "favorites": […] }
@@ -212,7 +215,7 @@ resolveToday({ today, welcomeDoneOn, all, welcomeId })
 - التصدير والاستيراد متماثلان: كل ما يُصدَّر يُستورد (في «الحمد» كانت ثلاثة إعدادات تُصدَّر ولا تُستورد، وأشياء أخرى لا تُصدَّر أصلًا).
 - الاستيراد: تحقق Zod لكل سجل، وحدود للحجم، ورفض القيم غير المعروفة، ثم ملخص («١٢٠ يومًا، ٤٥ مدخلة، ١٨ دعوة») وتأكيد، ثم الاستبدال. الفشل رسالة خطأ لا علامة نجاح.
 - النص في الخصوصية يقول بدقة إن الملف نص عادي غير مشفّر (في «الحمد» قالت السياسة إنه مشفّر وهو ليس كذلك).
-- «امسح كل بياناتي» يحذف كل مفاتيح `APP_SLUG:` بعد تأكيد.
+- «امسح كل بياناتي» يحذف كل مفاتيح `qareeb:` بعد تأكيد.
 
 ## ٧. التنقل والروابط
 
