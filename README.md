@@ -88,7 +88,7 @@ src/
 ## By the numbers
 
 - ~13,700 lines of TypeScript/TSX across 52 source files (35+ components)
-- 150 blessings (a second hundred is being added in batches) · 23 adhkar · 4 journey stages / 28 stations · 5 reciters
+- 175 blessings (a second hundred is being added in batches) · 23 adhkar · 4 journey stages / 28 stations · 5 reciters
 - Production bundle: 352 KB JS + 14 KB CSS (gzipped)
 
 ## Documentation
