@@ -1,167 +1,92 @@
-"""First verification pass over handoff/dua-app/04-seed-catalogue.md.
+"""Reference check for handoff/dua-app/04-seed-catalogue.md.
 
-Qur'an: every word of the incipit must appear in the cited ayah range of
-Tanzil's Simple text. Sunnah: every word must appear in the hadith with that
-number in the open hadith-api dataset (sunnah.com numbering; Muslim by Abd
-al-Baqi number = the integer part of `arabicnumber`). Prints a Markdown report.
+Checks that every Qur'anic reference exists in Tanzil's text and that every
+hadith number exists in the open hadith-api dataset (sunnah.com numbering;
+Muslim by Abd al-Baqi number = the integer part of `arabicnumber`), and lists
+the gradings recorded there. Prints a Markdown report.
 
-The lists below are the catalogue as it stood for the first pass on
-2026-11-23; 04b-catalogue-verification.md explains the five mismatches and
-how the catalogue was corrected afterwards.
+This script contains no Qur'an or hadith text and must not: it never types a
+verse or a hadith. Whether the dua is really at a reference is checked when a
+card is built, by comparing the card's text (pasted or fetched from the
+source) with the source itself.
 
 Usage: python3 -I verify_catalogue.py DOWNLOADS_DIR, where DOWNLOADS_DIR has
-quran/simple.txt (Tanzil, txt-2 format), quran/chapters.json (api.quran.com
-/api/v4/chapters?language=ar) and hadith/<collection>.json (hadith-api
-editions/ara-<collection>.min.json).
+quran/simple.txt (Tanzil, txt-2 format) and hadith/<collection>.json
+(hadith-api editions/ara-<collection>.min.json).
 """
-import json, re, sys, unicodedata
+import json, sys
 
 D = sys.argv[1]
 
-def norm(s):
-    s = unicodedata.normalize('NFD', s)
-    s = re.sub('[ؐ-ًؚ-ٰٟۖ-ۭ࣓-ࣣ࣡-ࣿـ‏‎]', '', s)
-    s = re.sub('[آأإٱ-ٳٵ]', 'ا', s)
-    s = re.sub('[ىی]', 'ي', s).replace('ة', 'ه').replace('ؤ', 'و').replace('ئ', 'ي')
-    s = re.sub(r'[^\w\s]', ' ', s)
-    return ' ' + re.sub(r'\s+', ' ', s).strip() + ' '
-
-AR = str.maketrans('٠١٢٣٤٥٦٧٨٩', '0123456789')
-
-# ---- Qur'an -----------------------------------------------------------
-quran = {}
+quran = set()
 for line in open(f'{D}/quran/simple.txt', encoding='utf-8'):
     parts = line.rstrip('\n').split('|')
     if len(parts) == 3 and parts[0].isdigit():
-        quran[(int(parts[0]), int(parts[1]))] = parts[2]
-names = {norm(c['name_arabic']).strip(): c['id'] for c in json.load(open(f'{D}/quran/chapters.json'))['chapters']}
+        quran.add((int(parts[0]), int(parts[1])))
 
-Q = [  # (row, surah, ayah_from, ayah_to, incipit as written in 04)
- (1,'الفاتحة',6,7,'اهدنا الصراط المستقيم'), (2,'البقرة',127,127,'ربنا تقبل منا إنك أنت السميع العليم'),
- (3,'البقرة',128,128,'ربنا واجعلنا مسلمين لك ومن ذريتنا أمة مسلمة لك'), (4,'البقرة',129,129,'ربنا وابعث فيهم رسولا منهم'),
- (5,'البقرة',201,201,'ربنا آتنا في الدنيا حسنة وفي الآخرة حسنة'), (6,'البقرة',250,250,'ربنا أفرغ علينا صبرا وثبت أقدامنا'),
- (7,'البقرة',286,286,'ربنا لا تؤاخذنا إن نسينا أو أخطأنا'), (8,'آل عمران',8,8,'ربنا لا تزغ قلوبنا بعد إذ هديتنا'),
- (9,'آل عمران',35,35,'رب إني نذرت لك ما في بطني محررا فتقبل مني'), (10,'آل عمران',38,38,'رب هب لي من لدنك ذرية طيبة'),
- (11,'آل عمران',147,147,'ربنا اغفر لنا ذنوبنا وإسرافنا في أمرنا وثبت أقدامنا'), (12,'آل عمران',173,173,'حسبنا الله ونعم الوكيل'),
- (13,'آل عمران',191,194,'ربنا ما خلقت هذا باطلا سبحانك فقنا عذاب النار'), (14,'الأعراف',23,23,'ربنا ظلمنا أنفسنا وإن لم تغفر لنا وترحمنا'),
- (15,'الأعراف',89,89,'ربنا افتح بيننا وبين قومنا بالحق'), (16,'الأعراف',126,126,'ربنا أفرغ علينا صبرا وتوفنا مسلمين'),
- (17,'الأعراف',151,151,'رب اغفر لي ولأخي وأدخلنا في رحمتك'), (18,'يونس',85,86,'ربنا لا تجعلنا فتنة للقوم الظالمين ونجنا برحمتك'),
- (19,'هود',47,47,'رب إني أعوذ بك أن أسألك ما ليس لي به علم'), (20,'يوسف',33,33,'رب السجن أحب إلي مما يدعونني إليه'),
- (21,'يوسف',86,86,'إنما أشكو بثي وحزني إلى الله'), (22,'يوسف',101,101,'فاطر السماوات والأرض أنت وليي توفني مسلما وألحقني بالصالحين'),
- (23,'إبراهيم',35,35,'رب اجعل هذا البلد آمنا واجنبني وبني أن نعبد الأصنام'), (24,'إبراهيم',37,37,'ربنا إني أسكنت من ذريتي بواد غير ذي زرع'),
- (25,'إبراهيم',40,41,'رب اجعلني مقيم الصلاة ومن ذريتي ربنا وتقبل دعاء'), (26,'الإسراء',24,24,'رب ارحمهما كما ربياني صغيرا'),
- (27,'الإسراء',80,80,'رب أدخلني مدخل صدق وأخرجني مخرج صدق'), (28,'الكهف',10,10,'ربنا آتنا من لدنك رحمة وهيئ لنا من أمرنا رشدا'),
- (29,'مريم',4,4,'ولم أكن بدعائك رب شقيا'), (30,'طه',25,28,'رب اشرح لي صدري ويسر لي أمري'), (31,'طه',114,114,'رب زدني علما'),
- (32,'الأنبياء',83,83,'أني مسني الضر وأنت أرحم الراحمين'), (33,'الأنبياء',87,87,'لا إله إلا أنت سبحانك إني كنت من الظالمين'),
- (34,'الأنبياء',89,89,'رب لا تذرني فردا وأنت خير الوارثين'), (35,'المؤمنون',29,29,'رب أنزلني منزلا مباركا وأنت خير المنزلين'),
- (36,'المؤمنون',97,98,'رب أعوذ بك من همزات الشياطين'), (37,'المؤمنون',118,118,'رب اغفر وارحم وأنت خير الراحمين'),
- (38,'الفرقان',74,74,'ربنا هب لنا من أزواجنا وذرياتنا قرة أعين'), (39,'الشعراء',83,85,'رب هب لي حكما وألحقني بالصالحين'),
- (40,'الشعراء',169,169,'رب نجني وأهلي مما يعملون'), (41,'النمل',19,19,'رب أوزعني أن أشكر نعمتك التي أنعمت علي'),
- (42,'القصص',16,16,'رب إني ظلمت نفسي فاغفر لي'), (43,'القصص',21,21,'رب نجني من القوم الظالمين'),
- (44,'القصص',22,22,'عسى ربي أن يهديني سواء السبيل'), (45,'القصص',24,24,'رب إني لما أنزلت إلي من خير فقير'),
- (46,'الصافات',100,100,'رب هب لي من الصالحين'), (47,'الأحقاف',15,15,'رب أوزعني أن أشكر نعمتك وأصلح لي في ذريتي'),
- (48,'القمر',10,10,'أني مغلوب فانتصر'), (49,'الحشر',10,10,'ربنا اغفر لنا ولإخواننا الذين سبقونا بالإيمان'),
- (50,'التحريم',11,11,'رب ابن لي عندك بيتا في الجنة ونجني من فرعون وعمله'),
- ('أخرى','الممتحنة',4,5,'ربنا عليك توكلنا'), ('أخرى','نوح',28,28,'رب اغفر لي ولوالدي ولمن دخل بيتي مؤمنا'),
- ('أخرى','التحريم',8,8,'ربنا أتمم لنا نورنا'), ('أخرى','آل عمران',193,193,'ربنا إننا سمعنا مناديا'),
- ('أخرى','الفرقان',65,65,'ربنا اصرف عنا عذاب جهنم'), ('أخرى','غافر',44,44,'وأفوض أمري إلى الله'),
+Q = [  # (row, surah number, ayah from, ayah to)
+    (1, 1, 6, 7), (2, 2, 127, 127), (3, 2, 128, 128), (4, 2, 129, 129), (5, 2, 201, 201), (6, 2, 250, 250),
+    (7, 2, 286, 286), (8, 3, 8, 8), (9, 3, 35, 35), (10, 3, 38, 38), (11, 3, 147, 147), (12, 3, 173, 173),
+    (13, 3, 191, 194), (14, 7, 23, 23), (15, 7, 89, 89), (16, 7, 126, 126), (17, 7, 151, 151), (18, 10, 85, 86),
+    (19, 11, 47, 47), (20, 12, 33, 33), (21, 12, 86, 86), (22, 12, 101, 101), (23, 14, 35, 35), (24, 14, 37, 37),
+    (25, 14, 40, 41), (26, 17, 24, 24), (27, 17, 80, 80), (28, 18, 10, 10), (29, 19, 4, 4), (30, 20, 25, 28),
+    (31, 20, 114, 114), (32, 21, 83, 83), (33, 21, 87, 87), (34, 21, 89, 89), (35, 23, 29, 29), (36, 23, 97, 98),
+    (37, 23, 118, 118), (38, 25, 74, 74), (39, 26, 83, 85), (40, 26, 169, 169), (41, 27, 19, 19), (42, 28, 16, 16),
+    (43, 28, 21, 21), (44, 28, 22, 22), (45, 28, 24, 24), (46, 37, 100, 100), (47, 46, 15, 15), (48, 54, 10, 10),
+    (49, 59, 10, 10), (50, 66, 11, 11),
+    ('أخرى', 60, 4, 5), ('أخرى', 71, 28, 28), ('أخرى', 66, 8, 8), ('أخرى', 3, 193, 193), ('أخرى', 25, 65, 65),
+    ('أخرى', 40, 44, 44),
 ]
 
-def missing_words(text, incipit):
-    t = norm(text)
-    return [w for w in norm(incipit).split() if f' {w} ' not in t and w not in t]
-
-print('## أ. القرآن\n')
-print('| # | الموضع | النتيجة | ملاحظة |\n|---|---|---|---|')
-q_fail = 0
-for row, sname, a, b, inc in Q:
-    s = names.get(norm(sname).strip())
-    if s is None:
-        print(f'| {row} | {sname} {a}–{b} | ✗ | اسم السورة غير معروف |'); q_fail += 1; continue
-    text = ' '.join(quran.get((s, i), '') for i in range(a, b + 1))
-    miss = missing_words(text, inc)
-    if not text.strip():
-        print(f'| {row} | {sname} {a}–{b} | ✗ | الآية غير موجودة |'); q_fail += 1
-    elif miss:
-        print(f'| {row} | {sname} {a}–{b} | ✗ | كلمات غير موجودة: {" ".join(miss)} |'); q_fail += 1
-    else:
-        print(f'| {row} | {sname} ({s}) {a}{"–"+str(b) if b!=a else ""} | ✓ | |')
-print(f'\nالقرآن: {len(Q)} موضعًا، {len(Q)-q_fail} مطابقة، {q_fail} تحتاج نظرًا.\n')
-
-# ---- Sunnah ----------------------------------------------------------
-H = {}
-for c in ['bukhari', 'muslim', 'abudawud', 'tirmidhi', 'nasai', 'ibnmajah']:
-    H[c] = json.load(open(f'{D}/hadith/{c}.json'))['hadiths']
+H = {c: json.load(open(f'{D}/hadith/{c}.json'))['hadiths']
+     for c in ['bukhari', 'muslim', 'abudawud', 'tirmidhi', 'nasai', 'ibnmajah']}
 
 def find(coll, num):
-    out = []
-    for h in H[coll]:
-        if coll == 'muslim':
-            an = str(h.get('arabicnumber', ''))
-            if an and an.split('.')[0] == str(num):
-                out.append(h)
-        elif str(h.get('hadithnumber')) == str(num) or str(h.get('arabicnumber')) == str(num):
-            out.append(h)
-    return out
+    if coll == 'muslim':
+        return [h for h in H[coll] if str(h.get('arabicnumber', '')).split('.')[0] == str(num)]
+    return [h for h in H[coll] if h.get('hadithnumber') == num]
 
-S = [  # (row, [(collection, number)], incipit as written in 04)
- (1,[('bukhari',834),('muslim',2705)],'اللهم إني ظلمت نفسي ظلما كثيرا ولا يغفر الذنوب إلا أنت'),
- (2,[('abudawud',1522),('nasai',1303)],'اللهم أعني على ذكرك وشكرك وحسن عبادتك'),
- (3,[('tirmidhi',3513),('ibnmajah',3850)],'اللهم إنك عفو تحب العفو فاعف عني'),
- (4,[('muslim',918)],'اللهم أجرني في مصيبتي واخلف لي خيرا منها'),
- (5,[('muslim',920)],'اللهم اغفر لأبي سلمة وارفع درجته في المهديين'),
- (6,[('bukhari',6306)],'سيد الاستغفار اللهم أنت ربي لا إله إلا أنت خلقتني وأنا عبدك'),
- (7,[('ahmad',3712)],'اللهم إني عبدك ابن عبدك ابن أمتك ناصيتي بيدك'),
- (8,[('tirmidhi',3522),('tirmidhi',2140)],'يا مقلب القلوب ثبت قلبي على دينك'),
- (9,[('muslim',2725)],'اللهم اهدني وسددني'),
- (10,[('bukhari',143),('bukhari',75)],'اللهم فقهه في الدين'),
- (11,[('bukhari',6334),('muslim',2480)],'اللهم أكثر ماله وولده وبارك له فيما أعطيته'),
- (12,[('muslim',2697)],'اللهم اغفر لي وارحمني واهدني وعافني وارزقني'),
- (13,[('tirmidhi',3514)],'سل الله العافية في الدنيا والآخرة'),
- (14,[('abudawud',5074),('ibnmajah',3871)],'اللهم إني أسألك العفو والعافية في الدنيا والآخرة'),
- (15,[('muslim',2721)],'اللهم إني أسألك الهدى والتقى والعفاف والغنى'),
- (16,[('bukhari',2893)],'اللهم إني أعوذ بك من الهم والحزن والعجز والكسل'),
- (17,[('bukhari',6346),('muslim',2730)],'لا إله إلا الله العظيم الحليم'),
- (18,[('abudawud',1525)],'الله الله ربي لا أشرك به شيئا'),
- (19,[('nasai_kubra',None)],'يا حي يا قيوم برحمتك أستغيث أصلح لي شأني كله'),
- (20,[('abudawud',5090)],'اللهم عافني في بدني اللهم عافني في سمعي'),
- (21,[('bukhari',1162)],'الاستخارة'),
- (22,[('bukhari',6398),('muslim',2719)],'اللهم اغفر لي خطيئتي وجهلي وإسرافي في أمري'),
- (23,[('muslim',2720)],'اللهم أصلح لي ديني الذي هو عصمة أمري'),
- (24,[('muslim',202)],'اللهم أمتي أمتي'),
- (25,[('abudawud',1510),('tirmidhi',3551)],'رب أعني ولا تعن علي وانصرني ولا تنصر علي'),
- (26,[('tirmidhi',3235)],'اللهم إني أسألك فعل الخيرات وترك المنكرات وحب المساكين'),
- (27,[('muslim',2491)],'اللهم اهد أم أبي هريرة'),
- (28,[('bukhari',3477),('muslim',1792)],'اللهم اغفر لقومي فإنهم لا يعلمون'),
- (29,[('abudawud',1425),('tirmidhi',464)],'اللهم اهدني فيمن هديت'),
- (30,[('muslim',1763)],'اللهم أنجز لي ما وعدتني'),
- (31,[('bukhari',2933),('muslim',1742)],'اللهم منزل الكتاب سريع الحساب اهزم الأحزاب'),
- (32,[('muslim',2202)],'أعوذ بالله وقدرته من شر ما أجد وأحاذر'),
- (33,[('bukhari',5743),('muslim',2191)],'اللهم رب الناس أذهب البأس اشف أنت الشافي'),
- (34,[('bukhari',3020),('muslim',2475)],'اللهم ثبته واجعله هاديا مهديا'),
- (35,[('muslim',2739)],'اللهم إني أعوذ بك من زوال نعمتك وتحول عافيتك'),
- (36,[('tirmidhi',3505)],'لا إله إلا أنت سبحانك إني كنت من الظالمين'),
- (37,[('bukhari',6389),('muslim',2690)],'ربنا آتنا في الدنيا حسنة'),
- ('ق١',[('muslim',395)],'اهدنا الصراط المستقيم'),
- ('ق٧',[('muslim',126)],'قد فعلت'),
- ('ق١٢',[('bukhari',4563)],'حسبنا الله ونعم الوكيل'),
+S = [  # (row, [(collection, number)]); None = not in the open dataset
+    (1, [('bukhari', 834), ('muslim', 2705)]), (2, [('abudawud', 1522), ('nasai', 1303)]),
+    (3, [('tirmidhi', 3513), ('ibnmajah', 3850)]), (4, [('muslim', 918)]), (5, [('muslim', 920)]),
+    (6, [('bukhari', 6306)]), (7, [('مسند أحمد 3712', None)]), (8, [('tirmidhi', 3522), ('tirmidhi', 2140)]),
+    (9, [('muslim', 2725)]), (10, [('bukhari', 143), ('bukhari', 75)]), (11, [('bukhari', 6334), ('muslim', 2480)]),
+    (12, [('muslim', 2697)]), (13, [('tirmidhi', 3514)]), (14, [('abudawud', 5074), ('ibnmajah', 3871)]),
+    (15, [('muslim', 2721)]), (16, [('bukhari', 2893)]), (17, [('bukhari', 6346), ('muslim', 2730)]),
+    (18, [('abudawud', 1525)]), (19, [('السنن الكبرى للنسائي', None)]), (20, [('abudawud', 5090)]),
+    (21, [('bukhari', 6382), ('bukhari', 7390), ('bukhari', 1166)]), (22, [('bukhari', 6398), ('muslim', 2719)]),
+    (23, [('muslim', 2720)]), (24, [('muslim', 202)]), (25, [('abudawud', 1510), ('tirmidhi', 3551)]),
+    (26, [('tirmidhi', 3235)]), (27, [('muslim', 2491)]), (28, [('bukhari', 3477), ('muslim', 1792)]),
+    (29, [('abudawud', 1425), ('tirmidhi', 464)]), (30, [('muslim', 1763)]), (31, [('bukhari', 2933), ('muslim', 1742)]),
+    (32, [('muslim', 2202)]), (33, [('bukhari', 5743), ('muslim', 2191)]), (34, [('bukhari', 3020), ('muslim', 2475)]),
+    (35, [('muslim', 2739)]), (36, [('tirmidhi', 3505)]), (37, [('bukhari', 6389), ('muslim', 2690)]),
+    ('أ١', [('muslim', 395)]), ('أ٧', [('muslim', 126)]), ('أ١٢', [('bukhari', 4563)]),
 ]
-CN = {'bukhari':'البخاري','muslim':'مسلم','abudawud':'أبو داود','tirmidhi':'الترمذي','nasai':'النسائي','ibnmajah':'ابن ماجه'}
-print('## ب. السنة\n')
-print('| # | المرجع | النتيجة | الأحكام في المصدر | ملاحظة |\n|---|---|---|---|---|')
-s_ok = s_fail = s_na = 0
-for row, refs, inc in S:
+
+CN = {'bukhari': 'البخاري', 'muslim': 'مسلم', 'abudawud': 'أبو داود', 'tirmidhi': 'الترمذي', 'nasai': 'النسائي', 'ibnmajah': 'ابن ماجه'}
+GRADERS = {'Al-Albani': 'الألباني', 'Muhammad Muhyi Al-Din Abdul Hamid': 'محمد محيي الدين عبد الحميد',
+           'Shuaib Al Arnaut': 'شعيب الأرنؤوط', 'Zubair Ali Zai': 'زبير علي زئي', 'Ahmad Muhammad Shakir': 'أحمد شاكر',
+           'Bashar Awad Maarouf': 'بشار عواد معروف', 'Abu Ghuddah': 'أبو غدة', 'Muhammad Fouad Abd al-Baqi': 'محمد فؤاد عبد الباقي'}
+GRADES = {'Isnaad Sahih': 'إسناده صحيح', 'Isnaad Hasan': 'إسناده حسن', 'Hasan Isnaad': 'إسناده حسن',
+          'Hasan Sahih': 'حسن صحيح', 'Sahih': 'صحيح', 'Hasan': 'حسن', 'Daif': 'ضعيف'}
+
+print('## أ. القرآن\n\n| # | الموضع | الآيات موجودة |\n|---|---|---|')
+q_bad = 0
+for row, s, a, b in Q:
+    ok = all((s, i) in quran for i in range(a, b + 1))
+    q_bad += not ok
+    print(f'| {row} | {s}:{a}' + (f'–{b}' if b != a else '') + f' | {"✓" if ok else "✗"} |')
+print(f'\n{len(Q)} موضعًا، {len(Q) - q_bad} موجودة.\n')
+
+print('## ب. السنة\n\n| # | المرجع | الرقم موجود | الأحكام المسجّلة في المصدر |\n|---|---|---|---|')
+for row, refs in S:
     for coll, num in refs:
-        if coll not in H:
-            print(f'| {row} | {coll} {num or ""} | — | | ليس في المصدر المفتوح؛ يُتحقق يدويًا |'); s_na += 1; continue
+        if num is None:
+            print(f'| {row} | {coll} | — | ليس في المصدر المفتوح؛ يُتحقق يدويًا |')
+            continue
         hs = find(coll, num)
-        if not hs:
-            print(f'| {row} | {CN[coll]} {num} | ✗ | | الرقم غير موجود |'); s_fail += 1; continue
-        best = min(hs, key=lambda h: len(missing_words(h['text'], inc)))
-        miss = missing_words(best['text'], inc)
-        grades = '، '.join(f"{g['name']}: {g['grade']}" for g in best.get('grades', [])) or ('في الصحيح' if coll in ('bukhari','muslim') else '')
-        if miss:
-            print(f'| {row} | {CN[coll]} {num} | ✗ | {grades} | كلمات غير موجودة: {" ".join(miss)} |'); s_fail += 1
-        else:
-            print(f'| {row} | {CN[coll]} {num} | ✓ | {grades} | |'); s_ok += 1
-print(f'\nالسنة: {s_ok} مطابقة، {s_fail} تحتاج نظرًا، {s_na} خارج المصدر المفتوح.')
+        grades = '، '.join(f"{GRADERS.get(g['name'], g['name'])}: {GRADES.get(g['grade'], g['grade'])}"
+                          for g in (hs[0].get('grades', []) if hs else []))
+        if not grades and coll in ('bukhari', 'muslim'):
+            grades = 'في الصحيح'
+        print(f'| {row} | {CN[coll]} {num} | {"✓" if hs else "✗"} | {grades} |')

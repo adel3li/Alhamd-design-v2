@@ -34,7 +34,7 @@
 - Vitest مع اختبارات reusable-code، وPlaywright، وGitHub Actions يشغّل: lint وtest وvalidate-content وcheck-promises وbuild.
 - scripts/check-promises.ts كما في المخطط §١٠.
 - خط المحتوى: src/content/types.ts وschema.ts (Zod)، وscripts/validate-content.ts بالفحوص في 03 §٧، وscripts/build-content.ts مع بوابة المراجعة: الحد الأدنى لما يدخل الإنتاج متغير واحد (verified أو approved، انظر 03 §٨)، والمعاينة CONTENT_PREVIEW=1 تضم الكل بشارة «مسودة».
-- scripts/fetch-quran.ts: يقرأ ملف نص القرآن من content/sources/ ويملأ quran.fullText بالسورة والآية. ضع في content/sources/ نسختي Tanzil (uthmani وsimple) مع ترخيصهما: واحدة للعرض حسب الإعداد، والإملائية دائمًا للبحث. إن لم يكن الملف موجودًا، أو لم تستطع تنزيله من tanzil.net بسبب سياسة الشبكة، فتوقف واطلب مني الملف. لا تكتب نص آية من ذاكرتك أبدًا.
+- scripts/fetch-quran.ts: يقرأ ملف نص القرآن من content/sources/ ويملأ quran.fullText بالسورة والآية. ضع في content/sources/ نسختي Tanzil (uthmani وsimple) مع ترخيصهما: واحدة للعرض حسب الإعداد، والإملائية دائمًا للبحث. إن لم يكن الملف موجودًا، أو لم تستطع تنزيله من tanzil.net بسبب سياسة الشبكة، فتوقف واطلب مني الملف. لا تكتب نص آية أو حديث، ولا جزءًا منه، في أي مكان: لا في الكود ولا الاختبارات ولا الوثائق ولا رسائلك لي. أشر إليه بمرجعه فقط.
 - ثلاث بطاقات تجريبية في content/duas/ بحالة draft، مبنية على docs/handoff/templates/dua.example.json وdua.example.quran.json: دعاء الترحيب (الفاتحة ٦–٧)، ودعاء يونس (الأنبياء ٨٧)، ودعاء معاذ (سنن أبي داود ١٥٢٢). نص الآيات يأتي من السكريبت. نص الحديث وكل حقل نصي مقدس للسنة يبقى مكانًا فارغًا بالشكل <<يُلصق من المصدر: سنن أبي داود ١٥٢٢>>. الطبقة المؤلَّفة اكتب لها نصًّا قصيرًا واضحًا أنه للتجربة: «[نص تجريبي]».
 
 ### الجزء ٢: أول حلقة كاملة
