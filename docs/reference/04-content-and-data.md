@@ -4,7 +4,7 @@ All content ships inside the JavaScript bundle. There is no CMS and no remote fe
 
 | File | Lines | What it holds | Consumed by |
 |---|---:|---|---|
-| `src/data/blessings_ar.json` | 21,638 | 300 blessings, the core content (added in batches of 25 since 101; see 1.4) | `data/loader.ts` |
+| `src/data/blessings_ar.json` | 23,433 | 325 blessings, the core content (added in batches of 25 since 101; see 1.4) | `data/loader.ts` |
 | `src/data/loader.ts` | 17 | Access functions and the review gate | store, charts, journey |
 | `src/data/journey_content.json` | 725 | 4 journey stages × 7 stations | `lib/journeyStore.ts` |
 | `src/data/hisnAlMuslim.ts` | 358 | 6 categories, 23 adhkar, 7 daily tips | `HisnScreen`, `HomeScreen`, `App` |
@@ -372,8 +372,33 @@ Blessings 101–200 were added in four batches (101–125, 126–150, 151–175,
 | 298 | `blessing_298` | wijdan | الانتماء | نعمة الانتماء | الأنبياء 21:92 |
 | 299 | `blessing_299` | wijdan | الندم | نعمة الندم الصادق | القصص 28:16 |
 | 300 | `blessing_300` | afiyah | الرئتان | نعمة الرئتين | التكوير 81:18 |
+| 301 | `blessing_301` | afiyah | الكبد | نعمة الكبد | الذاريات 51:21 |
+| 302 | `blessing_302` | afiyah | الكليتان | نعمة الكليتين | الانفطار 82:8 |
+| 303 | `blessing_303` | afiyah | الدماغ | نعمة الدماغ | الإسراء 17:36 |
+| 304 | `blessing_304` | afiyah | الأعصاب | نعمة الأعصاب | السجدة 32:9 |
+| 305 | `blessing_305` | afiyah | العضلات | نعمة العضلات | البقرة 2:247 |
+| 306 | `blessing_306` | afiyah | المفاصل | نعمة المفاصل | الإنسان 76:28 |
+| 307 | `blessing_307` | afiyah | الأصابع | نعمة الأصابع | القيامة 75:4 |
+| 308 | `blessing_308` | afiyah | البصمة | نعمة البصمة | الروم 30:22 |
+| 309 | `blessing_309` | afiyah | الجفون | نعمة الجفون والرموش | البلد 90:8 |
+| 310 | `blessing_310` | afiyah | الدموع | نعمة الدموع | الإسراء 17:109 |
+| 311 | `blessing_311` | afiyah | العرق | نعمة العرق | البلد 90:4 |
+| 312 | `blessing_312` | afiyah | اللعاب | نعمة اللعاب | طه 20:27 |
+| 313 | `blessing_313` | afiyah | الشهية | نعمة الشهية | الطور 52:22 |
+| 314 | `blessing_314` | afiyah | التئام الجروح | نعمة التئام الجروح | الإسراء 17:82 |
+| 315 | `blessing_315` | afiyah | الحمل والولادة | نعمة الحمل والولادة | الزمر 39:6 |
+| 316 | `blessing_316` | afiyah | النمو | نعمة النمو | نوح 71:17 |
+| 317 | `blessing_317` | afiyah | النشاط | نعمة النشاط والحيوية | النبأ 78:11 |
+| 318 | `blessing_318` | afiyah | الصحة النفسية | نعمة الصحة النفسية | يونس 10:57 |
+| 319 | `blessing_319` | afiyah | الشعر والأظافر | نعمة الشعر والأظافر | التغابن 64:3 |
+| 320 | `blessing_320` | nafs | الاسم الحسن | نعمة الاسم الحسن | مريم 19:7 |
+| 321 | `blessing_321` | nafs | الخصوصية | نعمة الخصوصية | الحجرات 49:12 |
+| 322 | `blessing_322` | nafs | الحرية | نعمة الحرية | البقرة 2:256 |
+| 323 | `blessing_323` | nafs | السكون | نعمة السكون | الأنعام 6:13 |
+| 324 | `blessing_324` | nafs | النظافة | نعمة النظافة | المدثر 74:4 |
+| 325 | `blessing_325` | nafs | الماء الدافئ | نعمة الماء الدافئ | ص 38:42 |
 
-By category: din 73, kawn 60, nasl 45, wijdan 43, afiyah 20, nafs 16, rizq 14, aql 13, amn 9, mal 7. `kawn` («نعم الكون») and `wijdan` («نعم الوجدان») do not occur in blessings 1–40.
+By category: din 73, kawn 60, nasl 45, wijdan 43, afiyah 39, nafs 22, rizq 14, aql 13, amn 9, mal 7. `kawn` («نعم الكون») and `wijdan` («نعم الوجدان») do not occur in blessings 1–40.
 
 `legacy/src/data/blessings_ar.json` holds the first 40 as they were before the import. Two lines of those 40 were corrected in this file at the import: the opening line of blessing 19 («هذه الكلمات» for «هذه كلمات»), and in the reflection of blessing 31 a phrase of the hadith that had been set in the Qur'an brackets ﴿ ﴾ is now in « ».
 
@@ -458,6 +483,7 @@ Added on 23 November 2026 at the owner's request, so that blessings 41–125 hav
 - **Blessings 226–250**: second batch of the third hundred: the last five «نعم الدين» and twenty «نعم الكون». Hadith outside the Sahihs: Tirmidhi 3383 and 2417, Ibn Majah 2305 (graded sahih or hasan by al-Albani); sourced supplications include al-Nasa'i 1305 and the istikhara (Bukhari 1166). Ten have no hadith (231, 234, 236, 237, 240, 245–248, 250). The verse filter now also removes the basmala Tanzil writes with a shadda before Al-Tin 1 and Al-Qadr 1 (no earlier blessing used either).
 - **Blessings 251–275**: third batch of the third hundred: the last five «نعم الكون» and twenty «نعم الأهل». Hadith outside the Sahihs: Abu Dawud 2548 and 4919, Tirmidhi 1919, 2685, 2499, 1956 and 2369 (al-Albani: sahih or hasan); sourced supplication Abu Dawud 3106. Six have no hadith (252, 254, 255, 257, 264, 275). Three verses repeat earlier ones (Al-Zukhruf 67, Al-Isra' 23, Al-Shu'ara' 80).
 - **Blessings 276–300**: fourth batch of the third hundred: the last two «نعم الأهل», all twenty-two «نعم الوجدان» and the first «نعم العافية» (الرئتان). Hadith outside the Sahihs: Abu Dawud 4811, Ibn Majah 4216 and 4252, Tirmidhi 2507 (al-Albani: sahih); sourced supplications Tirmidhi 2035 and Abu Dawud 1522. Blessing 300 has no hadith. The Tirmidhi 2507 text keeps the edition's vowelling «الْمُسْلِمَ», which the reviewer should check.
+- **Blessings 301–325**: afiyah 2–20 (organs and body functions) and nafs 1–6 (a good name, privacy, freedom, stillness, cleanliness, warm water). Eight have no hadith where none fit; Muslim 223 is given by its standard number. Al-Muyassar used for 30:22, 17:109, 39:6, 78:11.
 - **Fit**: each hadith was chosen for its subject and is not a commentary on the verse. Two are only loosely tied to their blessing: 94 (القلم والكتابة) is Abu Hurayra's remark that 'Abd Allah ibn 'Amr used to write, not words of the Prophet, and 98 (الثمار) is the simile of the citron and the date for readers of the Qur'an. No sahih hadith was chosen for 92, 96, 97, 99, 116, 122, 123 and 124; 92 and 97 still have a sourced supplication.
 
 ## 2. Journey content (`src/data/journey_content.json`)
