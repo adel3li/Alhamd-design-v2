@@ -98,6 +98,7 @@ Published pages: 1–100 at https://claude.ai/artifact/Ua2D9MwPbGtw7nB4cycHyT.
 | 3 | 21–30 | 21 shows الرحمن 1–4 under «الرحمن: 1» in the app: `fetch_verses.py` now matches a run of consecutive ayat (end-of-ayah sign and number between them, `ayahEnd` in the verse); asked the owner about the app's reference |
 | 4 | 31–40 | 32 (قريش 3–4) and 39 (العصر 1–3) span several ayat under one number in the app, same as 21 |
 | 5 | 41–50 | 42 (الحشر 7) and 46 (المائدة 54) are long whole ayat whose blessing sits in one phrase: asked the owner whether the app should show a portion |
+| 6 | 51–60 | 54 (الحج 78 whole, text at 77%) same question as 42 and 46 |
 
 ## How it works
 
