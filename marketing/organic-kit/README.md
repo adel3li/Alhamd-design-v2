@@ -83,7 +83,7 @@ one the app's real screen). They are made ten blessings at a time, in the app's 
 | 1–100 | `data/jr_progress/1.txt` | `data/verses.json` | `kit/icons.js` | `data/scripts/jr_notes.json` | https://claude.ai/artifact/Ua2D9MwPbGtw7nB4cycHyT |
 | 101–200 | `data/jr_progress/2.txt` | `data/verses_2.json` | `kit/icons_2.js` | `data/scripts/jr_notes_2.json` | https://claude.ai/artifact/WN31ubRHQf5xsQWN9pzbiJ |
 | 201–300 | `data/jr_progress/3.txt` | `data/verses_3.json` | `kit/icons_3.js` | `data/scripts/jr_notes_3.json` | (made by its session) |
-| 301–400 | `data/jr_progress/4.txt` | `data/verses_4.json` | `kit/icons_4.js` | `data/scripts/jr_notes_4.json` | (made by its session) |
+| 301–400 | `data/jr_progress/4.txt` | `data/verses_4.json` | `kit/icons_4.js` | `data/scripts/jr_notes_4.json` | https://claude.ai/artifact/DeBu6jcBhhjw2yvfPfQgE2 |
 
 A progress file holds the last blessing done in its hundred; `BUNDLE` in `tools/build_content.py` is built from them.
 One file of each kind per hundred, so sessions working on different hundreds never edit the same file, except

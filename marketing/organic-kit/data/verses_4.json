@@ -1,0 +1,125 @@
+{
+ "note": "Fetches the Quran verses the kit prints, in Uthmani script, and checks them.\n\n  python3 tools/fetch_verses.py           # writes data/verses.json\n  python3 tools/fetch_verses.py --words   # also prints every verse word by word (to choose portions)\n\nText: quran.com API v4 (text_uthmani, word by word), so a portion is always whole words of the verse.\nCheck: the same verse from api.alquran.cloud (Tanzil Uthmani) must have the same letters once\ndiacritics and marks are removed. A mismatch stops the script.\n\nEvery verse card still says «راجِع قبل النشر» in the plan: the app promises that each text is\nreviewed by people of knowledge before it is published, and that promise covers marketing too.",
+ "verses": [
+  {
+   "id": "BV-301",
+   "surah": 51,
+   "ayah": 21,
+   "surahName": "الذاريات",
+   "text": "وَفِىٓ أَنفُسِكُمْ ۚ أَفَلَا تُبْصِرُونَ",
+   "full": "وَفِىٓ أَنفُسِكُمْ ۚ أَفَلَا تُبْصِرُونَ",
+   "portion": false,
+   "ref": "الذاريات: 21",
+   "use": "نعمة الكبد: آية النعمة كما تظهر في التطبيق",
+   "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"
+  },
+  {
+   "id": "BV-302",
+   "surah": 82,
+   "ayah": 8,
+   "surahName": "الانفطار",
+   "text": "فِىٓ أَىِّ صُورَةٍ مَّا شَآءَ رَكَّبَكَ",
+   "full": "فِىٓ أَىِّ صُورَةٍ مَّا شَآءَ رَكَّبَكَ",
+   "portion": false,
+   "ref": "الانفطار: 8",
+   "use": "نعمة الكليتين: آية النعمة كما تظهر في التطبيق",
+   "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"
+  },
+  {
+   "id": "BV-303",
+   "surah": 17,
+   "ayah": 36,
+   "surahName": "الإسراء",
+   "text": "وَلَا تَقْفُ مَا لَيْسَ لَكَ بِهِۦ عِلْمٌ ۚ إِنَّ ٱلسَّمْعَ وَٱلْبَصَرَ وَٱلْفُؤَادَ كُلُّ أُو۟لَـٰٓئِكَ كَانَ عَنْهُ مَسْـُٔولًا",
+   "full": "وَلَا تَقْفُ مَا لَيْسَ لَكَ بِهِۦ عِلْمٌ ۚ إِنَّ ٱلسَّمْعَ وَٱلْبَصَرَ وَٱلْفُؤَادَ كُلُّ أُو۟لَـٰٓئِكَ كَانَ عَنْهُ مَسْـُٔولًا",
+   "portion": false,
+   "ref": "الإسراء: 36",
+   "use": "نعمة الدماغ: آية النعمة كما تظهر في التطبيق",
+   "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"
+  },
+  {
+   "id": "BV-304",
+   "surah": 32,
+   "ayah": 9,
+   "surahName": "السجدة",
+   "text": "ثُمَّ سَوَّىٰهُ وَنَفَخَ فِيهِ مِن رُّوحِهِۦ ۖ وَجَعَلَ لَكُمُ ٱلسَّمْعَ وَٱلْأَبْصَـٰرَ وَٱلْأَفْـِٔدَةَ ۚ قَلِيلًا مَّا تَشْكُرُونَ",
+   "full": "ثُمَّ سَوَّىٰهُ وَنَفَخَ فِيهِ مِن رُّوحِهِۦ ۖ وَجَعَلَ لَكُمُ ٱلسَّمْعَ وَٱلْأَبْصَـٰرَ وَٱلْأَفْـِٔدَةَ ۚ قَلِيلًا مَّا تَشْكُرُونَ",
+   "portion": false,
+   "ref": "السجدة: 9",
+   "use": "نعمة الأعصاب: آية النعمة كما تظهر في التطبيق",
+   "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"
+  },
+  {
+   "id": "BV-305",
+   "surah": 2,
+   "ayah": 247,
+   "surahName": "البقرة",
+   "text": "وَقَالَ لَهُمْ نَبِيُّهُمْ إِنَّ ٱللَّهَ قَدْ بَعَثَ لَكُمْ طَالُوتَ مَلِكًا ۚ قَالُوٓا۟ أَنَّىٰ يَكُونُ لَهُ ٱلْمُلْكُ عَلَيْنَا وَنَحْنُ أَحَقُّ بِٱلْمُلْكِ مِنْهُ وَلَمْ يُؤْتَ سَعَةً مِّنَ ٱلْمَالِ ۚ قَالَ إِنَّ ٱللَّهَ ٱصْطَفَىٰهُ عَلَيْكُمْ وَزَادَهُۥ بَسْطَةً فِى ٱلْعِلْمِ وَٱلْجِسْمِ ۖ وَٱللَّهُ يُؤْتِى مُلْكَهُۥ مَن يَشَآءُ ۚ وَٱللَّهُ وَٰسِعٌ عَلِيمٌ",
+   "full": "وَقَالَ لَهُمْ نَبِيُّهُمْ إِنَّ ٱللَّهَ قَدْ بَعَثَ لَكُمْ طَالُوتَ مَلِكًا ۚ قَالُوٓا۟ أَنَّىٰ يَكُونُ لَهُ ٱلْمُلْكُ عَلَيْنَا وَنَحْنُ أَحَقُّ بِٱلْمُلْكِ مِنْهُ وَلَمْ يُؤْتَ سَعَةً مِّنَ ٱلْمَالِ ۚ قَالَ إِنَّ ٱللَّهَ ٱصْطَفَىٰهُ عَلَيْكُمْ وَزَادَهُۥ بَسْطَةً فِى ٱلْعِلْمِ وَٱلْجِسْمِ ۖ وَٱللَّهُ يُؤْتِى مُلْكَهُۥ مَن يَشَآءُ ۚ وَٱللَّهُ وَٰسِعٌ عَلِيمٌ",
+   "portion": false,
+   "ref": "البقرة: 247",
+   "use": "نعمة العضلات: آية النعمة كما تظهر في التطبيق",
+   "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"
+  },
+  {
+   "id": "BV-306",
+   "surah": 76,
+   "ayah": 28,
+   "surahName": "الإنسان",
+   "text": "نَّحْنُ خَلَقْنَـٰهُمْ وَشَدَدْنَآ أَسْرَهُمْ ۖ وَإِذَا شِئْنَا بَدَّلْنَآ أَمْثَـٰلَهُمْ تَبْدِيلًا",
+   "full": "نَّحْنُ خَلَقْنَـٰهُمْ وَشَدَدْنَآ أَسْرَهُمْ ۖ وَإِذَا شِئْنَا بَدَّلْنَآ أَمْثَـٰلَهُمْ تَبْدِيلًا",
+   "portion": false,
+   "ref": "الإنسان: 28",
+   "use": "نعمة المفاصل: آية النعمة كما تظهر في التطبيق",
+   "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"
+  },
+  {
+   "id": "BV-307",
+   "surah": 75,
+   "ayah": 4,
+   "surahName": "القيامة",
+   "text": "بَلَىٰ قَـٰدِرِينَ عَلَىٰٓ أَن نُّسَوِّىَ بَنَانَهُۥ",
+   "full": "بَلَىٰ قَـٰدِرِينَ عَلَىٰٓ أَن نُّسَوِّىَ بَنَانَهُۥ",
+   "portion": false,
+   "ref": "القيامة: 4",
+   "use": "نعمة الأصابع: آية النعمة كما تظهر في التطبيق",
+   "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"
+  },
+  {
+   "id": "BV-308",
+   "surah": 30,
+   "ayah": 22,
+   "surahName": "الروم",
+   "text": "وَمِنْ ءَايَـٰتِهِۦ خَلْقُ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضِ وَٱخْتِلَـٰفُ أَلْسِنَتِكُمْ وَأَلْوَٰنِكُمْ ۚ إِنَّ فِى ذَٰلِكَ لَـَٔايَـٰتٍ لِّلْعَـٰلِمِينَ",
+   "full": "وَمِنْ ءَايَـٰتِهِۦ خَلْقُ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضِ وَٱخْتِلَـٰفُ أَلْسِنَتِكُمْ وَأَلْوَٰنِكُمْ ۚ إِنَّ فِى ذَٰلِكَ لَـَٔايَـٰتٍ لِّلْعَـٰلِمِينَ",
+   "portion": false,
+   "ref": "الروم: 22",
+   "use": "نعمة البصمة: آية النعمة كما تظهر في التطبيق",
+   "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"
+  },
+  {
+   "id": "BV-309",
+   "surah": 90,
+   "ayah": 8,
+   "surahName": "البلد",
+   "text": "أَلَمْ نَجْعَل لَّهُۥ عَيْنَيْنِ",
+   "full": "أَلَمْ نَجْعَل لَّهُۥ عَيْنَيْنِ",
+   "portion": false,
+   "ref": "البلد: 8",
+   "use": "نعمة الجفون والرموش: آية النعمة كما تظهر في التطبيق",
+   "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"
+  },
+  {
+   "id": "BV-310",
+   "surah": 17,
+   "ayah": 109,
+   "surahName": "الإسراء",
+   "text": "وَيَخِرُّونَ لِلْأَذْقَانِ يَبْكُونَ وَيَزِيدُهُمْ خُشُوعًا",
+   "full": "وَيَخِرُّونَ لِلْأَذْقَانِ يَبْكُونَ وَيَزِيدُهُمْ خُشُوعًا ۩",
+   "portion": true,
+   "ref": "الإسراء: 109",
+   "use": "نعمة الدموع: آية النعمة كما تظهر في التطبيق",
+   "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"
+  }
+ ]
+}
