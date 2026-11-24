@@ -215,6 +215,50 @@
       tree(24, 8, 16, 17, 38), tree(10.5, 17, 11, 11, 38), tree(37.5, 17, 11, 11, 38), C(20, 16, 1.1), C(27.5, 14.5, 1.1), C(26, 21, 1.1), C(9, 22, 0.9), C(38.5, 21.5, 0.9),
       P('M3 38 L45 38'), P('M6 42.5 C9 41 12 41 15 42.5 C18 44 21 44 24 42.5 C27 41 30 41 33 42.5 C36 44 39 44 42 42.5'),
     ],
+    marai: [ // green hills, and a sheep grazing on them
+      P('M3 34 C12 26 22 26 30 32'), P('M18 30 C27 23.5 37 23.5 45 30'), P('M3 42 L45 42'), P('M9 41 L10 38 L11 41 M17 41 L18 38.5 L19 41 M30 41 L31 37.5 L32 41 M38 41 L39 38 L40 41'),
+      P('M27 21 C26 19 27.5 17.2 29.5 17.6 C30.2 15.8 33 15.6 34 17.2 C35.5 16.4 37.4 17.8 37 19.6 C38.4 20.4 38 22.6 36.2 22.6 L28.4 22.6 C27 22.6 26.4 21.6 27 21 Z'), C(39.4, 19, 1.6), P('M29.5 22.6 L29.5 24.6 M35 22.6 L35 24.4'),
+      spark(11, 11, 2), spark(18, 6.5, 1.2),
+    ],
+    saat: [ // a galaxy turning, and stars beyond counting
+      P('M24 24 C24 20 30 19 31 24 C32 30 24 33 18 30 C11 26 13 15 21 12 C29 9 38 14 39 22'), P('M24 24 C24 28 18 29 17 24 C16 18 24 15 30 18 C37 22 35 33 27 36 C19 39 10 34 9 26'), C(24, 24, 1.6),
+      spark(40, 8, 2), spark(8, 40, 1.6), spark(41, 37, 1.2), spark(7, 9, 1.2), spark(34, 43, 1),
+    ],
+    dawab: [ // tracks of every kind: on the belly, on two feet, on four
+      P('M6 12 C10 8 14 16 18 12 C22 8 26 16 30 12 C34 8 38 16 42 12'),
+      ...[[11, 24], [19, 21]].map(([x, y]) => P(`M${x} ${y} L${x} ${y + 4.5} M${x} ${y + 4.5} L${x - 2.6} ${y + 1} M${x} ${y + 4.5} L${x + 2.6} ${y + 1} M${x} ${y + 4.5} L${x} ${y + 6.5}`)),
+      ...[[30, 32], [38, 27]].flatMap(([x, y]) => [E(x, y + 2, 2.6, 2.1), C(x - 3, y - 1.4, 0.9), C(x - 1, y - 2.8, 0.9), C(x + 1.2, y - 2.8, 0.9), C(x + 3.1, y - 1.4, 0.9)]),
+      drop(14, 39, 1),
+    ],
+    jawfi: [ // a well dug down to the water held under the earth
+      P('M4 18 L44 18'), P('M19 18 L19 9 M29 18 L29 9'), P('M17 9 L31 9'), P('M24 9 L24 25'), R(21.8, 25, 4.4, 3.6, 0.8), P('M19 18 L19 33 M29 18 L29 33'),
+      P('M4 36 C8 34 12 34 16 36 C20 38 24 38 28 36 C32 34 36 34 40 36 C41.5 36.8 43 37 44 36.6'), P('M6 41 L42 41'), C(9, 24, 1), C(38, 25, 1), C(12, 30, 0.8), C(35, 31, 0.8), C(40, 21.5, 0.7),
+    ],
+    khasiba: [ // good earth: the rain above, the roots below, the shoots between
+      P('M4 27 L44 27'), ...[14, 24, 34].flatMap((x) => [P(`M${x} 27 L${x} 19`), P(`M${x} 22.4 C${x - 3.4} 22.4 ${x - 5} 20.4 ${x - 5.2} 17.6 C${x - 2} 17.6 ${x - 0.4} 19.6 ${x} 22.4 Z`), P(`M${x} 20.4 C${x + 3.2} 20.4 ${x + 4.8} 18.4 ${x + 5} 15.6 C${x + 2} 15.6 ${x + 0.4} 17.6 ${x} 20.4 Z`),
+        P(`M${x} 27 C${x - 0.6} 31 ${x + 0.6} 34 ${x} 38 M${x} 31 C${x - 2} 32.4 ${x - 3} 34.4 ${x - 3.2} 36.4 M${x} 32 C${x + 2} 33.4 ${x + 3} 35.4 ${x + 3.2} 37.4`)]),
+      P('M10 5.5 L9 8.5 M20 4.5 L19 7.5 M30 5.5 L29 8.5 M40 4.5 L39 7.5'),
+    ],
+    qaraba: [ // one family tree, its branches spread wide
+      P('M24 43 L24 28'), P('M24 28 C20 24 15 22.5 11 21.6'), P('M24 28 C28 24 33 22.5 37 21.6'), P('M24 28 L24 15'), P('M17 24 L15 28.4'), P('M31 24 L33 28.4'),
+      C(8.4, 20.6, 3), C(39.6, 20.6, 3), C(24, 11.6, 3.4), C(14.2, 31, 2.4), C(33.8, 31, 2.4), P('M16 43 L32 43'),
+    ],
+    ashar: [ // two houses, joined by the love between them
+      P('M4 26 L12 19 L20 26'), P('M6 24.5 L6 38 L18 38 L18 24.5'), P('M10 38 L10 32 L14 32 L14 38'), P('M28 26 L36 19 L44 26'), P('M30 24.5 L30 38 L42 38 L42 24.5'), P('M34 38 L34 32 L38 32 L38 38'),
+      heart(24, 21, 4.6), P('M18 35 C21 32.5 27 32.5 30 35'), P('M2 41 L46 41'),
+    ],
+    rafiq: [ // one road, and two stars travelling over it together
+      P('M4 18 L44 18'), P('M8 43 L22.6 18.5'), P('M40 43 L25.4 18.5'), P('M24 42 L24 38 M24 34.5 L24 31.5 M24 28.5 L24 26.5 M24 23.5 L24 22'),
+      spark(19.5, 10, 2.4), spark(28.5, 10, 2.4), P('M6 22 L12 22 M36 22 L42 22'),
+    ],
+    sadiq: [ // two cups set down side by side, the steam of them still rising
+      P('M9 26 L22 26 L20.6 36 C20.4 37.4 19.3 38 18 38 L13 38 C11.7 38 10.6 37.4 10.4 36 Z'), P('M9.4 28.5 C6.4 28.5 6.4 33 10 33'), P('M26 26 L39 26 L37.6 36 C37.4 37.4 36.3 38 35 38 L30 38 C28.7 38 27.6 37.4 27.4 36 Z'), P('M38.6 28.5 C41.6 28.5 41.6 33 38 33'),
+      P('M6 41 L25 41 M23 41 L42 41'), P('M14 22.5 C13 20 16 18.5 15 16 M18 22.5 C17 20 20 18.5 19 16'), P('M31 22.5 C30 20 33 18.5 32 16 M35 22.5 C34 20 37 18.5 36 16'), heart(24.5, 10.5, 3.6),
+    ],
+    banat: [ // a tulip standing in the gate of the garden
+      P('M6 42 L42 42'), P('M10 42 L10 18 C10 11 16 6.5 24 6 C32 6.5 38 11 38 18 L38 42'), P('M24 42 L24 27'), P('M19 18 C19 24 21 27 24 27 C27 27 29 24 29 18 L26.5 20.5 L24 16.5 L21.5 20.5 Z'),
+      P('M24 36 C20 36 17.5 33.5 17 30 C20.5 30 23.4 32.4 24 36 Z'), spark(31.5, 13, 1.4),
+    ],
   });
 
   Object.assign(BY_BLESSING, {
@@ -228,5 +272,7 @@
     blessing_237: 'nada', blessing_238: 'duha', blessing_239: 'ghurub', blessing_240: 'nahl',
     blessing_241: 'naml', blessing_242: 'khayl', blessing_243: 'ibil', blessing_244: 'samak', blessing_245: 'azhar', blessing_246: 'inab',
     blessing_247: 'rumman', blessing_248: 'tin', blessing_249: 'sanabil', blessing_250: 'basatin',
+    blessing_251: 'marai', blessing_252: 'saat', blessing_253: 'dawab', blessing_254: 'jawfi', blessing_255: 'khasiba', blessing_256: 'qaraba',
+    blessing_257: 'ashar', blessing_258: 'rafiq', blessing_259: 'sadiq', blessing_260: 'banat',
   });
 })();
