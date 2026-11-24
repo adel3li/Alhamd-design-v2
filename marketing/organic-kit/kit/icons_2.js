@@ -306,6 +306,52 @@
     ],
   });
 
+  Object.assign(I, {
+    bidaya: [ // a fresh page turning over
+      P('M24 14 C19 11 13 10.5 7 11.5 L7 37 C13 36 19 36.5 24 39.5'), P('M24 14 L24 39.5'), P('M24 14 C28 10 33 8 38 8 C37 16 37 26 39 35 C33 35 28 36.5 24 39.5'),
+      P('M11 18 L19 18.6 M11 23 L19 23.4 M11 28 L17 28.3'), spark(41, 6, 2), spark(32, 20, 1.6),
+    ],
+    dif: [ // the hearth, its fire under the arch
+      P('M7 43 L41 43'), P('M10 43 L10 22 C10 13 16.5 8 24 8 C31.5 8 38 13 38 22 L38 43'), P('M15 39 L33 39'), P('M17 39 L31 34.5 M31 39 L17 34.5'),
+      P('M24 33 C19 32 18 27 21 23 C21.5 25.5 22.6 26 23.4 25 C22 21 24.5 17.5 27 16 C26.5 19.5 30 21.5 29.5 27 C29 30.5 27 33 24 33 Z'),
+    ],
+    mirat: [ // a mirror in its frame, catching the light
+      E(24, 20, 10, 12.5), E(24, 20, 7, 9.5), P('M24 32.5 L24 38 M18 42 L30 42 M24 38 C21 38 19.5 40 18 42 M24 38 C27 38 28.5 40 30 42'),
+      P('M20 15 C21 13.3 22.6 12.6 24 12.4'), spark(38, 8, 2.4), spark(40.5, 26, 1.4), spark(9, 12, 1.6),
+    ],
+    khubz: [ // a round loaf, and the wheat it came from
+      P('M6 34 C6 26 14 21 24 21 C34 21 42 26 42 34 C42 37 39 39 35 39 L13 39 C9 39 6 37 6 34 Z'), P('M15 27 L18 31 M22 26 L24.5 30.5 M29 26.4 L31 31'),
+      P('M24 21 C24 15 26 10 30 6'), leaf(26, 14, 21, 10, 1.6), leaf(27.4, 11, 31.4, 8.4, 1.5), leaf(25.2, 17, 29.6, 14.8, 1.5), P('M8 43 L40 43'),
+    ],
+    tamr: [ // a few dates on the plate, the cluster's stem above
+      E(16, 28, 4.4, 7), E(24.5, 27, 4.4, 7), E(33, 28.5, 4.2, 6.6), P('M7 37 C12 42 36 42 41 37 Z'), P('M5 37 L43 37'),
+      P('M24.5 20 C24.5 14 27 10 31 7 M16 21 C18 16 21 13 24.5 13 M33 22 C33 17 31.5 13 28.5 10.6'), P('M14 24.5 C14.6 23.6 15.4 23.2 16.2 23.2'),
+    ],
+    khudar: [ // a carrot and a leafy green, fresh from the soil
+      P('M16 18 C19.5 16.5 24 19 23.5 23 C22.5 30 16 38 11 42 C9.5 43 8.6 42 9 40.5 C11 33 12.5 23.5 16 18 Z'), P('M14.4 26 L17.4 27 M12.6 32 L15.4 32.8'), P('M19 17.2 C18 13 19 9.5 21.5 7.5 M20.4 17.4 C22.4 14 25.6 12.6 28.6 13'),
+      E(32.5, 32, 8, 7.5), P('M32.5 24.5 C32 21.5 30 20 28 20 M32.5 24.5 C33.5 21.5 36 20.5 38 21'), spark(40, 9, 1.8),
+    ],
+    milh: [ // the salt cellar, and the grains it gives
+      P('M15 42 L33 42 L31 20 L17 20 Z'), P('M17 20 C17 14 20 11 24 11 C28 11 31 14 31 20'), C(21, 15.5, 0.6), C(24, 14.5, 0.6), C(27, 15.5, 0.6), P('M18.6 29 L29.4 29'),
+      P('M37 26 L39 28 L37 30 L35 28 Z'), P('M40 34 L41.5 35.5 L40 37 L38.5 35.5 Z'), P('M9 31 L10.5 32.5 L9 34 L7.5 32.5 Z'), spark(40, 12, 1.6),
+    ],
+    sufra: [ // the shared tray, seen from above, dishes all round
+      C(24, 24, 17), C(24, 24, 6), C(13.5, 17, 3.2), C(34.5, 17, 3.2), C(13.5, 31, 3.2), C(34.5, 31, 3.2), C(24, 36.5, 2.4), C(24, 11.5, 2.4),
+    ],
+    rizqghayb: [ // provision coming down from where you did not look
+      cloud(9, 39, 15, 10), P('M24 18 L24 26'), P('M20.5 23 L24 26.5 L27.5 23'), P('M14 31 L34 31 L31.5 42 L16.5 42 Z'), P('M12.5 31 L35.5 31'), heart(24, 36.6, 3.6), spark(41, 24, 1.6), spark(8, 24, 1.4),
+    ],
+    halal: [ // the scale held level, a clean leaf in its pan
+      P('M24 8 L24 40 M16 42 L32 42 M24 40 C20 40 18 41 16 42 M24 40 C28 40 30 41 32 42'), P('M9 14 L39 14'), C(24, 8, 1.4),
+      P('M9 14 L4.5 26 M9 14 L13.5 26 M3.5 26 C4 29.5 14 29.5 14.5 26 Z'), P('M39 14 L34.5 26 M39 14 L43.5 26 M33.5 26 C34 29.5 44 29.5 44.5 26 Z'), leaf(6, 25, 12.5, 19.5, 2.1),
+    ],
+  });
+
+  Object.assign(BY_BLESSING, {
+    blessing_171: 'bidaya', blessing_172: 'dif', blessing_173: 'mirat', blessing_174: 'khubz', blessing_175: 'tamr',
+    blessing_176: 'khudar', blessing_177: 'milh', blessing_178: 'sufra', blessing_179: 'rizqghayb', blessing_180: 'halal',
+  });
+
   Object.assign(BY_BLESSING, {
     blessing_161: 'jild', blessing_162: 'sawt', blessing_163: 'tawazun', blessing_164: 'tufula', blessing_165: 'shabab',
     blessing_166: 'umr', blessing_167: 'libas', blessing_168: 'istiqaz', blessing_169: 'raha', blessing_170: 'irada',
