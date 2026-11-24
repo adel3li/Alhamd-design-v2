@@ -134,6 +134,46 @@
       P('M24 9 L24 40'), P('M16 41 L32 41'), P('M9.5 14 L38.5 14'), C(24, 7.6, 1.4), P('M9.5 14 L5.5 26 M9.5 14 L13.5 26'), P('M4.5 26 C5.5 30.5 13.5 30.5 14.5 26 Z'),
       P('M38.5 14 L34.5 26 M38.5 14 L42.5 26'), P('M33.5 26 C34.5 30.5 42.5 30.5 43.5 26 Z'), spark(15.5, 6.5, 1.4), spark(33, 6, 1.1),
     ],
+    hawa: [ // the air moving, and a leaf carried on it
+      P('M6 19 L30 19 C34 19 36 16 34.5 13.5 C33 11 29 11.5 29 14.5'), P('M6 27 L38 27 C42 27 43.5 31 41.5 33.5 C39.5 36 35.5 35 35.5 32'), P('M10 35 L24 35 C27.5 35 29 38.5 27 40.5 C25.5 42 23 41.5 22.6 39.5'),
+      P('M12 10 C14 6.8 18.2 6.6 20.4 8.6 C18.4 11.4 14.2 11.8 12 10 Z'), P('M12 10 L17.5 8.8'),
+    ],
+    turab: [ // a mound of earth, and what grows from it
+      P('M5 41 L43 41'), P('M7 41 C11 32 17 27 24 27 C31 27 37 32 41 41'), C(15, 36.5, 0.8), C(21, 33.5, 0.8), C(27, 34.5, 0.8), C(33, 37, 0.8), C(23, 38.5, 0.8), C(29, 39.2, 0.6), C(18, 39.5, 0.6),
+      P('M24 27 L24 18'), P('M24 22 C20.5 22 18.4 19.8 18 16.6 C21.4 16.6 23.6 18.8 24 22 Z'), P('M24 19.5 C27.5 19.5 29.6 17.3 30 14 C26.6 14 24.4 16.3 24 19.5 Z'),
+    ],
+    hijara: [ // stones set one on another
+      P('M4 42 L44 42'), E(24, 37, 13, 4.6), E(23, 28.4, 9.6, 4), E(24.6, 20.8, 7, 3.5), E(23.6, 14.4, 4.6, 2.9), spark(36, 9, 1.8), spark(11, 13, 1.3),
+    ],
+    sahra: [ // dunes under the sun
+      P('M3 42 L45 42'), P('M3 37 C10 29.5 18 29.5 26 36'), P('M18 32 C26 24.5 36 24.5 45 32'), P('M30 42 C34 38.5 39 38 44 40'),
+      C(14, 14, 4.2), P('M14 6 L14 7.5 M14 20.5 L14 22 M6 14 L7.5 14 M20.5 14 L22 14 M8.3 8.3 L9.4 9.4 M18.6 18.6 L19.7 19.7 M19.7 8.3 L18.6 9.4 M9.4 18.6 L8.3 19.7'),
+    ],
+    widyan: [ // a valley, and the stream that runs down it
+      P('M3 11 C10 17 16 29 21.5 39'), P('M45 11 C38 17 32 29 26.5 39'), P('M21.5 39 C23.2 40.2 24.8 40.2 26.5 39'), P('M24 13 C21 18 27 22 24 27 C21.6 31 26 34.4 24 38.5'),
+      P('M10 9 L15.5 4.5 L21 9'), P('M28 8 L32 5 L36 8'),
+    ],
+    thalj: [ // a snowflake, and hail beneath it
+      ...Array.from({ length: 6 }, (_, i) => { const a = -Math.PI / 2 + (i * Math.PI) / 3, c = Math.cos(a), s = Math.sin(a), x = (r) => f(24 + r * c), y = (r) => f(20 + r * s);
+        const b = (r, d) => { const t = a + d; return `L${f(24 + r * c + 4 * Math.cos(t))} ${f(20 + r * s + 4 * Math.sin(t))}`; };
+        return P(`M24 20 L${x(13)} ${y(13)} M${x(8)} ${y(8)} ${b(8, Math.PI / 4)} M${x(8)} ${y(8)} ${b(8, -Math.PI / 4)}`); }),
+      C(24, 20, 2), C(13, 40.5, 1.6), C(24, 42.5, 1.6), C(35, 40.5, 1.6),
+    ],
+    nada: [ // a leaf in the morning, and the dew on it
+      P('M8 41 C8 25 20 11 41 8 C41 27 28 39.5 8 41 Z'), P('M8 41 L33.5 15.5'), C(27.5, 27, 1.7), C(21, 33.5, 1.3), C(32.5, 21.5, 1.2), C(17, 26, 1.1), spark(12, 10, 2.2), spark(19, 6, 1.3),
+    ],
+    duha: [ // the sun climbed high, and a short shadow
+      P('M4 41 L44 41'), C(30, 15, 5.5), P('M30 5 L30 6.8 M30 23.2 L30 25 M20 15 L21.8 15 M38.2 15 L40 15 M22.9 7.9 L24.2 9.2 M35.8 20.8 L37.1 22.1 M37.1 7.9 L35.8 9.2 M24.2 20.8 L22.9 22.1'),
+      P('M13 41 L13 32'), C(13, 27.5, 5),
+    ],
+    ghurub: [ // the sun going down into the water, birds going home
+      P('M4 32 L44 32'), P('M14 32 A10 10 0 0 1 34 32'), P('M16 36 L32 36'), P('M19.5 40 L28.5 40'), P('M22.5 44 L25.5 44'),
+      P('M7 13 C8.6 11.4 10.4 11.4 11.5 13 C12.6 11.4 14.4 11.4 16 13'), P('M30 8 C31.2 6.8 32.6 6.8 33.4 8 C34.2 6.8 35.6 6.8 36.8 8'), P('M36 15 C37 14 38.2 14 38.8 15 C39.4 14 40.6 14 41.6 15'),
+    ],
+    nahl: [ // a bee on its way
+      E(24, 29, 7, 10), P('M17.4 26 L30.6 26 M17.2 31 L30.8 31 M18.6 36 L29.4 36'), C(24, 15.6, 3.6), P('M22.6 12.6 C21.6 9.6 19.6 8.4 17.6 8.8'), P('M25.4 12.6 C26.4 9.6 28.4 8.4 30.4 8.8'),
+      `<ellipse cx="12.5" cy="21" rx="7.5" ry="4.2" transform="rotate(-28 12.5 21)"/>`, `<ellipse cx="35.5" cy="21" rx="7.5" ry="4.2" transform="rotate(28 35.5 21)"/>`, P('M24 39 L24 42'),
+    ],
   });
 
   Object.assign(BY_BLESSING, {
@@ -143,5 +183,7 @@
     blessing_217: 'qabul', blessing_218: 'mahiya', blessing_219: 'jariya', blessing_220: 'niyya',
     blessing_221: 'udhiya', blessing_222: 'arafa', blessing_223: 'itikaf', blessing_224: 'wara', blessing_225: 'tasbih', blessing_226: 'hamd',
     blessing_227: 'qadar', blessing_228: 'ruya', blessing_229: 'tawhid', blessing_230: 'muhasaba',
+    blessing_231: 'hawa', blessing_232: 'turab', blessing_233: 'hijara', blessing_234: 'sahra', blessing_235: 'widyan', blessing_236: 'thalj',
+    blessing_237: 'nada', blessing_238: 'duha', blessing_239: 'ghurub', blessing_240: 'nahl',
   });
 })();
