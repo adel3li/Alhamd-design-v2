@@ -89,7 +89,11 @@ python3 tools/build_gallery.py 1          # out/gallery/1/: the review page for 
 `tools/build_gallery.py` writes one page per hundred blessings (a strip JPEG per carousel per theme, about 0.5 MB each),
 with a «ليل / نهار» switch and «يُراجَع قبل النشر» on every slide that prints a verse, hadith or scholar's words (or a
 tadabbur that quotes one). Notes for the owner on a blessing go in `data/scripts/jr_notes.json` (`{"12": "…"}`).
-Published pages: 1–100 at https://claude.ai/artifact/Ua2D9MwPbGtw7nB4cycHyT.
+Published pages: 1–100 at https://claude.ai/artifact/Ua2D9MwPbGtw7nB4cycHyT, 101–200 at https://claude.ai/artifact/WN31ubRHQf5xsQWN9pzbiJ.
+
+From 101 on, the kit's daily families stop (`KIT_BLESSINGS`), so a package carries its own pauses, duaa and journal prompt;
+every batch draws its ten icons in `kit/icons.js` (`BY_BLESSING`; `medal()` falls back to another icon when one is missing,
+so check `Object.keys(BY_BLESSING).length` reaches `JR_UPTO`).
 
 | Batch | Blessings | Notes |
 |---|---|---|
@@ -103,6 +107,7 @@ Published pages: 1–100 at https://claude.ai/artifact/Ua2D9MwPbGtw7nB4cycHyT.
 | 8 | 71–80 | a whole ayah that opens with the hizb sign «۞» (74, 79) now drops it from the printed text, as portions already did (`full` keeps it); 79 (النساء 36) same portion question as 42 |
 | 9 | 81–90 | 82 (المائدة 2 whole, text at 77%) same portion question |
 | 10 | 91–100 | 92, 96, 97 and 99 have no hadith (9 slides); nothing for the owner |
+| 11 | 101–110 | ten icons drawn (tahara, adhan, siyam, sadaqa, qiyam, istighfar, salatnabi, eid, haya, khushu); 101 (المائدة 6 whole, text at 70%) portion question; 110 (المؤمنون 1–2) reference question |
 
 ## How it works
 

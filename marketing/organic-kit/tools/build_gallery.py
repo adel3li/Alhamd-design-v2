@@ -117,7 +117,8 @@ def main() -> None:
                    else f'<span class="cell" aria-hidden="true">{ar(n)}</span>' for n in range(lo, hi + 1))
     tpl = (ROOT / "tools" / "gallery-template.html").read_text(encoding="utf-8")
     html_out = (tpl.replace("{{RANGE}}", f"{ar(lo)}–{ar(hi)}").replace("{{DONE}}", ar(len(done)))
-                .replace("{{GRID}}", grid).replace("{{CARDS}}", "".join(cards)))
+                .replace("{{GRID}}", grid)
+                .replace("{{DRAFT}}", '<p class="note">نصوص النِّعَم بعد المئة الأولى مسوّدةٌ في التطبيق تنتظر مراجعتك، فالكاروسيل يتبعها كما هي الآن.</p>' if page > 1 else "").replace("{{CARDS}}", "".join(cards)))
     (out / "index.html").write_text(html_out, encoding="utf-8")
     used = {f"JR-{n:02d}_{th}.jpg" for n in done for th in ("layl", "nahar")}
     for f in (out / "img").iterdir():

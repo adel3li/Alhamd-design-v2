@@ -115,7 +115,7 @@
 
   Object.values(CT.bundle || {}).forEach((pk) => {
     const base = CT.blessings.find((x) => x.n === pk.n) || {};
-    const b = { ...pk, steps: base.steps, duaa: base.duaa, prompt: base.prompt };
+    const b = { ...pk, steps: base.steps || pk.steps, duaa: base.duaa || pk.duaa, prompt: base.prompt || pk.prompt };
     const nn = pad2(b.n);
     const ic = ICON[b.id];
     const hamdK = b.stepTypes.indexOf('hamd');
