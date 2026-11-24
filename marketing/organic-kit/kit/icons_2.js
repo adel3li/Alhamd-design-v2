@@ -228,6 +228,52 @@
     ],
   });
 
+  Object.assign(I, {
+    wafa: [ // two rings, linked and kept
+      C(18.5, 25, 10), C(29.5, 25, 10), P('M24 16.8 L24 19 M24 31 L24 33.2'), spark(38.5, 9.5, 2), spark(9, 40, 1.4),
+    ],
+    shifa: [ // a leaf that mends, and the sign of healing on it
+      leaf(10, 40, 37, 11, 9, 1), P('M10 40 L28 22'), P('M27 12 L27 22 M22 17 L32 17'), spark(39, 30, 1.8), spark(13, 13, 1.4),
+    ],
+    dawa: [ // the mortar and its pestle, and the herb ground in it
+      P('M9 25 L39 25 C39 34 32.5 40 24 40 C15.5 40 9 34 9 25 Z'), P('M17 43 L31 43 M20 40 L19 43 M28 40 L29 43'), P('M26 25 L37 8.5'), P('M35.2 7.4 C36.6 6.2 39 7.7 38.6 9.6'),
+      leaf(15, 25, 11, 16, 2), leaf(20, 25, 21.5, 15.5, 2), spark(9, 10, 1.6),
+    ],
+    lams: [ // a feather, light enough to be felt
+      P('M12 40 C16 30 22 19 36 8'), P('M36 8 C38 16 36 24 28 30 C24 33 20 34 16.5 34.5'), P('M36 8 C29 9 22 13 18 20 C16 24 15.5 28 15 32'),
+      P('M30 15 L33.5 17.5 M26 20 L30.8 22.4 M22 25 L26.4 27.2 M27 13.8 L25 17 M23 18.4 L21 22'), P('M28 40 C31 38 33 42 36 40'), P('M30 44 C33 42 35 46 38 44'),
+    ],
+    shamm: [ // a flower, and its scent rising
+      P('M18 44 L18 30'), leaf(18, 38, 11, 34, 2.2), C(18, 24.5, 2.6), leaf(18, 22, 18, 14.5, 2.6), leaf(20.5, 24.5, 27.5, 22, 2.6), leaf(15.5, 24.5, 8.5, 22, 2.6), leaf(19.5, 27, 24.5, 31.5, 2.4), leaf(16.5, 27, 11.5, 31.5, 2.4),
+      P('M28 16 C26 13 30 11 28 8 M33 19 C31 16 35 14 33 11 M38 22 C36 19 40 17 38 14'),
+    ],
+    asnan: [ // a tooth, sound and whole
+      P('M14 10 C18 8 21 11 24 11 C27 11 30 8 34 10 C39 12.5 38.5 20 36 25 C34.5 28 34 32 33 37 C32.3 40.5 29.5 41 28.8 37.5 C28 33 27 29 24 29 C21 29 20 33 19.2 37.5 C18.5 41 15.7 40.5 15 37 C14 32 13.5 28 12 25 C9.5 20 9 12.5 14 10 Z'),
+      P('M17.5 14.5 C18.5 13.6 19.8 13.6 21 14.3'), spark(40, 34, 1.8), spark(8, 32, 1.4),
+    ],
+    izam: [ // a bone, the frame that holds you
+      P('M15.5 30.5 L30.5 15.5'), P('M15.5 30.5 C13.5 32.5 13.6 35 12 36 C9.5 37.5 7.5 34.5 9.5 32.8 C7 33.5 6 30 8.5 29 C10.2 28.3 12 30 13.6 28.4'),
+      P('M30.5 15.5 C32.5 13.5 32.4 11 34 10 C36.5 8.5 38.5 11.5 36.5 13.2 C39 12.5 40 16 37.5 17 C35.8 17.7 34 16 32.4 17.6'), P('M17.6 32.6 L32.6 17.6 M13.6 28.4 L28.4 13.6'),
+      spark(38, 34, 2), spark(11, 13, 1.4),
+    ],
+    dam: [ // the heart, and the flow that goes out from it and returns
+      heart(24, 26, 9), P('M24 37 C24 41 28 43 33 43 C40 43 43 37 43 30 C43 21 39 13 32 10'), P('M32 10 L35.2 8 M32 10 L33.2 13.6'),
+      P('M24 15 C24 11 20 7 15 7 C8 7 5 13 5 20 C5 29 9 35 16 38'), P('M16 38 L12.6 39.4 M16 38 L15.2 34.4'),
+    ],
+    hadm: [ // a bowl, and the slow turn that makes food strength
+      P('M8 22 L40 22 C40 31 33 37 24 37 C15 37 8 31 8 22 Z'), P('M16 40.5 L32 40.5'), P('M18 30 C18 26 22 25.5 24 27.5 C26 29.5 30 29 30 26'),
+      P('M19 17 C17 14 21 12 19 9 M24 17 C22 14 26 12 24 9 M29 17 C27 14 31 12 29 9'),
+    ],
+    manaa: [ // a ring of guards around the heart
+      heart(24, 25.5, 9.5), ring(24, 25, 16, 12, 1.3), spark(39.5, 8.5, 1.6),
+    ],
+  });
+
+  Object.assign(BY_BLESSING, {
+    blessing_151: 'wafa', blessing_152: 'shifa', blessing_153: 'dawa', blessing_154: 'lams', blessing_155: 'shamm',
+    blessing_156: 'asnan', blessing_157: 'izam', blessing_158: 'dam', blessing_159: 'hadm', blessing_160: 'manaa',
+  });
+
   Object.assign(BY_BLESSING, {
     blessing_141: 'hubb', blessing_142: 'tawadu', blessing_143: 'anah', blessing_144: 'shajaa', blessing_145: 'hubbkhayr',
     blessing_146: 'injaz', blessing_147: 'huzn', blessing_148: 'salamasadr', blessing_149: 'dahsha', blessing_150: 'sidq',
