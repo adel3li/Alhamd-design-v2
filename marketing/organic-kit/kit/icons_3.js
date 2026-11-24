@@ -53,10 +53,51 @@
       P('M6 41 L42 41 L37.5 34.5 L10.5 34.5 Z'), P('M19 41 L20.2 38.2 C21 36.8 22.4 36.2 24 36 C25.6 36.2 27 36.8 27.8 38.2 L29 41'),
       P('M24 30 L24 22'), P('M17.5 30.5 L14 24'), P('M30.5 30.5 L34 24'), spark(24, 14.5, 3.2), spark(12.5, 16, 1.5), spark(35.5, 16, 1.5),
     ],
+    tilawa: [ // an open mushaf, and the voice rising from it
+      P('M24 19 C20 16 14 15.5 8 16.5 L8 37 C14 36 20 36.5 24 39.5'), P('M24 19 C28 16 34 15.5 40 16.5 L40 37 C34 36 28 36.5 24 39.5'), P('M24 19 L24 39.5'),
+      P('M11.5 22 L20.5 22.8 M11.5 26.5 L20.5 27.2 M11.5 31 L18 31.5'), P('M36.5 22 L27.5 22.8 M36.5 26.5 L27.5 27.2 M36.5 31 L30 31.5'),
+      spark(24, 9, 2.8), spark(15, 8, 1.6), spark(33, 8, 1.6), spark(29, 3.5, 1.1),
+    ],
+    hifzquran: [ // a heart, and the book kept inside it
+      heart(24, 28, 15), P('M24 24.5 C21.5 22.8 18.5 22.5 16 23 L16 30.5 C18.5 30 21.5 30.3 24 32'), P('M24 24.5 C26.5 22.8 29.5 22.5 32 23 L32 30.5 C29.5 30 26.5 30.3 24 32'), P('M24 24.5 L24 32'),
+      spark(37.5, 9, 2.2), spark(10.5, 9.5, 1.5),
+    ],
+    sahaba: [ // lamps hung in a row: the light handed on
+      P('M5 8 L43 8'), P('M24 8 L24 10'), lantern(24, 10, 0.8), P('M11 8 L11 16'), lantern(11, 16, 0.6), P('M37 8 L37 16'), lantern(37, 16, 0.6),
+    ],
+    ulama: [ // books stacked, and a lamp set on them
+      R(9, 35, 30, 6, 1), R(12, 29, 24, 6, 1), P('M14 38 L34 38'), P('M16 32 L32 32'), lantern(24, 7.5, 0.6),
+      P('M14.5 15 L11 13.8'), P('M33.5 15 L37 13.8'), P('M14 21.5 L10.5 22'), P('M34 21.5 L37.5 22'),
+    ],
+    shafaa: [ // a word spoken for you: a bubble with a heart in it
+      P('M10 9 L38 9 C40.8 9 42.5 10.8 42.5 13.5 L42.5 29 C42.5 31.7 40.8 33.5 38 33.5 L22 33.5 L14 40.5 L15.5 33.5 L10 33.5 C7.2 33.5 5.5 31.7 5.5 29 L5.5 13.5 C5.5 10.8 7.2 9 10 9 Z'),
+      heart(24, 22.5, 7.5), spark(39, 41, 1.8), spark(32.5, 43, 1.2),
+    ],
+    afwallah: [ // a heavy cloud that comes apart into light
+      P('M8 31 L26 31 C29.5 31 31 27.5 29 25 C28 23.6 26.4 23.2 25 23.6 C24.4 19.5 21 17.5 17.6 18 C14.4 18.5 12.4 21 12.2 23.8 C9.6 23.8 7.6 25.6 7.6 28 C7.6 29.6 7.8 31 8 31 Z'),
+      spark(34, 22, 2.4), spark(39.5, 15, 1.8), spark(42.5, 24, 1.3), spark(37, 30, 1.2), spark(31, 13, 1.2), P('M10 38 L38 38'),
+    ],
+    mahiya: [ // a wave that smooths the marks in the sand
+      P('M4 25 C9 21 13.5 21 18 24 C22.5 27 26 27 30 24 C34 21 38.5 21 44 25'), P('M8 31 C12 28.5 15.5 28.5 19 30.5'), P('M5 40 L43 40'),
+      C(30, 34.5, 0.9), C(35, 35.5, 0.9), C(40, 34.5, 0.9), spark(24, 11, 3), spark(13, 10, 1.5), spark(35, 9.5, 1.5),
+    ],
+    qabul: [ // a chest that keeps what is put in it
+      R(9.5, 24, 29, 17, 2), P('M9.5 24 C9.5 17.5 14.5 14.5 24 14.5 C33.5 14.5 38.5 17.5 38.5 24'), P('M9.5 30 L38.5 30'), R(21.5, 27.5, 5, 5.5, 1), heart(24, 37.2, 2.6),
+      spark(24, 7.5, 2.4), spark(14, 9.5, 1.4), spark(34, 9.5, 1.4),
+    ],
+    jariya: [ // a tree, and the water that keeps running under it
+      tree(24, 6, 26, 21, 37), C(18.5, 15.5, 1.2), C(28.5, 13, 1.2), C(27, 21, 1.2), C(20, 22.5, 1.2), P('M8 37 L40 37'),
+      P('M6 42 C9 40.4 12 40.4 15 42 C18 43.6 21 43.6 24 42 C27 40.4 30 40.4 33 42 C36 43.6 39 43.6 42 42'),
+    ],
+    niyya: [ // a heart set on one direction
+      heart(24, 33, 12), P('M24 24.5 L24 13'), spark(24, 8.5, 3.4), spark(34.5, 12, 1.4), spark(13.5, 12, 1.4),
+    ],
   });
 
   Object.assign(BY_BLESSING, {
     blessing_201: 'wahy', blessing_202: 'malaika', blessing_203: 'imanghayb', blessing_204: 'yaqin', blessing_205: 'khashya', blessing_206: 'raja',
     blessing_207: 'hajj', blessing_208: 'umra', blessing_209: 'fajr', blessing_210: 'sujud',
+    blessing_211: 'tilawa', blessing_212: 'hifzquran', blessing_213: 'sahaba', blessing_214: 'ulama', blessing_215: 'shafaa', blessing_216: 'afwallah',
+    blessing_217: 'qabul', blessing_218: 'mahiya', blessing_219: 'jariya', blessing_220: 'niyya',
   });
 })();
