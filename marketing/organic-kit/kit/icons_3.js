@@ -259,6 +259,47 @@
       P('M6 42 L42 42'), P('M10 42 L10 18 C10 11 16 6.5 24 6 C32 6.5 38 11 38 18 L38 42'), P('M24 42 L24 27'), P('M19 18 C19 24 21 27 24 27 C27 27 29 24 29 18 L26.5 20.5 L24 16.5 L21.5 20.5 Z'),
       P('M24 36 C20 36 17.5 33.5 17 30 C20.5 30 23.4 32.4 24 36 Z'), spark(31.5, 13, 1.4),
     ],
+    birr: [ // the staff of old age, and the love that leans on it
+      P('M29 43 L29 17 C29 11.5 21.5 10.5 20.5 15.5'), heart(17, 29, 7.5), P('M25 43 L33 43'), spark(38, 12, 2), spark(36, 22, 1.3),
+    ],
+    yatim: [ // a roof held over a small heart
+      P('M6 22 L24 9 L42 22'), P('M10 19.2 L10 23 M38 19.2 L38 23'), heart(24, 32, 8.5), P('M5 30 L4 33 M43 30 L42 33 M7 37 L6 40 M41 37 L40 40'), spark(24, 4.5, 1.6),
+    ],
+    kibar: [ // reading glasses laid on an open book
+      C(16, 18, 5.5), C(32, 18, 5.5), P('M21.5 18 C23 16.6 25 16.6 26.5 18'), P('M10.5 17 L6 14.5 M37.5 17 L42 14.5'),
+      P('M24 30 C20 27.5 13 27 7 28 L7 40 C13 39 20 39.5 24 42'), P('M24 30 C28 27.5 35 27 41 28 L41 40 C35 39 28 39.5 24 42'), P('M24 30 L24 42'),
+    ],
+    zumala: [ // two wheels that turn each other
+      ...[[18, 19, 8.5, 9], [31.5, 31, 7, 7]].map(([x, y, r, n]) => { let d = ''; for (let i = 0; i < n * 4; i++) { const a = (i * Math.PI * 2) / (n * 4), rr = i % 4 < 2 ? r + 2.4 : r; d += `${i ? 'L' : 'M'}${f(x + rr * Math.cos(a))} ${f(y + rr * Math.sin(a))} `; } return P(d + 'Z'); }),
+      C(18, 19, 3), C(31.5, 31, 2.4),
+    ],
+    talamidh: [ // one candle that lights the others
+      R(20, 22, 8, 19, 1), drop(24, 15.4, 1.6), P('M24 22 L24 20'), R(8, 30, 5, 11, 1), drop(10.5, 25.4, 1), R(35, 30, 5, 11, 1), drop(37.5, 25.4, 1), P('M4 41 L44 41'),
+      P('M17.5 13 L14.5 15.5 M30.5 13 L33.5 15.5'),
+    ],
+    imam: [ // the minbar, its steps and its dome
+      P('M4 42 L44 42'), P('M7 42 L7 37 L12 37 L12 32 L17 32 L17 27 L22 27 L22 22 L24 22'), P('M7 37 L24 22'), P('M24 22 L36 22 L36 42'), P('M24 22 L24 12 M36 22 L36 12'),
+      P('M23 12 C23 7.5 26.5 5.5 30 4.5 C33.5 5.5 37 7.5 37 12 Z'), P('M30 4.5 L30 2.5'), P('M26.5 42 L26.5 32 C26.5 29.6 28.2 28 30 28 C31.8 28 33.5 29.6 33.5 32 L33.5 42'),
+    ],
+    khadim: [ // a tray brought in, and tea poured on it
+      P('M5 34 L43 34'), P('M8 34 C8 36.8 10.6 38.4 13.4 38.4 L34.6 38.4 C37.4 38.4 40 36.8 40 34'),
+      P('M14 33 C11 28 13 22 20 22 C27 22 29 28 26 33 Z'), P('M17 22 C17 19.5 23 19.5 23 22'), C(20, 18.6, 1), P('M27.5 27 C31 26 31.6 23 33 21'), P('M12.6 25 C9 25 8.6 30 12 31.6'),
+      P('M31 28.5 L39 28.5 L38 33 L32 33 Z'), P('M33.5 25.5 C33 24 34.4 23 34 21.5 M36.5 25.5 C36 24 37.4 23 37 21.5'),
+    ],
+    itidhar: [ // a heart cracked, and stitched back
+      heart(24, 28, 15), P('M24 17 L21.2 22.4 L26.2 27.4 L22.4 33.4 L24 38'), P('M19 20.6 L23.6 24 M22.4 26.4 L28 28.6 M20.2 31.6 L25 34.6'),
+    ],
+    sulh: [ // an olive branch held out
+      P('M8 40 L40 10'),
+      ...[0.2, 0.33, 0.46, 0.59, 0.72, 0.85].map((t, i) => { const s = i % 2 ? 1 : -1, bx = 8 + 32 * t, by = 40 - 30 * t, dx = 0.73, dy = -0.68, px = 0.68 * s, py = 0.73 * s;
+        const tx = bx + px * 6.5 + dx * 3, ty = by + py * 6.5 + dy * 3, mx = (bx + tx) / 2, my = (by + ty) / 2, lx = -(ty - by) / 4.2, ly = (tx - bx) / 4.2;
+        return P(`M${f(bx)} ${f(by)} Q${f(mx + lx)} ${f(my + ly)} ${f(tx)} ${f(ty)} Q${f(mx - lx)} ${f(my - ly)} ${f(bx)} ${f(by)} Z`); }),
+      spark(12, 12, 2.2), spark(37, 36, 1.6),
+    ],
+    ziyara: [ // a door knocked on, a heart above it
+      P('M6 42 L42 42'), P('M13 42 L13 14 C13 10 17.5 7.5 24 7.5 C30.5 7.5 35 10 35 14 L35 42'), P('M24 7.5 L24 42'), C(20.6, 26, 1.6), C(27.4, 26, 1.6), heart(24, 16.5, 3.4),
+      P('M38 20 L42.5 18.5 M38 26 L43 26 M38 32 L42.5 33.5'),
+    ],
   });
 
   Object.assign(BY_BLESSING, {
@@ -274,5 +315,7 @@
     blessing_247: 'rumman', blessing_248: 'tin', blessing_249: 'sanabil', blessing_250: 'basatin',
     blessing_251: 'marai', blessing_252: 'saat', blessing_253: 'dawab', blessing_254: 'jawfi', blessing_255: 'khasiba', blessing_256: 'qaraba',
     blessing_257: 'ashar', blessing_258: 'rafiq', blessing_259: 'sadiq', blessing_260: 'banat',
+    blessing_261: 'birr', blessing_262: 'yatim', blessing_263: 'kibar', blessing_264: 'zumala', blessing_265: 'talamidh', blessing_266: 'imam',
+    blessing_267: 'khadim', blessing_268: 'itidhar', blessing_269: 'sulh', blessing_270: 'ziyara',
   });
 })();
