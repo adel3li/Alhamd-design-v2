@@ -300,6 +300,39 @@
       P('M6 42 L42 42'), P('M13 42 L13 14 C13 10 17.5 7.5 24 7.5 C30.5 7.5 35 10 35 14 L35 42'), P('M24 7.5 L24 42'), C(20.6, 26, 1.6), C(27.4, 26, 1.6), heart(24, 16.5, 3.4),
       P('M38 20 L42.5 18.5 M38 26 L43 26 M38 32 L42.5 33.5'),
     ],
+    iyada: [ // flowers and a glass of water at the bedside
+      P('M6 42 L42 42'), P('M16 42 C12.5 40 12.5 33 15.5 30 L15.5 27 L21.5 27 L21.5 30 C24.5 33 24.5 40 21 42'), P('M18.5 27 L15.5 17.5 M18.5 27 L18.5 14.4 M18.5 27 L22.6 18.4'),
+      C(15, 15.4, 2.2), C(18.5, 12, 2.2), C(23.4, 16.2, 2.2), P('M29 29 L37 29 L36 42 L30 42 Z'), P('M29.4 33.5 L36.6 33.5'), heart(33, 20.5, 3.4),
+    ],
+    taziya: [ // a grieving heart, held on both sides
+      heart(24, 28, 9.5), drop(24, 11, 1.3), P('M10 17 C4.6 25 6.6 35.4 14.6 40'), P('M38 17 C43.4 25 41.4 35.4 33.4 40'), P('M14.6 14 C12.4 16 11 18.6 10.4 21 M33.4 14 C35.6 16 37 18.6 37.6 21'),
+    ],
+    ibtisama: [ // a daisy opening, gladness handed out
+      ...Array.from({ length: 10 }, (_, i) => `<ellipse cx="24" cy="12.4" rx="2.4" ry="4.6" transform="rotate(${i * 36} 24 21)"/>`), C(24, 21, 3.6),
+      P('M24 30.6 L24 43'), P('M24 38 C20 38 17.6 35.8 17 32.6 C20.6 32.6 23.4 34.8 24 38 Z'), P('M18 43 L30 43'), spark(39, 33, 1.8), spark(9, 33, 1.4),
+    ],
+    mashura: [ // a signpost that shows the way
+      P('M24 43 L24 7'), P('M24 10 L36 10 L39.5 13.5 L36 17 L24 17'), P('M24 22 L12 22 L8.5 25.5 L12 29 L24 29'), P('M16 43 L32 43'), spark(24, 4, 1.6), spark(40, 33, 1.8), spark(36, 38.5, 1.1),
+    ],
+    ijtima: [ // a full table, every place laid
+      C(24, 24, 16), C(24, 24, 3.8), ...Array.from({ length: 7 }, (_, i) => { const a = -Math.PI / 2 + (i * 2 * Math.PI) / 7; return C(24 + 10.6 * Math.cos(a), 24 + 10.6 * Math.sin(a), 2.6); }),
+    ],
+    dhikra: [ // a heart, and prayers going up from it to those gone ahead
+      heart(24, 35, 8), C(24, 22.5, 0.9), C(24, 17.5, 0.9), C(24, 12.8, 0.9), spark(24, 6.5, 2.6), spark(14, 12, 1.5), spark(34, 12, 1.5), spark(11, 22, 1), spark(37, 22, 1),
+    ],
+    shukrnas: [ // a gift given back, with its bow
+      R(10, 22, 28, 20, 1.5), R(8, 16, 32, 6, 1), P('M24 16 L24 42'), P('M24 16 C20 9 13 10 15 14 C16.5 16.5 21 16 24 16 C27 16 31.5 16.5 33 14 C35 10 28 9 24 16'), heart(31, 32.5, 3.2),
+    ],
+    hanin: [ // an old key, its bow a heart
+      heart(16, 18, 9), P('M21.8 23.8 L40 42'), P('M33.4 35.4 L36.8 32 M37 39 L40.4 35.6'), P('M13 15.5 C13.6 13.8 15 13 16.4 13.2'), spark(38, 9, 2), spark(32, 15, 1.2),
+    ],
+    shawq: [ // a bird flying out toward the light
+      P('M5 36 C9 30 14 30 17 34.5 C20 27.5 26.5 24 32.5 25.6'), P('M17 34.5 L18.2 38.4 L21 36.6'), C(23.5, 21, 0.8), C(27.5, 17.5, 0.8), C(31.5, 14, 0.8), spark(37.5, 9, 3.4), spark(42, 16, 1.2), spark(32, 5, 1.1),
+    ],
+    hudu: [ // a feather settling slowly, and still water under it
+      P('M14 38 C20 28 27 18 36 7'), P('M36 7 C40.5 13 37.5 22.5 28 28 C23 31 18 33.5 16.2 36'), P('M36 7 C28 8 22 14 19.6 21 C18.2 25.4 16.6 30 15.4 34'),
+      P('M23.6 22 L31.8 20.2 M20.6 27 L28 26 M27 16.8 L34.4 14'), P('M28 40.5 L42 40.5'), P('M31.5 44.5 L38.5 44.5'),
+    ],
   });
 
   Object.assign(BY_BLESSING, {
@@ -317,5 +350,7 @@
     blessing_257: 'ashar', blessing_258: 'rafiq', blessing_259: 'sadiq', blessing_260: 'banat',
     blessing_261: 'birr', blessing_262: 'yatim', blessing_263: 'kibar', blessing_264: 'zumala', blessing_265: 'talamidh', blessing_266: 'imam',
     blessing_267: 'khadim', blessing_268: 'itidhar', blessing_269: 'sulh', blessing_270: 'ziyara',
+    blessing_271: 'iyada', blessing_272: 'taziya', blessing_273: 'ibtisama', blessing_274: 'mashura', blessing_275: 'ijtima', blessing_276: 'dhikra',
+    blessing_277: 'shukrnas', blessing_278: 'hanin', blessing_279: 'shawq', blessing_280: 'hudu',
   });
 })();
