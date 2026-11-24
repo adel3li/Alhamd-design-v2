@@ -6,3 +6,8 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# app screenshots for «من الشاشة الرئيسية», captured per machine by marketing/organic-kit/tools/capture-blessing-screens.cjs
+# (the ten from the first packages stay tracked)
+marketing/promo-video/scenes/app/b*_home_card.png
+marketing/promo-video/scenes/app-light/b*_home_card.png
