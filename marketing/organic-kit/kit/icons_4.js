@@ -48,10 +48,47 @@
     dumu: [ // an eye, and the tears that wash it
       P('M7 20 C13 11 35 11 41 20 C35 29 13 29 7 20 Z'), C(24, 20, 5), C(24, 20, 1.8), drop(20, 34, 1.2), drop(16.5, 41.5, 0.9), spark(37, 36, 2.2),
     ],
+    araq: [ // drops of sweat under a hot sun, the body cooling itself
+      C(35, 12, 4.4), P('M35 3.6 L35 5.2 M35 18.8 L35 20.4 M26.6 12 L28.2 12 M41.8 12 L43.4 12 M29.1 6.1 L30.2 7.2 M39.8 16.8 L40.9 17.9 M40.9 6.1 L39.8 7.2 M30.2 16.8 L29.1 17.9'),
+      drop(16, 20, 1.7), drop(25, 29, 1.4), drop(15, 37, 1.1), P('M8 43.5 L40 43.5'), spark(33, 36, 1.8),
+    ],
+    luab: [ // a bowl of food, and the drop that makes it easy to taste
+      P('M8.5 27 C8.5 35.5 15.5 40.5 24 40.5 C32.5 40.5 39.5 35.5 39.5 27 Z'), P('M15 44 L33 44'), P('M14 23 C17 19.5 21 22 24 19.5 C27 22 31 19.5 34 23'), drop(24, 10, 1.6), spark(36, 11, 2), spark(12, 13, 1.4),
+    ],
+    shahiya: [ // a plate set between fork and spoon, waiting
+      C(24, 26, 10.5), C(24, 26, 6.6), P('M8.5 10 L8.5 16.5 C8.5 19 12.5 19 12.5 16.5 L12.5 10 M10.5 10 L10.5 42'), E(38.5, 14.5, 2.8, 4.4), P('M38.5 19 L38.5 42'), spark(24, 8, 1.8),
+    ],
+    iltiam: [ // a bandage over the wound as it closes
+      P('M8.5 30.5 L30.5 8.5 C32.5 6.5 36 6.5 38 8.5 L39.5 10 C41.5 12 41.5 15.5 39.5 17.5 L17.5 39.5 C15.5 41.5 12 41.5 10 39.5 L8.5 38 C6.5 36 6.5 32.5 8.5 30.5 Z'),
+      P('M18.5 24 L24 18.5 L29.5 24 L24 29.5 Z'), C(22.2, 22.2, 0.5), C(25.8, 25.8, 0.5), C(25.8, 22.2, 0.5), C(22.2, 25.8, 0.5), spark(38.5, 34, 2.4), spark(10, 12, 1.5),
+    ],
+    haml: [ // a cradle that rocks, and a heart over it
+      P('M9 22 C9 31.5 15.5 37 24 37 C32.5 37 39 31.5 39 22 Z'), P('M9 22 C9 16 13 12 18 11.4'), P('M12 43 C19.5 38.5 28.5 38.5 36 43'), P('M17 37 L15.5 40.4 M31 37 L32.5 40.4'),
+      heart(30.5, 13, 5.2), spark(39.5, 7, 1.6), spark(21.5, 27, 1.4),
+    ],
+    numuw: [ // a seedling grown taller beside the marks of its growth
+      P('M7.5 42 L40.5 42'), P('M11 42 L11 8 M11 34 L14 34 M11 26 L14 26 M11 18 L14 18 M11 10 L14 10'),
+      P('M28 42 L28 14'), P('M28 30 C22.5 30.6 19.4 27 19.6 22.4 C24.6 22.2 28 25.4 28 30 Z'), P('M28 22.5 C33.5 23.1 36.6 19.5 36.4 14.9 C31.4 14.7 28 17.9 28 22.5 Z'), P('M28 14 C26.6 11.4 27 8.6 28.4 6.6'), spark(38, 33, 1.8),
+    ],
+    nashat: [ // a full battery, charged with light
+      R(8.5, 15, 28, 18, 3.4), R(36.5, 20.5, 3.6, 7, 1.2), P('M25 18.5 L18.5 25.2 L24.4 25.2 L21.6 30'), spark(12, 8, 2.2), spark(38, 40, 1.6), P('M14 40 L30 40'),
+    ],
+    sihhanafs: [ // a heart at peace, a shoot rising in it
+      heart(24, 27.5, 15), P('M24 35 L24 23'), P('M24 28.5 C19.6 28.6 17.2 25.6 17.4 22 C21.4 22 24 24.8 24 28.5 Z'), P('M24 25 C28.4 25.1 30.8 22.1 30.6 18.5 C26.6 18.5 24 21.3 24 25 Z'), spark(39.5, 8, 2.2), spark(8.5, 9.5, 1.5),
+    ],
+    shaar: [ // a comb, and the shine it leaves
+      R(7.5, 16, 33, 7.5, 2.4), P('M11 23.5 L11 36 M14.5 23.5 L14.5 36 M18 23.5 L18 36 M21.5 23.5 L21.5 36 M25 23.5 L25 36 M28.5 23.5 L28.5 36 M32 23.5 L32 36 M35.5 23.5 L35.5 36'), spark(36, 8, 2.4), spark(12, 42, 1.5), spark(29, 42.5, 1.2),
+    ],
+    ism: [ // a name written well on a card, the pen beside it
+      R(6.5, 13, 28, 22, 3), P('M11.5 21 C14.5 18.5 17.5 23.5 20.5 21 C23.5 18.5 26.5 23.5 29.5 21'), P('M11.5 28 L22 28'),
+      P('M40.5 9 L36.5 13 L31 30.5 L28.6 33 L29.2 29.6 L36.5 13 M38.5 11 L41.5 14'), spark(10.5, 41, 2), spark(40, 38, 1.5),
+    ],
   });
 
   Object.assign(BY_BLESSING, {
     blessing_301: 'kabid', blessing_302: 'kulya', blessing_303: 'dimagh', blessing_304: 'asab', blessing_305: 'adalat', blessing_306: 'mafasil',
     blessing_307: 'asabi', blessing_308: 'basma', blessing_309: 'jufun', blessing_310: 'dumu',
+    blessing_311: 'araq', blessing_312: 'luab', blessing_313: 'shahiya', blessing_314: 'iltiam', blessing_315: 'haml', blessing_316: 'numuw',
+    blessing_317: 'nashat', blessing_318: 'sihhanafs', blessing_319: 'shaar', blessing_320: 'ism',
   });
 })();
