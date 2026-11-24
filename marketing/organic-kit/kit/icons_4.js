@@ -328,6 +328,38 @@
       P('M7.5 16 L24 8 L40.5 16'), P('M13.5 15.6 L13.5 29 M34.5 15.6 L34.5 29'), P('M13.5 19.5 L34.5 19.5'), P('M24 19.5 L24 24'), P('M21 24 L27 24 L26 28 L22 28 Z'),
       R(10.5, 29, 27, 13, 1.5), P('M10.5 35.5 L37.5 35.5'), drop(42, 27, 0.8), P('M6 42 L42 42'),
     ],
+    zakat: [ // a coin given, and the growth that follows it
+      C(16.5, 33, 8), C(16.5, 33, 4.4), P('M32 42 L32 17'), P('M32 30 C27 30.2 24.4 26.8 24.6 22.6 C29.2 22.4 32 25.6 32 30 Z'), P('M32 23.4 C37 23.6 39.6 20.2 39.4 16 C34.8 15.8 32 19 32 23.4 Z'), P('M5 42 L43 42'), spark(14, 12, 2), drop(40, 31, 0.8),
+    ],
+    maskan: [ // a house, and the key that is yours
+      P('M7 22 L24 9 L41 22'), P('M11 19 L11 42 L37 42 L37 19'), C(18, 31, 3.6), C(18, 31, 1.2), P('M21.6 31 L31.6 31 M28.4 31 L28.4 34.4 M31.6 31 L31.6 35.4'), P('M5 42 L43 42'), spark(24, 3.5, 1.5),
+    ],
+    adawat: [ // a wrench and a screwdriver, ready to mend
+      P('M9.4 38.6 L24 24'), C(8.4, 39.6, 1.5), P('M24 24 C21.8 19.4 24.4 14 29.6 13.6 L27 17.6 L30.4 21 L34.4 18.4 C34 23.6 28.6 26.2 24 24 Z'),
+      P('M28.6 29.4 L32.6 25.4 L39.4 32.2 C40.4 33.2 40.4 34.8 39.4 35.8 L38.4 36.8 C37.4 37.8 35.8 37.8 34.8 36.8 Z'), P('M30.6 27.4 L14 10.8 M14 10.8 L11.4 8.2'), spark(41, 9, 1.8),
+    ],
+    hiba: [ // a gift, tied with a bow
+      R(10, 21, 28, 21, 1.5), R(8, 15, 32, 6, 1.5), P('M24 15 L24 42'), P('M24 15 C20 7 12.6 9.6 16.6 13.6 C18.6 15.4 24 15 24 15 C24 15 29.4 15.4 31.4 13.6 C35.4 9.6 28 7 24 15 Z'), spark(41, 7, 1.8), spark(6, 30, 1.4),
+    ],
+    tawthiq: [ // a deed written down and sealed
+      R(9, 6, 24, 33, 2), P('M14 13 L28 13 M14 19 L28 19 M14 25 L22 25'), C(30, 32, 5.4), C(30, 32, 2.2), P('M27 36.6 L25 44 L28.6 42.4 L30 45 L31.4 37.4'), spark(40, 12, 1.8),
+    ],
+    wasiyya: [ // a scroll kept for those who come after
+      P('M14 8 L36 8 C38.8 8 38.8 14 36 14 L34 14 L34 37'), P('M14 8 C11.6 8 11 10 11 12 L11 38'), P('M11 38 C11 43 15 43 15.6 40 C16 38 18 37 20 37 L36 37 C38.8 37 38.8 43 36 43 L15 43'),
+      P('M17 19 L29 19 M17 25 L29 25 M17 31 L25 31'), spark(42, 24, 1.6),
+    ],
+    itidal: [ // the scale at rest, neither side too heavy
+      P('M24 9.6 L24 40'), P('M16 40 L32 40'), P('M9 15 L39 15'), C(24, 8, 1.6), P('M9 15 L5 27 M9 15 L13 27'), P('M4 27 C5 31.6 13 31.6 14 27 Z'), P('M39 15 L35 27 M39 15 L43 27'), P('M34 27 C35 31.6 43 31.6 44 27 Z'),
+    ],
+    ribh: [ // honest gain, rising step by step
+      R(8, 33, 6.4, 9, 1), R(17.6, 27, 6.4, 15, 1), R(27.2, 21, 6.4, 21, 1), P('M6 26 L15.6 18.4 L22.4 22.6 L37.4 9'), P('M37.4 9 L31.4 9.4 M37.4 9 L37 15'), P('M5 42 L43 42'), spark(41, 26, 1.8),
+    ],
+    iffa: [ // a flower that stands by itself, asking nothing
+      P('M24 20.4 C18 20.4 16 14.4 17 8 L20.6 11.2 L24 6 L27.4 11.2 L31 8 C32 14.4 30 20.4 24 20.4 Z'), P('M24 20.4 L24 43'), P('M24 34 C18.6 34.2 15.6 30.6 15.8 26 C20.8 25.8 24 29.2 24 34 Z'), P('M24 30 C29.4 30.2 32.4 26.6 32.2 22 C27.2 21.8 24 25.2 24 30 Z'), P('M15 43 L33 43'), spark(39, 12, 1.8),
+    ],
+    ajr: [ // the wage paid in full, and on time
+      R(8, 19, 32, 22, 2), P('M8 21 L24 32 L40 21'), P('M8 39 L19 30.4 M40 39 L29 30.4'), C(24, 11, 5.4), C(24, 11, 2.4), spark(38, 8, 1.8), spark(10, 10, 1.4),
+    ],
   });
 
   Object.assign(BY_BLESSING, {
@@ -349,5 +381,7 @@
     blessing_377: 'haram', blessing_378: 'istiadha', blessing_379: 'adhkar', blessing_380: 'aminawlad',
     blessing_381: 'aminrizq', blessing_382: 'mawa', blessing_383: 'sawnird', blessing_384: 'kawarith', blessing_385: 'isaf', blessing_386: 'thiqa',
     blessing_387: 'iddikhar', blessing_388: 'nafaqa', blessing_389: 'qard', blessing_390: 'waqf',
+    blessing_391: 'zakat', blessing_392: 'maskan', blessing_393: 'adawat', blessing_394: 'hiba', blessing_395: 'tawthiq', blessing_396: 'wasiyya',
+    blessing_397: 'itidal', blessing_398: 'ribh', blessing_399: 'iffa', blessing_400: 'ajr',
   });
 })();
