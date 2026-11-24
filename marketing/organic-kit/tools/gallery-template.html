@@ -1,0 +1,166 @@
+<title>الرحلة كاملة {{RANGE}}</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: one column of blessings in the app's order, each a numbered carousel; a 100-cell map at the top shows how far
+   the batches have reached. Palette: the app's own themes, «ليل» (navy, gold) by default and «نهار» (paper, terracotta). */
+:root {
+  --bg: #0C0C1C; --surface: #15152A; --text: #EDEDF5; --body: #C7C4D8; --muted: #AEAECB; --faint: #6E6E92; --hair: #2E2E4A;
+  --accent: #E4C368; --stroke: #C8A951; --review: #F2A766; --review-bg: rgba(242, 167, 102, 0.12);
+  --shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+  --display: 'Amiri', 'Noto Naskh Arabic', serif;
+  --sans: 'IBM Plex Sans Arabic', 'Noto Sans Arabic', system-ui, sans-serif;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #F4EDE3; --surface: #FBF8F3; --text: #2A1F19; --body: #4A3B32; --muted: #6B5A4E; --faint: #9A8878; --hair: #DCCFBE;
+    --accent: #9E4A30; --stroke: #B9573B; --review: #A8511A; --review-bg: rgba(168, 81, 26, 0.1);
+    --shadow: 0 12px 32px rgba(90, 60, 30, 0.14); color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #F4EDE3; --surface: #FBF8F3; --text: #2A1F19; --body: #4A3B32; --muted: #6B5A4E; --faint: #9A8878; --hair: #DCCFBE;
+  --accent: #9E4A30; --stroke: #B9573B; --review: #A8511A; --review-bg: rgba(168, 81, 26, 0.1);
+  --shadow: 0 12px 32px rgba(90, 60, 30, 0.14); color-scheme: light;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 16px; line-height: 1.75; direction: rtl; }
+.wrap { max-width: 1000px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+a { color: inherit; }
+
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: color-mix(in srgb, var(--bg) 90%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--hair); }
+.bar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 10px; }
+.mark { font-family: var(--display); font-weight: 700; font-size: 26px; line-height: 1; color: var(--accent); }
+.switch { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+.seg { display: inline-flex; border: 1px solid var(--hair); border-radius: 999px; padding: 3px; background: var(--surface); }
+.seg button { font: 600 13px/1 var(--sans); color: var(--muted); background: transparent; border: 0; border-radius: 999px; padding: 8px 14px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--bg); }
+
+.head { padding-block: 36px 20px; display: grid; gap: 12px; }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(38px, 8vw, 62px); line-height: 1.25; margin: 0; text-wrap: balance; }
+.intro { color: var(--body); margin: 0; max-width: 44em; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 13px; color: var(--muted); align-items: center; }
+.map { display: grid; grid-template-columns: repeat(20, minmax(0, 1fr)); gap: 4px; margin-top: 6px; }
+@media (max-width: 620px) { .map { grid-template-columns: repeat(10, minmax(0, 1fr)); } }
+.cell { display: grid; place-items: center; aspect-ratio: 1; border-radius: 6px; font-size: 11px; font-variant-numeric: tabular-nums; color: var(--faint); border: 1px dashed var(--hair); text-decoration: none; }
+.cell.on { color: var(--bg); background: var(--stroke); border: 1px solid var(--stroke); font-weight: 700; }
+.cell.on:hover { background: var(--accent); }
+
+main { display: grid; gap: 0; padding-bottom: 40px; }
+.bl { padding-block: 28px; border-top: 1px solid var(--hair); display: grid; gap: 12px; scroll-margin-top: 70px; min-width: 0; }
+.bl-head { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: start; }
+.num { min-width: 44px; height: 44px; padding-inline: 6px; border-radius: 50%; display: grid; place-items: center; border: 2px solid var(--stroke); color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+.bl-t { min-width: 0; }
+h2 { font-family: var(--display); font-weight: 700; font-size: clamp(24px, 4.2vw, 32px); line-height: 1.35; margin: 0; text-wrap: balance; }
+.op { margin: 2px 0 0; color: var(--body); font-family: var(--display); font-size: 19px; }
+.meta { margin: 2px 0 0; font-size: 13px; color: var(--faint); }
+.note { margin: 0; font-size: 14px; color: var(--review); background: var(--review-bg); border-radius: 10px; padding: 8px 12px; }
+
+.tag { display: inline-flex; font-size: 12px; font-weight: 600; border-radius: 999px; padding: 3px 10px; color: var(--review); background: var(--review-bg); }
+.art-nahar { display: none !important; }
+body[data-art="nahar"] .art-nahar { display: block !important; }
+body[data-art="nahar"] .art-layl { display: none !important; }
+.art { display: block; width: 100%; border-radius: 12px; box-shadow: var(--shadow); background-color: var(--surface); }
+.art.sl { aspect-ratio: 4 / 5; background-repeat: no-repeat; }
+
+.car { display: grid; gap: 8px; min-width: 0; }
+.car-bar { display: flex; align-items: center; gap: 10px; }
+.car-count { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; font-weight: 600; }
+.rv { font-size: 12px; color: var(--faint); flex: 1; min-width: 0; }
+.car-btns { display: flex; gap: 6px; }
+.nav { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--hair); background: var(--surface); color: var(--text); font: 600 18px/1 var(--sans); cursor: pointer; }
+.nav:hover { border-color: var(--stroke); color: var(--accent); }
+.nav:disabled { opacity: 0.35; cursor: default; }
+.strip { list-style: none; margin: 0; padding: 4px 2px 16px; display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: thin; overscroll-behavior-x: contain; }
+.slide { flex: 0 0 min(74vw, 280px); scroll-snap-align: start; position: relative; }
+.slide-flag { position: absolute; top: 10px; left: 10px; font-size: 11px; font-weight: 700; color: var(--review); background: color-mix(in srgb, var(--bg) 86%, transparent); border: 1px solid color-mix(in srgb, var(--review) 45%, transparent); border-radius: 999px; padding: 2px 9px; }
+
+.cap { border: 1px solid var(--hair); border-radius: 12px; background: var(--surface); padding: 10px 14px; }
+.cap summary { cursor: pointer; font-size: 13px; font-weight: 600; color: var(--muted); }
+.cap p { margin: 8px 0; font-size: 14px; line-height: 1.85; color: var(--body); overflow-wrap: anywhere; }
+.copy { font: 600 12px/1 var(--sans); color: var(--accent); background: transparent; border: 1px solid color-mix(in srgb, var(--stroke) 50%, transparent); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+.how { color: var(--faint); font-size: 14px; padding-block: 0 50px; max-width: 46em; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<div class="bar"><div class="wrap">
+  <span class="mark">الحمد</span>
+  <div class="switch"><span id="art-label">ثيم التصاميم</span>
+    <div class="seg" role="group" aria-labelledby="art-label">
+      <button type="button" id="art-layl" data-art="layl" aria-pressed="true">ليل</button>
+      <button type="button" id="art-nahar" data-art="nahar" aria-pressed="false">نهار</button>
+    </div></div>
+</div></div>
+
+<header class="wrap head">
+  <h1>«الرحلة كاملة» · النِّعَم {{RANGE}}</h1>
+  <p class="intro">كاروسيلٌ واحد لكلّ نعمة، بترتيب التطبيق: البطاقة، ثم الآية والحديث والتدبّر وقول العالم، ثم الوقفات، فالحمد والدعاء، وسجلّ الحمد. ٤:٥ (١٠٨٠×١٣٥٠)، بثيمَي «ليل» و«نهار». اسحب الشرائح، وبدّل الثيم من الشريط العلوي. جاهزٌ منها الآن {{DONE}}، وتُضاف عشرٌ مع كلّ دفعة.</p>
+  <div class="legend"><span><span class="tag">يُراجَع قبل النشر</span> شريحة فيها آية أو حديث أو قول عالم، تُنقل حرفيًا من التطبيق وما زالت قيد المراجعة</span></div>
+  <nav class="map" aria-label="النِّعَم الجاهزة">{{GRID}}</nav>
+</header>
+
+<main class="wrap">{{CARDS}}</main>
+
+<p class="wrap how">كلّ شريحة مولَّدة من ملف النِّعَم في التطبيق بأدوات <code>marketing/organic-kit</code>. الآية بالرسم العثماني من quran.com، مطابَقةً حروفها مع Tanzil، وهي المقطع نفسه الذي يعرضه التطبيق.</p>
+
+<script>
+(function () {
+  const AR = (n) => String(n).replace(/\d/g, (d) => '٠١٢٣٤٥٦٧٨٩'[d]);
+  const setArt = (v) => {
+    document.body.dataset.art = v;
+    document.querySelectorAll('.seg button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.art === v)));
+    try { localStorage.setItem('alhamd-jr-art', v); } catch (e) { /* storage unavailable */ }
+  };
+  let saved = 'layl';
+  try { saved = localStorage.getItem('alhamd-jr-art') || 'layl'; } catch (e) { /* storage unavailable */ }
+  setArt(saved === 'nahar' ? 'nahar' : 'layl');
+  document.querySelectorAll('.seg button').forEach((b) => b.addEventListener('click', () => setArt(b.dataset.art)));
+
+  // the strips load as their carousel comes near the screen
+  const load = (car) => car.querySelectorAll('[data-bg]').forEach((el) => { el.style.backgroundImage = `url(${el.dataset.bg})`; el.removeAttribute('data-bg'); });
+  const cars = [...document.querySelectorAll('[data-car]')];
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { load(e.target); io.unobserve(e.target); } }), { rootMargin: '600px 0px' });
+    cars.forEach((c) => io.observe(c));
+  } else cars.forEach(load);
+
+  cars.forEach((car) => {
+    const strip = car.querySelector('.strip');
+    const slides = [...strip.children];
+    const count = car.querySelector('.car-count');
+    const prev = car.querySelector('[data-dir="prev"]'), next = car.querySelector('[data-dir="next"]');
+    let idx = 0;
+    const update = () => {
+      const edge = strip.getBoundingClientRect().right;
+      let best = 0, d = Infinity;
+      slides.forEach((s, i) => { const x = Math.abs(s.getBoundingClientRect().right - edge); if (x < d) { d = x; best = i; } });
+      idx = best;
+      count.textContent = `${AR(idx + 1)} / ${AR(slides.length)}`;
+      prev.disabled = idx === 0;
+      next.disabled = idx >= slides.length - 1 || strip.scrollWidth <= strip.clientWidth + 2;
+    };
+    const go = (i) => {
+      const s = slides[Math.max(0, Math.min(slides.length - 1, i))];
+      const off = s.getBoundingClientRect().right - strip.getBoundingClientRect().right;
+      strip.scrollBy({ left: off, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    };
+    prev.addEventListener('click', () => go(idx - 1));
+    next.addEventListener('click', () => go(idx + 1));
+    strip.addEventListener('scroll', () => requestAnimationFrame(update), { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  });
+
+  document.querySelectorAll('.copy').forEach((btn) => btn.addEventListener('click', () => {
+    const p = document.getElementById(`cap-${btn.dataset.copy}`);
+    const done = () => { btn.textContent = 'نُسخ'; setTimeout(() => { btn.textContent = 'نسخ'; }, 1600); };
+    const select = () => { const r = document.createRange(); r.selectNodeContents(p); const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = 'محدَّد'; };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(p.innerText).then(done, select); else select();
+  }));
+})();
+</script>

@@ -67,13 +67,18 @@ def get(url: str) -> dict:
     raise RuntimeError(f"failed: {url}")
 
 
+# verses already in data/verses.json are kept as they are (--refresh fetches and checks every one again)
+_path = ROOT / "data" / "verses.json"
+CACHED = {} if "--refresh" in sys.argv or not _path.exists() else {v["id"]: v for v in json.loads(_path.read_text(encoding="utf-8"))["verses"] if v["id"].startswith("BV-")}
+
+
 def package_verses() -> list:
     """BV-<n> for every packaged blessing not listed above: the app's surah and ayah, and the same words the app shows
     (a portion when the app shows part of the ayah). The app's text is plain spelling, so words are matched by letters."""
     sys.path.insert(0, str(ROOT / "tools"))
     from build_content import BUNDLE  # noqa: E402
     src = {b["order"]: b for b in json.loads((ROOT.parent.parent / "src" / "data" / "blessings_ar.json").read_text(encoding="utf-8"))["blessings"]}
-    have = {v[0] for v in VERSES}
+    have = {v[0] for v in VERSES} | set(CACHED)
     # plain spelling vs the mushaf's: «الحياة» / «ٱلْحَيَوٰةِ» («وٰة» at a word's end reads «اة»)
     # the two spellings differ in alif, ya and hamza («يتوفاكم» / «يَتَوَفَّىٰكُم», «في» / «فِى», «شيئا» / «شَيْـًٔا»), so those are set
     # aside; a doubled letter is one letter with a shadda («الليل» / «ٱلَّيْل»). Whole runs of words are compared, so this stays exact enough.
@@ -109,6 +114,9 @@ def main() -> None:
     show = "--words" in sys.argv
     out = []
     for vid, s, a, name, w0, w1, use in VERSES + package_verses():
+        if vid in CACHED and not any(vid == v[0] for v in VERSES):
+            out.append(CACHED[vid])
+            continue
         v = get(f"https://api.quran.com/api/v4/verses/by_key/{s}:{a}?words=true&word_fields=text_uthmani&fields=text_uthmani")["verse"]
         full = v["text_uthmani"]
         # verse-level text is the reference (the word list adds a few recitation marks); pause marks are tokens of their own
@@ -135,6 +143,7 @@ def main() -> None:
                     "portion": bool(w0), "ref": f"{name}: {a}", "use": use,
                     "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"})
         print(f"{vid} {name} {a}{' (portion)' if w0 else ''}: {portion}")
+    out += [v for k, v in CACHED.items() if k not in {o["id"] for o in out}]
     (ROOT / "data" / "verses.json").write_text(json.dumps({"note": __doc__.strip(), "verses": out}, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"data/verses.json: {len(out)} verses")
 

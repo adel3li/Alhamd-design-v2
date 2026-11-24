@@ -72,6 +72,29 @@ title, surah, hadith source and the scholar), or `podcast_nn.json` for one; ever
 What the demo page says about one blessing (the animation's caption, the verse caption, the review notes) is in
 `data/scripts/package_nn.json`.
 
+## «الرحلة كاملة» for every blessing (JR-01 … JR-400)
+
+The JR carousel is being made for all 400 blessings, ten at a time in the app's order (batch 1 = blessings 1–10).
+`JR_UPTO` in `tools/build_content.py` is how far the batches have reached; every blessing up to it is in `BUNDLE`
+(the ten full packages stay in `PACKAGES`). `fetch_verses.py` keeps the verses already in `data/verses.json` and only
+fetches the new ones (`--refresh` checks them all again).
+
+```bash
+# batch k (here 1): raise JR_UPTO to 10·k, then
+python3 tools/fetch_verses.py && python3 tools/build_content.py
+node tools/render-stills.cjs --ids JR-01-,JR-02-,…,JR-10- --formats portrait   # exact ids: «JR-1» would also match JR-10…19
+python3 tools/build_gallery.py 1          # out/gallery/1/: the review page for blessings 1–100
+```
+
+`tools/build_gallery.py` writes one page per hundred blessings (a strip JPEG per carousel per theme, about 0.5 MB each),
+with a «ليل / نهار» switch and «يُراجَع قبل النشر» on every slide that prints a verse, hadith or scholar's words (or a
+tadabbur that quotes one). Notes for the owner on a blessing go in `data/scripts/jr_notes.json` (`{"12": "…"}`).
+Published pages: 1–100 at https://claude.ai/artifact/Ua2D9MwPbGtw7nB4cycHyT.
+
+| Batch | Blessings | Notes |
+|---|---|---|
+| 1 | 1–10 | all ten verses matched; every blessing has a hadith and a scholar's words (10 slides) |
+
 ## How it works
 
 - `kit/kit.html` renders any creative: `kit.html?id=PS-04&f=portrait&th=nahar` (reels: add `&t=3.2`).
