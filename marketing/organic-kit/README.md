@@ -101,6 +101,7 @@ Published pages: 1–100 at https://claude.ai/artifact/Ua2D9MwPbGtw7nB4cycHyT.
 | 6 | 51–60 | 54 (الحج 78 whole, text at 77%) same question as 42 and 46 |
 | 7 | 61–70 | all verses matched; 10 slides each; nothing for the owner |
 | 8 | 71–80 | a whole ayah that opens with the hizb sign «۞» (74, 79) now drops it from the printed text, as portions already did (`full` keeps it); 79 (النساء 36) same portion question as 42 |
+| 9 | 81–90 | 82 (المائدة 2 whole, text at 77%) same portion question |
 
 ## How it works
 
