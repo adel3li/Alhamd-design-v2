@@ -258,6 +258,43 @@
     tadris: [ // a board on its easel, the lesson on it
       R(7.5, 7, 33, 23, 2), P('M13 30 L9.5 43 M35 30 L38.5 43 M24 30 L24 40'), P('M12.5 14.5 L25 14.5 M12.5 20.5 L21 20.5'), spark(33, 18, 3.2), P('M5.5 30 L42.5 30'),
     ],
+    naqd: [ // a page checked, and the pen that marked it kindly
+      R(8, 7, 25, 33, 2), P('M13 14 L28 14 M13 20 L24 20'), P('M13 29 L17.4 33.4 L26.4 24.4'), P('M32 37.5 L41 28.5 L43.6 31.1 L34.6 40.1 Z'), P('M32 37.5 L30.6 41.5 L34.6 40.1'), spark(40, 12, 1.8),
+    ],
+    tadabbur: [ // an open book, and the heart lit over its lines
+      P('M24 23 C20 20 13 19.5 8 20.5 L8 39 C13 38 20 38.5 24 41.5 C28 38.5 35 38 40 39 L40 20.5 C35 19.5 28 20 24 23 Z'), P('M24 23 L24 41.5'), P('M12 26 L20 27 M12 31 L20 32 M28 27 L36 26 M28 32 L36 31'),
+      heart(24, 11.5, 5.4), P('M15 9 L12.6 7.4 M33 9 L35.4 7.4 M16.4 15.6 L14 16.6 M31.6 15.6 L34 16.6'),
+    ],
+    aminbayt: [ // a house at night, its door shut fast
+      P('M7 23 L24 10 L41 23'), P('M11 20 L11 42 L37 42 L37 20'), R(19.5, 29, 9, 13, 1), C(26, 35.6, 0.8), R(14, 24, 4, 4, 0.5), R(30, 24, 4, 4, 0.5),
+      P('M37 3.6 A5 5 0 1 0 42 10.8 A3.9 3.9 0 1 1 37 3.6 Z'), spark(10, 8, 1.6), P('M5 42 L43 42'),
+    ],
+    tariq: [ // the road ahead, clear and marked
+      P('M7 44 L20.5 8 M41 44 L27.5 8'), P('M24 39 L24 44 M24 28 L24 32 M24 19.5 L24 22.5 M24 12 L24 14'), P('M4 8 L44 8'), spark(36, 18, 2), spark(11, 18, 1.4),
+    ],
+    murabitin: [ // a watchtower, its light kept burning
+      P('M16 44 L19 18 M32 44 L29 18'), R(15, 12, 18, 6, 0.5), P('M15 12 L15 8.6 L19 8.6 L19 12 M22 12 L22 8.6 L26 8.6 L26 12 M29 12 L29 8.6 L33 8.6 L33 12'),
+      P('M21.6 31 L21.6 27 C21.6 25.6 22.6 24.6 24 24.6 C25.4 24.6 26.4 25.6 26.4 27 L26.4 31 Z'), P('M10 13 L5 11 M10 17 L5 19 M38 13 L43 11 M38 17 L43 19'), P('M8 44 L40 44'),
+    ],
+    aminju: [ // a sheaf of wheat, bound and stored
+      P('M24 44 L24 20 M24 44 L17.5 23 M24 44 L30.5 23'), P('M20 34.5 L28 34.5'),
+      P('M24 20 C21.6 17.6 21.6 13 24 8.6 C26.4 13 26.4 17.6 24 20 Z'), P('M17.5 23 C14.8 21.2 14 16.8 15.4 12.6 C18.6 15.6 19.4 20 17.5 23 Z'), P('M30.5 23 C33.2 21.2 34 16.8 32.6 12.6 C29.4 15.6 28.6 20 30.5 23 Z'),
+      P('M24 14.6 L22.4 13 M24 14.6 L25.6 13 M24 17.8 L22.4 16.2 M24 17.8 L25.6 16.2'), spark(40, 34, 1.8), spark(8, 34, 1.4),
+    ],
+    haram: [ // the House, and the circle that goes round it in safety
+      P('M15 18 L24 14 L33 18 L33 32 L24 36 L15 32 Z'), P('M15 18 L24 22 L33 18'), P('M24 22 L24 36'), P('M15 22.4 L24 26.4 L33 22.4'),
+      P('M10.6 30 C5.4 32.4 5.6 37.6 12 39.6 C19.6 42 28.4 42 36 39.6 C42.4 37.6 42.6 32.4 37.4 30'), spark(24, 6, 2.4), spark(39, 12, 1.5), spark(9, 12, 1.5),
+    ],
+    istiadha: [ // a shield, the crescent within it: a place to take refuge
+      P('M24 6 L38.5 11 L38.5 23 C38.5 32.4 32.2 38.6 24 42 C15.8 38.6 9.5 32.4 9.5 23 L9.5 11 Z'), P('M25 15 A8.4 8.4 0 1 0 31.6 28 A6.4 6.4 0 1 1 25 15 Z'), spark(29.4, 19.6, 1.5),
+    ],
+    adhkar: [ // beads drawn around a heart, keeping it
+      C(7.00, 33.00, 1.9), C(7.83, 27.75, 1.9), C(10.25, 23.01, 1.9), C(14.01, 19.25, 1.9), C(18.75, 16.83, 1.9), C(24.00, 16.00, 1.9), C(29.25, 16.83, 1.9), C(33.99, 19.25, 1.9), C(37.75, 23.01, 1.9), C(40.17, 27.75, 1.9), C(41.00, 33.00, 1.9), heart(24, 33.5, 8), P('M7 33 L7 38 M41 33 L41 38'), spark(24, 9, 1.8),
+    ],
+    aminawlad: [ // an umbrella held over two small hearts
+      P('M7 22 C8 13 15 8 24 8 C33 8 40 13 41 22 C38 20 35 20 32.5 22 C30 20 26.5 20 24 22 C21.5 20 18 20 15.5 22 C13 20 10 20 7 22 Z'), P('M24 8 L24 5'), P('M24 22 L24 25'),
+      heart(18.5, 34, 5.4), heart(30.5, 35, 4.4), drop(5.5, 31, 0.8), drop(42.5, 31, 0.8), drop(6.5, 40, 0.7), drop(41.5, 40, 0.7),
+    ],
   });
 
   Object.assign(BY_BLESSING, {
@@ -275,5 +312,7 @@
     blessing_357: 'idrak', blessing_358: 'intibah', blessing_359: 'hisab', blessing_360: 'lughat',
     blessing_361: 'kutub', blessing_362: 'ibda', blessing_363: 'hall', blessing_364: 'talum', blessing_365: 'fitna', blessing_366: 'hiwar',
     blessing_367: 'basira', blessing_368: 'takhtit', blessing_369: 'iktishaf', blessing_370: 'tadris',
+    blessing_371: 'naqd', blessing_372: 'tadabbur', blessing_373: 'aminbayt', blessing_374: 'tariq', blessing_375: 'murabitin', blessing_376: 'aminju',
+    blessing_377: 'haram', blessing_378: 'istiadha', blessing_379: 'adhkar', blessing_380: 'aminawlad',
   });
 })();
