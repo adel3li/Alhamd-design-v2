@@ -1,0 +1,166 @@
+{
+ "note": "Shared podcast script for a blessing package (episode of «وقفات في أثر النعمة»); a blessing can have its own data/scripts/podcast_<nn>.json instead. Slots: {title} {surah} {hadithIntro} {hadithSource} {quoteIntro}, filled by tools/voice.py from the app's data. The host lines are draft copy for the owner to review. Every sacred or quoted text is not written here: «verse», «hadith», «quote», «tadabbur», «steps», «duaa» and «prompt» blocks are read verbatim from the app's data. The verse is never synthesised: it is a recording by a reciter.",
+ "show": "وقفات في أثر النعمة",
+ "episode": "{title}",
+ "voice": "ar-SA-HamedNeural",
+ "rate": "-8%",
+ "blocks": [
+  {
+   "kind": "sfx",
+   "name": "breath",
+   "sec": 1.6
+  },
+  {
+   "kind": "opening"
+  },
+  {
+   "kind": "pause",
+   "sec": 1.4
+  },
+  {
+   "kind": "voice",
+   "label": "الترحيب",
+   "text": "أهلًا بك في «وقفات في أثر النعمة»، من تطبيق «الحمد». في كلِّ حلقة نقف مع نعمةٍ واحدة: نقرأ آيتها، ونتدبّرها، ثم نتخيّل غيابها… ونعود إليها فنحمد الله. وحلقتنا اليوم عن {title}."
+  },
+  {
+   "kind": "pause",
+   "sec": 1.6
+  },
+  {
+   "kind": "voice",
+   "label": "قبل الآية",
+   "text": "يقول الله تعالى في سورة {surah}:"
+  },
+  {
+   "kind": "pause",
+   "sec": 0.8
+  },
+  {
+   "kind": "verse",
+   "reciter": "Alafasy"
+  },
+  {
+   "kind": "pause",
+   "sec": 1.6
+  },
+  {
+   "kind": "voice",
+   "label": "قبل الحديث",
+   "text": "{hadithIntro}"
+  },
+  {
+   "kind": "pause",
+   "sec": 0.6
+  },
+  {
+   "kind": "hadith"
+  },
+  {
+   "kind": "pause",
+   "sec": 0.6
+  },
+  {
+   "kind": "voice",
+   "label": "مصدر الحديث",
+   "text": "{hadithSource}"
+  },
+  {
+   "kind": "pause",
+   "sec": 1.8
+  },
+  {
+   "kind": "voice",
+   "label": "قبل التدبّر",
+   "text": "وقفاتٌ في أثر النعمة."
+  },
+  {
+   "kind": "pause",
+   "sec": 0.8
+  },
+  {
+   "kind": "tadabbur"
+  },
+  {
+   "kind": "pause",
+   "sec": 1.8
+  },
+  {
+   "kind": "voice",
+   "label": "قبل القول",
+   "text": "{quoteIntro}"
+  },
+  {
+   "kind": "pause",
+   "sec": 0.6
+  },
+  {
+   "kind": "quote"
+  },
+  {
+   "kind": "pause",
+   "sec": 2.0
+  },
+  {
+   "kind": "voice",
+   "label": "قبل الاستشعار",
+   "text": "والآن… دقيقتان معًا. إن استطعت أن تغمض عينيك فافعل، واترك الكلمات تمرّ بقلبك على مهل."
+  },
+  {
+   "kind": "pause",
+   "sec": 1.6
+  },
+  {
+   "kind": "steps"
+  },
+  {
+   "kind": "pause",
+   "sec": 1.6
+  },
+  {
+   "kind": "voice",
+   "label": "قبل الدعاء",
+   "text": "ودعاءُ اليوم:"
+  },
+  {
+   "kind": "pause",
+   "sec": 0.6
+  },
+  {
+   "kind": "duaa"
+  },
+  {
+   "kind": "pause",
+   "sec": 2.0
+  },
+  {
+   "kind": "voice",
+   "label": "سؤال الحلقة",
+   "text": "وقبل أن نفترق، سؤالٌ تأخذه معك، وتكتب جوابه في دفترك أو في سجلّ الحمد:"
+  },
+  {
+   "kind": "pause",
+   "sec": 0.6
+  },
+  {
+   "kind": "prompt"
+  },
+  {
+   "kind": "pause",
+   "sec": 2.2
+  },
+  {
+   "kind": "voice",
+   "label": "الختام",
+   "text": "كانت هذه «وقفات في أثر النعمة». وفي تطبيق «الحمد» نعمةٌ جديدة كلَّ يوم، ودقيقتان من التأمّل… ابحث عنه باسم «الحمد»، وهو مجّانيّ. نلقاك على خير… والحمد لله ربّ العالمين."
+  },
+  {
+   "kind": "pause",
+   "sec": 1.0
+  },
+  {
+   "kind": "sfx",
+   "name": "glint",
+   "sec": 1.8
+  }
+ ]
+}

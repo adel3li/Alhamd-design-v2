@@ -1,0 +1,15 @@
+{
+ "note": "Copy for the demo page of a blessing package (tools/build_demo.py): what is specific to this blessing. Draft copy for the owner to review; sacred text is never written here. quotedVerses: verses that contain words the app's texts quote between ﴿ ﴾, so tools/voice.py can cut those words from the reciter's recording (it checks that the words are really in these verses).",
+ "quotedVerses": ["30:24", "57:17"],
+ "anim": {
+  "use": "شبكةٌ من النقاط تتّصل وتنبض، ثم تتبعثر ومعها الكلمات… ثم تلتئم من جديد",
+  "caption": "تاجٌ لا تراه عينُك…\nبه عرفتَ ربك، وبه تفهم هذه الكلمات الآن.\nالحمد لله على العقل."
+ },
+ "verseCaption": "آياتٌ لأولي الألباب… انظر الليلة إلى السماء دقيقةً واحدة، وتفكّر.",
+ "review": [
+  {"title": "الحديث", "text": "مصدره في التطبيق «رواه أبو داود» بلا رقم (٤٤٠٣ من حديث عليّ فيما نعرف، ولفظه يوافقه). يُطابَق الرقم والنصّ."},
+  {"title": "قول الغزالي", "text": "مسجَّلٌ في التطبيق بالمعنى من «إحياء علوم الدين»، فكتبنا تحته «بتصرّف». يُستبدل بنصّه بعد التحقّق، أو يُكتفى بالمعنى."},
+  {"title": "الكلمتان داخل التدبّر", "text": "﴿يعقلون﴾ و﴿تعقلون﴾ ليستا من آية النعمة. في البودكاست أُخذت كلٌّ منهما من تلاوة القارئ لآيةٍ ترد فيها (الروم ٢٤ والحديد ١٧)، ولا يقرؤهما الصوت الآلي. والتدبّر يقرّر أن «العقل» لم يرد في القرآن اسمًا بل فعلًا؛ يراجعه المراجع مع النص."},
+  {"title": "«رحلتي»", "text": "نعمة العقل ليست في أيّ منزلٍ من منازل «رحلتي»، فلا كاروسيل لها هنا."}
+ ]
+}

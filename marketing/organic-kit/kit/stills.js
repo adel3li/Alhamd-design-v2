@@ -130,7 +130,7 @@
   });
 
   /* ===================== SV — verse cards (Fridays, Ramadan) ===================== */
-  CT.verses.forEach((v) => {
+  CT.verses.filter((v) => v.id.startsWith('SV-')).forEach((v) => {
     def(v.id, {
       name: `آية: ${v.ref}`, group: 'SV', family: 'آية الجمعة', formats: ['square', 'portrait', 'story', 'wide'],
       review: true,
@@ -375,7 +375,8 @@
   ]);
 
   /* ===================== TR — «جرّبها الآن»: the five pauses of one blessing ===================== */
-  const TRY = [15, 37, 22, 14, 17, 33, 36, 13, 28, 32, 39, 5];
+  // the twelve of the plan, then every blessing that has a full package (kit/bundle.js)
+  const TRY = [...new Set([15, 37, 22, 14, 17, 33, 36, 13, 28, 32, 39, 5, ...Object.keys(CT.bundle || {}).map(Number)])];
   const STEP_NAMES = ['التهيئة والحضور', 'تخيّل الغياب', 'التعمّق', 'العودة', 'الحمد'];
   TRY.forEach((nn) => {
     const b = BY[nn], ic = ICON[b.id];
@@ -480,7 +481,7 @@
     name: 'خلفية: أربعون نعمة', group: 'WP', family: 'خلفيات', formats: F_WP, alt: 'خلفية: رموز النِّعَم الأربعين',
     build(c) {
       const cols = c.W > c.H ? 10 : 5, size = (c.W - c.px(160)) / cols / c.k * (c.W > c.H ? 0.82 : 0.66);
-      const grid = `<div style="display:grid;grid-template-columns:repeat(${cols},1fr);gap:${c.px(26)}px ${c.px(18)}px;justify-items:center;opacity:0.85">${B.map((b) => medal(c, ICON[b.id], { size, sw: 1.4 })).join('')}</div>`;
+      const grid = `<div style="display:grid;grid-template-columns:repeat(${cols},1fr);gap:${c.px(26)}px ${c.px(18)}px;justify-items:center;opacity:0.85">${B.filter((b) => b.n <= 40).map((b) => medal(c, ICON[b.id], { size, sw: 1.4 })).join('')}</div>`;
       return page(c, { bg: { cone: 0.05, coneAt: '50% 50%' }, mid: grid, foot: wm(c, 56), gap: 30 });
     },
   });
