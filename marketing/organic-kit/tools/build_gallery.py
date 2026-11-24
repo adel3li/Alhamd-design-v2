@@ -11,7 +11,8 @@ Reads out/stills/<id>-nn-k/*_portrait.png (node tools/render-stills.cjs --ids JR
 portrait) and writes index.html (from tools/gallery-template.html) and img/: one strip JPEG per blessing per theme,
 every slide of its carousels side by side, so a hundred blessings stay under the page's file limit (511 files). The
 page shows a slide with CSS background positions; a blessing shows the carousels that have been rendered, JR first. A slide that prints a verse, hadith or scholar's words is marked «يُراجَع قبل النشر»; a tadabbur that
-quotes one («…» or ﴿…﴾) is marked too. Notes for the owner, per blessing, are in data/scripts/jr_notes.json.
+quotes one («…» or ﴿…﴾) is marked too. Notes for the owner, per blessing, are in data/scripts/jr_notes.json (1–100)
+and jr_notes_<k>.json (hundred k).
 """
 import html
 import json
@@ -153,8 +154,8 @@ def main() -> None:
     out = Path(sys.argv[sys.argv.index("--out") + 1]) if "--out" in sys.argv else ROOT / "out" / "gallery" / (f"{page}-local" if local else str(page))
     (out / "img").mkdir(parents=True, exist_ok=True)
     C = content()
-    notes_path = ROOT / "data" / "scripts" / "jr_notes.json"
-    notes = json.loads(notes_path.read_text(encoding="utf-8")) if notes_path.exists() else {}
+    # notes for the owner: data/scripts/jr_notes.json (1–100) and jr_notes_<k>.json (hundred k), one file per hundred
+    notes = {k: v for f in sorted((ROOT / "data" / "scripts").glob("jr_notes*.json")) for k, v in json.loads(f.read_text(encoding="utf-8")).items()}
     cards, done = [], []
     for n in range(lo, hi + 1):
         c = card(out, C, n, notes, local)

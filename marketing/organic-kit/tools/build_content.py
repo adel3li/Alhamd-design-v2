@@ -25,8 +25,17 @@ ROOT = Path(__file__).resolve().parent.parent
 REPO = ROOT.parent.parent
 KIT_BLESSINGS = 100  # the kit's daily families (NB, NP, ND, NR, TR…): the first hundred (the 12-week plan keeps to the first 40)
 PACKAGES = [5, 37, 15, 22, 19, 28, 29, 34, 36, 14]  # full packages (every format, the demo page): ten blessings, seven categories
-JR_UPTO = 110  # the «الرحلة كاملة» carousel (JR-nn) for every blessing up to this order, made in batches of ten
-BUNDLE = PACKAGES + [n for n in range(1, JR_UPTO + 1) if n not in PACKAGES]  # every blessing kit/bundle.js builds
+
+
+def progress() -> dict:
+    """How far each hundred has reached: data/jr_progress/<k>.txt holds the last blessing done in hundred k (1 = 1–100).
+    One file per hundred, so the sessions working on different hundreds never edit the same line."""
+    d = Path(__file__).resolve().parent.parent / "data" / "jr_progress"
+    return {int(f.stem): int(f.read_text().split()[0]) for f in sorted(d.glob("*.txt"))} if d.exists() else {}
+
+
+# every blessing kit/bundle.js builds: the ten full packages, then each hundred up to the blessing it has reached
+BUNDLE = PACKAGES + [n for k, upto in sorted(progress().items()) for n in range((k - 1) * 100 + 1, upto + 1) if n not in PACKAGES]
 
 
 def package(b: dict, verses: list, journey: dict) -> dict:
@@ -81,8 +90,8 @@ def main() -> None:
             "prompt": b["journalPrompt"],
         })
     copy_path = ROOT / "data" / "copy.json"
-    verses_path = ROOT / "data" / "verses.json"
-    verses = json.loads(verses_path.read_text(encoding="utf-8"))["verses"] if verses_path.exists() else []
+    # data/verses.json (the kit's verses and blessings 1–100), data/verses_<k>.json (hundred k, from 101 on)
+    verses = [v for f in sorted((ROOT / "data").glob("verses*.json")) for v in json.loads(f.read_text(encoding="utf-8"))["verses"]]
     by_order = {b["order"]: b for b in src["blessings"]}
     data = {
         "blessings": blessings,

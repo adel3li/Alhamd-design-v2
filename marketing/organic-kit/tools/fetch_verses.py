@@ -68,8 +68,14 @@ def get(url: str) -> dict:
 
 
 # verses already in data/verses.json are kept as they are (--refresh fetches and checks every one again)
-_path = ROOT / "data" / "verses.json"
-CACHED = {} if "--refresh" in sys.argv or not _path.exists() else {v["id"]: v for v in json.loads(_path.read_text(encoding="utf-8"))["verses"] if v["id"].startswith("BV-")}
+# data/verses.json holds the kit's verses (SV-) and blessings 1–100; data/verses_<k>.json holds hundred k from 101 on,
+# so sessions working on different hundreds write different files
+CACHED = {} if "--refresh" in sys.argv else {v["id"]: v for f in sorted((ROOT / "data").glob("verses*.json"))
+                                              for v in json.loads(f.read_text(encoding="utf-8"))["verses"] if v["id"].startswith("BV-")}
+
+
+def hundred(vid: str) -> int:
+    return 1 if vid.startswith("SV-") else (int(vid[3:]) - 1) // 100 + 1
 
 
 def package_verses() -> list:
@@ -174,8 +180,11 @@ def main() -> None:
         out.append(rec)
         print(f"{vid} {name} {rec['ref'].split(': ')[1]}{' (portion)' if rec['portion'] else ''}: {portion}")
     out += [v for k, v in CACHED.items() if k not in {o["id"] for o in out}]
-    (ROOT / "data" / "verses.json").write_text(json.dumps({"note": __doc__.strip(), "verses": out}, ensure_ascii=False, indent=1), encoding="utf-8")
-    print(f"data/verses.json: {len(out)} verses")
+    for k in sorted({hundred(v["id"]) for v in out}):
+        name = "verses.json" if k == 1 else f"verses_{k}.json"
+        mine = [v for v in out if hundred(v["id"]) == k]
+        (ROOT / "data" / name).write_text(json.dumps({"note": __doc__.strip(), "verses": mine}, ensure_ascii=False, indent=1), encoding="utf-8")
+        print(f"data/{name}: {len(mine)} verses")
 
 
 if __name__ == "__main__":

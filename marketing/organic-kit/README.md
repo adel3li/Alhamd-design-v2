@@ -72,28 +72,49 @@ title, surah, hadith source and the scholar), or `podcast_nn.json` for one; ever
 What the demo page says about one blessing (the animation's caption, the verse caption, the review notes) is in
 `data/scripts/package_nn.json`.
 
-## «الرحلة كاملة» for every blessing (JR-01 … JR-400)
+## Four carousels for every blessing (JR, GH, TR, HS) and download packages
 
-The JR carousel is being made for all 400 blessings, ten at a time in the app's order (batch 1 = blessings 1–10).
-`JR_UPTO` in `tools/build_content.py` is how far the batches have reached; every blessing up to it is in `BUNDLE`
-(the ten full packages stay in `PACKAGES`). `fetch_verses.py` keeps the verses already in `data/verses.json` and only
-fetches the new ones (`--refresh` checks them all again).
+Every blessing gets four carousels, 4:5, in «ليل» and «نهار»: «الرحلة كاملة» (JR, up to 10 slides), «غابت… ثم عادت»
+(GH, 2), «جرّبها الآن» (TR, 7: the five pauses as the app shows them) and «من الشاشة الرئيسية» (HS, up to 6, the last
+one the app's real screen). They are made ten blessings at a time, in the app's order, one hundred per session:
+
+| Hundred | Progress | Verses | Icons | Notes for the owner | Review page |
+|---|---|---|---|---|---|
+| 1–100 | `data/jr_progress/1.txt` | `data/verses.json` | `kit/icons.js` | `data/scripts/jr_notes.json` | https://claude.ai/artifact/Ua2D9MwPbGtw7nB4cycHyT |
+| 101–200 | `data/jr_progress/2.txt` | `data/verses_2.json` | `kit/icons_2.js` | `data/scripts/jr_notes_2.json` | https://claude.ai/artifact/WN31ubRHQf5xsQWN9pzbiJ |
+| 201–300 | `data/jr_progress/3.txt` | `data/verses_3.json` | `kit/icons_3.js` | `data/scripts/jr_notes_3.json` | (made by its session) |
+| 301–400 | `data/jr_progress/4.txt` | `data/verses_4.json` | `kit/icons_4.js` | `data/scripts/jr_notes_4.json` | (made by its session) |
+
+A progress file holds the last blessing done in its hundred; `BUNDLE` in `tools/build_content.py` is built from them.
+One file of each kind per hundred, so sessions working on different hundreds never edit the same file, except
+`kit/content.js`, which is generated: on a merge conflict there, run `python3 tools/build_content.py` again.
 
 ```bash
-# batch k (here 1): raise JR_UPTO to 10·k, then
-python3 tools/fetch_verses.py && python3 tools/build_content.py
-node tools/render-stills.cjs --ids JR-01-,JR-02-,…,JR-10- --formats portrait   # exact ids: «JR-1» would also match JR-10…19
-python3 tools/build_gallery.py 1          # out/gallery/1/: the review page for blessings 1–100
+(cd ../.. && bun install && bun run dev) &       # the app on :3000, for the HS phone screen
+# draw the batch's ten icons in kit/icons_<k>.js first (from 101 on), then:
+bash tools/batch.sh 111                          # blessings 111–120: progress, verses, content, app screens, render, sheets
+# check out/sheets/111_*.png, then:
+python3 tools/build_gallery.py 2                 # out/gallery/2/: the review page for 101–200
 ```
 
-`tools/build_gallery.py` writes one page per hundred blessings (a strip JPEG per carousel per theme, about 0.5 MB each),
-with a «ليل / نهار» switch and «يُراجَع قبل النشر» on every slide that prints a verse, hadith or scholar's words (or a
-tadabbur that quotes one). Notes for the owner on a blessing go in `data/scripts/jr_notes.json` (`{"12": "…"}`).
-Published pages: 1–100 at https://claude.ai/artifact/Ua2D9MwPbGtw7nB4cycHyT, 101–200 at https://claude.ai/artifact/WN31ubRHQf5xsQWN9pzbiJ.
+`tools/capture-blessing-screens.cjs` finds the day the app shows each blessing (its rotation in `src/lib/dailyLogic.ts`)
+and checks the title on screen; the captures are not in git (each machine makes its own). `fetch_verses.py` keeps the
+verses it has and fetches only new ones (`--refresh` checks them all again); an app verse over several ayat is
+matched too, joined by the end-of-ayah sign and number (`ayahEnd`). Notes go in the hundred's notes file
+(`{"212": "…"}`) and show on the review page above that blessing.
 
-From 101 on, the kit's daily families stop (`KIT_BLESSINGS`), so a package carries its own pauses, duaa and journal prompt;
-every batch draws its ten icons in `kit/icons.js` (`BY_BLESSING`; `medal()` falls back to another icon when one is missing,
-so check `Object.keys(BY_BLESSING).length` reaches `JR_UPTO`).
+**Downloads.** The packages live on the owner's Mac (`~/Downloads/claude work/alhamd-carousels/`), not in the review
+page, which can hold 256 MB: for each blessing a 4K ZIP (2160×2700) and a Full HD ZIP (1080×1350), all four carousels
+in both themes, JPEG at quality 95, with the captions and the slides to review in «نصوص المنشورات.txt». On the Mac:
+
+```bash
+node tools/render-stills.cjs --ids JR-01-,GH-01-,TR-01-,HS-01-,… --formats portrait                       # Full HD
+node tools/render-stills.cjs --ids JR-01-,GH-01-,TR-01-,HS-01-,… --formats portrait --scale 2 --out out/stills-4k
+python3 tools/export_package.py --from 1 --to 100 --dest "$HOME/Downloads/claude work/alhamd-carousels/1-100"
+python3 tools/build_gallery.py 1 --local --out "$HOME/Downloads/claude work/alhamd-carousels/1-100"
+```
+
+The local copy of the page has the two buttons on each blessing; open its `index.html` in the browser.
 
 | Batch | Blessings | Notes |
 |---|---|---|
