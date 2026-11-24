@@ -48,6 +48,60 @@
     ],
   });
 
+  /** A cloud whose flat base runs from x0 to x1 at y; h is its height. */
+  const cloud = (x0, x1, y, h) => {
+    const w = x1 - x0, X = (t) => f(x0 + t * w), Y = (t) => f(y - t * h);
+    return P(`M${X(0.12)} ${f(y)} C${X(-0.04)} ${f(y)} ${X(-0.06)} ${Y(0.55)} ${X(0.14)} ${Y(0.55)} C${X(0.14)} ${Y(0.95)} ${X(0.42)} ${Y(1.12)} ${X(0.55)} ${Y(0.8)} C${X(0.66)} ${Y(1.02)} ${X(0.92)} ${Y(0.92)} ${X(0.88)} ${Y(0.55)} C${X(1.06)} ${Y(0.55)} ${X(1.06)} ${f(y)} ${X(0.88)} ${f(y)} Z`);
+  };
+
+  Object.assign(I, {
+    rahmawasia: [ // a wide arc of mercy over a small heart
+      P('M5 33 A19 19 0 0 1 43 33'), P('M10.5 33 A13.5 13.5 0 0 1 37.5 33'), heart(24, 34, 6.4), P('M5 41 L43 41'),
+      spark(24, 7, 2.6), spark(9, 18, 1.5), spark(39, 18, 1.5),
+    ],
+    mudaafa: [ // one good deed, and the many it grows into
+      P('M9 42 C16 40 22 33 25 24 C27.5 16.5 32 11 39 8'), spark(10, 36, 2.2), spark(19, 30.5, 3), spark(27, 19.5, 4), spark(38.5, 9, 5.2), P('M7 44 L41 44'),
+    ],
+    dhulhijja: [ // the mount of Arafat with its pillar, under the young moon
+      P('M5 42 L43 42'), P('M8 42 C13 35 17 30 21 27.5 C23 26.4 25 26.4 27 27.5 C31 30 35 35 40 42'), P('M22.6 27 L22.6 17.5 L25.4 17.5 L25.4 27'), P('M21.6 17.5 L26.4 17.5'),
+      P('M33.5 6 A6.4 6.4 0 1 0 39.9 15.6 A5 5 0 1 1 33.5 6 Z'), spark(12, 12, 2), spark(16, 22, 1.3),
+    ],
+    nasiha: [ // a word given in care: two speech bubbles, a heart in one
+      P('M6.5 11 L30.5 11 Q33 11 33 13.5 L33 27.5 Q33 30 30.5 30 L16 30 L10 35.5 L10.6 30 L9 30 Q6.5 30 6.5 27.5 L6.5 13.5 Q6.5 11 9 11 Z'), heart(19.8, 21.4, 6),
+      P('M37 22 L39.5 22 Q41.5 22 41.5 24 L41.5 34 Q41.5 36 39.5 36 L38.6 36 L39 40.5 L34 36 L25 36 Q23 36 23 34 L23 33'), P('M28 30.5 L36 30.5 M28 25.5 L33 25.5'),
+    ],
+    rusul: [ // a message sent down: the unrolled scroll, light above it
+      P('M12 19 L36 19 L36 38 L12 38 Z'), P('M12 19 C9 19 9 23.5 12 23.5'), P('M36 38 C39 38 39 33.5 36 33.5'), P('M9.6 21.2 L9.6 40.2 L12 38'), P('M17 25 L31 25 M17 29 L31 29 M17 33 L26 33'),
+      P('M24 5 L24 13'), P('M16.5 8 L19 13.5'), P('M31.5 8 L29 13.5'),
+    ],
+    samamahfuza: [ // the sky, a roof kept over the earth
+      P('M5 38 A19 19 0 0 1 43 38'), P('M9 38 A15 15 0 0 1 39 38'), P('M4 38 L44 38'), P('M14 43 L34 43'),
+      spark(24, 26, 2.8), spark(16.5, 31, 1.6), spark(31.5, 30.5, 1.8), C(20, 33.5, 0.7), C(28, 34, 0.7),
+    ],
+    anhar: [ // a spring, and the river that runs from it
+      C(14, 9.5, 3.4), P('M11 14 C9 22 22 23 21 30 C20 36 14 38 9 43'), P('M17 14 C17.5 20 28 22.5 28.5 30 C29 36.5 24 40 21 43'),
+      P('M30 43 C33.6 39.5 38.5 39.5 42 43'), drop(14, 5.2, 0.55), P('M33 18 C35.6 16.6 38.4 16.6 41 18 M33 23 C35.6 21.6 38.4 21.6 41 23'),
+    ],
+    sahab: [ // clouds drifting, heavy with what they carry
+      cloud(8, 34, 26, 15), cloud(22, 42, 36, 10.5), drop(14, 34.5, 0.65), drop(18.5, 39.5, 0.65), drop(13, 43.5, 0.65), spark(38, 11, 2),
+    ],
+    fajr: [ // the sun rising out of the horizon
+      P('M4 33 L44 33'), P('M14 33 A10 10 0 0 1 34 33'), P('M9.5 38.5 L38.5 38.5'), P('M15.5 43.5 L32.5 43.5'),
+      P('M24 13.5 L24 18.5'), P('M11 20.5 L14.4 23.9'), P('M37 20.5 L33.6 23.9'), P('M5.8 28 L10.5 29'), P('M42.2 28 L37.5 29'), spark(40, 9.5, 1.6),
+    ],
+    fusul: [ // the year's wheel: leaf, sun, rain and frost each in its turn
+      C(24, 24, 17.5), P('M24 6.5 L24 41.5 M6.5 24 L41.5 24'),
+      P('M15.5 19 C14.6 14.6 17 11.6 20.4 11.4 C20.6 15.4 18.6 18.4 15.5 19 Z'), P('M15.5 19 L18.4 14.4'),
+      C(32, 16, 3), P('M32 10.2 L32 11 M37.8 16 L37 16 M26.2 16 L27 16 M32 21.8 L32 21'),
+      drop(16, 32, 1.05), P('M32 27.5 L32 36.5 M28.1 29.75 L35.9 34.25 M28.1 34.25 L35.9 29.75'),
+    ],
+  });
+
+  Object.assign(BY_BLESSING, {
+    blessing_111: 'rahmawasia', blessing_112: 'mudaafa', blessing_113: 'dhulhijja', blessing_114: 'nasiha', blessing_115: 'rusul',
+    blessing_116: 'samamahfuza', blessing_117: 'anhar', blessing_118: 'sahab', blessing_119: 'fajr', blessing_120: 'fusul',
+  });
+
   Object.assign(BY_BLESSING, {
     blessing_101: 'tahara', blessing_102: 'adhan', blessing_103: 'siyam', blessing_104: 'sadaqa', blessing_105: 'qiyam', blessing_106: 'istighfar',
     blessing_107: 'salatnabi', blessing_108: 'eid', blessing_109: 'haya', blessing_110: 'khushu',
