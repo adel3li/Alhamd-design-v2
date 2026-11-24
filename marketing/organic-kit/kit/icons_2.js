@@ -347,6 +347,52 @@
     ],
   });
 
+  Object.assign(I, {
+    shiba: [ // a full bowl, and the spoon set down
+      P('M7 24 L41 24 C41 33.5 33.5 40 24 40 C14.5 40 7 33.5 7 24 Z'), P('M10 24 C12 19 18 17 24 17 C30 17 36 19 38 24'), P('M17 43.5 L31 43.5'),
+      P('M33 18 L41.5 9.5'), E(42.8, 8.2, 1.9, 1.3), P('M18 12 C16 9.5 20 8 18 5 M24 12 C22 9.5 26 8 24 5'),
+    ],
+    arabiyya: [ // the inkwell, the reed pen, and the stroke it leaves
+      P('M8 34 L18 34 L19 42 L7 42 Z'), P('M9.5 34 L9.5 31 L16.5 31 L16.5 34'), P('M15 31 L30 9 L33 11 L18 33'), P('M30 9 L33.6 6.4 L33 11'),
+      P('M22 40 C26 30 32 30 33 34 C34 38 30 40 28 37 C26 33.5 33 25 42 27'), C(36.5, 41.5, 1),
+    ],
+    qiraa: [ // an open book, its ribbon, and the light it gives
+      P('M24 21 C19 18 13 17.5 7 18.5 L7 40 C13 39 19 39.5 24 42.5'), P('M24 21 C29 18 35 17.5 41 18.5 L41 40 C35 39 29 39.5 24 42.5'), P('M24 21 L24 42.5'),
+      P('M32 19 L32 30 L34.5 27.6 L37 30 L37 18.6'), P('M24 6 L24 13 M16.5 9 L19 14 M31.5 9 L29 14'),
+    ],
+    tafakkur: [ // a lamp lit by a thought
+      P('M17 33 C13 30 11.5 26 11.5 22 C11.5 15 17 9.5 24 9.5 C31 9.5 36.5 15 36.5 22 C36.5 26 35 30 31 33 L31 36 L17 36 Z'), P('M18 40 L30 40 M20 43.5 L28 43.5'),
+      P('M21 33 L21 25 C21 22.6 27 22.6 27 25 L27 33'), P('M24 3 L24 5.5 M9 9 L10.8 10.8 M39 9 L37.2 10.8 M4.5 22 L7 22 M43.5 22 L41 22'),
+    ],
+    hikma: [ // an oil lamp, its small steady flame
+      P('M6 32 C10 36 18 37 26 36 C32 35.5 36 33 38 29 L44 25 C43 29 40 31 38 31'), P('M6 32 C6 28 12 26 20 26 C27 26 31 28 33 30'), P('M18 26 C18 23 20.5 21.5 23 21.5 C25.5 21.5 28 23 28 26'),
+      P('M14 37 L12 42 L32 42 L29.5 36'), P('M43 23 C42 19 39.6 18 39 15 C41.5 16 42.4 14 42 11.5 C45 13.5 46 17 44.6 21.6'), spark(10, 18, 2), spark(26, 12, 1.4),
+    ],
+    fahm: [ // the key that opens the lock
+      P('M15 24 L15 17 C15 11 19 7.5 24 7.5 C29 7.5 33 11 33 17 L33 24'), P('M19 24 L19 17.5 C19 14 21 11.5 24 11.5 C27 11.5 29 14 29 17.5 L29 24'), R(11, 24, 26, 19, 2.5),
+      C(24, 31.5, 2.4), P('M24 34 L24 38.5'), spark(41, 10, 1.8), spark(7, 14, 1.4),
+    ],
+    khayal: [ // a cloud of thought, the moon and stars inside it
+      cloud(9, 41, 30, 22), C(13, 37, 2), C(9, 42.5, 1.3), P('M24 15 A5.6 5.6 0 1 0 29.6 22.6 A4.4 4.4 0 1 1 24 15 Z'), spark(33, 17, 2), spark(18, 24.5, 1.4),
+    ],
+    tamyiz: [ // light on one side of the line, shade on the other
+      C(24, 24, 12), P('M24 6 L24 42'), P('M30 18 C31.5 19.5 32 21.4 32 24'), P('M38 24 L42 24 M36 14.5 L39 11.5 M36 33.5 L39 36.5 M30 9 L31.4 5.4 M30 39 L31.4 42.6'),
+      P('M13 20 L19 20 M12.4 24 L19 24 M13 28 L19 28'),
+    ],
+    khata: [ // the path dips, and climbs higher after
+      P('M5 18 C11 18 13 34 20 34 C27 34 29 14 38 10'), P('M38 10 L33.5 9.2 M38 10 L36.4 14.2'), C(20, 34, 1.4), P('M5 42 L43 42'), spark(42, 22, 1.8), spark(9, 30, 1.2),
+    ],
+    watan: [ // home among its hills, a palm beside it
+      P('M4 42 L44 42'), P('M4 33 C10 28 16 28 21 31'), P('M27 31 C32 27 38 27 44 31'), P('M17 42 L17 30 L24 24 L31 30 L31 42'), P('M21.5 42 L21.5 36 L26.5 36 L26.5 42'),
+      palm(37, 42, 18, 6.5, 1), heart(24, 13, 5),
+    ],
+  });
+
+  Object.assign(BY_BLESSING, {
+    blessing_181: 'shiba', blessing_182: 'arabiyya', blessing_183: 'qiraa', blessing_184: 'tafakkur', blessing_185: 'hikma',
+    blessing_186: 'fahm', blessing_187: 'khayal', blessing_188: 'tamyiz', blessing_189: 'khata', blessing_190: 'watan',
+  });
+
   Object.assign(BY_BLESSING, {
     blessing_171: 'bidaya', blessing_172: 'dif', blessing_173: 'mirat', blessing_174: 'khubz', blessing_175: 'tamr',
     blessing_176: 'khudar', blessing_177: 'milh', blessing_178: 'sufra', blessing_179: 'rizqghayb', blessing_180: 'halal',
