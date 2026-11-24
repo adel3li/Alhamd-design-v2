@@ -190,6 +190,49 @@
     ],
   });
 
+  Object.assign(I, {
+    hubb: [ // two hearts, one leaning into the other
+      heart(19, 25, 11), heart(30, 28, 9), spark(39, 11, 2), spark(9, 39, 1.4),
+    ],
+    tawadu: [ // the full ear of wheat bows its head
+      P('M14 44 C14 32 18 22 28 17 C32 15 35 15.5 37 18'), leaf(29, 17.2, 33.5, 22.5, 1.9), leaf(32, 17, 37.5, 20.5, 1.9), leaf(34.5, 17.6, 39.5, 24, 1.8), leaf(31, 19, 34, 26, 1.8), leaf(37, 18, 41, 26.5, 1.6),
+      leaf(16, 33, 9, 26, 2.2), P('M8 44 L24 44'),
+    ],
+    anah: [ // an hourglass, the sand falling slowly
+      P('M13 7 L35 7 M13 41 L35 41'), P('M15.5 7 C15.5 16 22 19 22 24 C22 29 15.5 32 15.5 41 M32.5 7 C32.5 16 26 19 26 24 C26 29 32.5 32 32.5 41'),
+      P('M19 15 L29 15 C28 18 25.5 20 24 21 C22.5 20 20 18 19 15 Z'), P('M24 25.5 L24 33.5'), P('M18.5 41 C19.5 37.5 22 35.5 24 35.5 C26 35.5 28.5 37.5 29.5 41'),
+    ],
+    shajaa: [ // a shield held steady
+      P('M24 6 C19 9 13 10 9 10 C9 26 14 36 24 42 C34 36 39 26 39 10 C35 10 29 9 24 6 Z'), P('M24 11.5 C21 13 17.5 14 14.5 14.3 C15 25.5 18.5 32.5 24 36.5 C29.5 32.5 33 25.5 33.5 14.3 C30.5 14 27 13 24 11.5 Z'), spark(24, 24, 4),
+    ],
+    hubbkhayr: [ // a heart whose good reaches out to others
+      heart(24, 25, 9.5), heart(9, 12, 3.6), heart(39, 12, 3.6), heart(9, 38, 3.6), heart(39, 38, 3.6),
+      P('M15.5 19 L12 15.4 M32.5 19 L36 15.4 M15.5 31 L12 34.6 M32.5 31 L36 34.6'),
+    ],
+    injaz: [ // the flag set on the summit
+      P('M4 42 L44 42'), P('M7 42 L19 25 L24 31 L29 24 L41 42'), P('M29 24 L29 7'), P('M29 7.5 L39 10.5 L29 14.5'), P('M15.5 30 L19 25 L22 28.6'), spark(12, 12, 2), spark(40, 22, 1.4),
+    ],
+    huzn: [ // soft rain on the earth, and what grows from it
+      cloud(10, 38, 17, 11), drop(16, 24, 0.75), drop(23, 27, 0.75), drop(30, 23.5, 0.75), P('M6 43 L42 43'), P('M24 43 L24 36.5'), leaf(24, 37.5, 18.5, 32, 2.2), leaf(24, 37.5, 29.5, 32, 2.2),
+    ],
+    salamasadr: [ // still water, nothing stirring under the sky
+      C(24, 24, 15), P('M9 26 L39 26'), P('M13 31 C17 30 19 32 24 31 C29 30 31 32 35 31'), P('M17 36 C20 35.3 22 36.7 24 36 C26 35.3 28 36.7 31 36'),
+      P('M17 20 A7 7 0 0 1 31 20'), spark(36, 13, 1.6), spark(12, 14, 1.2),
+    ],
+    dahsha: [ // a spyglass turned up to the stars
+      P('M8 40 L28 24 L31.6 28.6 L11.6 44.6 Z'), P('M28 24 L33 20 L36.6 24.6 L31.6 28.6'), P('M19 32.5 L14 42 M20 33.2 L27 42'), P('M10 44 L31 44'),
+      spark(38, 9, 3), spark(28, 9, 1.6), spark(42, 18, 1.4), C(20, 13, 0.8),
+    ],
+    sidq: [ // the plumb line: true and straight
+      P('M10 7 L38 7'), P('M24 7 L24 30'), P('M24 30 L20 36 L24 42 L28 36 Z'), P('M15 7 L15 11 M33 7 L33 11'), spark(36, 32, 2), spark(12, 26, 1.4),
+    ],
+  });
+
+  Object.assign(BY_BLESSING, {
+    blessing_141: 'hubb', blessing_142: 'tawadu', blessing_143: 'anah', blessing_144: 'shajaa', blessing_145: 'hubbkhayr',
+    blessing_146: 'injaz', blessing_147: 'huzn', blessing_148: 'salamasadr', blessing_149: 'dahsha', blessing_150: 'sidq',
+  });
+
   Object.assign(BY_BLESSING, {
     blessing_131: 'diyafa', blessing_132: 'hadiyya', blessing_133: 'salam', blessing_134: 'kalima', blessing_135: 'khuluq',
     blessing_136: 'jamaa', blessing_137: 'muwasat', blessing_138: 'qudwa', blessing_139: 'maruf', blessing_140: 'rahmaqalb',
