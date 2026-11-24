@@ -137,7 +137,8 @@ def ayah(vid: str, s: int, a: int, name: str, w0, w1, show: bool) -> tuple[str, 
     if show:
         print(f"\n{vid} {name} {a}:", " ".join(f"{i + 1}:{w}" for i, w in enumerate(words)))
     if not w0 and not w1:
-        return full, full
+        # the hizb sign «۞» marks a reading division, not a word: a portion never takes it, and a whole ayah drops it in front
+        return full, re.sub(r"^\u06DE\s*", "", full)
     w0, w1 = w0 or 1, w1 or len(words)
     # whole words of the verse; a pause mark left dangling at the cut is dropped; pause marks inside the portion stay
     portion = re.sub(r"\s*[ۖ-ۜ]\s*$", "", " ".join(tokens[at[w0 - 1]:at[w1 - 1] + 1]))
