@@ -72,6 +72,67 @@ title, surah, hadith source and the scholar), or `podcast_nn.json` for one; ever
 What the demo page says about one blessing (the animation's caption, the verse caption, the review notes) is in
 `data/scripts/package_nn.json`.
 
+## Four carousels for every blessing (JR, GH, TR, HS) and download packages
+
+Every blessing gets four carousels, 4:5, in «ليل» and «نهار»: «الرحلة كاملة» (JR, up to 10 slides), «غابت… ثم عادت»
+(GH, 2), «جرّبها الآن» (TR, 7: the five pauses as the app shows them) and «من الشاشة الرئيسية» (HS, up to 6, the last
+one the app's real screen). They are made ten blessings at a time, in the app's order, one hundred per session:
+
+| Hundred | Progress | Verses | Icons | Notes for the owner | Review page |
+|---|---|---|---|---|---|
+| 1–100 | `data/jr_progress/1.txt` | `data/verses.json` | `kit/icons.js` | `data/scripts/jr_notes.json` | https://claude.ai/artifact/Ua2D9MwPbGtw7nB4cycHyT |
+| 101–200 | `data/jr_progress/2.txt` | `data/verses_2.json` | `kit/icons_2.js` | `data/scripts/jr_notes_2.json` | https://claude.ai/artifact/WN31ubRHQf5xsQWN9pzbiJ |
+| 201–300 | `data/jr_progress/3.txt` | `data/verses_3.json` | `kit/icons_3.js` | `data/scripts/jr_notes_3.json` | (made by its session) |
+| 301–400 | `data/jr_progress/4.txt` | `data/verses_4.json` | `kit/icons_4.js` | `data/scripts/jr_notes_4.json` | (made by its session) |
+
+A progress file holds the last blessing done in its hundred; `BUNDLE` in `tools/build_content.py` is built from them.
+One file of each kind per hundred, so sessions working on different hundreds never edit the same file, except
+`kit/content.js`, which is generated: on a merge conflict there, run `python3 tools/build_content.py` again.
+
+```bash
+(cd ../.. && bun install && bun run dev) &       # the app on :3000, for the HS phone screen
+# draw the batch's ten icons in kit/icons_<k>.js first (from 101 on), then:
+bash tools/batch.sh 111                          # blessings 111–120: progress, verses, content, app screens, render, sheets
+# check out/sheets/111_*.png, then:
+python3 tools/build_gallery.py 2                 # out/gallery/2/: the review page for 101–200
+```
+
+`tools/capture-blessing-screens.cjs` finds the day the app shows each blessing (its rotation in `src/lib/dailyLogic.ts`)
+and checks the title on screen; the captures are not in git (each machine makes its own). `fetch_verses.py` keeps the
+verses it has and fetches only new ones (`--refresh` checks them all again); an app verse over several ayat is
+matched too, joined by the end-of-ayah sign and number (`ayahEnd`). Notes go in the hundred's notes file
+(`{"212": "…"}`) and show on the review page above that blessing.
+
+**Downloads.** The packages live on the owner's Mac (`~/Downloads/claude work/alhamd-carousels/`), not in the review
+page, which can hold 256 MB: for each blessing a 4K ZIP (2160×2700) and a Full HD ZIP (1080×1350), all four carousels
+in both themes, JPEG at quality 95, with the captions and the slides to review in «نصوص المنشورات.txt». On the Mac:
+
+```bash
+node tools/render-stills.cjs --ids JR-01-,GH-01-,TR-01-,HS-01-,… --formats portrait                       # Full HD
+node tools/render-stills.cjs --ids JR-01-,GH-01-,TR-01-,HS-01-,… --formats portrait --scale 2 --out out/stills-4k
+python3 tools/export_package.py --from 1 --to 100 --dest "$HOME/Downloads/claude work/alhamd-carousels/1-100"
+python3 tools/build_gallery.py 1 --local --out "$HOME/Downloads/claude work/alhamd-carousels/1-100"
+```
+
+The local copy of the page has a download button on each blessing for every size exported; open its `index.html` in
+the browser. On the Mac, `alhamd-carousels/export.sh <from> <to>` runs all of it in one command for up to ~25 blessings
+(the app server, the screenshots, the Full HD render with `PW_CHANNEL=chrome`, i.e. the installed Google Chrome, the ZIPs
+and the page); a command there cannot reach a server another command started. Done so far: 1–100 in Full HD (1 GB).
+
+| Batch | Blessings | Notes |
+|---|---|---|
+| 1 | 1–10 | all ten verses matched; every blessing has a hadith and a scholar's words (10 slides) |
+| 2 | 11–20 | all verses matched; 10 slides each; nothing for the owner |
+| 3 | 21–30 | 21 shows الرحمن 1–4 under «الرحمن: 1» in the app: `fetch_verses.py` now matches a run of consecutive ayat (end-of-ayah sign and number between them, `ayahEnd` in the verse); asked the owner about the app's reference |
+| 4 | 31–40 | 32 (قريش 3–4) and 39 (العصر 1–3) span several ayat under one number in the app, same as 21 |
+| 5 | 41–50 | 42 (الحشر 7) and 46 (المائدة 54) are long whole ayat whose blessing sits in one phrase: asked the owner whether the app should show a portion |
+| 6 | 51–60 | 54 (الحج 78 whole, text at 77%) same question as 42 and 46 |
+| 7 | 61–70 | all verses matched; 10 slides each; nothing for the owner |
+| 8 | 71–80 | a whole ayah that opens with the hizb sign «۞» (74, 79) now drops it from the printed text, as portions already did (`full` keeps it); 79 (النساء 36) same portion question as 42 |
+| 9 | 81–90 | 82 (المائدة 2 whole, text at 77%) same portion question |
+| 10 | 91–100 | 92, 96, 97 and 99 have no hadith (9 slides); nothing for the owner |
+| 11 | 101–110 | ten icons drawn (tahara, adhan, siyam, sadaqa, qiyam, istighfar, salatnabi, eid, haya, khushu); 101 (المائدة 6 whole, text at 70%) portion question; 110 (المؤمنون 1–2) reference question |
+
 ## How it works
 
 - `kit/kit.html` renders any creative: `kit.html?id=PS-04&f=portrait&th=nahar` (reels: add `&t=3.2`).

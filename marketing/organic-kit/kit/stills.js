@@ -13,7 +13,8 @@
   const AR = K.AR;
   const CT = window.CONTENT;
   const B = CT.blessings;
-  const BY = Object.fromEntries(B.map((b) => [b.n, b]));
+  // the kit's daily families reach KIT_BLESSINGS; a packaged blessing past them brings its own title, pauses and duaa
+  const BY = Object.fromEntries([...Object.values(CT.bundle || {}).map((p) => ({ ...p, steps: p.steps, duaa: p.duaa, prompt: p.prompt })), ...B].map((b) => [b.n, b]));
   const ICON = window.ICONS.BY_BLESSING;
   const A = window.ART;
   const pad2 = (n) => String(n).padStart(2, '0');

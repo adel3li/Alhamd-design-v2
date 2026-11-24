@@ -43,6 +43,9 @@
     return s;
   };
 
+  /** A drop of water, tip up, centred on (x, y). */
+  const drop = (x, y, s = 1) => P(`M${f(x)} ${f(y - 3.2 * s)} C${f(x - 1.2 * s)} ${f(y - 1.4 * s)} ${f(x - 2.3 * s)} ${f(y)} ${f(x - 2.3 * s)} ${f(y + 1.1 * s)} A${f(2.3 * s)} ${f(2.3 * s)} 0 0 0 ${f(x + 2.3 * s)} ${f(y + 1.1 * s)} C${f(x + 2.3 * s)} ${f(y)} ${f(x + 1.2 * s)} ${f(y - 1.4 * s)} ${f(x)} ${f(y - 3.2 * s)} Z`);
+
   const I = {
     // ——— نعم الدين ———
     islam: [ // the Kaaba with its band and door
@@ -440,6 +443,7 @@
     blessing_083: 'ghayb', blessing_084: 'sakina', blessing_085: 'farah', blessing_086: 'hope', blessing_087: 'rida', blessing_088: 'uns',
     blessing_089: 'dahik', blessing_090: 'batina', blessing_091: 'halawa', blessing_092: 'inshirah', blessing_093: 'hilm', blessing_094: 'qalam',
     blessing_095: 'dhakira', blessing_096: 'fulk', blessing_097: 'rukub', blessing_098: 'thimar', blessing_099: 'zina', blessing_100: 'hadid',
+    // 101–400 are in icons_2.js (101–200), icons_3.js (201–300) and icons_4.js (301–400), loaded after this file
   };
 
   /** The icon alone: <svg viewBox="0 0 48 48">. */
@@ -457,5 +461,7 @@
       `<g class="m-icon" transform="translate(21 21) scale(1.2083)" stroke-width="${sw}"${dash}>${els}</g></svg>`;
   }
 
-  window.ICONS = { I, BY_BLESSING, glyph, medal, names: Object.keys(I) };
+  /** The drawing helpers, for icons_<k>.js: each adds its icons to I and its blessings to BY_BLESSING. */
+  const H = { f, P, C, E, R, spark, heart, tree, lantern, ring, drop };
+  window.ICONS = { I, BY_BLESSING, H, glyph, medal, get names() { return Object.keys(I); } };
 })();

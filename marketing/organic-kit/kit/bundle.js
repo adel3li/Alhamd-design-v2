@@ -38,7 +38,7 @@
   const slide = (c, i, n, inner, { bgo, sw = i === 1, under = '', top = '', foot = '', g } = {}) =>
     page(c, { bg: bgo || { cone: 0.06 }, under, top, foot, mid: inner, gap: g !== undefined ? g : c.pick({ story: 40, square: 20 }, 30), over: pager(c, i, n) + (sw ? swipe(c) : '') });
   const label = (c, text, size = 34) => `<div class="lbl fit" data-fs="${c.px(size)}" style="font-size:${c.px(size)}px">${text}</div>`;
-  const ref = (v) => `[${v.surahName}: ${AR(v.ayah)}]`;
+  const ref = (v) => `[${v.surahName}: ${AR(v.ayah)}${v.ayahEnd ? `–${AR(v.ayahEnd)}` : ''}]`;
   const orn = (s) => `<span class="acc">${s}</span>`;
   const hadithSource = (h) => `${h.source}${h.number ? ` ${AR(h.number)}` : ''}${h.grade ? ` (${h.grade})` : ''}`;
   // a named scholar gets «بتصرّف» when the app marks the words as a paraphrase; an unnamed one shows the app's own note (e.g. «مستفاد من شرح الحديث»)
@@ -115,7 +115,7 @@
 
   Object.values(CT.bundle || {}).forEach((pk) => {
     const base = CT.blessings.find((x) => x.n === pk.n) || {};
-    const b = { ...pk, steps: base.steps, duaa: base.duaa, prompt: base.prompt };
+    const b = { ...pk, steps: base.steps || pk.steps, duaa: base.duaa || pk.duaa, prompt: base.prompt || pk.prompt };
     const nn = pad2(b.n);
     const ic = ICON[b.id];
     const hamdK = b.stepTypes.indexOf('hamd');
