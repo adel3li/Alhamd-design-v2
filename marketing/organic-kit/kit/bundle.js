@@ -38,7 +38,7 @@
   const slide = (c, i, n, inner, { bgo, sw = i === 1, under = '', top = '', foot = '', g } = {}) =>
     page(c, { bg: bgo || { cone: 0.06 }, under, top, foot, mid: inner, gap: g !== undefined ? g : c.pick({ story: 40, square: 20 }, 30), over: pager(c, i, n) + (sw ? swipe(c) : '') });
   const label = (c, text, size = 34) => `<div class="lbl fit" data-fs="${c.px(size)}" style="font-size:${c.px(size)}px">${text}</div>`;
-  const ref = (v) => `[${v.surahName}: ${AR(v.ayah)}]`;
+  const ref = (v) => `[${v.surahName}: ${AR(v.ayah)}${v.ayahEnd ? `–${AR(v.ayahEnd)}` : ''}]`;
   const orn = (s) => `<span class="acc">${s}</span>`;
   const hadithSource = (h) => `${h.source}${h.number ? ` ${AR(h.number)}` : ''}${h.grade ? ` (${h.grade})` : ''}`;
   // a named scholar gets «بتصرّف» when the app marks the words as a paraphrase; an unnamed one shows the app's own note (e.g. «مستفاد من شرح الحديث»)

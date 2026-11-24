@@ -95,6 +95,7 @@ Published pages: 1–100 at https://claude.ai/artifact/Ua2D9MwPbGtw7nB4cycHyT.
 |---|---|---|
 | 1 | 1–10 | all ten verses matched; every blessing has a hadith and a scholar's words (10 slides) |
 | 2 | 11–20 | all verses matched; 10 slides each; nothing for the owner |
+| 3 | 21–30 | 21 shows الرحمن 1–4 under «الرحمن: 1» in the app: `fetch_verses.py` now matches a run of consecutive ayat (end-of-ayah sign and number between them, `ayahEnd` in the verse); asked the owner about the app's reference |
 
 ## How it works
 

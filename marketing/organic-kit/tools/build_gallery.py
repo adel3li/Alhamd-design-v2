@@ -82,7 +82,7 @@ def card(out: Path, C: dict, n: int, notes: dict) -> str | None:
            f"اقرأها على مهل، واكتب جواب السؤال الأخير في التعليقات.\n{CTA_LIVE}\n{TAGS}")
     flagged = "، ".join(dict.fromkeys(review.values()))
     note = notes.get(str(n))
-    meta = [f"{ar(count)} شرائح", esc(pk["catLabel"]), f"[{esc(pk['verse']['surahName'])}: {ar(pk['verse']['ayah'])}]"]
+    meta = [f"{ar(count)} شرائح", esc(pk["catLabel"]), f"[{esc(pk['verse']['surahName'])}: {ar(pk['verse']['ayah'])}{'–' + ar(pk['verse']['ayahEnd']) if pk['verse'].get('ayahEnd') else ''}]"]
     if not pk.get("hadith"):
         meta.append("بلا حديث")
     return (f'<article class="bl" id="n{n}" aria-labelledby="n{n}-h"><header class="bl-head">'

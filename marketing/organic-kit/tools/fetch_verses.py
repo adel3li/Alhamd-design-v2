@@ -89,60 +89,89 @@ def package_verses() -> list:
             continue
         q = src[n]["quran"]
         s, a = q["surahNumber"], q["ayahNumber"]
-        v = get(f"https://api.quran.com/api/v4/verses/by_key/{s}:{a}?fields=text_uthmani")["verse"]
-        words = [t for t in v["text_uthmani"].split() if not re.fullmatch(r"[\u06D6-\u06DC\u06DE]", t)]
         want = loose(q["textUthmani"])
-        span = None
-        for i in range(len(words)):
-            for j in range(i, len(words)):
-                got = loose("".join(words[i:j + 1]))
-                if got == want:
-                    span = (i + 1, j + 1)
+        # the app's text is usually inside one ayah; some blessings show a few ayat in a row under the first one's number
+        # (55:1 «الرحمن… علّمه البيان» is 55:1–4), so the next ayat are tried too, the words of all of them in one run
+        words, last, span = [], a - 1, None
+        while span is None and last < a + 7:
+            try:
+                v = get(f"https://api.quran.com/api/v4/verses/by_key/{s}:{last + 1}?fields=text_uthmani")["verse"]
+            except RuntimeError:
+                break  # past the end of the surah
+            last += 1
+            words += [(last, k + 1, t) for k, t in enumerate(t for t in v["text_uthmani"].split() if not re.fullmatch(r"[\u06D6-\u06DC\u06DE]", t))]
+            for i in range(len(words)):
+                for j in range(i, len(words)):
+                    got = loose("".join(w[2] for w in words[i:j + 1]))
+                    if got == want:
+                        span = (i, j)
+                        break
+                    if len(got) > len(want):
+                        break
+                if span:
                     break
-                if len(got) > len(want):
-                    break
-            if span:
-                break
         if not span:
             raise SystemExit(f"blessing {n}: the app's verse {s}:{a} is not a run of whole words of the ayah: {q['textUthmani']}")
-        whole = span == (1, len(words))
-        out.append((f"BV-{n:02d}", s, a, q["surahName"], None if whole else span[0], None if whole else span[1], f"{src[n]['title']}: آية النعمة كما تظهر في التطبيق"))
+        first, end = words[span[0]], words[span[1]]
+        if first[0] != a:
+            raise SystemExit(f"blessing {n}: the app's verse starts in {s}:{first[0]}, not {s}:{a}: {q['textUthmani']}")
+        whole = first[1] == 1 and span[1] == len(words) - 1
+        out.append((f"BV-{n:02d}", s, a, q["surahName"], None if whole else first[1], None if whole else end[1],
+                    f"{src[n]['title']}: آية النعمة كما تظهر في التطبيق" + (f" (الآيات {a}–{end[0]}؛ التطبيق يذكر الآية {a} وحدها)" if end[0] != a else ""), end[0]))
     return out
+
+
+def ayah(vid: str, s: int, a: int, name: str, w0, w1, show: bool) -> tuple[str, str]:
+    """One ayah from quran.com, checked against Tanzil; the words w0..w1 of it (1-based; None = from the start / to the end)."""
+    v = get(f"https://api.quran.com/api/v4/verses/by_key/{s}:{a}?words=true&word_fields=text_uthmani&fields=text_uthmani")["verse"]
+    full = v["text_uthmani"].strip()
+    # verse-level text is the reference (the word list adds a few recitation marks); pause marks are tokens of their own
+    tokens = full.split()
+    at = [i for i, t in enumerate(tokens) if not re.fullmatch(r"[\u06D6-\u06DC\u06DE]", t)]  # pause marks and the hizb sign «۞» are not words
+    words = [tokens[i] for i in at]
+    tanzil = get(f"https://api.alquran.cloud/v1/ayah/{s}:{a}/quran-uthmani")["data"]["text"]
+    if a == 1 and s not in (1, 9) and skeleton(" ".join(tanzil.split()[:4])) == skeleton("بسم الله الرحمن الرحيم"):
+        tanzil = " ".join(tanzil.split()[4:])  # Tanzil writes the surah's basmala on its first ayah; quran.com does not
+    if skeleton(full) != skeleton(tanzil):
+        raise SystemExit(f"{vid} {s}:{a} differs between sources:\n{full}\n{tanzil}")
+    if show:
+        print(f"\n{vid} {name} {a}:", " ".join(f"{i + 1}:{w}" for i, w in enumerate(words)))
+    if not w0 and not w1:
+        return full, full
+    w0, w1 = w0 or 1, w1 or len(words)
+    # whole words of the verse; a pause mark left dangling at the cut is dropped; pause marks inside the portion stay
+    portion = re.sub(r"\s*[ۖ-ۜ]\s*$", "", " ".join(tokens[at[w0 - 1]:at[w1 - 1] + 1]))
+    nomark = lambda t: " ".join(re.sub(r"[ۖ-ۜ]", " ", t).split())  # noqa: E731
+    if nomark(portion) not in nomark(full):
+        raise SystemExit(f"{vid}: portion not found verbatim")
+    return full, portion
 
 
 def main() -> None:
     show = "--words" in sys.argv
     out = []
-    for vid, s, a, name, w0, w1, use in VERSES + package_verses():
+    for row in VERSES + package_verses():
+        vid, s, a, name, w0, w1, use = row[:7]
+        a_end = row[7] if len(row) > 7 else a
         if vid in CACHED and not any(vid == v[0] for v in VERSES):
             out.append(CACHED[vid])
             continue
-        v = get(f"https://api.quran.com/api/v4/verses/by_key/{s}:{a}?words=true&word_fields=text_uthmani&fields=text_uthmani")["verse"]
-        full = v["text_uthmani"]
-        # verse-level text is the reference (the word list adds a few recitation marks); pause marks are tokens of their own
-        tokens = full.split()
-        at = [i for i, t in enumerate(tokens) if not re.fullmatch(r"[\u06D6-\u06DC\u06DE]", t)]  # pause marks and the hizb sign «۞» are not words
-        words = [tokens[i] for i in at]
-        tanzil = get(f"https://api.alquran.cloud/v1/ayah/{s}:{a}/quran-uthmani")["data"]["text"]
-        if s != 1 and tanzil.startswith("بِسْمِ"):
-            tanzil = tanzil  # only the first verse of a surah carries the basmala in Tanzil; not used here
-        if skeleton(full) != skeleton(tanzil):
-            raise SystemExit(f"{vid} {s}:{a} differs between sources:\n{full}\n{tanzil}")
-        if show:
-            print(f"\n{vid} {name} {a}:", " ".join(f"{i + 1}:{w}" for i, w in enumerate(words)))
-        if w0:
-            # whole words of the verse; a pause mark left dangling at the cut is dropped
-            # pause marks inside the portion stay as they are in the mushaf
-            portion = re.sub(r"\s*[ۖ-ۜ]\s*$", "", " ".join(tokens[at[w0 - 1]:at[w1 - 1] + 1]))
-            nomark = lambda t: " ".join(re.sub(r"[ۖ-ۜ]", " ", t).split())  # noqa: E731
-            if nomark(portion) not in nomark(full):
-                raise SystemExit(f"{vid}: portion not found verbatim")
-        else:
-            portion = full
-        out.append({"id": vid, "surah": s, "ayah": a, "surahName": name, "text": portion, "full": full,
-                    "portion": bool(w0), "ref": f"{name}: {a}", "use": use,
-                    "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"})
-        print(f"{vid} {name} {a}{' (portion)' if w0 else ''}: {portion}")
+        parts, fulls = [], []
+        for ay in range(a, a_end + 1):
+            full, portion = ayah(vid, s, ay, name, w0 if ay == a else None, w1 if ay == a_end else None, show)
+            fulls.append(full)
+            parts.append(portion)
+        # consecutive ayat keep the mushaf's end-of-ayah sign and number between them (U+06DD and the ayah's number)
+        num = lambda k: "\u06DD" + str(k).translate(str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩"))  # noqa: E731
+        portion = " ".join(p + (f"\u00A0{num(a + k)}" if k < len(parts) - 1 else "") for k, p in enumerate(parts))
+        full = " ".join(f + (f"\u00A0{num(a + k)}" if k < len(fulls) - 1 else "") for k, f in enumerate(fulls))
+        rec = {"id": vid, "surah": s, "ayah": a, "surahName": name, "text": portion, "full": full,
+               "portion": bool(w0 or w1), "ref": f"{name}: {a}" + (f"–{a_end}" if a_end != a else ""), "use": use,
+               "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"}
+        if a_end != a:
+            rec["ayahEnd"] = a_end
+        out.append(rec)
+        print(f"{vid} {name} {rec['ref'].split(': ')[1]}{' (portion)' if rec['portion'] else ''}: {portion}")
     out += [v for k, v in CACHED.items() if k not in {o["id"] for o in out}]
     (ROOT / "data" / "verses.json").write_text(json.dumps({"note": __doc__.strip(), "verses": out}, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"data/verses.json: {len(out)} verses")
