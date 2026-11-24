@@ -28,8 +28,12 @@ a day-by-day calendar with captions, and every creative in both app themes — �
 
 `kit/bundle.js` builds the full set of formats for one blessing from the app's own card, so a demo for one
 blessing can be repeated for any of the 400. The blessings that get a package are listed in `BUNDLE` in
-`tools/build_content.py` (today: 5 «نعمة الصلاة», 37 «نعمة البصر», 15 «نعمة الماء», 22 «نعمة الأم» and 19 «نعمة العقل»).
-Each packaged blessing also gets the kit's «جرّبها الآن» carousel (TR-nn).
+`tools/build_content.py`. Today there are ten, across seven categories: 5 «نعمة الصلاة», 37 «نعمة البصر», 15 «نعمة الماء»,
+22 «نعمة الأم», 19 «نعمة العقل», 28 «نعمة الرزق», 29 «نعمة المال», 34 «نعمة حفظ الله», 36 «نعمة السمع», 14 «نعمة النوم».
+Each packaged blessing also gets the kit's «جرّبها الآن» carousel (TR-nn). The kit's daily families (NB, NP, ND, NR)
+now reach the first hundred blessings (`KIT_BLESSINGS`; icons for 41–100 are in `kit/icons.js`), while the 12-week plan
+keeps to the first 40. `fetch_verses.py` adds the verse of any packaged blessing on its own (`BV-nn`, the app's
+portion matched word by word).
 
 | ID | What | Formats |
 |---|---|---|
@@ -38,8 +42,8 @@ Each packaged blessing also gets the kit's «جرّبها الآن» carousel (T
 | JR-nn-1..10 | «الرحلة كاملة»: the card, then the pauses, the duaa and the journal (10 slides at most) | portrait, story, square |
 | JM-&lt;stage&gt;-1..9 | «رحلتي»: the stage that holds the blessing, its seven stations and their daily actions | portrait, story, square |
 | SQ-nn, AY-nn, PC-nn | story question, verse card, podcast episode cover | story · portrait, story, square · square |
-| AN-nn | animated reel, drawn for each blessing (`animFor` in `bundle.js`): 5 the prayer times and a door that shuts and opens, 37 an eye, 15 a glass that runs dry and fills, 22 a house whose windows go dark and light again, 19 a web of points that scatters (with the words) and joins again; a package without a drawing has no AN | 9:16 |
-| VV-nn | the five pauses read aloud on the app's clock (needs `kit/voice.js`) | 9:16 |
+| AN-nn | animated reel, drawn for each blessing (`animFor` in `bundle.js`): 5 the prayer times and a door that shuts and opens, 37 an eye, 15 a glass that runs dry and fills, 22 a house whose windows go dark and light again, 19 a web of points that scatters (with the words) and joins again, 28 three doors that shut and birds that come home, 29 a stack of coins that goes and comes back, one coin given away and replaced, 34 a point on its way inside rings that turn dangers aside, 36 sound waves and a line that falls silent, 14 the moon, three sleepless nights, then the dawn; any other package animates its own icon (`animIcon`) | 9:16 |
+| VV-nn | the five pauses read aloud on the app's clock (needs `kit/voice.js`); drawn at 15 frames a second after the first five packages, encoded at 30 | 9:16 |
 
 The package prints the hadith and the scholar's words, which the kit's daily families never do. They are copied
 verbatim from the app with their review flags, and every creative that shows them, or a verse, is `review: true`:
@@ -54,7 +58,7 @@ python3 tools/voice.py 5                             # out/audio/05: waqfa.mp3, 
 node tools/capture-blessing-screens.cjs --n 5 --day 2027-11-28   # app screen for HS/JR (needs `bun run dev`)
 node tools/render-stills.cjs --ids GH-05,HS-05,JR-05,JM-,SQ-05,AY-05,PC-05 --formats portrait
 node tools/render-reels.cjs --ids AN-05,VV-05 --themes layl
-python3 tools/build_demo.py 5 37 15 22 19            # out/demo/index.html: every package on one page, a tab each
+python3 tools/build_demo.py 5 37 15 22 19 28 29 34 36 14   # out/demo/index.html: every package on one page, a tab each
 ```
 
 Audio: `tools/voice.py` uses a temporary synthetic voice (Microsoft's neural Arabic voice through `edge-tts`,
@@ -62,7 +66,8 @@ Audio: `tools/voice.py` uses a temporary synthetic voice (Microsoft's neural Ara
 recitation from quran.com, which needs permission before anything is published, and words between ﴿ ﴾ inside an app
 text (a tadabbur that quotes a verse) are never synthesised either: the whole verse is the recording; a few words of it
 are cut from the reciter's recording of their verse by quran.com's word timings (the blessing's own verse, or one listed
-in `quotedVerses` in `package_nn.json`; the tool checks the words are really there), and silence is left otherwise. The podcast's linking lines are a draft in `data/scripts/podcast.json`, shared by every blessing (slots for the
+in `quotedVerses` in `package_nn.json`; the tool checks the words are really there), and silence is left otherwise. A package can set the line that leads into its hadith (`hadithIntro` in `package_nn.json`: a hadith qudsi, a
+supplication); otherwise a narration («جاء رجل…») is introduced without «قال رسول الله ﷺ». The podcast's linking lines are a draft in `data/scripts/podcast.json`, shared by every blessing (slots for the
 title, surah, hadith source and the scholar), or `podcast_nn.json` for one; every other line is read from the app's data.
 What the demo page says about one blessing (the animation's caption, the verse caption, the review notes) is in
 `data/scripts/package_nn.json`.

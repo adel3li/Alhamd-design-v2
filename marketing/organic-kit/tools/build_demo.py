@@ -26,6 +26,7 @@ ar = lambda n: str(n).translate(AR)  # noqa: E731
 esc = html.escape
 TAGS = "#نعمة_اليوم #الحمد_لله #تطبيق_الحمد"
 OUT = ROOT / "out" / "demo"
+CACHE = ROOT / "out" / "demo-cache"
 
 
 def content() -> dict:
@@ -56,8 +57,12 @@ class Assets:
         if not src.exists():
             return None
         dst = OUT / "vid" / f"{rid}_{th}.mp4"
-        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(src), "-vf", "scale=720:1280:flags=lanczos", "-c:v", "libx264", "-preset", "slow",
-                        "-crf", "25", "-profile:v", "high", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", str(dst)], check=True)
+        cached = CACHE / dst.name  # the web copy is kept between builds; it is redone only when the reel is newer
+        if not cached.exists() or cached.stat().st_mtime < src.stat().st_mtime:
+            CACHE.mkdir(parents=True, exist_ok=True)
+            subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(src), "-vf", "scale=720:1280:flags=lanczos", "-c:v", "libx264", "-preset", "slow",
+                            "-crf", "25", "-profile:v", "high", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", str(cached)], check=True)
+        shutil.copy(cached, dst)
         poster = OUT / "vid" / f"{rid}_{th}.jpg"
         shutil.copy(src.with_suffix(".jpg"), poster)
         self.files += 2
@@ -112,11 +117,31 @@ def section(num: int, sid: str, title: str, lead: str, body: str, meta: str = ""
             f'<div class="flags">{flags}</div></header>{body}</section>')
 
 
+def strip(a: Assets, cid: str, count: int, th: str, w: int = 720) -> str | None:
+    """Every slide of a carousel side by side in one JPEG: a page holds a limited number of files."""
+    srcs = [ROOT / "out" / "stills" / f"{cid}-{k}" / f"{cid}-{k}_{th}_portrait.png" for k in range(1, count + 1)]
+    if not all(x.exists() for x in srcs):
+        return None
+    ims = [Image.open(x).convert("RGB") for x in srcs]
+    h = round(ims[0].height * w / ims[0].width)
+    out = Image.new("RGB", (w * count, h))
+    for k, im in enumerate(ims):
+        out.paste(im.resize((w, h), Image.LANCZOS), (k * w, 0))
+    dst = OUT / "img" / f"strip_{cid}_{th}.jpg"
+    out.save(dst, quality=82, optimize=True, progressive=True)
+    a.files += 1
+    return f"img/{dst.name}"
+
+
 def carousel(a: Assets, cid: str, count: int, review: set, cap: str) -> str:
+    sheets = {th: strip(a, cid, count, th) for th in ("layl", "nahar")}
     slides = []
     for k in range(1, count + 1):
         badge = '<span class="slide-flag">يُراجَع قبل النشر</span>' if k in review else ""
-        slides.append(f'<li class="slide" aria-label="شريحة {ar(k)} من {ar(count)}">{pair(a, f"{cid}-{k}", "portrait", "")}{badge}</li>')
+        pos = f"{(k - 1) / (count - 1) * 100:.4f}% 0" if count > 1 else "0 0"
+        faces = "".join(f'<div class="art art-{th} sl" role="img" aria-label="شريحة {ar(k)}" style="background-image:url({src});background-size:{count * 100}% 100%;background-position:{pos}"></div>'
+                        for th, src in sheets.items() if src)
+        slides.append(f'<li class="slide" aria-label="شريحة {ar(k)} من {ar(count)}">{faces}{badge}</li>')
     return (f'<div class="car" data-car><div class="car-bar"><span class="car-count" aria-live="polite">{ar(1)} / {ar(count)}</span>'
             f'<div class="car-btns"><button type="button" class="nav" data-dir="prev" aria-label="الشريحة السابقة">→</button>'
             f'<button type="button" class="nav" data-dir="next" aria-label="الشريحة التالية">←</button></div></div>'

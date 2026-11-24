@@ -29,7 +29,7 @@ def main(frames: Path) -> None:
                         "[1:a]volume=0.32[f];[0:a][f]amix=inputs=2:duration=longest:normalize=0,loudnorm=I=-16:TP=-1.5:LRA=11[a]",
                         "-map", "[a]", "-ar", "48000", str(mixed)], check=True)
         wav = mixed
-    subprocess.run(["ffmpeg", "-y", "-v", "error", "-framerate", "30", "-i", str(frames / "%05d.jpg"), "-i", str(wav),
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-framerate", str(job.get("fps", 30)), "-i", str(frames / "%05d.jpg"), "-i", str(wav), "-r", "30",
                     "-map", "0:v", "-map", "1:a", "-vf", ("noise=alls=2:allf=t," if "_layl_" in job["key"] else "") + "format=yuv420p",
                     "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-profile:v", "high",
                     "-c:a", "aac", "-b:a", "160k", "-t", f"{total:.3f}", "-movflags", "+faststart", str(out)], check=True)

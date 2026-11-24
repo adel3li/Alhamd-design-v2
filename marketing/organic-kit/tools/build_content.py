@@ -23,8 +23,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 REPO = ROOT.parent.parent
-KIT_BLESSINGS = 40   # the kit's daily families (NB, NP, ND, NR, TR…) cover the app's first 40 blessings
-BUNDLE = [5, 37, 15, 22, 19]  # blessings with a full package of formats (kit/bundle.js)
+KIT_BLESSINGS = 100  # the kit's daily families (NB, NP, ND, NR, TR…): the first hundred (the 12-week plan keeps to the first 40)
+BUNDLE = [5, 37, 15, 22, 19, 28, 29, 34, 36, 14]  # full packages (kit/bundle.js): ten blessings, seven categories
 
 
 def package(b: dict, verses: list, journey: dict) -> dict:

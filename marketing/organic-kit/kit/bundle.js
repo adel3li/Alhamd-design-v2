@@ -32,6 +32,7 @@
   const ABSENT = (type) => type === 'visualize' || type === 'deepen';
   const sigSize = (c) => c.pick({ story: 62, square: 50 }, 56);
   const deep = { tone: 'deep', pat: 0.022, cone: 0.02 };
+  const CUSTOM_FPS = { 5: 1, 37: 1, 15: 1, 22: 1, 19: 1 }; // the first packages, rendered at 30 fps before the slow voiced reel moved to 15
 
   /* ---------- shared slide furniture ---------- */
   const slide = (c, i, n, inner, { bgo, sw = i === 1, under = '', top = '', foot = '', g } = {}) =>
@@ -227,7 +228,7 @@
     if (anim) def(`AN-${nn}`, { kind: 'reel', name: `ريل أنيميشن: ${b.title}`, group: 'AN', family: 'ريل أنيميشن', pillar: 'باقة النعمة', formats: ['story'], alt: `ريل متحرّك بلا تعليق صوتي: ${b.opening}`, scenes: (c) => anim(c, b) });
     def(`VW-${nn}`, { kind: 'reel', name: `الوقفات الخمس (بلا صوت): ${b.title}`, group: 'VW', family: 'ريل الوقفات', pillar: 'باقة النعمة', formats: ['story'], alt: `الوقفات الخمس من «${b.title}» في تطبيق الحمد.`, scenes: (c) => waqfaScenes(c, b, null) });
     const vt = VOICE[String(b.n)] && VOICE[String(b.n)].waqfa;
-    if (vt) def(`VV-${nn}`, { kind: 'reel', name: `وقفة صوتية (فيديو): ${b.title}`, group: 'VV', family: 'وقفة صوتية', pillar: 'باقة النعمة', formats: ['story'], audio: vt.audio, poster: vt.steps[1].start + 6, alt: `الوقفات الخمس من «${b.title}» بصوتٍ هادئ، على توقيت التطبيق.`, scenes: (c) => waqfaScenes(c, b, vt) });
+    if (vt) def(`VV-${nn}`, { kind: 'reel', name: `وقفة صوتية (فيديو): ${b.title}`, group: 'VV', family: 'وقفة صوتية', pillar: 'باقة النعمة', formats: ['story'], fps: b.n in CUSTOM_FPS ? 30 : 15, audio: vt.audio, poster: vt.steps[1].start + 6, alt: `الوقفات الخمس من «${b.title}» بصوتٍ هادئ، على توقيت التطبيق.`, scenes: (c) => waqfaScenes(c, b, vt) });
   });
 
   /* ================= reels ================= */
@@ -737,6 +738,368 @@
     ];
   }
 
-  /** The animated reel of each packaged blessing: each one is drawn for its blessing. */
-  function animFor(n) { return { 5: animSalah, 37: animBasar, 15: animMaa, 22: animUmm, 19: animAql }[n]; }
+
+  /* ---------- every other blessing: its own icon, drawn, lost, and drawn again ---------- */
+  /** The blessing's icon at full size, lit over its «gone» ghost, so the two can cross-fade. */
+  function iconStack(c, b, cls = 'ic', size = 520) {
+    const p = c.px(size), name = ICON[b.id];
+    const glowF = c.th === 'layl' ? 'filter:drop-shadow(0 0 18px rgba(228,195,104,0.42));' : '';
+    return `<div class="${cls}" data-sz="${p}" style="position:relative;width:${p}px;height:${p}px;flex:0 0 auto;color:var(--accent)">` +
+      `<div class="ic-gone" style="position:absolute;inset:0;opacity:0">${window.ICONS.medal(name, { state: 'gone' })}</div>` +
+      `<div class="ic-lit" style="position:absolute;inset:0;${glowF}">${window.ICONS.medal(name)}</div>` +
+      `<div class="ic-rays" style="position:absolute;inset:-14%;opacity:0">${raysSvg()}</div></div>`;
+  }
+  function raysSvg() {
+    const r = Array.from({ length: 16 }, (_, k) => { const a = (k / 16) * Math.PI * 2, r0 = 41, r1 = k % 2 ? 47 : 50; return `<path d="M${(50 + r0 * Math.cos(a)).toFixed(1)} ${(50 + r0 * Math.sin(a)).toFixed(1)} L${(50 + r1 * Math.cos(a)).toFixed(1)} ${(50 + r1 * Math.sin(a)).toFixed(1)}"/>`; }).join('');
+    return `<svg viewBox="0 0 100 100" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="0.8" stroke-linecap="round">${r}</svg>`;
+  }
+  /** on: 1 the blessing is there, 0 it is gone; rays: light around it */
+  function setIcon(L, cls, on, rays = 0) {
+    const el = $(L, cls);
+    if (!el) return;
+    el.querySelector('.ic-lit').style.opacity = String(on);
+    el.querySelector('.ic-gone').style.opacity = String(0.85 * (1 - on));
+    el.querySelector('.ic-rays').style.opacity = String(rays);
+    el.querySelector('.ic-rays').style.transform = `rotate(${(rays * 12).toFixed(2)}deg) scale(${(0.94 + 0.06 * rays).toFixed(3)})`;
+  }
+  function animIcon(c, b) {
+    const { o: [o1, o2], v: [v1, v2], d, r: [r1, r2] } = lines(b);
+    const two = (a, bb, sa, sb) => `<div class="tx1">${title(c, a, sa)}</div>` + (bb ? `<div class="tx2">${quote(c, bb, sb, { w: 900 })}</div>` : '');
+    return [
+      { // 1 — the blessing, drawn
+        len: 6.6,
+        html: page(c, { bg: { cone: 0.08, coneAt: '50% 40%', warm: 0.07, warmAt: '50% 44%' }, mid: `<div class="tx1">${title(c, o1, 104)}</div>` + iconStack(c, b) + (o2 ? `<div class="tx2">${quote(c, acc(o2), 60, { w: 900 })}</div>` : ''), gap: 34 }),
+        anim(t, L) { setIcon(L, '.ic', 1, 0.5 * P(t, 1.6, 1.2)); draw($(L, '.ic-lit svg'), P(t, 0.1, 1.8)); reveal($(L, '.tx1 .t-title'), t, 0.3, { stagger: 0.18 }); if (o2) reveal($(L, '.tx2 .t-quote'), t, 2.4, { stagger: 0.16 }); breathe($(L, '.safe'), t, 6.6, 0.02); },
+        sfx: [[0.3, 'breath', -29, { dur: 1.3 }], [1.7, 'glint', -30]],
+      },
+      { // 2 — imagine it gone
+        len: 6.8,
+        html: page(c, { bg: { cone: 0.06, coneAt: '50% 40%' }, under: darkLayer, mid: two(v1, v2, 94, 62).replace('</div><div class="tx2">', `</div>${iconStack(c, b)}<div class="tx2">`), gap: 34 }),
+        anim(t, L) {
+          const g = inOut(P(t, 2.0, 1.8));
+          setIcon(L, '.ic', 1 - g, 0);
+          $(L, '.dark').style.opacity = String(0.6 * P(t, 2.2, 1.6));
+          mv($(L, '.ic'), { s: 1 - 0.06 * g });
+          reveal($(L, '.tx1 .t-title'), t, 0.2, { stagger: 0.17 }); if (v2) reveal($(L, '.tx2 .t-quote'), t, 3.5, { stagger: 0.17 });
+        },
+        sfx: [[2.0, 'whoosh', -29, { dur: 1.6, from: 1600, to: 300 }], [3.6, 'wind', -31, { dur: 3.0 }]],
+      },
+      { // 3 — the absence
+        len: 6.4,
+        html: page(c, { bg: deep, mid: `<div style="opacity:0.45">${iconStack(c, b, 'ic0', 320)}</div><div class="tx">${quote(c, d, 68, { w: 920 })}</div>`, gap: 44 }),
+        anim(t, L) { setIcon(L, '.ic0', 0, 0); reveal($(L, '.tx .t-quote'), t, 0.3, { stagger: 0.2 }); breathe($(L, '.safe'), t, 6.4, 0.02); },
+        sfx: [[0.5, 'heartbeat', -27], [2.8, 'heartbeat', -29]],
+      },
+      { // 4 — then come back
+        len: 8.0,
+        html: page(c, { bg: { cone: 0.12, coneAt: '50% 40%', warm: 0.12, warmAt: '50% 44%' }, under: `<div class="parts" style="position:absolute;inset:0">${lit(c)}</div>`, mid: `<div class="tx1">${title(c, gold(r1), 110)}</div>` + iconStack(c, b) + (r2 ? `<div class="tx2">${quote(c, r2, 58, { w: 920 })}</div>` : ''), gap: 32 }),
+        anim(t, L) {
+          setIcon(L, '.ic', 1, out3(P(t, 0.6, 1.6)));
+          draw($(L, '.ic-lit svg'), P(t, 0.2, 1.6));
+          L.style.filter = `brightness(${(1 + 0.4 * P(t, 0.6, 0.4) * (1 - P(t, 1.0, 1.4))).toFixed(3)})`;
+          pop($(L, '.tx1'), t, 0.1, 0.7, 0.9); if (r2) reveal($(L, '.tx2 .t-quote'), t, 1.9, { stagger: 0.17 }); drift($(L, '.parts svg'), t, { fade: [0.8, 1.2] });
+        },
+        sfx: [[0.3, 'whoosh', -30, { dur: 1.6, from: 400, to: 2200 }], [1.0, 'glint', -28], [1.4, 'birds', -32, { dur: 2.2 }]],
+      },
+      fifth(c, b),
+      endScene(c, { sub: `${b.title}… ودقيقتان معها في «الحمد»` }),
+    ];
+  }
+
+
+  /* ---------- the second five: الرزق، المال، حفظ الله، السمع، النوم ---------- */
+  const glowL = (c) => (c.th === 'layl' ? 'filter:drop-shadow(0 0 14px rgba(228,195,104,0.42));' : '');
+  /** A drawing box that the page's fitting can scale. */
+  const box = (c, cls, w, h, inner, extra = '') => `<div class="${cls}" data-w="${c.px(w)}" data-h="${c.px(h)}" style="position:relative;width:${c.px(w)}px;height:${c.px(h)}px;flex:0 0 auto;${glowL(c)}${extra}">${inner}</div>`;
+  const svgOpen = (W, H) => `<svg viewBox="0 0 ${W} ${H}" width="100%" height="100%" style="overflow:visible;color:var(--accent)" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">`;
+  const twoLines = (c, a, b, sa, sb, mid) => `<div class="tx1">${title(c, a, sa)}</div>${mid}${b ? `<div class="tx2">${quote(c, b, sb, { w: 900 })}</div>` : ''}`;
+
+  /* الرزق: birds, and doors */
+  function birdsArt() {
+    const birds = [0, 1, 2].map((k) => `<g class="bird" data-k="${k}"><path class="wing" stroke-width="4" d="M-34 0 Q-17 -16 0 0 Q17 -16 34 0"/></g>`).join('');
+    return `${svgOpen(800, 300)}<path d="M40 280 L760 280" stroke-width="2" opacity="0.5"/>${birds}</svg>`;
+  }
+  /** p: 0..1 along the flight (right to left, the way the day goes in Arabic); flap from t */
+  function setBirds(L, p, t, alpha = 1) {
+    $$(L, '.bird').forEach((g) => {
+      const k = +g.dataset.k, q = clamp(p - k * 0.06);
+      const x = 760 - 720 * q, y = 150 - 90 * Math.sin(Math.PI * q) + k * 34 - 20;
+      g.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${(0.9 + 0.15 * (k % 2)).toFixed(2)})`);
+      const f = Math.sin(t * 9 + k * 1.7) * 14;
+      g.querySelector('.wing').setAttribute('d', `M-34 ${(-f * 0.3).toFixed(1)} Q-17 ${(-16 + f).toFixed(1)} 0 0 Q17 ${(-16 + f).toFixed(1)} 34 ${(-f * 0.3).toFixed(1)}`);
+      g.style.opacity = String(alpha * (q > 0 && q < 1 ? 1 : 0));
+    });
+  }
+  function setDoorIn(el, open, light) {
+    if (!el) return;
+    el.querySelectorAll('.leaf').forEach((g) => { g.style.transform = `scaleX(${(1 - open * 0.94).toFixed(4)})`; });
+    el.querySelectorAll('.glow').forEach((g) => g.setAttribute('opacity', (light * 0.95).toFixed(3)));
+    el.querySelectorAll('.floor').forEach((g) => g.setAttribute('opacity', (light * 0.8).toFixed(3)));
+  }
+  function animRizq(c, b) {
+    const { o: [o1, o2], v: [v1, v2], d, r: [r1, r2] } = lines(b);
+    const doors = (w = 250) => `<div class="drs" style="display:flex;gap:${c.px(26)}px;flex:0 0 auto">${[1, 2, 3].map((k) => box(c, `dr dr${k}`, w, w * 820 / 600, doorArt(c))).join('')}</div>`;
+    const birds = (w = 860) => box(c, 'bw', w, w * 300 / 800, birdsArt());
+    return [
+      { // 1 — your provision is written
+        len: 6.6,
+        html: page(c, { bg: { cone: 0.08, coneAt: '50% 40%', warm: 0.06, warmAt: '50% 46%' }, mid: twoLines(c, o1, acc(o2), 104, 64, birds()), gap: 40 }),
+        anim(t, L) { setBirds(L, 0.05 + 0.5 * inOut(P(t, 0.2, 5.6)), t); reveal($(L, '.tx1 .t-title'), t, 0.3, { stagger: 0.18 }); reveal($(L, '.tx2 .t-quote'), t, 2.6, { stagger: 0.17 }); breathe($(L, '.safe'), t, 6.6, 0.02); },
+        sfx: [[0.4, 'birds', -30, { dur: 2.4 }], [3.0, 'breath', -30, { dur: 1.2 }]],
+      },
+      { // 2 — every door shut
+        len: 7.0,
+        html: page(c, { bg: { cone: 0.06, coneAt: '50% 44%' }, under: darkLayer, mid: twoLines(c, v1, v2, 92, 62, doors()), gap: 40 }),
+        anim(t, L) {
+          [1, 2, 3].forEach((k) => { const s = inOut(P(t, 1.6 + k * 0.75, 0.7)); setDoorIn($(L, `.dr${k}`), 1 - s, 1 - s); });
+          draw($(L, '.drs'), P(t, 0, 0.9), 0.1);
+          $(L, '.dark').style.opacity = String(0.55 * P(t, 2.4, 2.4));
+          reveal($(L, '.tx1 .t-title'), t, 0.2, { stagger: 0.17 }); reveal($(L, '.tx2 .t-quote'), t, 4.4, { stagger: 0.16 });
+        },
+        sfx: [[2.3, 'step', -22, { seed: 21 }], [3.05, 'step', -22, { seed: 22 }], [3.8, 'step', -21, { seed: 23 }], [4.2, 'wind', -31, { dur: 2.6 }]],
+      },
+      { // 3 — tomorrow's worry
+        len: 6.4,
+        html: page(c, { bg: deep, mid: `<div style="opacity:0.35">${doors(170)}</div><div class="tx">${quote(c, d, 68, { w: 920 })}</div>`, gap: 46 }),
+        anim(t, L) { [1, 2, 3].forEach((k) => setDoorIn($(L, `.dr${k}`), 0, 0)); reveal($(L, '.tx .t-quote'), t, 0.3, { stagger: 0.2 }); breathe($(L, '.safe'), t, 6.4, 0.02); },
+        sfx: [[0.5, 'heartbeat', -27], [2.8, 'heartbeat', -29]],
+      },
+      { // 4 — then come back: the doors open, the birds come home
+        len: 8.4,
+        html: page(c, { bg: { cone: 0.12, coneAt: '50% 40%', warm: 0.12, warmAt: '50% 44%' }, under: `<div class="parts" style="position:absolute;inset:0">${lit(c)}</div>`, mid: `<div class="tx1">${title(c, gold(r1), 110)}</div>` + birds(760) + doors(200) + `<div class="tx2">${quote(c, r2, 54, { w: 920 })}</div>`, gap: 26 }),
+        anim(t, L) {
+          const o = inOut(P(t, 0.3, 1.6));
+          [1, 2, 3].forEach((k) => setDoorIn($(L, `.dr${k}`), o, o));
+          setBirds(L, 0.5 + 0.5 * inOut(P(t, 0.6, 6.6)), t);
+          pop($(L, '.tx1'), t, 0.1, 0.7, 0.9); reveal($(L, '.tx2 .t-quote'), t, 1.9, { stagger: 0.16 }); drift($(L, '.parts svg'), t, { fade: [0.8, 1.2] });
+        },
+        sfx: [[0.3, 'whoosh', -30, { dur: 1.6, from: 400, to: 2200 }], [0.9, 'birds', -29, { dur: 2.6 }], [1.3, 'glint', -29]],
+      },
+      fifth(c, b),
+      endScene(c, { sub: `${b.title}… ودقيقتان معها في «الحمد»` }),
+    ];
+  }
+
+  /* المال: a stack of coins */
+  const COINS = 7;
+  function coinsArt() {
+    const coin = (k) => { const y = 380 - k * 34; return `<g class="coin" data-k="${k}"><path d="M200 ${y} L200 ${y + 16} A100 26 0 0 0 400 ${y + 16} L400 ${y}" stroke-width="3.2" fill="var(--bg)"/><ellipse cx="300" cy="${y}" rx="100" ry="26" stroke-width="3.2" fill="var(--bg)"/><ellipse cx="300" cy="${y}" rx="62" ry="15" stroke-width="1.6" opacity="0.6"/></g>`; };
+    return `${svgOpen(600, 460)}<ellipse class="base" cx="300" cy="400" rx="118" ry="30" stroke-width="2" stroke-dasharray="6 10" opacity="0.5"/>${Array.from({ length: COINS }, (_, k) => coin(k)).join('')}` +
+      `<g class="gift" opacity="0"><ellipse cx="300" cy="0" rx="100" ry="26" stroke-width="3.2" fill="currentColor" fill-opacity="0.25"/><ellipse cx="300" cy="0" rx="62" ry="15" stroke-width="1.6" opacity="0.6"/></g></svg>`;
+  }
+  /** n coins showing (fractional: the top one fades in or out) */
+  function setCoins(L, n) {
+    $$(L, '.coin').forEach((g) => { const k = +g.dataset.k; const o = clamp(n - k); g.style.opacity = String(o); g.style.transform = `translateY(${((1 - o) * -40).toFixed(1)}px)`; });
+  }
+  function animMal(c, b) {
+    const { o: [o1, o2], v: [v1, v2], d, r: [r1, r2] } = lines(b);
+    const coins = (w = 700) => box(c, 'cn', w, w * 460 / 600, coinsArt());
+    return [
+      { // 1 — a trust, and a test
+        len: 7.0,
+        html: page(c, { bg: { cone: 0.08, coneAt: '50% 40%', warm: 0.06, warmAt: '50% 46%' }, mid: twoLines(c, o1, acc(o2), 86, 64, coins()), gap: 36 }),
+        anim(t, L) { setCoins(L, COINS * P(t, 0.4, 2.4)); reveal($(L, '.tx1 .t-title'), t, 0.2, { stagger: 0.14 }); reveal($(L, '.tx2 .t-quote'), t, 3.4, { stagger: 0.18 }); breathe($(L, '.safe'), t, 7.0, 0.02); },
+        sfx: Array.from({ length: COINS }, (_, k) => [0.4 + (k + 1) * (2.4 / COINS) - 0.15, 'click', -27, { seed: 50 + k }]),
+      },
+      { // 2 — gone in one night, and the debts knock
+        len: 7.2,
+        html: page(c, { bg: { cone: 0.06, coneAt: '50% 44%' }, under: darkLayer, mid: twoLines(c, v1, v2, 92, 62, coins()), gap: 36 }),
+        anim(t, L) {
+          setCoins(L, COINS * (1 - inOut(P(t, 1.8, 2.0))));
+          $(L, '.dark').style.opacity = String(0.55 * P(t, 2.0, 2.0));
+          reveal($(L, '.tx1 .t-title'), t, 0.2, { stagger: 0.17 }); reveal($(L, '.tx2 .t-quote'), t, 3.8, { stagger: 0.17 });
+        },
+        sfx: [[1.8, 'whoosh', -29, { dur: 1.8, from: 1800, to: 300 }], [5.2, 'step', -23, { seed: 31 }], [5.55, 'step', -23, { seed: 32 }], [5.9, 'step', -23, { seed: 33 }]],
+      },
+      { // 3 — need, and shame
+        len: 6.4,
+        html: page(c, { bg: deep, mid: `<div style="opacity:0.5">${coins(480)}</div><div class="tx">${quote(c, d, 66, { w: 920 })}</div>`, gap: 44 }),
+        anim(t, L) { setCoins(L, 0); reveal($(L, '.tx .t-quote'), t, 0.3, { stagger: 0.2 }); breathe($(L, '.safe'), t, 6.4, 0.02); },
+        sfx: [[0.5, 'heartbeat', -27], [2.8, 'heartbeat', -29]],
+      },
+      { // 4 — then come back: enough, and something to give
+        len: 8.6,
+        html: page(c, { bg: { cone: 0.12, coneAt: '50% 40%', warm: 0.12, warmAt: '50% 44%' }, under: `<div class="parts" style="position:absolute;inset:0">${lit(c)}</div>`, mid: twoLines(c, gold(r1), r2, 110, 56, coins()), gap: 32 }),
+        anim(t, L) {
+          setCoins(L, COINS * inOut(P(t, 0.3, 1.6)));
+          const gp = P(t, 3.0, 1.6), g = $(L, '.gift'); // the top coin given away… and replaced
+          if (g) { g.setAttribute('opacity', String(gp > 0 && gp < 1 ? Math.sin(Math.PI * gp) : 0)); g.setAttribute('transform', `translate(${(gp * 230).toFixed(1)} ${(380 - (COINS - 1) * 34 - gp * 150).toFixed(1)})`); }
+          if (t > 3.0) { const top = $(L, `.coin[data-k="${COINS - 1}"]`); if (top) { const back = P(t, 4.6, 0.6); top.style.opacity = String(back); top.style.transform = `translateY(${((1 - back) * -40).toFixed(1)}px)`; } }
+          pop($(L, '.tx1'), t, 0.1, 0.7, 0.9); reveal($(L, '.tx2 .t-quote'), t, 1.9, { stagger: 0.16 }); drift($(L, '.parts svg'), t, { fade: [0.8, 1.2] });
+        },
+        sfx: [[0.3, 'whoosh', -30, { dur: 1.6, from: 400, to: 2200 }], [3.1, 'glint', -27], [4.7, 'click', -25, { seed: 60 }], [4.8, 'glint', -29, { seed: 61 }]],
+      },
+      fifth(c, b),
+      endScene(c, { sub: `${b.title}… ودقيقتان معها في «الحمد»` }),
+    ];
+  }
+
+  /* حفظ الله: a point on its way, rings around it */
+  const HAZ = 7;
+  function guardArt() {
+    const haz = Array.from({ length: HAZ }, (_, k) => `<path class="hz" data-k="${k}" d="M-9 -9 L9 9 M9 -9 L-9 9" stroke-width="3" opacity="0"/>`).join('');
+    return `${svgOpen(700, 520)}<path class="road" d="M40 470 C220 430 300 330 360 260 C420 190 520 120 660 60" stroke-width="2" stroke-dasharray="4 14" opacity="0.6"/>` +
+      `<g class="me"><circle class="ring r1" r="62" stroke-width="2.6"/><circle class="ring r2" r="92" stroke-width="1.8" opacity="0.6"/><circle r="14" fill="currentColor" stroke="none"/></g>${haz}</svg>`;
+  }
+  const roadAt = (p) => { // a point on the road (cubic pieces approximated by two quadratic-ish blends)
+    const P0 = [40, 470], P1 = [220, 430], P2 = [300, 330], P3 = [360, 260], P4 = [420, 190], P5 = [520, 120], P6 = [660, 60];
+    const cub = (a, b, cc, dd, u) => [0, 1].map((i) => (1 - u) ** 3 * a[i] + 3 * (1 - u) ** 2 * u * b[i] + 3 * (1 - u) * u * u * cc[i] + u ** 3 * dd[i]);
+    return p < 0.5 ? cub(P0, P1, P2, P3, p * 2) : cub(P3, P4, P5, P6, (p - 0.5) * 2);
+  };
+  /** walk 0..1 along the road; guard 0..1 the rings; t for the hazards' rhythm */
+  function setGuard(L, walk, guard, t) {
+    const [x, y] = roadAt(walk);
+    const me = $(L, '.me'); if (!me) return;
+    me.setAttribute('transform', `translate(${x.toFixed(1)} ${y.toFixed(1)})`);
+    $$(L, '.ring').forEach((r, k) => { r.style.opacity = String(guard * (k ? 0.6 : 1)); r.setAttribute('stroke-dasharray', guard < 0.98 ? `${(14 * guard + 2).toFixed(1)} ${(14 * (1 - guard) + 4).toFixed(1)}` : 'none'); });
+    $$(L, '.hz').forEach((h) => {
+      const k = +h.dataset.k, ph = ((t * 0.55 + k / HAZ) % 1), a = k * 2.399 + 0.4;
+      const stop = 70, far = 300; // with the rings up, nothing comes nearer than the ring
+      const r = guard > 0.5 ? (ph < 0.5 ? far - (far - stop - 70) * (ph / 0.5) : stop + 70 + (far - stop - 70) * ((ph - 0.5) / 0.5)) : far - (far - 120) * ph;
+      h.setAttribute('transform', `translate(${(x + Math.cos(a) * r).toFixed(1)} ${(y + Math.sin(a) * r).toFixed(1)}) rotate(${(t * 40 + k * 30).toFixed(0)})`);
+      h.setAttribute('opacity', (0.75 * Math.sin(Math.PI * ph)).toFixed(3));
+    });
+  }
+  function animHifz(c, b) {
+    const { o: [o1, o2], v: [v1, v2], d, r: [r1, r2] } = lines(b);
+    const guard = (w = 700) => box(c, 'gd', w, w * 520 / 700, guardArt());
+    return [
+      { // 1 — how many dangers passed you by
+        len: 6.8,
+        html: page(c, { bg: { cone: 0.08, coneAt: '50% 40%', warm: 0.05, warmAt: '50% 46%' }, mid: twoLines(c, o1, acc(o2), 100, 64, guard()), gap: 36 }),
+        anim(t, L) { setGuard(L, 0.08 + 0.28 * P(t, 0, 6.8), out3(P(t, 0.2, 1.0)), t); reveal($(L, '.tx1 .t-title'), t, 0.3, { stagger: 0.18 }); reveal($(L, '.tx2 .t-quote'), t, 2.6, { stagger: 0.17 }); },
+        sfx: [[1.4, 'glint', -31], [3.2, 'glint', -32, { seed: 44 }], [5.0, 'glint', -32, { seed: 45 }]],
+      },
+      { // 2 — the keeping lifted
+        len: 7.0,
+        html: page(c, { bg: { cone: 0.06, coneAt: '50% 44%' }, under: darkLayer, mid: twoLines(c, v1, v2, 92, 60, guard()), gap: 36 }),
+        anim(t, L) {
+          setGuard(L, 0.36 + 0.2 * P(t, 0, 7.0), 1 - inOut(P(t, 1.8, 1.6)), t);
+          $(L, '.dark').style.opacity = String(0.5 * P(t, 2.0, 2.0));
+          reveal($(L, '.tx1 .t-title'), t, 0.2, { stagger: 0.17 }); reveal($(L, '.tx2 .t-quote'), t, 3.6, { stagger: 0.15 });
+        },
+        sfx: [[1.8, 'whoosh', -29, { dur: 1.6, from: 1600, to: 300 }], [3.4, 'wind', -31, { dur: 3.0 }], [3.6, 'heartbeat', -29]],
+      },
+      { // 3 — how many near misses
+        len: 6.6,
+        html: page(c, { bg: deep, mid: `<div style="opacity:0.45">${guard(460)}</div><div class="tx">${quote(c, d, 64, { w: 920 })}</div>`, gap: 40 }),
+        anim(t, L) { setGuard(L, 0.56, 0, t * 0.6); reveal($(L, '.tx .t-quote'), t, 0.3, { stagger: 0.2 }); breathe($(L, '.safe'), t, 6.6, 0.02); },
+        sfx: [[0.5, 'heartbeat', -27], [2.9, 'heartbeat', -29]],
+      },
+      { // 4 — then come back: kept, before and behind
+        len: 8.0,
+        html: page(c, { bg: { cone: 0.12, coneAt: '50% 40%', warm: 0.12, warmAt: '50% 44%' }, under: `<div class="parts" style="position:absolute;inset:0">${lit(c)}</div>`, mid: twoLines(c, gold(r1), r2, 110, 58, guard()), gap: 32 }),
+        anim(t, L) {
+          setGuard(L, 0.56 + 0.4 * P(t, 0, 8.0), inOut(P(t, 0.3, 1.4)), t);
+          pop($(L, '.tx1'), t, 0.1, 0.7, 0.9); reveal($(L, '.tx2 .t-quote'), t, 1.9, { stagger: 0.17 }); drift($(L, '.parts svg'), t, { fade: [0.8, 1.2] });
+        },
+        sfx: [[0.3, 'whoosh', -30, { dur: 1.6, from: 400, to: 2200 }], [1.0, 'glint', -28], [1.4, 'birds', -32, { dur: 2.2 }]],
+      },
+      fifth(c, b),
+      endScene(c, { sub: `${b.title}… ودقيقتان معها في «الحمد»` }),
+    ];
+  }
+
+  /* السمع: waves, and a line that carries sound */
+  function soundArt() {
+    const rings = [0, 1, 2, 3].map((k) => `<circle class="wv" data-k="${k}" cx="380" cy="190" r="80" stroke-width="2.4" opacity="0"/>`).join('');
+    return `${svgOpen(760, 500)}${rings}<path class="line" d="M40 430 L720 430" stroke-width="3"/></svg>`;
+  }
+  /** amp: 0 silence … 1 the world's sound */
+  function setSound(L, amp, t) {
+    $$(L, '.wv').forEach((w) => { const k = +w.dataset.k, ph = (t * 0.45 + k / 4) % 1; w.setAttribute('r', (80 + 230 * ph).toFixed(1)); w.setAttribute('opacity', (amp * 0.7 * (1 - ph)).toFixed(3)); });
+    const ln = $(L, '.line'); if (!ln) return;
+    let dd = 'M40 430';
+    for (let x = 40; x <= 720; x += 8) {
+      const u = (x - 40) / 680, env = Math.sin(Math.PI * u);
+      const yv = 430 - amp * env * (34 * Math.sin(x * 0.045 + t * 7) + 18 * Math.sin(x * 0.11 - t * 11) + 8 * Math.sin(x * 0.23 + t * 17));
+      dd += ` L${x} ${yv.toFixed(1)}`;
+    }
+    ln.setAttribute('d', dd);
+  }
+  function animSam(c, b) {
+    const { o: [o1, o2], v: [v1, v2], d, r: [r1, r2] } = lines(b);
+    const ear = (w = 680) => box(c, 'sw', w, w * 500 / 760, soundArt() + `<div style="position:absolute;left:50%;top:38%;width:24%;aspect-ratio:1;transform:translate(-50%,-50%);color:var(--accent)">${window.ICONS.medal(ICON[b.id])}</div>`);
+    return [
+      { // 1 — the first sense
+        len: 6.8,
+        html: page(c, { bg: { cone: 0.08, coneAt: '50% 40%', warm: 0.06, warmAt: '50% 46%' }, mid: twoLines(c, o1, acc(o2), 100, 62, ear()), gap: 36 }),
+        anim(t, L) { setSound(L, out3(P(t, 0.3, 1.4)), t); reveal($(L, '.tx1 .t-title'), t, 0.3, { stagger: 0.18 }); reveal($(L, '.tx2 .t-quote'), t, 2.6, { stagger: 0.17 }); },
+        sfx: [[0.3, 'birds', -30, { dur: 2.6 }], [3.2, 'drop', -28]],
+      },
+      { // 2 — every sound goes out
+        len: 7.0,
+        html: page(c, { bg: { cone: 0.06, coneAt: '50% 44%' }, under: darkLayer, mid: twoLines(c, v1, v2, 92, 60, ear()), gap: 36 }),
+        anim(t, L) { setSound(L, 1 - inOut(P(t, 1.8, 1.4)), t); $(L, '.dark').style.opacity = String(0.55 * P(t, 2.0, 2.0)); reveal($(L, '.tx1 .t-title'), t, 0.2, { stagger: 0.17 }); reveal($(L, '.tx2 .t-quote'), t, 3.6, { stagger: 0.17 }); },
+        sfx: [[0.2, 'birds', -31, { dur: 1.6 }]], // and then nothing at all
+      },
+      { // 3 — no recitation, no laughter, no call to prayer
+        len: 6.8,
+        html: page(c, { bg: deep, mid: `<div style="opacity:0.45">${ear(460)}</div><div class="tx">${quote(c, d, 62, { w: 920 })}</div>`, gap: 40 }),
+        anim(t, L) { setSound(L, 0, t); reveal($(L, '.tx .t-quote'), t, 0.3, { stagger: 0.2 }); breathe($(L, '.safe'), t, 6.8, 0.02); },
+        sfx: [],
+      },
+      { // 4 — then come back: listen
+        len: 8.0,
+        html: page(c, { bg: { cone: 0.12, coneAt: '50% 40%', warm: 0.12, warmAt: '50% 44%' }, under: `<div class="parts" style="position:absolute;inset:0">${lit(c)}</div>`, mid: twoLines(c, gold(r1), r2, 110, 58, ear()), gap: 32 }),
+        anim(t, L) { setSound(L, inOut(P(t, 0.4, 1.4)), t); pop($(L, '.tx1'), t, 0.1, 0.7, 0.9); reveal($(L, '.tx2 .t-quote'), t, 1.9, { stagger: 0.17 }); drift($(L, '.parts svg'), t, { fade: [0.8, 1.2] }); },
+        sfx: [[0.5, 'breath', -27, { dur: 1.2 }], [0.8, 'birds', -28, { dur: 3.0 }], [1.6, 'drop', -27], [2.6, 'glint', -30]],
+      },
+      fifth(c, b),
+      endScene(c, { sub: `${b.title}… ودقيقتان معها في «الحمد»` }),
+    ];
+  }
+
+  /* النوم: the moon, three sleepless nights, and the dawn */
+  let nightN = 0;
+  function nightArt(c) {
+    const R = A0.rng(14), uid = `nt${++nightN}`;
+    const stars = Array.from({ length: 16 }, (_, k) => `<circle class="st" data-k="${k}" cx="${(40 + R() * 680).toFixed(0)}" cy="${(20 + R() * 260).toFixed(0)}" r="${(1.6 + R() * 2.4).toFixed(1)}" fill="currentColor" stroke="none"/>`).join('');
+    const moons = [0, 1, 2].map((k) => `<path class="mn" data-k="${k}" transform="translate(${250 + k * 130} 340)" d="M14 -24 A26 26 0 1 0 14 24 A20 20 0 1 1 14 -24 Z" stroke-width="2.6" fill="currentColor" fill-opacity="0.15" opacity="0"/>`).join('');
+    const sunC = c.th === 'nahar' ? '#D4704F' : '#F0D48A';
+    return `${svgOpen(760, 460)}<defs><clipPath id="${uid}"><rect x="0" y="-200" width="760" height="632"/></clipPath></defs>${stars}<path class="moon" d="M600 60 A62 62 0 1 0 600 184 A48 48 0 1 1 600 60 Z" stroke-width="3.2" fill="currentColor" fill-opacity="0.18"/>` + moons +
+      `<g clip-path="url(#${uid})"><g class="sun" opacity="0"><circle cx="380" cy="430" r="58" fill="${sunC}" fill-opacity="0.35" stroke="currentColor" stroke-width="3"/>${Array.from({ length: 9 }, (_, k) => { const a = Math.PI + (k / 8) * Math.PI; return `<path d="M${(380 + 76 * Math.cos(a)).toFixed(1)} ${(430 + 76 * Math.sin(a)).toFixed(1)} L${(380 + 104 * Math.cos(a)).toFixed(1)} ${(430 + 104 * Math.sin(a)).toFixed(1)}" stroke-width="3"/>`; }).join('')}</g></g>` +
+      `<path d="M30 432 L730 432" stroke-width="2.4" opacity="0.7"/></svg>`;
+  }
+  function setNight(L, t, { moon = 1, nights = 0, sun = 0 } = {}) {
+    $$(L, '.st').forEach((s) => { const k = +s.dataset.k; s.style.opacity = String((1 - sun) * (0.45 + 0.55 * Math.abs(Math.sin(t * 1.3 + k)))); });
+    const m = $(L, '.moon'); if (m) { m.style.opacity = String(moon); m.style.transform = `translateY(${(sun * 90).toFixed(1)}px)`; }
+    $$(L, '.mn').forEach((n) => { const k = +n.dataset.k; n.setAttribute('opacity', String(clamp(nights - k))); });
+    const s = $(L, '.sun'); if (s) { s.setAttribute('opacity', String(sun)); s.setAttribute('transform', `translate(0 ${((1 - sun) * 90).toFixed(1)})`); }
+  }
+  function animNawm(c, b) {
+    const { o: [o1, o2], v: [v1, v2], d, r: [r1, r2] } = lines(b);
+    const night = (w = 760) => box(c, 'nt', w, w * 460 / 760, nightArt(c));
+    return [
+      { // 1 — a small death every night
+        len: 6.8,
+        html: page(c, { bg: { tone: 'ground', cone: 0.06, coneAt: '50% 34%' }, mid: twoLines(c, o1, acc(o2), 100, 62, night()), gap: 36 }),
+        anim(t, L) { setNight(L, t, { moon: out3(P(t, 0.2, 1.2)) }); reveal($(L, '.tx1 .t-title'), t, 0.3, { stagger: 0.18 }); reveal($(L, '.tx2 .t-quote'), t, 2.6, { stagger: 0.17 }); breathe($(L, '.safe'), t, 6.8, 0.02); },
+        sfx: [[0.3, 'breath', -29, { dur: 1.6 }], [2.8, 'glint', -32]],
+      },
+      { // 2 — the first night, the second, the third
+        len: 7.4,
+        html: page(c, { bg: { tone: 'deep', cone: 0.04, coneAt: '50% 44%' }, mid: twoLines(c, v1, v2, 92, 62, night()), gap: 36 }),
+        anim(t, L) { setNight(L, t, { moon: 1, nights: 3 * P(t, 2.0, 2.6) }); reveal($(L, '.tx1 .t-title'), t, 0.2, { stagger: 0.17 }); reveal($(L, '.tx2 .t-quote'), t, 2.0, { stagger: 0.3 }); },
+        sfx: [[2.0, 'tick', -24], [2.9, 'tick', -24], [3.8, 'tick', -23], [4.6, 'heartbeat', -29]],
+      },
+      { // 3 — all you want is to sleep
+        len: 6.4,
+        html: page(c, { bg: deep, mid: `<div style="opacity:0.45">${night(460)}</div><div class="tx">${quote(c, d, 64, { w: 920 })}</div>`, gap: 40 }),
+        anim(t, L) { setNight(L, t * 3, { moon: 1, nights: 3 }); reveal($(L, '.tx .t-quote'), t, 0.3, { stagger: 0.2 }); breathe($(L, '.safe'), t, 6.4, 0.02); },
+        sfx: [[0.5, 'heartbeat', -27], [2.8, 'heartbeat', -29]],
+      },
+      { // 4 — then come back: tonight, sleep comes; and with the dawn, He returns you
+        len: 8.2,
+        html: page(c, { bg: { cone: 0.12, coneAt: '50% 44%', warm: 0.14, warmAt: '50% 50%' }, under: `<div class="parts" style="position:absolute;inset:0">${lit(c)}</div>`, mid: twoLines(c, gold(r1), r2, 110, 56, night()), gap: 32 }),
+        anim(t, L) { setNight(L, t, { moon: 1 - P(t, 2.4, 2.0), sun: inOut(P(t, 2.6, 2.6)) }); pop($(L, '.tx1'), t, 0.1, 0.7, 0.9); reveal($(L, '.tx2 .t-quote'), t, 1.9, { stagger: 0.17 }); drift($(L, '.parts svg'), t, { fade: [1.8, 1.4] }); },
+        sfx: [[0.4, 'breath', -27, { dur: 1.6 }], [3.0, 'birds', -29, { dur: 3.0 }], [3.6, 'glint', -29]],
+      },
+      fifth(c, b),
+      endScene(c, { sub: `${b.title}… ودقيقتان معها في «الحمد»` }),
+    ];
+  }
+
+  /** The animated reel of each packaged blessing: ten are drawn for their blessing; every other one animates its icon. */
+  function animFor(n) { return { 5: animSalah, 37: animBasar, 15: animMaa, 22: animUmm, 19: animAql, 28: animRizq, 29: animMal, 34: animHifz, 36: animSam, 14: animNawm }[n] || animIcon; }
 })();

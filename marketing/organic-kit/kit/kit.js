@@ -111,7 +111,8 @@
   const body = (c, html, size = 44, o = {}) => T(c, 't-body', html, size, o);
   const kick = (c, html, size = 32, o = {}) => T(c, 't-kick', html, size, o);
   const small = (c, html, size = 28, o = {}) => T(c, 't-small', html, size, o);
-  const verseT = (c, html, size = 76, o = {}) => T(c, 't-verse', html, size, o);
+  // a pause mark (ۖ ۗ ۚ …) stays on the line of the word before it, never at the start of the next one
+  const verseT = (c, html, size = 76, o = {}) => T(c, 't-verse', String(html).replace(/ ([\u06D6-\u06DC])/g, '\u00A0$1'), size, o);
   const acc = (s) => `<span class="acc">${s}</span>`;
   const mut = (s) => `<span class="mut">${s}</span>`;
   const ltr = (s) => `<span class="ltr">${s}</span>`;

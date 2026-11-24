@@ -481,7 +481,7 @@
     name: 'خلفية: أربعون نعمة', group: 'WP', family: 'خلفيات', formats: F_WP, alt: 'خلفية: رموز النِّعَم الأربعين',
     build(c) {
       const cols = c.W > c.H ? 10 : 5, size = (c.W - c.px(160)) / cols / c.k * (c.W > c.H ? 0.82 : 0.66);
-      const grid = `<div style="display:grid;grid-template-columns:repeat(${cols},1fr);gap:${c.px(26)}px ${c.px(18)}px;justify-items:center;opacity:0.85">${B.map((b) => medal(c, ICON[b.id], { size, sw: 1.4 })).join('')}</div>`;
+      const grid = `<div style="display:grid;grid-template-columns:repeat(${cols},1fr);gap:${c.px(26)}px ${c.px(18)}px;justify-items:center;opacity:0.85">${B.filter((b) => b.n <= 40).map((b) => medal(c, ICON[b.id], { size, sw: 1.4 })).join('')}</div>`;
       return page(c, { bg: { cone: 0.05, coneAt: '50% 50%' }, mid: grid, foot: wm(c, 56), gap: 30 });
     },
   });

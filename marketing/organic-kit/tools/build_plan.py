@@ -305,6 +305,7 @@ def caption_for(cid: str, b_today: dict, blessings: dict, verses: dict, live: bo
 
 def main() -> None:
     content, stills, reels = load_kit()
+    content["blessings"] = [b for b in content["blessings"] if b["n"] <= 40]  # the plan was made for the first 40
     blessings = {b["n"]: b for b in content["blessings"]}
     verses = {v["id"]: v for v in content["verses"]}
     meta_by_id = {}

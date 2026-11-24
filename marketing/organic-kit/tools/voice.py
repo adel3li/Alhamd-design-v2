@@ -145,7 +145,10 @@ def quran_words(fragment: str, refs: list, reciter: int = 7) -> np.ndarray | Non
     """Words quoted from a verse, cut from the reciter's recording of that verse by quran.com's word timings.
     The fragment must be consecutive whole words of one of the verses in refs (letters compared without
     diacritics or alifs, so the app's plain spelling matches the Uthmani text)."""
-    loose = lambda t: skeleton(t.replace("ء", "ا")).replace("ا", "")  # noqa: E731
+    # plain spelling vs the mushaf's: «الحياة» / «ٱلْحَيَوٰةِ» («وٰة» at a word's end reads «اة»)
+    # the two spellings differ in alif, ya and hamza («يتوفاكم» / «يَتَوَفَّىٰكُم», «في» / «فِى», «شيئا» / «شَيْـًٔا»), so those are set
+    # aside; a doubled letter is one letter with a shadda («الليل» / «ٱلَّيْل»). Whole runs of words are compared, so this stays exact enough.
+    loose = lambda t: re.sub(r"(.)\1+", r"\1", re.sub("[ايءئؤ]", "", skeleton(re.sub("و[\u064B-\u0652]*\u0670(?=[\u064B-\u0652]*ة)", "", t))))  # noqa: E731
     want = loose(fragment)
     for s, a in refs:
         words = [w for w in cached_json(f"words_{s:03d}{a:03d}.json", f"https://api.quran.com/api/v4/verses/by_key/{s}:{a}?words=true&word_fields=text_uthmani")["verse"]["words"] if w["char_type_name"] == "word"]
@@ -278,6 +281,7 @@ def fill(text: str, b: dict) -> str:
     # a narration («جاء رجلٌ…», «سُئل النبي…») is not the Prophet's own words, so it is not introduced with «قال»
     narrated = re.match(r"^(جاء |سُئل |سئل |عن |كان |قال رجل)", h.get("text", ""))
     hadith_intro = "وفي الحديث الشريف:" if narrated else "وفي الحديث الشريف، قال رسول الله صلى الله عليه وسلم:"
+    hadith_intro = b.get("hadithIntro") or hadith_intro  # a blessing can set its own (a hadith qudsi, a supplication)
     return (text.replace("{title}", b["title"]).replace("{surah}", b["verse"]["surahName"])
             .replace("{hadithSource}", HADITH_SOURCE.get(h.get("source", ""), f"{h.get('source', '')}."))
             .replace("{quoteIntro}", intro).replace("{hadithIntro}", hadith_intro))
@@ -361,7 +365,8 @@ def main() -> None:
     b = {**b, "steps": full["steps"], "duaa": full["duaa"], "prompt": full["prompt"]}
     pk = ROOT / "data" / "scripts" / f"package_{n:02d}.json"
     if pk.exists():
-        b["quoted"] = json.loads(pk.read_text(encoding="utf-8")).get("quotedVerses", [])
+        pkd = json.loads(pk.read_text(encoding="utf-8"))
+        b["quoted"], b["hadithIntro"] = pkd.get("quotedVerses", []), pkd.get("hadithIntro", "")
     out = ROOT / "out" / "audio" / f"{n:02d}"
     out.mkdir(parents=True, exist_ok=True)
     timing = build_waqfa(b, out)

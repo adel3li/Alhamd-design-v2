@@ -17,7 +17,7 @@ const root = path.resolve(__dirname, '..');
 const arg = (name, def) => { const i = process.argv.indexOf(`--${name}`); return i > -1 ? process.argv[i + 1] : def; };
 const OUT = path.resolve(root, arg('out', 'out/reels'));
 const WORKERS = Number(arg('workers', 6));
-const FPS = 30;
+const SCALE = Number(arg('scale', 1)); // 0.6667 renders 720×1280 frames (quicker; for review)
 const ids = arg('ids', null), onlyF = arg('formats', null), onlyT = arg('themes', null), at = arg('at', null);
 const skipDone = process.argv.includes('--skip-done');
 const url = `file://${path.join(root, 'kit', 'kit.html')}`;
@@ -25,7 +25,7 @@ const url = `file://${path.join(root, 'kit', 'kit.html')}`;
 (async () => {
   const browser = await chromium.launch();
   const open = async () => {
-    const page = await browser.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 });
+    const page = await browser.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: SCALE });
     page.on('pageerror', (e) => console.error('page error:', e.message));
     await page.goto(url);
     await page.waitForFunction(() => window.KIT && window.KIT.setupReel && Object.keys(window.KIT.REG).length > 0);
@@ -68,6 +68,7 @@ const url = `file://${path.join(root, 'kit', 'kit.html')}`;
     const frames = path.join(OUT, '_frames', key);
     fs.rmSync(frames, { recursive: true, force: true });
     fs.mkdirSync(frames, { recursive: true });
+    const FPS = info.fps || 30;
     const n = Math.ceil(info.total * FPS);
     const t1 = Date.now();
     await Promise.all(pages.map(async (p, w) => {
