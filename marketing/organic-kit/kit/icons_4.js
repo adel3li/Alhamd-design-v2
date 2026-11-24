@@ -189,6 +189,40 @@
       P('M4.5 41 C15 37 33 37 43.5 41'), P('M8 34 C17 31 31 31 40 34'), P('M16 32.2 L16 26 M16 28.8 C13.4 28.8 12 26.8 12.2 24.6 C14.6 24.6 16 26.4 16 28.8 Z'), P('M32 32.2 L32 26 M32 28.8 C34.6 28.8 36 26.8 35.8 24.6 C33.4 24.6 32 26.4 32 28.8 Z'),
       P('M24 31 L24 22.6 M24 25.6 C21.2 25.6 19.6 23.4 19.8 21 C22.4 21 24 23 24 25.6 Z M24 25.6 C26.8 25.6 28.4 23.4 28.2 21 C25.6 21 24 23 24 25.6 Z'), C(24, 10, 3.6), P('M24 3 L24 4.4 M17 10 L18.4 10 M29.6 10 L31 10 M19 5 L20 6 M29 5 L28 6'),
     ],
+    sayd: [ // a fish rising to the line
+      P('M8 27 C14 19 26 19 32 27 C26 35 14 35 8 27 Z'), P('M32 27 L40 21 L40 33 Z'), C(14, 26, 1), P('M30 4 L30 12.5 C30 16 25.6 16 25.6 12.6'), P('M5 42 C9 40 13 44 17 42 C21 40 27 44 31 42 C35 40 39 44 43 42'), spark(40, 9, 1.8),
+    ],
+    rai: [ // a sheep at pasture
+      P('M13 31 C9 31 8 26 11 24.5 C10.5 20 15.5 18 18 20.5 C20 16.5 27 16.5 28.5 20.5 C32 19 36 22 34.5 25.5 C37 27.5 35.5 31.5 32 31 Z'), E(37.6, 22.4, 3.2, 4.4),
+      P('M15 31 L15 37.5 M20 31 L20 37.5 M26 31 L26 37.5 M31 31 L31 37.5'), P('M5 41.5 L43 41.5'), P('M9 41.5 L8 38.5 M10.5 41.5 L11 38.2 M38 41.5 L37 38.5 M39.5 41.5 L40 38.2'), spark(9, 10, 1.8), spark(40, 10, 1.4),
+    ],
+    iftar: [ // the sun going down, the cup and the dates ready
+      P('M6 29 L42 29'), P('M14.5 29 A9.5 9.5 0 0 1 33.5 29'), P('M24 14 L24 16.5 M13.6 18.6 L15.4 20.4 M34.4 18.6 L32.6 20.4 M8.6 24.4 L11 25.2 M39.4 24.4 L37 25.2'),
+      P('M11 33 L12.4 43 L19.6 43 L21 33 Z'), E(28.6, 40, 3.6, 2.2), E(36, 39, 3.6, 2.2),
+    ],
+    suhur: [ // a bowl before dawn, the stars still out
+      P('M9 29 C9 36 15.5 41 24 41 C32.5 41 39 36 39 29 Z'), P('M15 44 L33 44'), P('M29 29 L36 19'), E(37.4, 17, 1.8, 2.8), 
+      P('M20 5 A7 7 0 1 0 27 15 A5.4 5.4 0 1 1 20 5 Z'), spark(9, 12, 2), spark(36, 7, 1.6), spark(14, 21, 1.3),
+    ],
+    hifzni: [ // a jar sealed, what was given kept with care
+      R(14, 8.5, 20, 5.5, 1.6), P('M16 14 C10.5 18 10.5 38 16 42 L32 42 C37.5 38 37.5 18 32 14'), P('M13.6 20 L34.4 20'), heart(24, 31, 6.4), spark(41, 9, 1.8),
+    ],
+    maabayt: [ // a house, and water coming into it from the tap
+      P('M7 22 L24 8.5 L41 22'), P('M11 19 L11 42 L37 42 L37 19'), P('M16 26 L28 26 C30.2 26 31 27 31 29 L31 30.6'), P('M28.4 30.6 L33.6 30.6'), P('M20.6 22.6 L20.6 26'), drop(31, 36.4, 1.1), P('M5 42 L43 42'),
+    ],
+    idrak: [ // a mind taking in the world: a point, and the rings that reach it
+      C(24, 24, 3.2), P('M17.6 17.6 A9 9 0 0 0 17.6 30.4 M30.4 17.6 A9 9 0 0 1 30.4 30.4'), P('M13.4 13.4 A15 15 0 0 0 13.4 34.6 M34.6 13.4 A15 15 0 0 1 34.6 34.6'), spark(24, 7, 2.4), spark(24, 41, 1.6),
+    ],
+    intibah: [ // the arrow on the mark
+      C(21, 27, 14), C(21, 27, 9), C(21, 27, 4), P('M21 27 L38 10'), P('M38 10 L38 4.5 M38 10 L43.5 10 M35 13 L35 7.5 M35 13 L40.5 13'),
+    ],
+    hisab: [ // an abacus, its beads counted
+      R(8, 9, 32, 30, 2), P('M8 17 L40 17 M8 24 L40 24 M8 31 L40 31'), C(13, 17, 2), C(17.4, 17, 2), C(32, 17, 2), C(13, 24, 2), C(28, 24, 2), C(32.4, 24, 2), C(13, 31, 2), C(17.4, 31, 2), C(21.8, 31, 2), C(32.4, 31, 2), P('M11 39 L9 44 M37 39 L39 44'),
+    ],
+    lughat: [ // two voices, two scripts, one meaning
+      P('M8 7 L26 7 C27.7 7 29 8.3 29 10 L29 18 C29 19.7 27.7 21 26 21 L14 21 L9.6 25.4 L10 21 L8 21 C6.3 21 5 19.7 5 18 L5 10 C5 8.3 6.3 7 8 7 Z'), P('M10 14 L13 14 M15.5 11 L15.5 17 M18.5 14 L24 14'),
+      P('M40 25 L22 25 C20.3 25 19 26.3 19 28 L19 36 C19 37.7 20.3 39 22 39 L34 39 L38.4 43.4 L38 39 L40 39 C41.7 39 43 37.7 43 36 L43 28 C43 26.3 41.7 25 40 25 Z'), P('M24 32 C26 29.5 28 34.5 30 32 C32 29.5 34 34.5 36 32 L38 30'),
+    ],
   });
 
   Object.assign(BY_BLESSING, {
@@ -202,5 +236,7 @@
     blessing_337: 'khalwa', blessing_338: 'nudj', blessing_339: 'nizam', blessing_340: 'lahm',
     blessing_341: 'bayd', blessing_342: 'maabarid', blessing_343: 'halwa', blessing_344: 'tawabil', blessing_345: 'tahy', blessing_346: 'rizqwasi',
     blessing_347: 'dakhl', blessing_348: 'aswaq', blessing_349: 'hirfa', blessing_350: 'ziraa',
+    blessing_351: 'sayd', blessing_352: 'rai', blessing_353: 'iftar', blessing_354: 'suhur', blessing_355: 'hifzni', blessing_356: 'maabayt',
+    blessing_357: 'idrak', blessing_358: 'intibah', blessing_359: 'hisab', blessing_360: 'lughat',
   });
 })();
