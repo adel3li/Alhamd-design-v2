@@ -1,0 +1,125 @@
+{
+ "note": "Fetches the Quran verses the kit prints, in Uthmani script, and checks them.\n\n  python3 tools/fetch_verses.py           # writes data/verses.json\n  python3 tools/fetch_verses.py --words   # also prints every verse word by word (to choose portions)\n\nText: quran.com API v4 (text_uthmani, word by word), so a portion is always whole words of the verse.\nCheck: the same verse from api.alquran.cloud (Tanzil Uthmani) must have the same letters once\ndiacritics and marks are removed. A mismatch stops the script.\n\nEvery verse card still says «راجِع قبل النشر» in the plan: the app promises that each text is\nreviewed by people of knowledge before it is published, and that promise covers marketing too.",
+ "verses": [
+  {
+   "id": "BV-201",
+   "surah": 42,
+   "ayah": 52,
+   "surahName": "الشورى",
+   "text": "وَكَذَٰلِكَ أَوْحَيْنَآ إِلَيْكَ رُوحًا مِّنْ أَمْرِنَا ۚ مَا كُنتَ تَدْرِى مَا ٱلْكِتَـٰبُ وَلَا ٱلْإِيمَـٰنُ وَلَـٰكِن جَعَلْنَـٰهُ نُورًا نَّهْدِى بِهِۦ مَن نَّشَآءُ مِنْ عِبَادِنَا ۚ وَإِنَّكَ لَتَهْدِىٓ إِلَىٰ صِرَٰطٍ مُّسْتَقِيمٍ",
+   "full": "وَكَذَٰلِكَ أَوْحَيْنَآ إِلَيْكَ رُوحًا مِّنْ أَمْرِنَا ۚ مَا كُنتَ تَدْرِى مَا ٱلْكِتَـٰبُ وَلَا ٱلْإِيمَـٰنُ وَلَـٰكِن جَعَلْنَـٰهُ نُورًا نَّهْدِى بِهِۦ مَن نَّشَآءُ مِنْ عِبَادِنَا ۚ وَإِنَّكَ لَتَهْدِىٓ إِلَىٰ صِرَٰطٍ مُّسْتَقِيمٍ",
+   "portion": false,
+   "ref": "الشورى: 52",
+   "use": "نعمة الوحي: آية النعمة كما تظهر في التطبيق",
+   "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"
+  },
+  {
+   "id": "BV-202",
+   "surah": 35,
+   "ayah": 1,
+   "surahName": "فاطر",
+   "text": "ٱلْحَمْدُ لِلَّهِ فَاطِرِ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضِ جَاعِلِ ٱلْمَلَـٰٓئِكَةِ رُسُلًا أُو۟لِىٓ أَجْنِحَةٍ مَّثْنَىٰ وَثُلَـٰثَ وَرُبَـٰعَ ۚ يَزِيدُ فِى ٱلْخَلْقِ مَا يَشَآءُ ۚ إِنَّ ٱللَّهَ عَلَىٰ كُلِّ شَىْءٍ قَدِيرٌ",
+   "full": "ٱلْحَمْدُ لِلَّهِ فَاطِرِ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضِ جَاعِلِ ٱلْمَلَـٰٓئِكَةِ رُسُلًا أُو۟لِىٓ أَجْنِحَةٍ مَّثْنَىٰ وَثُلَـٰثَ وَرُبَـٰعَ ۚ يَزِيدُ فِى ٱلْخَلْقِ مَا يَشَآءُ ۚ إِنَّ ٱللَّهَ عَلَىٰ كُلِّ شَىْءٍ قَدِيرٌ",
+   "portion": false,
+   "ref": "فاطر: 1",
+   "use": "نعمة الملائكة: آية النعمة كما تظهر في التطبيق",
+   "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"
+  },
+  {
+   "id": "BV-203",
+   "surah": 2,
+   "ayah": 3,
+   "surahName": "البقرة",
+   "text": "ٱلَّذِينَ يُؤْمِنُونَ بِٱلْغَيْبِ وَيُقِيمُونَ ٱلصَّلَوٰةَ وَمِمَّا رَزَقْنَـٰهُمْ يُنفِقُونَ",
+   "full": "ٱلَّذِينَ يُؤْمِنُونَ بِٱلْغَيْبِ وَيُقِيمُونَ ٱلصَّلَوٰةَ وَمِمَّا رَزَقْنَـٰهُمْ يُنفِقُونَ",
+   "portion": false,
+   "ref": "البقرة: 3",
+   "use": "نعمة الإيمان بالغيب: آية النعمة كما تظهر في التطبيق",
+   "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"
+  },
+  {
+   "id": "BV-204",
+   "surah": 51,
+   "ayah": 20,
+   "surahName": "الذاريات",
+   "text": "وَفِى ٱلْأَرْضِ ءَايَـٰتٌ لِّلْمُوقِنِينَ",
+   "full": "وَفِى ٱلْأَرْضِ ءَايَـٰتٌ لِّلْمُوقِنِينَ",
+   "portion": false,
+   "ref": "الذاريات: 20",
+   "use": "نعمة اليقين: آية النعمة كما تظهر في التطبيق",
+   "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"
+  },
+  {
+   "id": "BV-205",
+   "surah": 55,
+   "ayah": 46,
+   "surahName": "الرحمن",
+   "text": "وَلِمَنْ خَافَ مَقَامَ رَبِّهِۦ جَنَّتَانِ",
+   "full": "وَلِمَنْ خَافَ مَقَامَ رَبِّهِۦ جَنَّتَانِ",
+   "portion": false,
+   "ref": "الرحمن: 46",
+   "use": "نعمة الخوف من الله: آية النعمة كما تظهر في التطبيق",
+   "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"
+  },
+  {
+   "id": "BV-206",
+   "surah": 2,
+   "ayah": 218,
+   "surahName": "البقرة",
+   "text": "إِنَّ ٱلَّذِينَ ءَامَنُوا۟ وَٱلَّذِينَ هَاجَرُوا۟ وَجَـٰهَدُوا۟ فِى سَبِيلِ ٱللَّهِ أُو۟لَـٰٓئِكَ يَرْجُونَ رَحْمَتَ ٱللَّهِ ۚ وَٱللَّهُ غَفُورٌ رَّحِيمٌ",
+   "full": "إِنَّ ٱلَّذِينَ ءَامَنُوا۟ وَٱلَّذِينَ هَاجَرُوا۟ وَجَـٰهَدُوا۟ فِى سَبِيلِ ٱللَّهِ أُو۟لَـٰٓئِكَ يَرْجُونَ رَحْمَتَ ٱللَّهِ ۚ وَٱللَّهُ غَفُورٌ رَّحِيمٌ",
+   "portion": false,
+   "ref": "البقرة: 218",
+   "use": "نعمة الرجاء: آية النعمة كما تظهر في التطبيق",
+   "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"
+  },
+  {
+   "id": "BV-207",
+   "surah": 22,
+   "ayah": 27,
+   "surahName": "الحج",
+   "text": "وَأَذِّن فِى ٱلنَّاسِ بِٱلْحَجِّ يَأْتُوكَ رِجَالًا وَعَلَىٰ كُلِّ ضَامِرٍ يَأْتِينَ مِن كُلِّ فَجٍّ عَمِيقٍ",
+   "full": "وَأَذِّن فِى ٱلنَّاسِ بِٱلْحَجِّ يَأْتُوكَ رِجَالًا وَعَلَىٰ كُلِّ ضَامِرٍ يَأْتِينَ مِن كُلِّ فَجٍّ عَمِيقٍ",
+   "portion": false,
+   "ref": "الحج: 27",
+   "use": "نعمة الحج: آية النعمة كما تظهر في التطبيق",
+   "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"
+  },
+  {
+   "id": "BV-208",
+   "surah": 2,
+   "ayah": 158,
+   "surahName": "البقرة",
+   "text": "إِنَّ ٱلصَّفَا وَٱلْمَرْوَةَ مِن شَعَآئِرِ ٱللَّهِ ۖ فَمَنْ حَجَّ ٱلْبَيْتَ أَوِ ٱعْتَمَرَ فَلَا جُنَاحَ عَلَيْهِ أَن يَطَّوَّفَ بِهِمَا ۚ وَمَن تَطَوَّعَ خَيْرًا فَإِنَّ ٱللَّهَ شَاكِرٌ عَلِيمٌ",
+   "full": "۞ إِنَّ ٱلصَّفَا وَٱلْمَرْوَةَ مِن شَعَآئِرِ ٱللَّهِ ۖ فَمَنْ حَجَّ ٱلْبَيْتَ أَوِ ٱعْتَمَرَ فَلَا جُنَاحَ عَلَيْهِ أَن يَطَّوَّفَ بِهِمَا ۚ وَمَن تَطَوَّعَ خَيْرًا فَإِنَّ ٱللَّهَ شَاكِرٌ عَلِيمٌ",
+   "portion": false,
+   "ref": "البقرة: 158",
+   "use": "نعمة العمرة: آية النعمة كما تظهر في التطبيق",
+   "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"
+  },
+  {
+   "id": "BV-209",
+   "surah": 17,
+   "ayah": 78,
+   "surahName": "الإسراء",
+   "text": "أَقِمِ ٱلصَّلَوٰةَ لِدُلُوكِ ٱلشَّمْسِ إِلَىٰ غَسَقِ ٱلَّيْلِ وَقُرْءَانَ ٱلْفَجْرِ ۖ إِنَّ قُرْءَانَ ٱلْفَجْرِ كَانَ مَشْهُودًا",
+   "full": "أَقِمِ ٱلصَّلَوٰةَ لِدُلُوكِ ٱلشَّمْسِ إِلَىٰ غَسَقِ ٱلَّيْلِ وَقُرْءَانَ ٱلْفَجْرِ ۖ إِنَّ قُرْءَانَ ٱلْفَجْرِ كَانَ مَشْهُودًا",
+   "portion": false,
+   "ref": "الإسراء: 78",
+   "use": "نعمة صلاة الفجر: آية النعمة كما تظهر في التطبيق",
+   "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"
+  },
+  {
+   "id": "BV-210",
+   "surah": 96,
+   "ayah": 19,
+   "surahName": "العلق",
+   "text": "كَلَّا لَا تُطِعْهُ وَٱسْجُدْ وَٱقْتَرِب",
+   "full": "كَلَّا لَا تُطِعْهُ وَٱسْجُدْ وَٱقْتَرِب ۩",
+   "portion": true,
+   "ref": "العلق: 19",
+   "use": "نعمة السجود: آية النعمة كما تظهر في التطبيق",
+   "source": "api.quran.com v4 text_uthmani; letters checked against api.alquran.cloud quran-uthmani"
+  }
+ ]
+}
