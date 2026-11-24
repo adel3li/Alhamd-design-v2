@@ -3,7 +3,7 @@ Download packages: for each blessing, its four carousels (JR, GH, TR, HS) in bot
 
   node tools/render-stills.cjs --ids JR-01-,GH-01-,TR-01-,HS-01-,… --formats portrait                       # Full HD
   node tools/render-stills.cjs --ids JR-01-,GH-01-,TR-01-,HS-01-,… --formats portrait --scale 2 --out out/stills-4k
-  python3 tools/export_package.py --from 1 --to 10 --dest "/Users/…/alhamd-carousels/1-100"
+  python3 tools/export_package.py --from 1 --to 10 --dest "/Users/…/alhamd-carousels/1-100" [--sizes fullhd]
   python3 tools/build_gallery.py 1 --local --out "/Users/…/alhamd-carousels/1-100"                         # the page with the buttons
 
 Writes <dest>/downloads/<nn>/alhamd_<nn>_4k.zip (2160×2700) and alhamd_<nn>_fullhd.zip (1080×1350). Inside a ZIP:
@@ -25,7 +25,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_gallery import CAROUSELS, captions, content, kinds_of, review_of, ar  # noqa: E402
 
 THEMES = [("layl", "ليل"), ("nahar", "نهار")]
-SIZES = [("4k", ROOT / "out" / "stills-4k", (2160, 2700)), ("fullhd", ROOT / "out" / "stills", (1080, 1350))]
+ALL_SIZES = [("4k", ROOT / "out" / "stills-4k", (2160, 2700)), ("fullhd", ROOT / "out" / "stills", (1080, 1350))]
 
 
 def arg(name: str, default=None):
@@ -38,6 +38,8 @@ def slide_files(base: Path, cid: str, nn: str, count: int, th: str) -> list:
 
 def main() -> None:
     lo, hi, dest = int(arg("from", 1)), int(arg("to", 10)), Path(arg("dest"))
+    want = arg("sizes", "4k,fullhd").split(",")  # --sizes fullhd: only the Full HD ZIP (no 4K renders needed)
+    SIZES = [x for x in ALL_SIZES if x[0] in want]
     C = content()
     done, missing = [], []
     for n in range(lo, hi + 1):

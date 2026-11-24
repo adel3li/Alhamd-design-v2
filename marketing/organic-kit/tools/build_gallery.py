@@ -136,9 +136,11 @@ def card(out: Path, C: dict, n: int, notes: dict, local: bool) -> str | None:
     if not pk.get("hadith"):
         meta.append("بلا حديث")
     dl = ""
-    if local and (out / "downloads" / nn / f"alhamd_{nn}_4k.zip").exists():  # the copy on the owner's computer links the ZIPs beside it
-        dl = (f'<div class="dl"><a class="dl-b" href="downloads/{nn}/alhamd_{nn}_4k.zip" download>تحميل 4K<small>٢١٦٠×٢٧٠٠</small></a>'
-              f'<a class="dl-b" href="downloads/{nn}/alhamd_{nn}_fullhd.zip" download>تحميل Full HD<small>١٠٨٠×١٣٥٠</small></a></div>')
+    if local:  # the copy on the owner's computer links the ZIPs beside it, whichever sizes have been exported
+        sizes = [("4k", "4K", "٢١٦٠×٢٧٠٠"), ("fullhd", "Full HD", "١٠٨٠×١٣٥٠")]
+        btns = "".join(f'<a class="dl-b" href="downloads/{nn}/alhamd_{nn}_{key}.zip" download>تحميل {name}<small>{px}</small></a>'
+                       for key, name, px in sizes if (out / "downloads" / nn / f"alhamd_{nn}_{key}.zip").exists())
+        dl = f'<div class="dl">{btns}</div>' if btns else ""
     return (f'<article class="bl" id="n{n}" aria-labelledby="n{n}-h"><header class="bl-head">'
             f'<span class="num">{ar(n)}</span><div class="bl-t"><h2 id="n{n}-h">{esc(pk["title"])}</h2>'
             f'<p class="op">{esc(pk["opening"])}</p><p class="meta">{" · ".join(meta)}</p></div></header>{dl}'
