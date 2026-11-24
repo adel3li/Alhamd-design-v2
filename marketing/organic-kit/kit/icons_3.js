@@ -92,6 +92,48 @@
     niyya: [ // a heart set on one direction
       heart(24, 33, 12), P('M24 24.5 L24 13'), spark(24, 8.5, 3.4), spark(34.5, 12, 1.4), spark(13.5, 12, 1.4),
     ],
+    udhiya: [ // the ram of the sacrifice, under the feast's crescent
+      P('M13.5 31 C11 27.5 13.5 23 17.5 23.8 C18.8 19.8 24.6 19 27 22.2 C30 20 34.5 22.6 33.6 26.6 C36.2 28.6 35 33.6 31.4 33.6 L16 33.6 C12.6 33.6 11.6 31.8 13.5 31 Z'),
+      P('M33.8 25.6 C35.4 22.6 40.8 22.8 41.2 26.8 C41.4 29.6 39 31.4 36.6 30.6'), P('M18 33.6 L18 41 M23 33.6 L23 41 M28 33.6 L28 41 M31.8 33.6 L31.8 41'),
+      P('M36.4 23.4 C35.6 19.6 39.6 18 41.2 20.4 C42.4 22.2 40.6 24 39.2 23 C38.4 22.4 38.8 21.2 39.6 21.2'),
+      P('M14 4.5 A6 6 0 1 0 20.6 12.6 A4.6 4.6 0 1 1 14 4.5 Z'), spark(27, 9, 1.8), spark(34, 13, 1.2),
+    ],
+    arafa: [ // the mount of mercy, its pillar, and the day's sun
+      P('M3 40 L45 40'), P('M4 40 C12 38 15 28.5 20 26.4 C22 25.6 26 25.6 28 26.4 C33 28.5 36 38 44 40'), R(22.6, 15, 2.8, 11, 0.6), P('M21.4 15 L26.6 15'),
+      P('M16.5 33 L19 32.4 M29 32.4 L31.5 33 M13 37 L15.5 36.4 M32.5 36.4 L35 37'),
+      C(38, 9.5, 3), P('M38 3.5 L38 4.6 M38 14.4 L38 15.5 M32 9.5 L33.1 9.5 M42.9 9.5 L44 9.5'),
+    ],
+    itikaf: [ // a lamp kept lit in the house of God
+      P('M6 42 L42 42'), P('M10 42 L10 20 C10 12 16 7 24 5 C32 7 38 12 38 20 L38 42'), lantern(24, 13, 0.62), P('M24 11 L24 13'),
+      P('M15 42 L15 36 M33 42 L33 36'),
+    ],
+    wara: [ // two paths: the clear one taken, the doubtful one left
+      P('M24 43 L24 25 L24 11'), spark(24, 6.5, 2.8), P('M24 27 C27 25 30 23 32 20'), P('M33.5 17.6 L35 15.2'), P('M36.6 12.8 L38 10.6'), P('M39.6 8.4 L40.8 6.6'),
+      P('M16 43 L32 43'),
+    ],
+    tasbih: [ // the heavens, every body swimming in its orbit
+      C(24, 24, 3.8), `<ellipse cx="24" cy="24" rx="19" ry="7.5" transform="rotate(-22 24 24)"/>`, `<ellipse cx="24" cy="24" rx="11.5" ry="4.8" transform="rotate(28 24 24)"/>`,
+      C(24 + 19 * Math.cos(-22 * Math.PI / 180), 24 + 19 * Math.sin(-22 * Math.PI / 180), 1.8), C(24 - 11.5 * Math.cos(28 * Math.PI / 180), 24 - 11.5 * Math.sin(28 * Math.PI / 180), 1.4),
+      spark(9, 9, 1.6), spark(39, 40, 1.4), spark(11, 39, 1.1),
+    ],
+    hamd: [ // the opening page, its frame and its medallion
+      R(11, 6.5, 26, 35, 2), R(14.5, 10, 19, 28, 1.5), E(24, 24, 6.5, 8.6), spark(24, 24, 2.8), P('M16.5 12 L19 12 M29 12 L31.5 12 M16.5 36 L19 36 M29 36 L31.5 36'),
+    ],
+    qadar: [ // a scroll written and sealed
+      P('M13 10.5 L13 37.5'), P('M35 10.5 L35 37.5'), P('M10 10.5 C10 7.5 38 7.5 38 10.5 C38 13.5 10 13.5 10 10.5 Z'), P('M10 37.5 C10 34.5 38 34.5 38 37.5 C38 40.5 10 40.5 10 37.5 Z'),
+      P('M17 17.5 L31 17.5 M17 21.5 L31 21.5 M17 25.5 L27 25.5'), C(29.5, 30.5, 2.6), spark(29.5, 30.5, 1.2),
+    ],
+    ruya: [ // the gate thrown open, and the light beyond it
+      P('M6 42 L42 42'), P('M13 42 L13 19 C13 12.5 18 8 24 7 C30 8 35 12.5 35 19 L35 42'), P('M13 19 L6.5 22.5 L6.5 42'), P('M35 19 L41.5 22.5 L41.5 42'),
+      P('M24 34 L24 38'), P('M24 25 L24 20'), P('M18.5 29.5 L16 27.5 M29.5 29.5 L32 27.5'), spark(24, 29.5, 3.2), spark(24, 14, 1.6),
+    ],
+    tawhid: [ // the One stroke, and all around it turned toward it
+      P('M24.4 9 C23.6 18 23.4 29 24.6 39.5'), spark(24.4, 5.5, 1.8), ring(24, 24, 15.5, 13, 0.9, 1.2),
+    ],
+    muhasaba: [ // the scales held up at the day's end
+      P('M24 9 L24 40'), P('M16 41 L32 41'), P('M9.5 14 L38.5 14'), C(24, 7.6, 1.4), P('M9.5 14 L5.5 26 M9.5 14 L13.5 26'), P('M4.5 26 C5.5 30.5 13.5 30.5 14.5 26 Z'),
+      P('M38.5 14 L34.5 26 M38.5 14 L42.5 26'), P('M33.5 26 C34.5 30.5 42.5 30.5 43.5 26 Z'), spark(15.5, 6.5, 1.4), spark(33, 6, 1.1),
+    ],
   });
 
   Object.assign(BY_BLESSING, {
@@ -99,5 +141,7 @@
     blessing_207: 'hajj', blessing_208: 'umra', blessing_209: 'fajr', blessing_210: 'sujud',
     blessing_211: 'tilawa', blessing_212: 'hifzquran', blessing_213: 'sahaba', blessing_214: 'ulama', blessing_215: 'shafaa', blessing_216: 'afwallah',
     blessing_217: 'qabul', blessing_218: 'mahiya', blessing_219: 'jariya', blessing_220: 'niyya',
+    blessing_221: 'udhiya', blessing_222: 'arafa', blessing_223: 'itikaf', blessing_224: 'wara', blessing_225: 'tasbih', blessing_226: 'hamd',
+    blessing_227: 'qadar', blessing_228: 'ruya', blessing_229: 'tawhid', blessing_230: 'muhasaba',
   });
 })();
