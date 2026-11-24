@@ -83,6 +83,42 @@
       R(6.5, 13, 28, 22, 3), P('M11.5 21 C14.5 18.5 17.5 23.5 20.5 21 C23.5 18.5 26.5 23.5 29.5 21'), P('M11.5 28 L22 28'),
       P('M40.5 9 L36.5 13 L31 30.5 L28.6 33 L29.2 29.6 L36.5 13 M38.5 11 L41.5 14'), spark(10.5, 41, 2), spark(40, 38, 1.5),
     ],
+    khususiya: [ // a window, its curtains drawn
+      P('M6.5 8 L41.5 8'), R(10, 8, 28, 30, 1.5), P('M10 8 C16.5 15.5 17 27 12.5 38'), P('M38 8 C31.5 15.5 31 27 35.5 38'), P('M24 8 L24 38'), P('M7.5 42 L40.5 42'), spark(24, 23, 2.2),
+    ],
+    hurriya: [ // an open cage, and the bird that has flown it
+      P('M5.5 43 L26.5 43'), P('M8 43 L8 24 C8 16.5 12.5 12 16 12 C19.5 12 24 16.5 24 24 L24 30 M24 40 L24 43'), P('M12 43 L12 18.5 M16 43 L16 12 M20 43 L20 18.5'), P('M16 12 L16 7.5'), P('M24 30 L30.5 33 L30.5 41.5 L24 40'),
+      P('M30 15 C32.4 12.2 34.6 12.2 36 15 C37.4 12.2 39.6 12.2 42 15'), P('M34 24 C35.6 22.2 37 22.2 38 24 C39 22.2 40.4 22.2 42 24'), spark(36.5, 6.5, 1.6),
+    ],
+    sukun: [ // still water under the moon
+      P('M24 5 A9 9 0 1 0 33 17.6 A7 7 0 1 1 24 5 Z'), P('M7 32 L41 32'), P('M12 37.5 L36 37.5'), P('M17.5 43 L30.5 43'), spark(37, 9, 2), spark(11, 13, 1.4),
+    ],
+    nazafa: [ // a bar of soap and its bubbles
+      R(7.5, 26, 25, 14, 5), P('M13 33 L27 33'), C(31, 16, 4.6), C(38.5, 24, 2.6), C(21.5, 14.5, 2.4), C(26, 7, 1.6), spark(39, 9, 2), P('M7.5 44 L32.5 44'),
+    ],
+    maadafi: [ // a cup of warm water, its steam rising
+      P('M10 20 L12.4 39.6 C12.7 41.8 14.4 43 16.6 43 L28.4 43 C30.6 43 32.3 41.8 32.6 39.6 L35 20 Z'), P('M34.4 25 C40.6 24.6 41 34.4 33.4 34.2'),
+      P('M16.5 15.5 C14.5 12.5 18.5 10 16.5 6'), P('M22.5 15.5 C20.5 12.5 24.5 10 22.5 6'), P('M28.5 15.5 C26.5 12.5 30.5 10 28.5 6'), P('M14 27 L31 27'),
+    ],
+    kuhula: [ // a tree in its full years, heavy with fruit
+      tree(24, 6, 30, 25, 42.5), P('M24 34 L18.6 28.6 M24 36.5 L29.6 30.6'), C(16, 16, 1.7), C(29, 13.5, 1.7), C(33, 22, 1.7), C(20.5, 23.5, 1.7), P('M9 42.5 L39 42.5'),
+    ],
+    shaykhukha: [ // reading glasses resting on an open book
+      C(17, 14.5, 5.6), C(31, 14.5, 5.6), P('M22.6 14.5 C23.4 13 24.6 13 25.4 14.5'), P('M11.4 13.5 L7 11.5 M36.6 13.5 L41 11.5'),
+      P('M24 28 C20 25.5 13 25 8 26 L8 40 C13 39 20 39.5 24 42 C28 39.5 35 39 40 40 L40 26 C35 25 28 25.5 24 28 Z'), P('M24 28 L24 42'), spark(42, 31, 1.4),
+    ],
+    ijaza: [ // a sunshade by the sea, the sun overhead
+      P('M8 23 C9 14.5 16 9.5 24 9.5 C32 9.5 39 14.5 40 23 C37 21 34 21 32 23 C30 21 26 21 24 23 C22 21 18 21 16 23 C14 21 11 21 8 23 Z'), P('M24 9.5 L24 6.5 M24 23 L24 41'),
+      P('M5 41 C9 39 13 43 17 41 C21 39 27 43 31 41 C35 39 39 43 43 41'), C(39.5, 33, 2.4), spark(9, 33, 1.6),
+    ],
+    hiwaya: [ // a painter's palette, its colours ready
+      P('M24 8 C13 8 7 16 7 24 C7 33 14 40 22 40 C26 40 26.4 36.4 24.4 34.2 C22.4 32 23.4 29 27 29 L32 29 C37 29 41 26 41 21 C41 13 33 8 24 8 Z'), C(15.6, 18, 2.2), C(23.6, 14, 2.2), C(31.6, 16.6, 2.2), C(14.6, 27, 2.2),
+      P('M43 31 L33.5 40.5'), P('M33.5 40.5 C31.5 40.5 30.6 42.6 29.4 44 C32 44 34.6 43.4 34.6 41.6 Z'), 
+    ],
+    laib: [ // a kite in the wind, its tail tied with bows
+      P('M30 5 L40.5 16 L30 30 L19.5 16 Z'), P('M30 5 L30 30 M19.5 16 L40.5 16'), P('M30 30 C26 33.5 30 37.5 24 39.5 C19.5 41 18 43.5 12 44'),
+      P('M26.4 34.2 L23.6 32.6 L24.4 36 Z M20.6 40.4 L18.6 38 L18 41.4 Z'), spark(10, 10, 2.2), spark(41, 35, 1.5),
+    ],
   });
 
   Object.assign(BY_BLESSING, {
@@ -90,5 +126,7 @@
     blessing_307: 'asabi', blessing_308: 'basma', blessing_309: 'jufun', blessing_310: 'dumu',
     blessing_311: 'araq', blessing_312: 'luab', blessing_313: 'shahiya', blessing_314: 'iltiam', blessing_315: 'haml', blessing_316: 'numuw',
     blessing_317: 'nashat', blessing_318: 'sihhanafs', blessing_319: 'shaar', blessing_320: 'ism',
+    blessing_321: 'khususiya', blessing_322: 'hurriya', blessing_323: 'sukun', blessing_324: 'nazafa', blessing_325: 'maadafi', blessing_326: 'kuhula',
+    blessing_327: 'shaykhukha', blessing_328: 'ijaza', blessing_329: 'hiwaya', blessing_330: 'laib',
   });
 })();
