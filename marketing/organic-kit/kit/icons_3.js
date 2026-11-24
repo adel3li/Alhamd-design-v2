@@ -379,6 +379,44 @@
       ...[5, 9.5, 14, 34, 38.5, 43].map((x) => P(`M${x} 42 L${x} 31.5 L${x + 0} 29`)), ...[5, 9.5, 14, 34, 38.5, 43].map((x) => P(`M${x - 1.4} 31 L${x} 28.6 L${x + 1.4} 31`)), P('M3.6 34 L15.4 34 M3.6 39 L15.4 39 M32.6 34 L44.4 34 M32.6 39 L44.4 39'),
       P('M2 42 L46 42'),
     ],
+    insaf: [ // a beam held level, the same weight on either side
+      P('M6 26 L42 26'), P('M24 26 L17.5 39 L30.5 39 Z'), P('M12 39 L36 39'), C(10.5, 21.6, 4.2), C(37.5, 21.6, 4.2),
+    ],
+    imtinan: [ // a cup filled until it runs over
+      P('M12 18 L36 18 L33 38 C32.6 40 31 41 29 41 L19 41 C17 41 15.4 40 15 38 Z'), P('M12 18 C16 15.5 20 20.5 24 18 C28 15.5 32 20.5 36 18'), P('M12.2 18.4 C10 20.4 9.6 23.4 10.4 26.4'), P('M35.8 18.4 C38 20.4 38.4 23.4 37.6 26.4'),
+      drop(10, 31, 0.8), drop(38, 31, 0.8), heart(24, 30, 5.2), spark(24, 8, 2.6), spark(15, 10, 1.4), spark(33, 10, 1.4),
+    ],
+    hamas: [ // an arrow let fly
+      P('M9 37 L37 13'), P('M29.4 12.4 L37.8 12.2 L36 20.4'), P('M9 37 L5.4 36.4 M9 37 L9.6 40.6 M12.4 34 L8.8 33.4 M12.4 34 L13 37.6'), P('M7 20 L17 20 M4 26 L13 26 M22 42 L32 42'), spark(41, 7, 1.6),
+    ],
+    himma: [ // steps that go on up toward the star
+      P('M5 43 L13 43 L13 35 L21 35 L21 27 L29 27 L29 19 L37 19 L37 13'), P('M5 43 L43 43'), spark(40, 6, 3.4), spark(32, 9, 1.4),
+    ],
+    tafaul: [ // a rainbow after the rain
+      P('M7 35 A17 17 0 0 1 41 35'), P('M11.5 35 A12.5 12.5 0 0 1 36.5 35'), P('M16 35 A8 8 0 0 1 32 35'),
+      P('M3 39 L13 39 C15.4 39 16.4 36.4 15 34.8 C14.2 33.8 13 33.6 12 34 C11.6 31.6 9.6 30.4 7.6 30.8 C5.8 31.2 4.6 32.8 4.6 34.6 C3.2 34.8 2.4 36 2.6 37.4 C2.8 38.4 3 39 3 39 Z'),
+      drop(9, 43.5, 0.6), drop(13, 43.5, 0.6), spark(38, 8, 2.2), spark(43, 16, 1.2),
+    ],
+    safa: [ // one clear drop, and the still water it falls to
+      drop(24, 21, 5.2), spark(22, 24, 2.4), P('M27.2 14 C28.6 16 29.6 18 30 20'), P('M9 41 C15 37.6 33 37.6 39 41'), P('M15 44.6 C20 42.8 28 42.8 33 44.6'), spark(38, 9, 1.4), spark(10, 12, 1.1),
+    ],
+    unsnas: [ // a fire people gather round
+      P('M24 13 C19.5 19.5 17.6 23.6 17.6 27.8 C17.6 32 20.4 35 24 35 C27.6 35 30.4 32 30.4 27.8 C30.4 23.6 28.5 19.5 24 13 Z'), P('M24 23.5 C22 26.4 21.4 28.4 21.4 30.2 C21.4 32 22.6 33.2 24 33.2 C25.4 33.2 26.6 32 26.6 30.2 C26.6 28.4 26 26.4 24 23.5 Z'),
+      P('M11 41 L37 35 M11 35 L37 41'), C(7, 41.5, 1.4), C(41, 41.5, 1.4), spark(15, 15, 1.4), spark(33, 10, 1.6), spark(30, 4.5, 1),
+    ],
+    intima: [ // every row turned toward the one House
+      P('M20 22 L24 20.4 L28 22 L28 28.4 L24 30 L20 28.4 Z'), P('M20 22 L24 23.6 L28 22'), P('M24 23.6 L24 30'),
+      ...Array.from({ length: 12 }, (_, i) => { const a = (i * Math.PI) / 6; return C(24 + 11 * Math.cos(a), 25 + 11 * Math.sin(a), 1); }),
+      ...Array.from({ length: 18 }, (_, i) => { const a = (i * Math.PI) / 9 + 0.17; return C(24 + 17 * Math.cos(a), 25 + 17 * Math.sin(a), 0.9); }),
+    ],
+    nadam: [ // a heart that weeps, and something new growing out of it
+      heart(24, 32, 11), P('M24 23.6 L24 13.5'), P('M24 18.5 C20.5 18.5 18.4 16.4 18 13.2 C21.4 13.2 23.6 15.4 24 18.5 Z'), P('M24 15.8 C27.2 15.8 29.4 13.8 29.8 10.6 C26.6 10.6 24.4 12.6 24 15.8 Z'),
+      drop(35.5, 21, 1),
+    ],
+    riatan: [ // the two lungs, and the breath branching through them
+      P('M24 5 L24 19'), P('M24 19 L19.5 23 M24 19 L28.5 23'), P('M21 14 C14 14 8 23 8 32.5 C8 38.6 11 42 15 42 C19 42 21 39.5 21 36 Z'), P('M27 14 C34 14 40 23 40 32.5 C40 38.6 37 42 33 42 C29 42 27 39.5 27 36 Z'),
+      P('M19.5 23 L15 29.5 M19.5 23 L18 32 M15 29.5 L12.6 33.6'), P('M28.5 23 L33 29.5 M28.5 23 L30 32 M33 29.5 L35.4 33.6'),
+    ],
   });
 
   Object.assign(BY_BLESSING, {
@@ -400,5 +438,7 @@
     blessing_277: 'shukrnas', blessing_278: 'hanin', blessing_279: 'shawq', blessing_280: 'hudu',
     blessing_281: 'husnzann', blessing_282: 'karam', blessing_283: 'ihsan', blessing_284: 'sumud', blessing_285: 'izza', blessing_286: 'karama',
     blessing_287: 'istighna', blessing_288: 'bashasha', blessing_289: 'riqqa', blessing_290: 'ghayra',
+    blessing_291: 'insaf', blessing_292: 'imtinan', blessing_293: 'hamas', blessing_294: 'himma', blessing_295: 'tafaul', blessing_296: 'safa',
+    blessing_297: 'unsnas', blessing_298: 'intima', blessing_299: 'nadam', blessing_300: 'riatan',
   });
 })();
