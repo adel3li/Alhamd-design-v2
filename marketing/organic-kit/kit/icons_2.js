@@ -97,6 +97,63 @@
     ],
   });
 
+  /** A palm: trunk from (x, base) to (x+lean, top), fronds of length r. */
+  const palm = (x, base, top, r, lean = 0) => {
+    const tx = x + lean;
+    let s = P(`M${f(x)} ${f(base)} C${f(x + lean * 0.2)} ${f(base - (base - top) * 0.5)} ${f(tx)} ${f(top + (base - top) * 0.2)} ${f(tx)} ${f(top)}`);
+    for (const [dx, dy, cx, cy] of [[-1, 0.45, -0.55, -0.35], [1, 0.45, 0.55, -0.35], [-0.8, -0.35, -0.5, -0.7], [0.8, -0.35, 0.5, -0.7], [-0.15, -0.95, -0.25, -0.75]]) {
+      s += P(`M${f(tx)} ${f(top)} Q${f(tx + cx * r)} ${f(top + cy * r)} ${f(tx + dx * r)} ${f(top + dy * r)}`);
+    }
+    return s;
+  };
+  /** A leaf from (x0,y0) to (x1,y1), width w; one side bulges by w, the other by w*k. */
+  const leaf = (x0, y0, x1, y1, w, k = 1) => {
+    const dx = x1 - x0, dy = y1 - y0, L = Math.hypot(dx, dy), nx = -dy / L, ny = dx / L;
+    const m = (t, s) => `${f(x0 + dx * t + nx * s)} ${f(y0 + dy * t + ny * s)}`;
+    return P(`M${f(x0)} ${f(y0)} Q${m(0.5, w)} ${f(x1)} ${f(y1)} Q${m(0.5, -w * k)} ${f(x0)} ${f(y0)} Z`);
+  };
+
+  Object.assign(I, {
+    nakhl: [ // a palm, its dates hanging under the fronds
+      palm(24, 43, 15, 13, -1), C(20, 19.5, 1.4), C(22.6, 20.6, 1.4), C(20.6, 22.6, 1.4), P('M12 43 L36 43'), spark(38, 33, 1.8),
+    ],
+    zaytun: [ // an olive branch, the fruit among its leaves
+      P('M8 40 C16 33 26 22 40 9'), leaf(13.5, 35, 9, 27.5, 3.2), leaf(15.5, 33, 23, 36, 3.2), leaf(21.5, 27, 17.5, 19, 3.2), leaf(23.5, 25, 31.5, 27.5, 3.2),
+      leaf(30, 18.5, 27.5, 10.5, 3.2), leaf(32.5, 16, 40, 17.5, 3), E(20.4, 31.4, 1.7, 2.3), E(28.6, 22.8, 1.7, 2.3), E(35.2, 12.8, 1.6, 2.1),
+    ],
+    alwan: [ // three petals overlapping, each its own colour
+      leaf(24, 26, 24, 7, 6.5), leaf(24, 26, 7.5, 36, 6.5), leaf(24, 26, 40.5, 36, 6.5), C(24, 26, 2.2), spark(38.5, 9.5, 2), spark(10, 12, 1.4),
+    ],
+    zawjiyya: [ // two leaves, a pair, from the same stem
+      P('M24 44 L24 23'), leaf(24, 25, 9, 9.5, 5.6), leaf(24, 25, 39, 9.5, 5.6), P('M24 25 L14 14.5 M24 25 L34 14.5'), P('M15 44 L33 44'),
+    ],
+    maaadhb: [ // a glass of sweet water, a drop above it
+      P('M13.5 16 L16.5 42 L31.5 42 L34.5 16'), P('M15 26 C19 24.4 22 27.6 24 26 C26 24.4 29 27.6 33.3 26'), drop(24, 8.5, 1.3), P('M19 36 L19.6 31'), spark(39, 26, 1.6),
+    ],
+    shajar: [ // two green trees side by side
+      tree(17, 7, 17, 22, 42), tree(33, 15, 13, 16, 42), P('M8 42 L40 42'), P('M17 22 L13.5 18.5 M17 26 L21 22.5'),
+    ],
+    barq: [ // a cloud, lightning breaking from it
+      cloud(7, 41, 24, 15), P('M25 24 L20 33 L26 33 L21.5 43'), P('M13 30 L11.5 34 M33 30 L31.5 34 M37.5 30 L36 34'),
+    ],
+    ikhwa: [ // two shoots from one seed
+      E(24, 38.5, 4.2, 2.8), P('M24 36 C22 30 19 26 15.5 22'), P('M24 36 C26 30 29 26 32.5 22'), leaf(15.5, 22, 9.5, 14, 3), leaf(32.5, 22, 38.5, 14, 3), P('M10 43 L38 43'),
+    ],
+    ajdad: [ // an old tree, its wide shade over a young shoot
+      P('M17 43 C18 37 18 31 17 26 M23 43 C22 37 22.4 31 23.6 26'), P('M7 24 C4 17 10 9 18 10 C21 5 30 5 33 10 C40 9 45 17 41 24 C38 28 30 27 27 25 C24 28 14 29 7 24 Z'),
+      P('M20 26 L16 21 M20.4 26 L26 20'), P('M35 43 L35 37'), leaf(35, 38, 30.5, 33.5, 1.8), leaf(35, 38, 39.5, 34, 1.8), P('M11 43 L41 43'),
+    ],
+    ahfad: [ // a tree, a sapling and a seedling: what grows on after you
+      tree(12, 11, 13, 17, 41), P('M26 41 L26 27'), leaf(26, 29, 21, 23, 2.2), leaf(26, 28, 31, 22, 2.2), P('M37 41 L37 35'), leaf(37, 36, 34, 32.5, 1.5), leaf(37, 36, 40, 32.5, 1.5),
+      P('M5 41 L43 41'), spark(36, 13, 1.8),
+    ],
+  });
+
+  Object.assign(BY_BLESSING, {
+    blessing_121: 'nakhl', blessing_122: 'zaytun', blessing_123: 'alwan', blessing_124: 'zawjiyya', blessing_125: 'maaadhb',
+    blessing_126: 'shajar', blessing_127: 'barq', blessing_128: 'ikhwa', blessing_129: 'ajdad', blessing_130: 'ahfad',
+  });
+
   Object.assign(BY_BLESSING, {
     blessing_111: 'rahmawasia', blessing_112: 'mudaafa', blessing_113: 'dhulhijja', blessing_114: 'nasiha', blessing_115: 'rusul',
     blessing_116: 'samamahfuza', blessing_117: 'anhar', blessing_118: 'sahab', blessing_119: 'fajr', blessing_120: 'fusul',
