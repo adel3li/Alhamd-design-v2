@@ -37,7 +37,8 @@ const single = arg('n', null);
 const list = single ? [Number(single)] : Array.from({ length: Number(arg('to', 10)) - Number(arg('from', 1)) + 1 }, (_, k) => Number(arg('from', 1)) + k);
 
 (async () => {
-  const browser = await chromium.launch();
+  // PW_CHANNEL=chrome uses the computer's installed Google Chrome instead of Playwright's own download
+  const browser = await chromium.launch(process.env.PW_CHANNEL ? { channel: process.env.PW_CHANNEL } : {});
   for (const n of list) {
     const nn = String(n).padStart(2, '0');
     const day = arg('day', null) || dayFor(n);

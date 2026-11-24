@@ -24,7 +24,8 @@ const SCALE = Number(arg('scale', 1)); // device pixels per CSS pixel: 2 renders
 const url = `file://${path.join(root, 'kit', 'kit.html')}`;
 
 (async () => {
-  const browser = await chromium.launch();
+  // PW_CHANNEL=chrome uses the computer's installed Google Chrome instead of Playwright's own download
+  const browser = await chromium.launch(process.env.PW_CHANNEL ? { channel: process.env.PW_CHANNEL } : {});
   const open = async () => {
     const page = await browser.newPage({ viewport: { width: 1080, height: 1080 }, deviceScaleFactor: SCALE });
     page.on('pageerror', (e) => console.error('page error:', e.message));
