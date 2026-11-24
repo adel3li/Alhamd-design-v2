@@ -269,6 +269,48 @@
     ],
   });
 
+  Object.assign(I, {
+    jild: [ // the sun's heat stopped at a soft, layered cover
+      C(24, 11, 4), P('M24 3.5 L24 4.5 M16.5 11 L17.5 11 M31.5 11 L30.5 11 M18.6 5.6 L19.4 6.4 M29.4 5.6 L28.6 6.4'), P('M18 18 L16 22 M24 18 L24 22 M30 18 L32 22'),
+      P('M5 28 C11 24 17 24 24 28 C31 32 37 32 43 28'), P('M5 34 C11 30 17 30 24 34 C31 38 37 38 43 34'), P('M5 40 C11 36 17 36 24 40 C31 44 37 44 43 40'),
+    ],
+    sawt: [ // a voice carried out as waves
+      P('M6 24 L9 24 M10.5 19 L10.5 29 M15 14 L15 34 M19.5 18 L19.5 30 M24 10 L24 38 M28.5 16 L28.5 32 M33 20 L33 28 M37.5 15 L37.5 33 M42 23 L42 25'), spark(40, 8, 1.8),
+    ],
+    tawazun: [ // stones resting one on another, each in balance
+      P('M6 42 L42 42'), E(24, 37.5, 11, 4.5), E(23, 28.5, 8, 3.8), E(25, 20.8, 6, 3.2), E(24, 14.2, 4, 2.6), spark(36, 11, 2), spark(11, 18, 1.4),
+    ],
+    tufula: [ // a kite climbing, its tail of bows behind
+      P('M30 6 L40 16 L30 30 L20 16 Z'), P('M30 6 L30 30 M20 16 L40 16'), P('M30 30 C27 35 22 33 19 38 C16.5 42 12 41 9 44'),
+      P('M24.5 33.5 L22 31 M24.5 33.5 L22 36 M15.6 40.6 L13 38.4 M15.6 40.6 L14 43.4'), spark(10, 10, 2),
+    ],
+    shabab: [ // a young tree, straight and rising
+      P('M24 44 L24 12'), leaf(24, 20, 14, 12, 3.2), leaf(24, 20, 34, 12, 3.2), leaf(24, 28, 13, 23, 3), leaf(24, 28, 35, 23, 3), leaf(24, 13, 24, 4, 2.8), P('M15 44 L33 44'), spark(40, 34, 1.8),
+    ],
+    umr: [ // the rings of a tree: year upon year
+      C(24, 24, 17), C(24.6, 24.4, 13), C(25, 25, 9.4), C(25.4, 25.4, 5.8), C(25.6, 25.6, 2.4), P('M33 10 L30 16.4'), spark(42, 6.5, 1.6),
+    ],
+    libas: [ // a garment on its hanger
+      P('M24 9.5 C24 6.5 27.5 6.5 27.5 8.6 C27.5 10.4 24 10.6 24 13'), P('M24 13 L9 21 M24 13 L39 21'),
+      P('M17 17 L10 22 L13 27 L16 25.5 L16 43 L32 43 L32 25.5 L35 27 L38 22 L31 17 C29 19 19 19 17 17 Z'), P('M24 19 L24 30'), C(24, 23, 0.6), C(24, 27, 0.6),
+    ],
+    istiqaz: [ // a window opened on the new morning
+      R(9, 9, 30, 33, 1.5), P('M24 9 L24 42 M9 26 L39 26'), P('M12 26 A7 7 0 0 1 26 26'), P('M13 20 L11.4 18.6 M19 16.5 L19 14.5'), P('M28 35 L36 35 M29 31 L35 31'), P('M6 42 L42 42'),
+    ],
+    raha: [ // a warm cup, and time to sit with it
+      P('M11 22 L33 22 L31 37 C30.6 39.5 29 41 26.5 41 L17.5 41 C15 41 13.4 39.5 13 37 Z'), P('M33 25 C38 25 39 30 35.5 32.5 C34.5 33.2 33 33.4 31.8 33.3'), P('M7 44 L37 44'),
+      P('M17 17 C15 14 19 12 17 9 M22 17 C20 14 24 12 22 9 M27 17 C25 14 29 12 27 9'), spark(40, 12, 1.6),
+    ],
+    irada: [ // a signpost at the fork: the choice is yours
+      P('M24 44 L24 9'), P('M24 12 L37 12 L41 16 L37 20 L24 20'), P('M24 24 L11 24 L7 28 L11 32 L24 32'), C(24, 7.5, 1.5), P('M15 44 L33 44'),
+    ],
+  });
+
+  Object.assign(BY_BLESSING, {
+    blessing_161: 'jild', blessing_162: 'sawt', blessing_163: 'tawazun', blessing_164: 'tufula', blessing_165: 'shabab',
+    blessing_166: 'umr', blessing_167: 'libas', blessing_168: 'istiqaz', blessing_169: 'raha', blessing_170: 'irada',
+  });
+
   Object.assign(BY_BLESSING, {
     blessing_151: 'wafa', blessing_152: 'shifa', blessing_153: 'dawa', blessing_154: 'lams', blessing_155: 'shamm',
     blessing_156: 'asnan', blessing_157: 'izam', blessing_158: 'dam', blessing_159: 'hadm', blessing_160: 'manaa',
