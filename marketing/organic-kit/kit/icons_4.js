@@ -223,6 +223,41 @@
       P('M8 7 L26 7 C27.7 7 29 8.3 29 10 L29 18 C29 19.7 27.7 21 26 21 L14 21 L9.6 25.4 L10 21 L8 21 C6.3 21 5 19.7 5 18 L5 10 C5 8.3 6.3 7 8 7 Z'), P('M10 14 L13 14 M15.5 11 L15.5 17 M18.5 14 L24 14'),
       P('M40 25 L22 25 C20.3 25 19 26.3 19 28 L19 36 C19 37.7 20.3 39 22 39 L34 39 L38.4 43.4 L38 39 L40 39 C41.7 39 43 37.7 43 36 L43 28 C43 26.3 41.7 25 40 25 Z'), P('M24 32 C26 29.5 28 34.5 30 32 C32 29.5 34 34.5 36 32 L38 30'),
     ],
+    kutub: [ // books stacked, one open on top
+      R(7.5, 35, 31, 7, 1.5), R(10.5, 28, 29, 7, 1.5), R(8.5, 21, 27, 7, 1.5), P('M12.5 35 L12.5 42 M35.5 28 L35.5 35 M13 21 L13 28'),
+      P('M23 15 C20 12.6 15.6 12.4 12 13.2 L12 21 M23 15 C26 12.6 30.4 12.4 34 13.2 L34 21 M23 15 L23 21'), spark(40, 9, 1.8), spark(42, 22, 1.2),
+    ],
+    ibda: [ // a pencil, and the spark it draws
+      P('M14 34 L31 17 L36.6 22.6 L19.6 39.6 Z'), P('M14 34 L10.6 43 L19.6 39.6'), P('M28.4 19.6 L34 25.2'), P('M11.6 39.6 L14 42'),
+      spark(15, 13, 3.4), spark(39, 37, 2), spark(24, 6, 1.6),
+    ],
+    hall: [ // the piece that fits
+      P('M9 13 L18.5 13 C18.5 8.6 25.5 8.6 25.5 13 L35 13 L35 22.5 C39.4 22.5 39.4 29.5 35 29.5 L35 39 L25.5 39 C25.5 34.6 18.5 34.6 18.5 39 L9 39 L9 29.5 C13.4 29.5 13.4 22.5 9 22.5 Z'), spark(22, 26, 3), spark(41, 9, 1.6),
+    ],
+    talum: [ // steps that keep going up, a light at the top
+      P('M6 41 L14 41 L14 34 L22 34 L22 27 L30 27 L30 20 L38 20 L38 13'), P('M6 41 L42 41'), P('M10 24 L22 12 M22 12 L16.6 12 M22 12 L22 17.4'), spark(38, 6.5, 2.6), spark(42.5, 26, 1.4),
+    ],
+    fitna: [ // a key that finds its lock
+      C(14, 24, 6.4), C(14, 24, 2.4), P('M20.4 24 L41 24'), P('M34.5 24 L34.5 29.5 M39 24 L39 31'), spark(28, 13, 2.6), spark(38, 10, 1.5), spark(10, 37, 1.4),
+    ],
+    hiwar: [ // two voices turned toward each other, listening
+      P('M17 7 C10.4 7 5.5 11.2 5.5 16.6 C5.5 19.6 7 22.2 9.4 24 L8.4 29 L13.6 26 C14.7 26.2 15.8 26.3 17 26.3 C23.6 26.3 28.5 22 28.5 16.6 C28.5 11.2 23.6 7 17 7 Z'),
+      P('M31 21.7 C37.6 21.7 42.5 25.9 42.5 31.3 C42.5 34.3 41 36.9 38.6 38.7 L39.6 43.7 L34.4 40.7 C33.3 40.9 32.2 41 31 41 C24.4 41 19.5 36.7 19.5 31.3'),
+      C(12.4, 16.6, 1), C(17, 16.6, 1), C(21.6, 16.6, 1), C(26.4, 31.3, 0.8), C(31, 31.3, 0.8), C(35.6, 31.3, 0.8),
+    ],
+    basira: [ // a heart that sees
+      heart(24, 26, 15.5), P('M14.6 22.4 C18.6 17.4 29.4 17.4 33.4 22.4 C29.4 27.4 18.6 27.4 14.6 22.4 Z'), C(24, 22.4, 2.4), spark(40, 7, 2), spark(8, 8, 1.4),
+    ],
+    takhtit: [ // a route drawn from here to the flag
+      C(10, 37, 2.6), P('M12.4 35.6 C19 31 13.6 24.4 21.6 21.6 C29 19 28.6 14.6 33.6 12.4'), P('M35 13 L35 4.5 L42 7 L35 9.6'), P('M33 13 L37 13'),
+      P('M21 37 L25 41 M25 37 L21 41'), P('M33.4 29 L37.4 33 M37.4 29 L33.4 33'), P('M6 44 L42 44'),
+    ],
+    iktishaf: [ // a lens, and the star found under it
+      C(20, 20, 11), P('M27.8 27.8 L38.4 38.4 C39.4 39.4 41 39.4 42 38.4 C43 37.4 43 35.8 42 34.8 L31.4 24.2'), spark(20, 20, 5), spark(9, 39, 1.8), spark(40, 9, 1.5),
+    ],
+    tadris: [ // a board on its easel, the lesson on it
+      R(7.5, 7, 33, 23, 2), P('M13 30 L9.5 43 M35 30 L38.5 43 M24 30 L24 40'), P('M12.5 14.5 L25 14.5 M12.5 20.5 L21 20.5'), spark(33, 18, 3.2), P('M5.5 30 L42.5 30'),
+    ],
   });
 
   Object.assign(BY_BLESSING, {
@@ -238,5 +273,7 @@
     blessing_347: 'dakhl', blessing_348: 'aswaq', blessing_349: 'hirfa', blessing_350: 'ziraa',
     blessing_351: 'sayd', blessing_352: 'rai', blessing_353: 'iftar', blessing_354: 'suhur', blessing_355: 'hifzni', blessing_356: 'maabayt',
     blessing_357: 'idrak', blessing_358: 'intibah', blessing_359: 'hisab', blessing_360: 'lughat',
+    blessing_361: 'kutub', blessing_362: 'ibda', blessing_363: 'hall', blessing_364: 'talum', blessing_365: 'fitna', blessing_366: 'hiwar',
+    blessing_367: 'basira', blessing_368: 'takhtit', blessing_369: 'iktishaf', blessing_370: 'tadris',
   });
 })();
