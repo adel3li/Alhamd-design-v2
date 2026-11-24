@@ -155,6 +155,40 @@
     lahm: [ // a cut of meat on its bone
       P('M9.5 22.5 C9.5 14.5 19.5 10 28.5 11 C36.5 12 41 18 40 25 C39 33 31 38.5 22 37.5 C14 36.5 9.5 30.5 9.5 22.5 Z'), C(30.6, 22.6, 3.6), P('M13.6 22.6 C13.6 17.4 19.6 14.2 26.6 14.6'), P('M7 43 L41 43'), spark(41, 6, 2),
     ],
+    bayd: [ // eggs warm in their nest
+      E(18.5, 23, 5.4, 7), E(29.5, 23.6, 5.4, 7), P('M7 27 C8 36 15 40.5 24 40.5 C33 40.5 40 36 41 27'), P('M7 27 C12 30.5 36 30.5 41 27'), P('M10 34 L16 32.6 M32 32.6 L38 34 M19 37.6 L25 35.8'), spark(39, 10, 2), spark(9, 13, 1.4),
+    ],
+    maabarid: [ // a glass of cold water, ice in it, drops on the side
+      P('M12 9 L15 42.5 L33 42.5 L36 9'), P('M13 19.5 L35 19.5'), P('M17.4 24.4 L22.4 22.8 L24 27.8 L19 29.4 Z'), P('M25 30 L30 29 L31 34 L26 35 Z'), drop(40.5, 26, 0.9), drop(8, 33, 0.8), spark(41, 9, 1.8),
+    ],
+    halwa: [ // a sweet in its twisted wrapper
+      E(24, 24, 8.4, 6.6), P('M15.8 22.4 L7.5 16.5 L7.5 31.5 L15.8 25.6'), P('M32.2 22.4 L40.5 16.5 L40.5 31.5 L32.2 25.6'), P('M21.6 17.8 C19.8 21.6 19.8 26.4 21.6 30.2'), P('M27.2 17.8 C25.4 21.6 25.4 26.4 27.2 30.2'), spark(35, 8, 2.2), spark(13, 40, 1.5),
+    ],
+    tawabil: [ // a mortar and pestle, the spices ground fresh
+      P('M8 25 L40 25 C40 34.4 33 40.6 24 40.6 C15 40.6 8 34.4 8 25 Z'), P('M16.5 44 L31.5 44'), P('M26 25 L34.6 8.6 C35.6 6.6 38.8 7.8 37.9 10 L30.4 25'), C(14, 20.5, 1.1), C(19.5, 21.5, 1.1), C(16.8, 17, 1.1), spark(9, 9, 1.8),
+    ],
+    tahy: [ // a pot on the flame, steam rising from it
+      R(9, 22, 30, 16, 3), P('M6.5 22 L41.5 22'), P('M21 22 C21 18.4 27 18.4 27 22'), P('M9 26.5 L5 26.5 M39 26.5 L43 26.5'),
+      P('M18 44 C15.8 42.4 17 40 18 39.4 C19 40.6 20.4 42.2 18 44 Z M30 44 C27.8 42.4 29 40 30 39.4 C31 40.6 32.4 42.2 30 44 Z'), P('M16 15 C14 12 18 10 16 6.5'), P('M32 15 C30 12 34 10 32 6.5'),
+    ],
+    rizqwasi: [ // a basket full past its brim
+      P('M8 25 L40 25 L36 41.5 L12 41.5 Z'), P('M10 31.5 L38 31.5 M18 25 L19.4 41.5 M30 25 L28.6 41.5'), C(16, 19.8, 4.8), C(25, 17.4, 5.6), C(33.6, 20.2, 4.4), P('M25 11.8 C25 9.4 26.6 7.6 28.6 7.2'), spark(42, 11, 2), spark(7, 11, 1.5),
+    ],
+    dakhl: [ // the month turning, and the wage that comes with it
+      R(7, 11, 26, 25, 2.5), P('M13 7.5 L13 14 M27 7.5 L27 14'), P('M7 18.5 L33 18.5'), C(13, 24, 0.9), C(20, 24, 0.9), C(27, 24, 0.9), C(13, 30, 0.9), C(20, 30, 0.9),
+      C(34, 33.5, 7.6), C(34, 33.5, 4.4),
+    ],
+    aswaq: [ // a market stall under its awning, goods laid out
+      P('M9 10 L39 10 L42 18 L6 18 Z'), P('M6 18 C6 22 12 22 12 18 C12 22 18 22 18 18 C18 22 24 22 24 18 C24 22 30 22 30 18 C30 22 36 22 36 18 C36 22 42 22 42 18'),
+      P('M9 21 L9 42 M39 21 L39 42'), P('M6 34 L42 34'), C(16, 31, 2.6), C(23.5, 31, 2.6), C(31, 31, 2.6), P('M5 42 L43 42'),
+    ],
+    hirfa: [ // a hammer at its work, a nail driven home
+      P('M22 17 L26 13 L35 22 L31 26 Z'), P('M26.5 21.5 L10.5 37.5 C9.5 38.5 9.5 40 10.5 41 C11.5 42 13 42 14 41 L29 26'), P('M37.5 34 L37.5 43 M34.5 34 L40.5 34'), spark(41, 10, 2), spark(10, 12, 1.5),
+    ],
+    ziraa: [ // furrows sown, the shoots up, the sun over them
+      P('M4.5 41 C15 37 33 37 43.5 41'), P('M8 34 C17 31 31 31 40 34'), P('M16 32.2 L16 26 M16 28.8 C13.4 28.8 12 26.8 12.2 24.6 C14.6 24.6 16 26.4 16 28.8 Z'), P('M32 32.2 L32 26 M32 28.8 C34.6 28.8 36 26.8 35.8 24.6 C33.4 24.6 32 26.4 32 28.8 Z'),
+      P('M24 31 L24 22.6 M24 25.6 C21.2 25.6 19.6 23.4 19.8 21 C22.4 21 24 23 24 25.6 Z M24 25.6 C26.8 25.6 28.4 23.4 28.2 21 C25.6 21 24 23 24 25.6 Z'), C(24, 10, 3.6), P('M24 3 L24 4.4 M17 10 L18.4 10 M29.6 10 L31 10 M19 5 L20 6 M29 5 L28 6'),
+    ],
   });
 
   Object.assign(BY_BLESSING, {
@@ -166,5 +200,7 @@
     blessing_327: 'shaykhukha', blessing_328: 'ijaza', blessing_329: 'hiwaya', blessing_330: 'laib',
     blessing_331: 'nisyan', blessing_332: 'ruya', blessing_333: 'qaylula', blessing_334: 'mashy', blessing_335: 'daw', blessing_336: 'samt',
     blessing_337: 'khalwa', blessing_338: 'nudj', blessing_339: 'nizam', blessing_340: 'lahm',
+    blessing_341: 'bayd', blessing_342: 'maabarid', blessing_343: 'halwa', blessing_344: 'tawabil', blessing_345: 'tahy', blessing_346: 'rizqwasi',
+    blessing_347: 'dakhl', blessing_348: 'aswaq', blessing_349: 'hirfa', blessing_350: 'ziraa',
   });
 })();
