@@ -295,6 +295,39 @@
       P('M7 22 C8 13 15 8 24 8 C33 8 40 13 41 22 C38 20 35 20 32.5 22 C30 20 26.5 20 24 22 C21.5 20 18 20 15.5 22 C13 20 10 20 7 22 Z'), P('M24 8 L24 5'), P('M24 22 L24 25'),
       heart(18.5, 34, 5.4), heart(30.5, 35, 4.4), drop(5.5, 31, 0.8), drop(42.5, 31, 0.8), drop(6.5, 40, 0.7), drop(41.5, 40, 0.7),
     ],
+    aminrizq: [ // bread kept under a sheltering arc
+      P('M9 31 C9 25 15 22 24 22 C33 22 39 25 39 31 L39 39 L9 39 Z'), P('M17 26 L19 30 M24 25 L24 29.6 M31 26 L29 30'), P('M5.5 22 A18.5 18.5 0 0 1 42.5 22'), P('M6 43 L42 43'), spark(24, 8.5, 2.2),
+    ],
+    mawa: [ // a tent pitched, a place to rest
+      P('M5.5 40 L24 9.5 L42.5 40 Z'), P('M24 22 L18 40 M24 22 L30 40'), P('M24 9.5 L24 5.5'), P('M3.5 40 L44.5 40'), spark(38, 10, 1.8), spark(9.5, 16, 1.4),
+    ],
+    sawnird: [ // a pearl kept safe in its shell
+      P('M8 27 C8 17.5 15.5 11.5 24 11.5 C32.5 11.5 40 17.5 40 27 Z'), P('M24 11.5 L24 27 M16 13.6 L19.2 27 M32 13.6 L28.8 27 M10.4 19 L14.6 27 M37.6 19 L33.4 27'),
+      P('M8 27 C10 37 38 37 40 27'), C(24, 31.2, 2.8), spark(40, 9, 1.8), spark(9, 39, 1.4),
+    ],
+    kawarith: [ // the storm held off from the house below
+      P('M14 17 C9.6 17 8.6 11.6 12.4 10.4 C12.4 6 18.4 4.6 20.6 8.2 C22.6 4.4 29.6 4.8 30 10 C34.4 9.8 35.6 15.6 31.6 17 Z'), P('M23 17 L19.6 22.6 L24 22.6 L21.6 27'),
+      P('M8.5 33 A16.5 8.5 0 0 1 39.5 33'), P('M14 33 L14 43 L34 43 L34 33'), P('M21 43 L21 37 L27 37 L27 43'), drop(38, 22, 0.8), drop(9.5, 23, 0.8),
+    ],
+    isaf: [ // a lifebuoy thrown to the one in need
+      C(24, 24, 14), C(24, 24, 7), P('M14.1 14.1 L19 19 M33.9 14.1 L29 19 M14.1 33.9 L19 29 M33.9 33.9 L29 29'), P('M38 24 C42 21 44 17 43 12'), spark(10, 7, 1.8), spark(40, 42, 1.4),
+    ],
+    thiqa: [ // two rings joined, each holding the other
+      C(18.5, 25, 10), C(29.5, 25, 10), spark(24, 8, 2.4), spark(24, 42, 1.5),
+    ],
+    iddikhar: [ // coins put by, the stacks growing
+      P('M6.5 41 L6.5 36 M17.5 41 L17.5 36'), E(12, 36, 5.5, 2), P('M6.5 41 A5.5 2 0 0 0 17.5 41'), P('M6.5 37.5 A5.5 2 0 0 0 17.5 37.5'), P('M18.5 41 L18.5 29 M29.5 41 L29.5 29'), E(24, 29, 5.5, 2), P('M18.5 41 A5.5 2 0 0 0 29.5 41'), P('M18.5 37.5 A5.5 2 0 0 0 29.5 37.5'), P('M18.5 34.0 A5.5 2 0 0 0 29.5 34.0'), P('M18.5 30.5 A5.5 2 0 0 0 29.5 30.5'), P('M30.5 41 L30.5 22 M41.5 41 L41.5 22'), E(36, 22, 5.5, 2), P('M30.5 41 A5.5 2 0 0 0 41.5 41'), P('M30.5 37.5 A5.5 2 0 0 0 41.5 37.5'), P('M30.5 34.0 A5.5 2 0 0 0 41.5 34.0'), P('M30.5 30.5 A5.5 2 0 0 0 41.5 30.5'), P('M30.5 27.0 A5.5 2 0 0 0 41.5 27.0'), P('M30.5 23.5 A5.5 2 0 0 0 41.5 23.5'), spark(40, 10, 2), spark(16, 22, 1.4),
+    ],
+    nafaqa: [ // a home with a heart in it, and what is given to it
+      P('M8 24 L24 11 L40 24'), P('M12 21 L12 42 L36 42 L36 21'), heart(24, 32.5, 7.4), C(39, 8, 3.8), P('M39 6.2 L39 9.8'), P('M5 42 L43 42'),
+    ],
+    qard: [ // a coin lent and returned
+      C(24, 24, 7), C(24, 24, 3.6), P('M9.6 19 A15 15 0 0 1 36 12.4'), P('M36 12.4 L30.6 12.2 M36 12.4 L35.2 17.6'), P('M38.4 29 A15 15 0 0 1 12 35.6'), P('M12 35.6 L17.4 35.8 M12 35.6 L12.8 30.4'), spark(40, 41, 1.6),
+    ],
+    waqf: [ // a well that keeps giving, long after its builder
+      P('M7.5 16 L24 8 L40.5 16'), P('M13.5 15.6 L13.5 29 M34.5 15.6 L34.5 29'), P('M13.5 19.5 L34.5 19.5'), P('M24 19.5 L24 24'), P('M21 24 L27 24 L26 28 L22 28 Z'),
+      R(10.5, 29, 27, 13, 1.5), P('M10.5 35.5 L37.5 35.5'), drop(42, 27, 0.8), P('M6 42 L42 42'),
+    ],
   });
 
   Object.assign(BY_BLESSING, {
@@ -314,5 +347,7 @@
     blessing_367: 'basira', blessing_368: 'takhtit', blessing_369: 'iktishaf', blessing_370: 'tadris',
     blessing_371: 'naqd', blessing_372: 'tadabbur', blessing_373: 'aminbayt', blessing_374: 'tariq', blessing_375: 'murabitin', blessing_376: 'aminju',
     blessing_377: 'haram', blessing_378: 'istiadha', blessing_379: 'adhkar', blessing_380: 'aminawlad',
+    blessing_381: 'aminrizq', blessing_382: 'mawa', blessing_383: 'sawnird', blessing_384: 'kawarith', blessing_385: 'isaf', blessing_386: 'thiqa',
+    blessing_387: 'iddikhar', blessing_388: 'nafaqa', blessing_389: 'qard', blessing_390: 'waqf',
   });
 })();
