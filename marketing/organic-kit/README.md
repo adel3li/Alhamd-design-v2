@@ -114,7 +114,10 @@ python3 tools/export_package.py --from 1 --to 100 --dest "$HOME/Downloads/claude
 python3 tools/build_gallery.py 1 --local --out "$HOME/Downloads/claude work/alhamd-carousels/1-100"
 ```
 
-The local copy of the page has the two buttons on each blessing; open its `index.html` in the browser.
+The local copy of the page has a download button on each blessing for every size exported; open its `index.html` in
+the browser. On the Mac, `alhamd-carousels/export.sh <from> <to>` runs all of it in one command for up to ~25 blessings
+(the app server, the screenshots, the Full HD render with `PW_CHANNEL=chrome`, i.e. the installed Google Chrome, the ZIPs
+and the page); a command there cannot reach a server another command started. Done so far: 1–100 in Full HD (1 GB).
 
 | Batch | Blessings | Notes |
 |---|---|---|
