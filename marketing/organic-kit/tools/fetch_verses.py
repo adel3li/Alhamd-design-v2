@@ -12,6 +12,7 @@ Every verse card still says «راجِع قبل النشر» in the plan: the ap
 reviewed by people of knowledge before it is published, and that promise covers marketing too.
 """
 import json
+import unicodedata
 import re
 import sys
 import time
@@ -40,12 +41,17 @@ VERSES = [
     # blessing packages (kit/bundle.js): the verse the app shows on the blessing card, same portion
     ("BV-05", 29, 45, "العنكبوت", 7, 17, "نعمة الصلاة: آية النعمة كما تظهر في التطبيق"),
     ("BV-37", 90, 8, "البلد", None, None, "نعمة البصر: آية النعمة كما تظهر في التطبيق"),
+    ("BV-15", 67, 30, "الملك", None, None, "نعمة الماء: آية النعمة كما تظهر في التطبيق"),
+    ("BV-19", 3, 190, "آل عمران", None, None, "نعمة العقل: آية النعمة كما تظهر في التطبيق"),
+    ("BV-22", 31, 14, "لقمان", 1, 15, "نعمة الأم: آية النعمة كما تظهر في التطبيق (حتى «ولوالديك»)"),
 ]
 
 MARKS = re.compile(r"[ؐ-ًؚ-ٰٟۖ-ۭ࣓-ࣿـ]")
 
 
 def skeleton(s: str) -> str:
+    # the same hamza is written as a mark on a tatweel in one source and as a letter in the other («لَـَٔايَـٰتٍ» / «لَءَايَٰتٍ»)
+    s = unicodedata.normalize("NFC", s).replace("\u0654", "ء")
     s = MARKS.sub("", s)
     s = s.replace("ٱ", "ا").replace("أ", "ا").replace("إ", "ا").replace("آ", "ا").replace("ى", "ي").replace("ة", "ه")
     return re.sub(r"[^ء-ي]", "", s)

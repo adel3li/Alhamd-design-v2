@@ -375,7 +375,8 @@
   ]);
 
   /* ===================== TR — «جرّبها الآن»: the five pauses of one blessing ===================== */
-  const TRY = [15, 37, 22, 14, 17, 33, 36, 13, 28, 32, 39, 5];
+  // the twelve of the plan, then every blessing that has a full package (kit/bundle.js)
+  const TRY = [...new Set([15, 37, 22, 14, 17, 33, 36, 13, 28, 32, 39, 5, ...Object.keys(CT.bundle || {}).map(Number)])];
   const STEP_NAMES = ['التهيئة والحضور', 'تخيّل الغياب', 'التعمّق', 'العودة', 'الحمد'];
   TRY.forEach((nn) => {
     const b = BY[nn], ic = ICON[b.id];

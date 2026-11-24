@@ -143,6 +143,7 @@ def package(a: Assets, C: dict, n: int) -> tuple[str, str]:
     q = re.sub(r"^اكتب:\s*", "", b["prompt"])
     P = f"b{nn}-"  # ids are unique per blessing on the shared page
     secs = []
+    num = iter(range(1, 20))  # sections are numbered in order; a blessing outside «رحلتي» has no stage section
 
     # 1 — single designs
     singles = [
@@ -159,36 +160,36 @@ def package(a: Assets, C: dict, n: int) -> tuple[str, str]:
     caps = (caption(f"{b['title']}.\n{b['opening']}\nفي «الحمد» نعمةٌ كلَّ يوم، ودقيقتان من التأمّل معها.\n{CTA_LIVE}\n{TAGS}", f"NB-{nn}") +
             caption(f"﴿{v['text']}﴾ {ref}\n{cp.get('verseCaption', '')}\n#جمعة_مباركة #الحمد_لله #تطبيق_الحمد", f"AY-{nn}") +
             caption(f"سؤال الليلة من «{b['title']}»:\n{q}\nاكتبها في التعليقات… أو في دفترك.\n{TAGS}", f"NP-{nn}"))
-    secs.append(section(1, P + "single", "تصميمٌ واحد", "أبسط شكل: صورة واحدة تُقرأ في ثانيتين. نعمة اليوم، آيتها، دعاؤها، وسؤالها.",
+    secs.append(section(next(num), P + "single", "تصميمٌ واحد", "أبسط شكل: صورة واحدة تُقرأ في ثانيتين. نعمة اليوم، آيتها، دعاؤها، وسؤالها.",
                         f'<div class="singles">{"".join(cards)}</div><div class="caps">{caps}</div>',
                         "ستّ تصاميم من نصوص التطبيق، بثيمَي «ليل» و«نهار»، وبكل المقاسات (المعروض هنا بعضها).", flag("ready")))
 
     # 2 — two slides
-    secs.append(section(2, P + "gh", "كاروسيل صغير: «غابت… ثم عادت»", "فكرة التطبيق كلّها في سحبة واحدة: الشريحة الأولى تُغيّب النعمة، والثانية تُعيدها.",
+    secs.append(section(next(num), P + "gh", "كاروسيل صغير: «غابت… ثم عادت»", "فكرة التطبيق كلّها في سحبة واحدة: الشريحة الأولى تُغيّب النعمة، والثانية تُعيدها.",
                         carousel(a, f"GH-{nn}", 2, set(), f"تخيَّل لحظة…\n{b['steps'][1]}\nاسحب ←\n\n{b['title']}: {b['opening']}\n{CTA_LIVE}\n{TAGS}"),
                         "شريحتان ٤:٥ · إنستجرام وفيسبوك ولينكدإن", flag("ready")))
 
     # 3 — try it now
-    secs.append(section(3, P + "tr", "كاروسيل «جرّبها الآن»", "الوقفات الخمس كما في التطبيق، صفحةً صفحة: يقرأها المتابع ببطء ثم يسحب.",
+    secs.append(section(next(num), P + "tr", "كاروسيل «جرّبها الآن»", "الوقفات الخمس كما في التطبيق، صفحةً صفحة: يقرأها المتابع ببطء ثم يسحب.",
                         carousel(a, f"TR-{nn}", 7, set(), f"جرّبها الآن: دقيقتان مع {b['title']}.\nاقرأ كلَّ صفحةٍ ببطء… ثم اسحب.\nهكذا يأخذك «الحمد» كلَّ يوم إلى نعمةٍ واحدة.\n{CTA_LIVE}\n{TAGS}"),
                         "٧ شرائح ٤:٥ · من الحزمة السابقة", flag("ready")))
 
     # 4 — the home screen
     hs, hs_review = card_slides(b, ["app"])
-    secs.append(section(4, P + "hs", "كاروسيل «من الشاشة الرئيسية»", "بطاقة النعمة كما تظهر في التطبيق: الآية، ثم الحديث، ثم «وقفات في أثر النعمة»، ثم قول العالم، وأخيرًا الشاشة الحقيقية.",
+    secs.append(section(next(num), P + "hs", "كاروسيل «من الشاشة الرئيسية»", "بطاقة النعمة كما تظهر في التطبيق: الآية، ثم الحديث، ثم «وقفات في أثر النعمة»، ثم قول العالم، وأخيرًا الشاشة الحقيقية.",
                         carousel(a, f"HS-{nn}", len(hs), hs_review, f"{b['title']}… كما تصلك في «الحمد».\nآيتها، وحديثها، ووقفاتٌ في أثرها.\nاحفظ المنشور وارجع إليه الليلة.\n{CTA_LIVE}\n{TAGS}"),
                         f"{ar(len(hs))} شرائح ٤:٥", flag("review")))
 
     # 5 — the whole journey
     jr, jr_review = card_slides(b, ["visualize", "deepen", "return", "hamd", "journal"])
-    secs.append(section(5, P + "jr", "كاروسيل «الرحلة كاملة»", "ما يعيشه المستخدم مع النعمة في التطبيق، من البطاقة إلى سجلّ الحمد، في عشر شرائح (الحدّ الأقصى).",
+    secs.append(section(next(num), P + "jr", "كاروسيل «الرحلة كاملة»", "ما يعيشه المستخدم مع النعمة في التطبيق، من البطاقة إلى سجلّ الحمد، في عشر شرائح (الحدّ الأقصى).",
                         carousel(a, f"JR-{nn}", len(jr), jr_review, f"رحلةٌ كاملة مع {b['title']}… في عشر صفحات.\nمن الآية والحديث، إلى أن تتخيّل غيابها، ثم تعود إليها فتحمد الله.\nاقرأها على مهل، واكتب جواب السؤال الأخير في التعليقات.\n{CTA_LIVE}\n{TAGS}"),
                         "١٠ شرائح ٤:٥", flag("review")))
 
     # 6 — «رحلتي»
     st = b.get("stage")
     if st:
-        secs.append(section(6, P + "jm", f"كاروسيل «رحلتي»: {esc(st['title'])}", f"المنزل الذي فيه {b['title']} في «رحلتي»: سبع محطّات، لكلٍّ منها «عمل اليوم».",
+        secs.append(section(next(num), P + "jm", f"كاروسيل «رحلتي»: {esc(st['title'])}", f"المنزل الذي فيه {b['title']} في «رحلتي»: سبع محطّات، لكلٍّ منها «عمل اليوم».",
                             carousel(a, f"JM-{st['id']}", 2 + len(st["stations"]), set(), f"{st['title']}: سبع نِعَم… وسبعة أعمالٍ صغيرة.\nمحطّةٌ كلَّ يوم في «رحلتي»، بالسرعة التي تناسبك.\nأيّ محطّةٍ تبدأ بها؟\n{CTA_LIVE}\n#رحلتي #الحمد_لله #تطبيق_الحمد"),
                             f"{ar(2 + len(st['stations']))} شرائح ٤:٥ · نصوص «رحلتي» نفسها ما زالت قيد المراجعة في التطبيق", flag("ready")))
 
@@ -208,7 +209,7 @@ def package(a: Assets, C: dict, n: int) -> tuple[str, str]:
         reels.append(f'<figure class="reel"><div class="phone"><video controls playsinline preload="none" poster="{r[1]}" src="{r[0]}" aria-label="{esc(name)}"></video></div>'
                      f'<figcaption><b>{name}</b><span>{use}</span><span class="dur">{mmss(secs_len)} · ٩:١٦</span>{flag("voice") if rid.startswith("VV") else ""}</figcaption>'
                      f'{caption(cap, rid + "-" + th) if cap else ""}</figure>')
-    secs.append(section(7, P + "reels", "ريلز", "ثلاثة أشكال من الفيديو القصير: نصٌّ متحرّك، وأنيميشن مرسومٌ لهذه النعمة، ونسخةٌ مسموعة من الوقفات.",
+    secs.append(section(next(num), P + "reels", "ريلز", "ثلاثة أشكال من الفيديو القصير: نصٌّ متحرّك، وأنيميشن مرسومٌ لهذه النعمة، ونسخةٌ مسموعة من الوقفات.",
                         f'<div class="reels">{"".join(reels)}</div>', "١٠٨٠×١٩٢٠ · ٣٠ إطارًا في الثانية · بلا موسيقى", flag("ready") + flag("voice")))
 
     # 8 — audio
@@ -232,7 +233,7 @@ def package(a: Assets, C: dict, n: int) -> tuple[str, str]:
              f'<audio controls preload="none" src="{pc}"></audio><p class="meta">{mmss(pc_len)} · MP3</p>{flag("voice")}{flag("review")}</div></div></div>'
              f'<details class="script"><summary>نصّ الحلقة بالتوقيت</summary><div class="tbl"><table><thead><tr><th>الوقت</th><th>المقطع</th><th>النص</th></tr></thead><tbody>{"".join(rows)}</tbody></table></div>'
              f'<p class="meta">الأبيض من التطبيق، والمائل مسوّدة لنصّ الحلقة تحتاج موافقتك، والمعلَّم بالبرتقالي نصٌّ قيد المراجعة.</p></details>')
-    secs.append(section(8, P + "audio", "صوت: وقفة وبودكاست", "النعمة مسموعة: مقطعٌ قصير للاستماع اليومي، وحلقةٌ أطول تجمع البطاقة كلّها والوقفات.", audio, "", flag("voice")))
+    secs.append(section(next(num), P + "audio", "صوت: وقفة وبودكاست", "النعمة مسموعة: مقطعٌ قصير للاستماع اليومي، وحلقةٌ أطول تجمع البطاقة كلّها والوقفات.", audio, "", flag("voice")))
 
     review = [(r["title"], r["text"]) for r in cp.get("review", [])] + [
         ("الآية", f"{ref} بالرسم العثماني من quran.com، وطابقنا حروفها مع Tanzil، وهي المقطع نفسه الذي يعرضه التطبيق مع علامات الوقف. تُراجَع كلّ بطاقة آية قبل نشرها."),
@@ -242,7 +243,7 @@ def package(a: Assets, C: dict, n: int) -> tuple[str, str]:
     ]
     review_html = "".join(f"<li><b>{esc(t)}</b><span>{esc(d)}</span></li>" for t, d in review)
     ladder = [("single", "تصميم واحد", "٦"), ("gh", "كاروسيل صغير", "٢"), ("tr", "جرّبها الآن", "٧"), ("hs", "الشاشة الرئيسية", ar(len(hs))),
-              ("jr", "الرحلة كاملة", ar(len(jr))), ("jm", "رحلتي", ar(2 + len(st["stations"])) if st else ""), ("reels", "ريلز", "٣"), ("audio", "صوت", "٢")]
+              ("jr", "الرحلة كاملة", ar(len(jr)))] + ([("jm", "رحلتي", ar(2 + len(st["stations"])))] if st else []) + [("reels", "ريلز", "٣"), ("audio", "صوت", "٢")]
     toc = "".join(f'<li><a href="#{P}{x}"><span class="toc-n">{ar(k + 1)}</span><span class="toc-t">{t}</span><span class="toc-c">{c}</span></a></li>' for k, (x, t, c) in enumerate(ladder))
 
     body = (f'<div class="pkg" id="b{nn}" data-pkg="b{nn}">'

@@ -55,7 +55,9 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .mark i { display: block; height: 2px; background: var(--stroke); border-radius: 2px; position: relative; }
 .mark i::after { content: ""; position: absolute; right: -3px; top: -3px; width: 8px; height: 8px; border-radius: 50%; background: var(--stroke); }
 .pkg[hidden] { display: none; }
-.pkg, .sec { scroll-margin-top: 72px; }
+.pkg { scroll-margin-top: 400px; } /* a blessing always opens at the top of the page */
+.sec { scroll-margin-top: 72px; }
+@media (max-width: 520px) { .sec { scroll-margin-top: 120px; } }
 .bar .wrap { flex-wrap: wrap; }
 .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-inline-start: auto; margin-inline-end: 12px; }
 .pk-tab { font: 600 14px/1 var(--sans); text-decoration: none; color: var(--muted); border: 1px solid var(--hair); border-radius: 999px; padding: 9px 16px; background: var(--surface); }

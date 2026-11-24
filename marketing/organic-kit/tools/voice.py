@@ -18,6 +18,7 @@ published audio needs permission. Every other sacred or quoted text is read verb
 import asyncio
 import hashlib
 import json
+import unicodedata
 import re
 import ssl
 import subprocess
@@ -51,6 +52,7 @@ def tts(text: str, voice: str = VOICE, rate: str = "-10%") -> tuple[np.ndarray, 
     if Path(CA).exists():  # the session's TLS proxy; harmless elsewhere
         cm._SSL_CTX = ssl.create_default_context(cafile=CA)
     CACHE.mkdir(parents=True, exist_ok=True)
+    text = text.replace("ﷺ", "صلى الله عليه وسلم")  # the ligature is read in full
     key = hashlib.sha1(f"{voice}|{rate}|{text}".encode()).hexdigest()[:16]
     mp3, words_f = CACHE / f"{key}.mp3", CACHE / f"{key}.json"
     if not mp3.exists():
@@ -80,6 +82,7 @@ MARKS = re.compile(r"[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED\u08D3-\u08FF
 
 def skeleton(t: str) -> str:
     """Letters only, as tools/fetch_verses.py compares two copies of a verse."""
+    t = unicodedata.normalize("NFC", t).replace("\u0654", "ء")
     t = MARKS.sub("", t)
     for a, b in (("ٱ", "ا"), ("أ", "ا"), ("إ", "ا"), ("آ", "ا"), ("ى", "ي"), ("ة", "ه")):
         t = t.replace(a, b)
@@ -98,10 +101,15 @@ def speak(text: str, b: dict, voice: str = VOICE, rate: str = "-10%") -> tuple[n
     for part in parts:
         if part.startswith("﴿"):
             v = b["verse"]
-            same = skeleton(part) == skeleton(v["full"])
-            x = peak(recitation(v["surah"], v["ayah"]), -3) if same else silence(1.2)
-            if not same:
-                print(f"  note: a verse inside a line is not the blessing's verse, left silent: {part}")
+            if skeleton(part) == skeleton(v["full"]):
+                x = peak(recitation(v["surah"], v["ayah"]), -3)
+            else:
+                x = quran_words(part, [(v["surah"], v["ayah"])] + [tuple(map(int, r.split(":"))) for r in b.get("quoted", [])])
+                if x is None:
+                    print(f"  note: no recording found for {part}; left silent (add its verse to quotedVerses in package_nn.json)")
+                    x = silence(1.2)
+                else:
+                    x = peak(x, -3)
             out += [silence(0.3), x, silence(0.3)]
         elif re.search(r"[ء-ي]", part):
             x, _ = tts(part.strip(" —-:،"), voice=voice, rate=rate)
@@ -109,13 +117,56 @@ def speak(text: str, b: dict, voice: str = VOICE, rate: str = "-10%") -> tuple[n
     return np.concatenate(out), [], True
 
 
-def decode(path: Path) -> np.ndarray:
+def decode(path: Path, trim: bool = True) -> np.ndarray:
     raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(path), "-ac", "1", "-ar", str(SR), "-f", "f32le", "-"],
                          check=True, capture_output=True).stdout
     x = np.frombuffer(raw, dtype=np.float32).astype(np.float64)
+    if not trim:
+        return x
     # trim the synthesiser's leading and trailing silence
     nz = np.nonzero(np.abs(x) > 0.004)[0]
     return x[max(0, nz[0] - int(0.03 * SR)): nz[-1] + int(0.12 * SR)] if len(nz) else x
+
+
+def qget(url: str) -> bytes:
+    ctx = ssl.create_default_context(cafile=CA) if Path(CA).exists() else None
+    return urllib.request.urlopen(urllib.request.Request(url, headers={"User-Agent": "alhamd-kit"}), context=ctx, timeout=60).read()
+
+
+def cached_json(name: str, url: str) -> dict:
+    CACHE.mkdir(parents=True, exist_ok=True)
+    f = CACHE / name
+    if not f.exists():
+        f.write_bytes(qget(url))
+    return json.loads(f.read_text(encoding="utf-8"))
+
+
+def quran_words(fragment: str, refs: list, reciter: int = 7) -> np.ndarray | None:
+    """Words quoted from a verse, cut from the reciter's recording of that verse by quran.com's word timings.
+    The fragment must be consecutive whole words of one of the verses in refs (letters compared without
+    diacritics or alifs, so the app's plain spelling matches the Uthmani text)."""
+    loose = lambda t: skeleton(t.replace("ء", "ا")).replace("ا", "")  # noqa: E731
+    want = loose(fragment)
+    for s, a in refs:
+        words = [w for w in cached_json(f"words_{s:03d}{a:03d}.json", f"https://api.quran.com/api/v4/verses/by_key/{s}:{a}?words=true&word_fields=text_uthmani")["verse"]["words"] if w["char_type_name"] == "word"]
+        for i in range(len(words)):
+            for j in range(i, len(words)):
+                got = loose("".join(w["text_uthmani"] for w in words[i:j + 1]))
+                if got == want:
+                    meta = cached_json(f"segments_{reciter}_{s:03d}{a:03d}.json", f"https://api.quran.com/api/v4/recitations/{reciter}/by_ayah/{s}:{a}?fields=segments")["audio_files"][0]
+                    seg = {sg[1]: (sg[2], sg[3]) for sg in meta["segments"]}
+                    p0, p1 = words[i]["position"], words[j]["position"]
+                    if p0 not in seg or p1 not in seg:
+                        return None
+                    recitation(s, a, reciter)  # makes sure the recording is cached
+                    x = decode(CACHE / f"recitation_{reciter}_{s:03d}{a:03d}.mp3", trim=False)
+                    # exactly on the timing boundaries: any margin picks up the neighbouring words
+                    t0, t1 = seg[p0][0], seg[p1][1]
+                    clip = x[int(t0 * SR / 1000): int(t1 * SR / 1000)].copy()
+                    return sfx.fades(clip, 0.012, 0.05)
+                if len(got) > len(want):
+                    break
+    return None
 
 
 def recitation(surah: int, ayah: int, reciter: int = 7) -> np.ndarray:
@@ -213,18 +264,23 @@ HADITH_SOURCE = {"متفق عليه": "متفقٌ عليه.", "صحيح البخ
 
 
 def fill(text: str, b: dict) -> str:
-    """The shared script's slots, filled from the blessing: {title} {surah} {hadithSource} {quoteIntro}."""
+    """The shared script's slots, filled from the blessing: {title} {surah} {hadithIntro} {hadithSource} {quoteIntro}."""
     q = b.get("quote") or {}
     if q.get("scholar"):
         intro = f"ومن كلام {q['scholar']} رحمه الله" + (f" في «{q['work']}»" if q.get("work") else "") + ("، بمعناه:" if q.get("paraphrase") else ":")
     elif "شرح الحديث" in (q.get("note") or ""):
         intro = "ومما يُستفاد من شرح هذا الحديث:"
+    elif (q.get("note") or "").startswith("مستفاد من "):
+        intro = f"ومما يُستفاد من {q['note'][len('مستفاد من '):]}:"
     else:
         intro = "ومن كلام أهل العلم، بمعناه:"
     h = b.get("hadith") or {}
+    # a narration («جاء رجلٌ…», «سُئل النبي…») is not the Prophet's own words, so it is not introduced with «قال»
+    narrated = re.match(r"^(جاء |سُئل |سئل |عن |كان |قال رجل)", h.get("text", ""))
+    hadith_intro = "وفي الحديث الشريف:" if narrated else "وفي الحديث الشريف، قال رسول الله صلى الله عليه وسلم:"
     return (text.replace("{title}", b["title"]).replace("{surah}", b["verse"]["surahName"])
             .replace("{hadithSource}", HADITH_SOURCE.get(h.get("source", ""), f"{h.get('source', '')}."))
-            .replace("{quoteIntro}", intro))
+            .replace("{quoteIntro}", intro).replace("{hadithIntro}", hadith_intro))
 
 
 def build_podcast(b: dict, script: dict, out: Path) -> list:
@@ -303,6 +359,9 @@ def main() -> None:
     b = C["bundle"][str(n)]
     full = next(x for x in C["blessings"] if x["n"] == n)
     b = {**b, "steps": full["steps"], "duaa": full["duaa"], "prompt": full["prompt"]}
+    pk = ROOT / "data" / "scripts" / f"package_{n:02d}.json"
+    if pk.exists():
+        b["quoted"] = json.loads(pk.read_text(encoding="utf-8")).get("quotedVerses", [])
     out = ROOT / "out" / "audio" / f"{n:02d}"
     out.mkdir(parents=True, exist_ok=True)
     timing = build_waqfa(b, out)

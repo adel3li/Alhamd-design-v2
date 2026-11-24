@@ -1,5 +1,5 @@
 {
- "note": "Shared podcast script for a blessing package (episode of «وقفات في أثر النعمة»); a blessing can have its own data/scripts/podcast_<nn>.json instead. Slots: {title} {surah} {hadithSource} {quoteIntro}, filled by tools/voice.py from the app's data. The host lines are draft copy for the owner to review. Every sacred or quoted text is not written here: «verse», «hadith», «quote», «tadabbur», «steps», «duaa» and «prompt» blocks are read verbatim from the app's data. The verse is never synthesised: it is a recording by a reciter.",
+ "note": "Shared podcast script for a blessing package (episode of «وقفات في أثر النعمة»); a blessing can have its own data/scripts/podcast_<nn>.json instead. Slots: {title} {surah} {hadithIntro} {hadithSource} {quoteIntro}, filled by tools/voice.py from the app's data. The host lines are draft copy for the owner to review. Every sacred or quoted text is not written here: «verse», «hadith», «quote», «tadabbur», «steps», «duaa» and «prompt» blocks are read verbatim from the app's data. The verse is never synthesised: it is a recording by a reciter.",
  "show": "وقفات في أثر النعمة",
  "episode": "{title}",
  "voice": "ar-SA-HamedNeural",
@@ -46,7 +46,7 @@
   {
    "kind": "voice",
    "label": "قبل الحديث",
-   "text": "وفي الحديث الشريف، قال رسول الله صلى الله عليه وسلم:"
+   "text": "{hadithIntro}"
   },
   {
    "kind": "pause",

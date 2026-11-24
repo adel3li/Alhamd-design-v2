@@ -516,6 +516,227 @@
     ];
   }
 
+
+  /* ---------- shared: one drawing in two states (lit / gone), cross-faded ---------- */
+  const sized = (svg) => svg.replace('<svg ', '<svg width="100%" height="100%" style="display:block;overflow:visible" ');
+  function stack(c, cls, w, ratio, lit, gone) {
+    const W = c.px(w), H = W * ratio;
+    return `<div class="${cls}" data-w="${W}" data-h="${H}" style="position:relative;width:${W}px;height:${H}px;flex:0 0 auto">` +
+      `<div class="st-gone" style="position:absolute;inset:0">${sized(K.C.withTheme(c, gone))}</div>` +
+      `<div class="st-lit glow" style="position:absolute;inset:0">${sized(K.C.withTheme(c, lit))}</div></div>`;
+  }
+  /** 1 = the blessing is there, 0 = gone */
+  function setStack(L, cls, on) {
+    const st = $(L, cls);
+    if (!st) return;
+    st.querySelector('.st-lit').style.opacity = String(on);
+    st.querySelector('.st-gone').style.opacity = String(0.25 + 0.75 * (1 - on));
+  }
+  const ripples = (L, t, start) => $$(L, '.st-lit .ripple').forEach((r, k) => {
+    const p = P(t, start + k * 0.25, 1.4);
+    r.style.transformBox = 'fill-box'; r.style.transformOrigin = 'center';
+    r.style.transform = `scale(${(0.4 + 1.1 * out3(p)).toFixed(3)})`;
+    r.style.opacity = String(p > 0 && p < 1 ? 0.9 * (1 - p) : 0);
+  });
+  const fifth = (c, b) => ({ // name it, and praise (shared last scene)
+    len: 4.2,
+    html: page(c, { bg: { cone: 0.09, coneAt: '50% 30%', warm: 0.1, warmAt: '50% 50%' }, top: chip(c, b.title, { size: 34 }), mid: `<div class="m5">${medal(c, ICON[b.id], { size: 360 })}</div>` + gap(c, 10) + `<div class="g5">${display(c, gold('الحمدُ لله'), 150)}</div>`, gap: 26 }),
+    anim(t, L) { enter($(L, '.chip'), t, 0.05, 0.5, 14); draw($(L, '.m5 svg'), P(t, 0.1, 1.6)); pop($(L, '.g5'), t, 1.4, 0.8, 0.85); breathe($(L, '.safe'), t, 4.2, 0.02); },
+    sfx: [[0.2, 'drop', -24], [1.4, 'breath', -27, { dur: 1.3 }]],
+  });
+  const lines = (b) => ({
+    o: splitLine(b.opening), v: splitLine(b.steps[b.stepTypes.indexOf('visualize')]),
+    d: b.steps[b.stepTypes.indexOf('deepen')], r: splitLine(b.steps[b.stepTypes.indexOf('return')]),
+  });
+  const darkLayer = '<div class="dark" style="position:absolute;inset:0;background:#000;opacity:0"></div>';
+
+  /** «نعمة الماء»: a glass and a falling drop; the glass runs dry; then it fills again. */
+  function animMaa(c, b) {
+    const { o: [o1, o2], v: [v1, v2], d, r: [r1, r2] } = lines(b);
+    const A = window.ART;
+    const glass = (cls = 'gl', w = 480) => stack(c, cls, w, 700 / 600, () => A.glassArt('lit', { ripple: true, drop: true }), () => A.glassArt('gone'));
+    return [
+      { // 1 — the cheapest thing in your house
+        len: 6.8,
+        html: page(c, { bg: { cone: 0.08, coneAt: '50% 44%', warm: 0.06, warmAt: '50% 50%' }, mid: `<div class="tx1">${title(c, o1, 108)}</div>` + glass() + `<div class="tx2">${quote(c, acc(o2), 62, { w: 900 })}</div>`, gap: 36 }),
+        anim(t, L) {
+          setStack(L, '.gl', 1);
+          const dp = $(L, '.st-lit .drop'); const fall = P(t, 0.8, 0.7);
+          if (dp) { dp.style.transform = `translateY(${(fall * fall * 230).toFixed(1)}px)`; dp.style.opacity = String(fall < 1 ? 1 : 0); }
+          ripples(L, t, 1.5);
+          reveal($(L, '.tx1 .t-title'), t, 0.2, { stagger: 0.18 }); reveal($(L, '.tx2 .t-quote'), t, 2.4, { stagger: 0.16 }); breathe($(L, '.safe'), t, 6.8, 0.02);
+        },
+        sfx: [[1.5, 'drop', -22], [2.0, 'glint', -31]],
+      },
+      { // 2 — the tap runs dry
+        len: 6.6,
+        html: page(c, { bg: { cone: 0.06, coneAt: '50% 44%' }, under: darkLayer, mid: `<div class="tx1">${title(c, v1, 96)}</div>` + glass() + `<div class="tx2">${quote(c, v2, 66, { w: 900 })}</div>`, gap: 36 }),
+        anim(t, L) {
+          setStack(L, '.gl', 1 - inOut(P(t, 2.0, 1.8)));
+          const dp = $(L, '.st-lit .drop'); if (dp) dp.style.opacity = '0';
+          $(L, '.dark').style.opacity = String(0.6 * P(t, 2.2, 1.6));
+          reveal($(L, '.tx1 .t-title'), t, 0.2, { stagger: 0.17 }); reveal($(L, '.tx2 .t-quote'), t, 3.4, { stagger: 0.18 });
+        },
+        sfx: [[2.0, 'whoosh', -29, { dur: 1.4, from: 1200, to: 260 }], [3.4, 'wind', -30, { dur: 3.0 }]],
+      },
+      { // 3 — thirst
+        len: 6.4,
+        html: page(c, { bg: deep, mid: `${glass('gl0', 280)}<div class="tx">${quote(c, d, 68, { w: 920 })}</div>`, gap: 46 }),
+        anim(t, L) { setStack(L, '.gl0', 0); reveal($(L, '.tx .t-quote'), t, 0.3, { stagger: 0.2 }); breathe($(L, '.safe'), t, 6.4, 0.02); },
+        sfx: [[0.4, 'heartbeat', -26], [2.8, 'heartbeat', -28]],
+      },
+      { // 4 — then come back: open your tap
+        len: 7.6,
+        html: page(c, { bg: { cone: 0.12, coneAt: '50% 44%', warm: 0.12, warmAt: '50% 46%' }, under: `<div class="parts" style="position:absolute;inset:0">${lit(c)}</div>`, mid: `<div class="tx1">${title(c, gold(r1), 112)}</div>` + glass() + `<div class="tx2">${quote(c, r2, 62, { w: 920 })}</div>`, gap: 36 }),
+        anim(t, L) {
+          setStack(L, '.gl', inOut(P(t, 0.4, 1.6)));
+          const dp = $(L, '.st-lit .drop'); if (dp) dp.style.opacity = '0';
+          ripples(L, t, 1.4);
+          pop($(L, '.tx1'), t, 0.1, 0.7, 0.9); reveal($(L, '.tx2 .t-quote'), t, 1.8, { stagger: 0.16 }); drift($(L, '.parts svg'), t, { fade: [0.8, 1.2] });
+        },
+        sfx: [[0.3, 'pour', -24, { dur: 2.2 }], [1.4, 'drop', -26], [1.8, 'glint', -29]],
+      },
+      fifth(c, b),
+      endScene(c, { sub: `${b.title}… ودقيقتان معها في «الحمد»` }),
+    ];
+  }
+
+  /** «نعمة الأم»: her house at night, its windows lit; the light goes out; then it comes back. */
+  function animUmm(c, b) {
+    const { o: [o1, o2], v: [v1, v2], d, r: [r1, r2] } = lines(b);
+    const A = window.ART;
+    const house = (cls = 'hs', w = 540) => stack(c, cls, w, 700 / 600, () => A.houseArt('lit'), () => A.houseArt('gone'));
+    return [
+      { // 1 — she carried you
+        len: 6.8,
+        html: page(c, { bg: { cone: 0.08, coneAt: '50% 44%', warm: 0.06, warmAt: '50% 50%' }, mid: `<div class="tx1">${title(c, o1, 104)}</div>` + house() + `<div class="tx2">${quote(c, acc(o2), 62, { w: 900 })}</div>`, gap: 32 }),
+        anim(t, L) { setStack(L, '.hs', inOut(P(t, 0.4, 1.4))); reveal($(L, '.tx1 .t-title'), t, 0.2, { stagger: 0.2 }); reveal($(L, '.tx2 .t-quote'), t, 2.4, { stagger: 0.17 }); breathe($(L, '.safe'), t, 6.8, 0.02); },
+        sfx: [[0.6, 'breath', -29, { dur: 1.3 }], [1.6, 'glint', -31]],
+      },
+      { // 2 — the phone rings
+        len: 6.8,
+        html: page(c, { bg: { cone: 0.06, coneAt: '50% 44%' }, under: darkLayer, mid: `<div class="tx1">${title(c, v1, 92)}</div>` + house() + `<div class="tx2">${quote(c, v2, 64, { w: 900 })}</div>`, gap: 32 }),
+        anim(t, L) {
+          setStack(L, '.hs', 1 - inOut(P(t, 2.6, 1.8)));
+          $(L, '.dark').style.opacity = String(0.55 * P(t, 2.8, 1.6));
+          reveal($(L, '.tx1 .t-title'), t, 0.2, { stagger: 0.17 }); reveal($(L, '.tx2 .t-quote'), t, 3.6, { stagger: 0.18 });
+        },
+        sfx: [[0.7, 'vibrate', -26], [2.6, 'whoosh', -31, { dur: 1.6, from: 900, to: 260 }]],
+      },
+      { // 3 — her door no longer waits
+        len: 6.4,
+        html: page(c, { bg: deep, mid: `${house('hs0', 320)}<div class="tx">${quote(c, d, 68, { w: 920 })}</div>`, gap: 44 }),
+        anim(t, L) { setStack(L, '.hs0', 0); reveal($(L, '.tx .t-quote'), t, 0.3, { stagger: 0.2 }); breathe($(L, '.safe'), t, 6.4, 0.02); },
+        sfx: [[0.5, 'heartbeat', -27], [3.0, 'wind', -32, { dur: 3.0 }]],
+      },
+      { // 4 — then come back
+        len: 9.4,
+        html: page(c, { bg: { cone: 0.12, coneAt: '50% 44%', warm: 0.12, warmAt: '50% 46%' }, under: `<div class="parts" style="position:absolute;inset:0">${lit(c)}</div>`, mid: `<div class="tx1">${title(c, gold(r1), 112)}</div>` + house('hs', 460) + `<div class="tx2">${quote(c, r2, 58, { w: 920 })}</div>`, gap: 30 }),
+        anim(t, L) {
+          setStack(L, '.hs', inOut(P(t, 0.4, 2.0)));
+          pop($(L, '.tx1'), t, 0.1, 0.7, 0.9); reveal($(L, '.tx2 .t-quote'), t, 1.8, { stagger: 0.19 }); drift($(L, '.parts svg'), t, { fade: [0.8, 1.2] });
+        },
+        sfx: [[0.4, 'breath', -27, { dur: 1.3 }], [1.0, 'glint', -29], [1.4, 'birds', -32, { dur: 2.4 }]],
+      },
+      fifth(c, b),
+      endScene(c, { sub: `${b.title}… ودقيقتان معها في «الحمد»` }),
+    ];
+  }
+
+  /* ---------- «نعمة العقل»: a web of points that connects, scatters, and connects again ---------- */
+  function netArt() {
+    const R = A0.rng(19), N = 24, W = 760, H = 520, pts = [];
+    while (pts.length < N) {
+      const x = 60 + R() * (W - 120), y = 50 + R() * (H - 100);
+      if (((x - W / 2) / (W / 2 - 40)) ** 2 + ((y - H / 2) / (H / 2 - 30)) ** 2 > 1) continue; // inside an oval
+      if (pts.some((p) => Math.hypot(p.x - x, p.y - y) < 70)) continue;
+      const a = R() * Math.PI * 2, m = 160 + R() * 260;
+      pts.push({ x, y, dx: Math.cos(a) * m, dy: Math.sin(a) * m });
+    }
+    const edges = [];
+    pts.forEach((p, i) => pts.forEach((q, j) => { if (j > i && Math.hypot(p.x - q.x, p.y - q.y) < 150) edges.push([i, j]); }));
+    return `<svg viewBox="0 0 ${W} ${H}" width="100%" height="100%" style="overflow:visible;color:var(--accent)" fill="none" stroke="currentColor" stroke-linecap="round">` +
+      edges.map(([i, j], k) => `<line class="ed" data-i="${i}" data-j="${j}" data-k="${k}" stroke-width="2" x1="${pts[i].x}" y1="${pts[i].y}" x2="${pts[j].x}" y2="${pts[j].y}"/>`).join('') +
+      pts.map((p, i) => `<circle class="nd" data-i="${i}" data-x="${p.x}" data-y="${p.y}" data-dx="${p.dx.toFixed(1)}" data-dy="${p.dy.toFixed(1)}" cx="${p.x}" cy="${p.y}" r="${7 + (i % 3) * 2}" fill="currentColor" stroke="none"/>`).join('') +
+      [0, 1, 2].map((k) => `<circle class="pl" data-k="${k}" r="6" fill="currentColor" stroke="none" opacity="0"/>`).join('') + '</svg>';
+  }
+  const A0 = window.ART;
+  /** conn: edges shown 0..1, scatter: points thrown apart 0..1, t: time (for the pulses) */
+  function setNet(L, conn, scatter, t = 0) {
+    $$(L, 'svg').forEach((svg) => {
+      const nd = [...svg.querySelectorAll('.nd')];
+      if (!nd.length) return;
+      const pos = nd.map((n) => ({ x: +n.dataset.x + scatter * +n.dataset.dx, y: +n.dataset.y + scatter * +n.dataset.dy }));
+      nd.forEach((n, i) => { n.setAttribute('cx', pos[i].x.toFixed(1)); n.setAttribute('cy', pos[i].y.toFixed(1)); n.style.opacity = String(1 - 0.6 * scatter); });
+      const ed = [...svg.querySelectorAll('.ed')];
+      ed.forEach((e) => {
+        const i = +e.dataset.i, j = +e.dataset.j, k = +e.dataset.k;
+        e.setAttribute('x1', pos[i].x.toFixed(1)); e.setAttribute('y1', pos[i].y.toFixed(1)); e.setAttribute('x2', pos[j].x.toFixed(1)); e.setAttribute('y2', pos[j].y.toFixed(1));
+        const show = clamp(conn * 1.6 - (k / ed.length) * 0.6);
+        e.style.opacity = String(0.55 * show * (1 - scatter));
+      });
+      svg.querySelectorAll('.pl').forEach((pl) => { // light travelling along the web while it is whole
+        const k = +pl.dataset.k, e = ed[(k * 7 + Math.floor(t * 1.2 + k)) % ed.length];
+        if (!e) return;
+        const f = (t * 1.2 + k) % 1, i = +e.dataset.i, j = +e.dataset.j;
+        pl.setAttribute('cx', (pos[i].x + (pos[j].x - pos[i].x) * f).toFixed(1)); pl.setAttribute('cy', (pos[i].y + (pos[j].y - pos[i].y) * f).toFixed(1));
+        pl.setAttribute('opacity', (conn * (1 - scatter) * Math.sin(Math.PI * f)).toFixed(3));
+      });
+    });
+  }
+  /** Words fly apart and fade (the scattered words of «تخيّل الغياب»). */
+  function scatterWords(el, p, seed = 7) {
+    const R = A0.rng(seed);
+    M.words(el).forEach((w) => { const a = R() * Math.PI * 2, m = 60 + R() * 160, rot = (R() - 0.5) * 40; w.style.transform = `translate(${(Math.cos(a) * m * p).toFixed(1)}px, ${(Math.sin(a) * m * p).toFixed(1)}px) rotate(${(rot * p).toFixed(1)}deg)`; w.style.opacity = String(1 - 0.85 * p); });
+  }
+  function animAql(c, b) {
+    const { o: [o1, o2], v: [v1, v2], d, r: [r1, r2] } = lines(b);
+    const glowF = c.th === 'layl' ? 'filter:drop-shadow(0 0 14px rgba(228,195,104,0.4));' : '';
+    const net = (w = 760) => `<div class="nw" data-w="${c.px(w)}" data-h="${c.px(w * 520 / 760)}" style="width:${c.px(w)}px;height:${c.px(w * 520 / 760)}px;flex:0 0 auto;${glowF}">${netArt()}</div>`;
+    return [
+      { // 1 — a crown you cannot see
+        len: 6.8,
+        html: page(c, { bg: { cone: 0.08, coneAt: '50% 44%', warm: 0.05, warmAt: '50% 46%' }, mid: `<div class="tx1">${title(c, o1, 108)}</div>` + net() + `<div class="tx2">${quote(c, acc(o2), 62, { w: 900 })}</div>`, gap: 36 }),
+        anim(t, L) {
+          setNet(L, P(t, 0.4, 2.0), 0, t);
+          $$(L, '.nd').forEach((n, i) => { n.style.opacity = String(out3(P(t, 0.1 + i * 0.03, 0.4))); });
+          reveal($(L, '.tx1 .t-title'), t, 0.2, { stagger: 0.18 }); reveal($(L, '.tx2 .t-quote'), t, 2.4, { stagger: 0.17 }); breathe($(L, '.safe'), t, 6.8, 0.02);
+        },
+        sfx: [[0.4, 'glint', -30], [1.4, 'glint', -32, { seed: 40 }], [2.2, 'glint', -33, { seed: 41 }]],
+      },
+      { // 2 — it begins to go; the words scatter
+        len: 7.4,
+        html: page(c, { bg: { cone: 0.06, coneAt: '50% 44%' }, under: darkLayer, mid: `<div class="tx1">${title(c, v1, 96)}</div>` + net() + `<div class="tx2">${quote(c, v2, 64, { w: 900 })}</div>`, gap: 36 }),
+        anim(t, L) {
+          const s = inOut(P(t, 1.8, 2.2));
+          setNet(L, 1, s, t);
+          $(L, '.dark').style.opacity = String(0.5 * P(t, 2.0, 2.0));
+          reveal($(L, '.tx1 .t-title'), t, 0.2, { stagger: 0.17 });
+          const tx = $(L, '.tx2 .t-quote');
+          if (t < 5.4) reveal(tx, t, 2.6, { stagger: 0.15 }); else scatterWords(tx, inOut(P(t, 5.4, 1.6)));
+        },
+        sfx: [[1.8, 'whoosh', -29, { dur: 2.0, from: 2400, to: 400 }], [5.4, 'wind', -31, { dur: 2.0 }]],
+      },
+      { // 3 — present in body, absent in mind
+        len: 6.6,
+        html: page(c, { bg: deep, mid: `<div style="opacity:0.35">${net(520)}</div><div class="tx">${quote(c, d, 66, { w: 920 })}</div>`, gap: 40 }),
+        anim(t, L) { setNet(L, 0.3, 0.85, t); reveal($(L, '.tx .t-quote'), t, 0.3, { stagger: 0.2 }); breathe($(L, '.safe'), t, 6.6, 0.02); },
+        sfx: [[0.5, 'heartbeat', -27], [3.0, 'heartbeat', -29]],
+      },
+      { // 4 — then come back
+        len: 8.0,
+        html: page(c, { bg: { cone: 0.12, coneAt: '50% 44%', warm: 0.1, warmAt: '50% 46%' }, under: `<div class="parts" style="position:absolute;inset:0">${lit(c)}</div>`, mid: `<div class="tx1">${title(c, gold(r1), 112)}</div>` + net() + `<div class="tx2">${quote(c, r2, 60, { w: 920 })}</div>`, gap: 34 }),
+        anim(t, L) {
+          setNet(L, P(t, 0.6, 1.6), 1 - inOut(P(t, 0.2, 1.6)), t);
+          pop($(L, '.tx1'), t, 0.1, 0.7, 0.9); reveal($(L, '.tx2 .t-quote'), t, 1.9, { stagger: 0.17 }); drift($(L, '.parts svg'), t, { fade: [0.8, 1.2] });
+        },
+        sfx: [[0.2, 'whoosh', -30, { dur: 1.6, from: 400, to: 2200 }], [1.2, 'glint', -28], [1.6, 'birds', -32, { dur: 2.2 }]],
+      },
+      fifth(c, b),
+      endScene(c, { sub: `${b.title}… ودقيقتان معها في «الحمد»` }),
+    ];
+  }
+
   /** The animated reel of each packaged blessing: each one is drawn for its blessing. */
-  function animFor(n) { return { 5: animSalah, 37: animBasar }[n]; }
+  function animFor(n) { return { 5: animSalah, 37: animBasar, 15: animMaa, 22: animUmm, 19: animAql }[n]; }
 })();
