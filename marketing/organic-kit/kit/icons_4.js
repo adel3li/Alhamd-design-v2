@@ -119,6 +119,42 @@
       P('M30 5 L40.5 16 L30 30 L19.5 16 Z'), P('M30 5 L30 30 M19.5 16 L40.5 16'), P('M30 30 C26 33.5 30 37.5 24 39.5 C19.5 41 18 43.5 12 44'),
       P('M26.4 34.2 L23.6 32.6 L24.4 36 Z M20.6 40.4 L18.6 38 L18 41.4 Z'), spark(10, 10, 2.2), spark(41, 35, 1.5),
     ],
+    nisyan: [ // an eraser lifting what weighed on the mind
+      P('M18 30.5 L31.5 17 L40.5 26 L27 39.5 Z'), P('M22.6 26 L31.6 35'), P('M6.5 39.5 L22 39.5'), P('M6.5 34 L12 34'), C(15, 34, 0.5), C(18, 34, 0.4), spark(13, 13, 2.4), spark(38, 9, 1.5),
+    ],
+    ruya: [ // a cloud of sleep, the moon and stars over it
+      P('M12.5 40 C7.5 40 6.4 33 10.8 31.4 C10.2 25 17.2 22.4 20.8 26 C22.8 20 32.2 20 33.2 27 C38.8 26.4 41.6 32 39.2 36 C40.2 39 38.2 40 36.2 40 Z'),
+      P('M17 5 A6.6 6.6 0 1 0 23.6 14.4 A5.1 5.1 0 1 1 17 5 Z'), spark(32, 9, 2.4), spark(39.5, 17, 1.5), spark(27, 33, 1.5),
+    ],
+    qaylula: [ // a pillow at midday, the sun high, sleep coming
+      P('M7.5 33 C7.5 27.8 11.6 27 24 27 C36.4 27 40.5 27.8 40.5 33 C40.5 38.2 36.4 39 24 39 C11.6 39 7.5 38.2 7.5 33 Z'), P('M7.5 33 L5 31 M7.5 33 L5 35 M40.5 33 L43 31 M40.5 33 L43 35'),
+      C(14, 13, 3.8), P('M14 5.6 L14 7 M14 19 L14 20.4 M6.6 13 L8 13 M20 13 L21.4 13 M8.8 7.8 L9.8 8.8 M18.2 17.2 L19.2 18.2 M19.2 7.8 L18.2 8.8 M9.8 17.2 L8.8 18.2'),
+      P('M28 8 L33.5 8 L28 14 L33.5 14'), P('M36 16 L39.5 16 L36 20 L39.5 20'),
+    ],
+    mashy: [ // footsteps on the way
+      P('M16 24 C11.6 24 10 31 11.4 36.4 C12.8 42 20 42 20.8 36.4 C21.6 31 20.6 24 16 24 Z'), C(12.4, 19.6, 1.3), C(15.8, 18.4, 1.4), C(19.2, 19.8, 1.3),
+      P('M32 10.5 C27.6 10.5 26 17.5 27.4 22.9 C28.8 28.5 36 28.5 36.8 22.9 C37.6 17.5 36.6 10.5 32 10.5 Z'), C(28.4, 6.1, 1.3), C(31.8, 4.9, 1.4), C(35.2, 6.3, 1.3), spark(38.5, 37, 2), spark(8, 10, 1.4),
+    ],
+    daw: [ // a lamp lit, its light spreading
+      P('M18.4 29 C14 25.6 13.6 17 17.6 13.4 C21.4 10 26.6 10 30.4 13.4 C34.4 17 34 25.6 29.6 29 C28.4 30.2 28 31.6 28 33.4 L20 33.4 C20 31.6 19.6 30.2 18.4 29 Z'), P('M20.4 37 L27.6 37'), P('M21.8 40.6 L26.2 40.6'),
+      P('M24 2.5 L24 6 M10.6 8.6 L13 11 M37.4 8.6 L35 11 M5.5 21.5 L9 21.5 M42.5 21.5 L39 21.5'), P('M21.4 22 C21.4 19.6 23 18 24.6 18'),
+    ],
+    samt: [ // a word held back: an empty bubble, a calm line
+      P('M10 11 L38 11 C40 11 41 12 41 14 L41 28 C41 30 40 31 38 31 L22 31 L15.4 37.4 L16 31 L10 31 C8 31 7 30 7 28 L7 14 C7 12 8 11 10 11 Z'), P('M17 21 L31 21'), spark(36, 41, 2), spark(29, 44, 1.2),
+    ],
+    khalwa: [ // a niche alone, a single lamp in it
+      P('M12 42 L12 20 C12 12 18 7 24 6 C30 7 36 12 36 20 L36 42'), P('M8 42 L40 42'), lantern(24, 14, 0.62), spark(42, 9, 1.6), spark(6, 14, 1.3),
+    ],
+    nudj: [ // a fruit grown full on its branch
+      P('M5 10 C15 12.5 27 10.5 42 6'), P('M24 10.8 L24 16'), C(24, 27.5, 10.4), P('M20.6 17.6 L22.4 15.6 L24 17.2 L25.6 15.6 L27.4 17.6'),
+      P('M32.5 8.4 C33.6 12.6 37.6 14.4 41 13.2 C40 9.2 36.4 7.4 32.5 8.4 Z'), P('M19 25 C19.8 22.6 21.6 21.4 23.4 21.2'), spark(39, 34, 2), spark(9, 34, 1.4),
+    ],
+    nizam: [ // a list, each thing in its place and done
+      R(11, 9, 26, 34, 2.5), R(18, 6, 12, 5.6, 1.6), P('M16 19.6 L18 21.6 L21.6 17.6 M24.6 19.6 L32 19.6'), P('M16 27.6 L18 29.6 L21.6 25.6 M24.6 27.6 L32 27.6'), P('M16 35.6 L18 37.6 L21.6 33.6 M24.6 35.6 L32 35.6'), spark(41.5, 15, 1.8),
+    ],
+    lahm: [ // a cut of meat on its bone
+      P('M9.5 22.5 C9.5 14.5 19.5 10 28.5 11 C36.5 12 41 18 40 25 C39 33 31 38.5 22 37.5 C14 36.5 9.5 30.5 9.5 22.5 Z'), C(30.6, 22.6, 3.6), P('M13.6 22.6 C13.6 17.4 19.6 14.2 26.6 14.6'), P('M7 43 L41 43'), spark(41, 6, 2),
+    ],
   });
 
   Object.assign(BY_BLESSING, {
@@ -128,5 +164,7 @@
     blessing_317: 'nashat', blessing_318: 'sihhanafs', blessing_319: 'shaar', blessing_320: 'ism',
     blessing_321: 'khususiya', blessing_322: 'hurriya', blessing_323: 'sukun', blessing_324: 'nazafa', blessing_325: 'maadafi', blessing_326: 'kuhula',
     blessing_327: 'shaykhukha', blessing_328: 'ijaza', blessing_329: 'hiwaya', blessing_330: 'laib',
+    blessing_331: 'nisyan', blessing_332: 'ruya', blessing_333: 'qaylula', blessing_334: 'mashy', blessing_335: 'daw', blessing_336: 'samt',
+    blessing_337: 'khalwa', blessing_338: 'nudj', blessing_339: 'nizam', blessing_340: 'lahm',
   });
 })();
