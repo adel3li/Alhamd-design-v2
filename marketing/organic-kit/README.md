@@ -94,6 +94,7 @@ Published pages: 1–100 at https://claude.ai/artifact/Ua2D9MwPbGtw7nB4cycHyT.
 | Batch | Blessings | Notes |
 |---|---|---|
 | 1 | 1–10 | all ten verses matched; every blessing has a hadith and a scholar's words (10 slides) |
+| 2 | 11–20 | all verses matched; 10 slides each; nothing for the owner |
 
 ## How it works
 
