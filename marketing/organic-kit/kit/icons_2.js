@@ -149,6 +149,52 @@
     ],
   });
 
+  Object.assign(I, {
+    diyafa: [ // the coffee pot and a small cup, set out for the guest
+      P('M14 41 L28 41 C29 36 28.5 31 26.5 27 L26.5 22 L15.5 22 L15.5 27 C13.5 31 13 36 14 41 Z'), P('M15.5 22 C15.5 18 17.6 16 21 16 C24.4 16 26.5 18 26.5 22'), C(21, 14, 1.6),
+      P('M26.5 25 C31 24.5 33.5 21 34 16 L37 13'), P('M14.5 27 C10.5 27.5 9.5 33 13.6 35'), P('M31 41 L39 41 L38 35 L32 35 Z'), P('M8 44 L41 44'), P('M35 31 C34.2 29.6 35.8 28.4 35 27'),
+    ],
+    hadiyya: [ // a gift, tied with its ribbon
+      R(10, 22, 28, 20, 1.5), R(8, 16.5, 32, 5.5, 1.5), P('M24 16.5 L24 42'), P('M24 16.5 C19 7 11 10 15 15 C17 17 21 16.5 24 16.5 C27 16.5 31 17 33 15 C37 10 29 7 24 16.5 Z'), spark(41, 8, 1.8),
+    ],
+    salam: [ // a dove carrying the greeting
+      P('M10 27 C14 23 20 22.5 25 24 L33 17 C35 15.4 38 16 38.4 18.4 L42 19 L38.4 21 C38 26 34 32 26 33.5 C20 34.5 14 32.5 10 27 Z'), P('M25 24 C24 18 21 13 15 10 C17 17 19 21.5 22 24'),
+      P('M10 27 L5 31 L13 30.8'), C(35.6, 19.2, 0.6), P('M14 41 C20 37 30 37 36 41'), spark(40, 34, 1.6),
+    ],
+    kalima: [ // a good word: a flower opening from the speech bubble
+      P('M8 16 L32 16 Q35 16 35 19 L35 33 Q35 36 32 36 L18 36 L11.5 42 L12.3 36 L11 36 Q8 36 8 33 L8 19 Q8 16 11 16 Z'),
+      P('M21.5 32 L21.5 27'), leaf(21.5, 27.5, 21.5, 19, 2.6), leaf(21.5, 27.5, 14.5, 21.5, 2.3), leaf(21.5, 27.5, 28.5, 21.5, 2.3), spark(40.5, 11, 1.8),
+    ],
+    khuluq: [ // a rose: what is fair, and gentle to hold
+      P('M24 44 C24 37 24 32 24 27'), leaf(24, 37, 15, 32, 2.8), leaf(24, 34, 33, 30, 2.8),
+      P('M24 27 C16 27 14 20 15.5 13 C19 15 21 15 24 11 C27 15 29 15 32.5 13 C34 20 32 27 24 27 Z'), P('M24 11 C22 14 21 18 24 21 C27 18 26 14 24 11'), spark(9, 10, 1.6),
+    ],
+    jamaa: [ // houses set close together, one neighbourhood
+      P('M5 42 L43 42'), P('M8 42 L8 28 L15 22 L22 28 L22 42'), P('M22 42 L22 21 L30 14 L38 21 L38 42'), P('M38 42 L38 30 L43 30'), P('M12.5 42 L12.5 35 L17.5 35 L17.5 42'),
+      R(27, 25, 6, 6, 1), P('M30 25 L30 31'), R(26.5, 35, 7, 7, 0.5), C(15, 29.5, 1.4),
+    ],
+    muwasat: [ // a shelter held over a heart in the rain
+      P('M7 24 C9 14 17 9 24 9 C31 9 39 14 41 24 C38 21.5 34.5 21.5 32.5 24 C30 21.5 26.5 21.5 24 24 C21.5 21.5 18 21.5 15.5 24 C13.5 21.5 10 21.5 7 24 Z'), P('M24 9 L24 6.5'),
+      heart(24, 36.5, 7.2), drop(9, 32, 0.7), drop(39, 32, 0.7), drop(12, 41, 0.6), drop(36, 41.5, 0.6),
+    ],
+    qudwa: [ // a lantern ahead, and the path it lights
+      lantern(24, 4, 0.78), P('M24 31.5 L24 33.5'), P('M17 44 C20 39 22 36 23.2 35 M31 44 C28 39 26 36 24.8 35'), P('M20.5 41 L27.5 41'),
+      P('M14 17 L10 15.5 M14 22 L9.5 22 M34 17 L38 15.5 M34 22 L38.5 22'),
+    ],
+    maruf: [ // a hand held open, giving what is good
+      P('M6 33 L13 33 C17 33 21 31 25 31 L31 31 C33 31 33 34 31 34 L24 34 M25 34 L35 34 L41.5 28.5 C43 27.2 45 29 43.5 30.7 L37 38 C35.6 39.4 34 40 32 40 L13 40 L6 40'), P('M13 33 L13 40'),
+      heart(28, 20, 7), spark(38, 12, 1.8), spark(18, 13, 1.4),
+    ],
+    rahmaqalb: [ // a heart that holds a softer heart inside
+      heart(24, 26, 16), heart(24, 25, 7.4), P('M7 40 C11 38 13 42 17 40'), P('M31 40 C35 38 37 42 41 40'), spark(39, 9, 1.8),
+    ],
+  });
+
+  Object.assign(BY_BLESSING, {
+    blessing_131: 'diyafa', blessing_132: 'hadiyya', blessing_133: 'salam', blessing_134: 'kalima', blessing_135: 'khuluq',
+    blessing_136: 'jamaa', blessing_137: 'muwasat', blessing_138: 'qudwa', blessing_139: 'maruf', blessing_140: 'rahmaqalb',
+  });
+
   Object.assign(BY_BLESSING, {
     blessing_121: 'nakhl', blessing_122: 'zaytun', blessing_123: 'alwan', blessing_124: 'zawjiyya', blessing_125: 'maaadhb',
     blessing_126: 'shajar', blessing_127: 'barq', blessing_128: 'ikhwa', blessing_129: 'ajdad', blessing_130: 'ahfad',
