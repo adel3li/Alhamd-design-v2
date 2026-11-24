@@ -177,7 +177,7 @@ def main() -> None:
         if f.name not in used:
             f.unlink()
     size = sum(f.stat().st_size for f in out.rglob("*") if f.is_file())
-    print(f"{out.relative_to(ROOT)}/index.html: {len(done)} carousels ({done[0] if done else '-'}…{done[-1] if done else '-'}), "
+    print(f"{out.relative_to(ROOT) if out.is_relative_to(ROOT) else out}/index.html: {len(done)} carousels ({done[0] if done else '-'}…{done[-1] if done else '-'}), "
           f"{len(used)} strips, {size / 1e6:.1f} MB")
 
 
