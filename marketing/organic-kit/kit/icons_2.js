@@ -388,6 +388,52 @@
     ],
   });
 
+  Object.assign(I, {
+    silm: [ // the sword laid down in its sheath, and green growing over it
+      P('M6 33 L32 33 L36 35 L32 37 L6 37 Z'), P('M36 35 L41 35'), P('M38 31 L38 39'), P('M5 42 L43 42'),
+      P('M18 33 C18 27 20 22 24 18'), leaf(24, 18, 30, 12, 2.6), leaf(21, 24, 14, 20, 2.4), leaf(22.6, 21, 28, 22.5, 2), spark(38, 10, 2),
+    ],
+    adl: [ // the scales, both pans level
+      P('M24 9 L24 39 M15 42 L33 42 M24 39 L18 42 M24 39 L30 42'), P('M8 14 L40 14'), spark(24, 7, 2.4),
+      P('M11 14 L6 27 M11 14 L16 27 M4.5 27 L17.5 27 C17 31 5 31 4.5 27 Z'), P('M37 14 L32 27 M37 14 L42 27 M30.5 27 L43.5 27 C43 31 31 31 30.5 27 Z'),
+    ],
+    safar: [ // the road running safe to the horizon
+      P('M4 24 L44 24'), P('M10 44 L21.5 24 M38 44 L26.5 24'), P('M24 41 L24 37.5 M24 33 L24 30.5 M24 27.5 L24 26'),
+      P('M27 6 A6.6 6.6 0 1 0 33.6 15.4 A5.2 5.2 0 1 1 27 6 Z'), P('M5 24 C8 20 11 20 14 24 M33 24 C36 21 39 21 43 24'), spark(12, 10, 1.8),
+    ],
+    najat: [ // a ring thrown into the waves
+      C(24, 22, 12), C(24, 22, 6.5), P('M15.5 13.5 L19.4 17.4 M32.5 13.5 L28.6 17.4 M15.5 30.5 L19.4 26.6 M32.5 30.5 L28.6 26.6'),
+      P('M4 38 C8 35 12 35 16 38 C20 41 24 41 28 38 C32 35 36 35 40 38 C41.5 39 42.8 39.4 44 39.4'), P('M24 10 C26 6 31 5 34 7'),
+    ],
+    tumanina: [ // an anchor holding still after the storm
+      C(24, 10, 3), P('M24 13 L24 40'), P('M17 19 L31 19'), P('M10 30 C10 37 16 40.5 24 40.5 C32 40.5 38 37 38 30'), P('M10 30 L7 33 M10 30 L13.4 32.4 M38 30 L41 33 M38 30 L34.6 32.4'),
+      spark(39, 11, 1.8), spark(9, 14, 1.4),
+    ],
+    infaq: [ // the open purse, and what it gives away
+      P('M12 24 C8 30 8 42 20 42 L28 42 C40 42 40 30 36 24 Z'), P('M12 24 C16 21 32 21 36 24'), P('M18 21.8 C17 18.5 19 16 21 17 M30 21.8 C31 18.5 29 16 27 17'),
+      heart(24, 33.5, 5.4), C(24, 9, 3), C(34, 12, 2.4), C(14, 12, 2.4), P('M24 13.4 L24 16'),
+    ],
+    dayn: [ // a chain link opened: the debt is lifted
+      R(5, 19, 16, 10, 5), R(27, 19, 16, 10, 5), P('M21 24 L23 24 M25 24 L27 24'), P('M22 15 L23.5 11.5 M26 15 L24.5 11.5 M22 33 L23.5 36.5 M26 33 L24.5 36.5'), spark(40, 9, 2), spark(9, 39, 1.4),
+    ],
+    tijara: [ // a market stall, its awning out
+      P('M6 18 L42 18 L39 9 L9 9 Z'), P('M6 18 C6 21 12 21 12 18 C12 21 18 21 18 18 C18 21 24 21 24 18 C24 21 30 21 30 18 C30 21 36 21 36 18 C36 21 42 21 42 18'),
+      P('M15 9 L13 18 M21 9 L20 18 M27 9 L28 18 M33 9 L35 18'), P('M9 21 L9 42 M39 21 L39 42 M5 42 L43 42'), R(13, 30, 22, 12, 1), C(19, 27, 2.8), C(25.5, 27, 2.8), C(31.5, 27.4, 2.4),
+    ],
+    amana: [ // the strongbox, closed and kept
+      R(8, 18, 32, 23, 2), P('M8 18 C8 12 14 10 24 10 C34 10 40 12 40 18'), P('M8 24 L40 24'), R(20.5, 21.5, 7, 9, 1.5), C(24, 25.5, 1.2), P('M24 26.7 L24 28.6'), P('M15 24 L15 41 M33 24 L33 41'),
+    ],
+    mirath: [ // the old chest, and the scroll handed down from it
+      P('M7 25 L41 25 L41 42 L7 42 Z'), P('M7 25 L10 18 L38 18 L41 25'), P('M7 31 L41 31'), R(21.5, 28.5, 5, 5, 1),
+      P('M17 18 L17 9 C17 7 20 7 20 9 L20 18 M17 9 L31 9 C33 9 33 12 31 12 L20 12'), P('M23 15 L28 15'), spark(39, 9, 2),
+    ],
+  });
+
+  Object.assign(BY_BLESSING, {
+    blessing_191: 'silm', blessing_192: 'adl', blessing_193: 'safar', blessing_194: 'najat', blessing_195: 'tumanina',
+    blessing_196: 'infaq', blessing_197: 'dayn', blessing_198: 'tijara', blessing_199: 'amana', blessing_200: 'mirath',
+  });
+
   Object.assign(BY_BLESSING, {
     blessing_181: 'shiba', blessing_182: 'arabiyya', blessing_183: 'qiraa', blessing_184: 'tafakkur', blessing_185: 'hikma',
     blessing_186: 'fahm', blessing_187: 'khayal', blessing_188: 'tamyiz', blessing_189: 'khata', blessing_190: 'watan',
