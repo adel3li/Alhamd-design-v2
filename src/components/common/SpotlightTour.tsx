@@ -47,8 +47,13 @@ export const SpotlightTour: React.FC<SpotlightTourProps> = ({ onComplete }) => {
       el.scrollIntoView({ behavior: 'smooth', block: 'center' });
       const updatePos = () => setTargetRect(el.getBoundingClientRect());
       updatePos();
+      // The smooth scroll above moves the target after this first read; follow it.
       window.addEventListener('resize', updatePos);
-      return () => window.removeEventListener('resize', updatePos);
+      window.addEventListener('scroll', updatePos, true);
+      return () => {
+        window.removeEventListener('resize', updatePos);
+        window.removeEventListener('scroll', updatePos, true);
+      };
     } else {
       setTargetRect(null);
     }

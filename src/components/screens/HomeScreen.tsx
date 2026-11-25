@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { Share2, Copy, Check, ChevronDown, ChevronUp, CheckCircle2, RotateCcw, Sparkles } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Check, CheckCircle2, Copy, Share2 } from 'lucide-react';
 import { Blessing, InspirationItem } from '../../types';
-import { GlassCard } from '../common/GlassCard';
-import { getFormattedHijriDate } from '../../lib/hijri';
+import { getFormattedHijriDayHeader } from '../../lib/hijri';
 import { toArabicNumerals } from '../../lib/arabic';
+import { parseLocalDateString, useLocalDay } from '../../lib/dates';
+import { useStore } from '../../lib/store';
 import { ShareCardModal } from '../common/ShareCardModal';
+import { BlessingScene, sceneMotifFor } from '../common/BlessingScene';
 import { HisnCategoryId } from '../../data/hisnAlMuslim';
 
 interface HomeScreenProps {
@@ -17,330 +19,329 @@ interface HomeScreenProps {
   onOpenHisn?: (category?: HisnCategoryId) => void;
 }
 
+/** Letters only: harakat, Qur'anic marks and spaces do not take room on a line. */
+const letterCount = (text: string) => text.replace(/[ً-ٰٟۖ-ۭ\s]/g, '').length;
+
+/**
+ * A verse up to about four lines is written in the sky. A longer one (about one
+ * blessing in ten) moves, whole, under the button, and the title takes the sky.
+ * A verse is never shortened, and the button never falls below the fold.
+ */
+const SKY_VERSE_LIMIT = 95;
+
+/** Generic attributions are not names; the reference sheets hide them. */
+const GENERIC_SCHOLAR_PREFIXES = ['مستفاد', 'مأثور', 'إشارة'];
+
+/** Renders ﴿…﴾ fragments inside prose in the Qur'an face and colour. */
+function withQuranFragments(text: string): React.ReactNode[] {
+  return text.split(/(﴿[^﴾]*﴾)/g).map((part, i) =>
+    part.startsWith('﴿') ? (
+      <span key={i} className="font-quran" style={{ color: 'var(--ayah-color)' }}>{part}</span>
+    ) : (
+      <React.Fragment key={i}>{part}</React.Fragment>
+    )
+  );
+}
+
+const SectionHead: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <div className="flex items-center gap-2.5">
+    <h2 className="text-[0.8125rem] font-medium shrink-0" style={{ color: 'var(--accent-text)' }}>{children}</h2>
+    <span className="w-[5px] h-[5px] rounded-full shrink-0" style={{ background: 'var(--accent-stroke)' }} aria-hidden="true" />
+    <span className="flex-1 h-px" style={{ background: 'var(--border-hairline)' }} aria-hidden="true" />
+  </div>
+);
+
 export const HomeScreen: React.FC<HomeScreenProps> = ({
   blessing,
   inspiration,
   isCompletedToday,
   onStartReflection,
 }) => {
-  const [showTadabbur, setShowTadabbur] = useState(false);
-  const [showInspiration, setShowInspiration] = useState(false);
-  const [copiedBlessing, setCopiedBlessing] = useState(false);
-  const [copiedInspiration, setCopiedInspiration] = useState(false);
-  const [shareModalData, setShareModalData] = useState<{ open: boolean; type: 'ayah' | 'tadabbur' }>({
-    open: false,
-    type: 'ayah'
-  });
+  const { entries, todayRole, theme } = useStore();
+  const today = useLocalDay();
+  const [copied, setCopied] = useState<'blessing' | 'inspiration' | null>(null);
+  const [copyFailed, setCopyFailed] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
+  const copyTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const tadabburRef = useRef<HTMLElement | null>(null);
 
-  const hijriToday = getFormattedHijriDate();
+  useEffect(() => () => {
+    if (copyTimer.current) clearTimeout(copyTimer.current);
+  }, []);
 
-  // Scholar name display rule from A4: only show if not generic starting with مستفاد / مأثور / إشارة
-  const showScholarName = blessing.scholarQuote.scholar && 
-    !['مستفاد', 'مأثور', 'إشارة'].some(prefix => blessing.scholarQuote.scholar.startsWith(prefix));
+  const isLight = theme === 'light';
+  const motif = sceneMotifFor(blessing.id);
+  const dayHeader = getFormattedHijriDayHeader(parseLocalDateString(today) ?? new Date());
+  const isWelcome = todayRole === 'welcome';
 
-  const handleCopyBlessingText = async () => {
-    const formatted = `«${blessing.title}»\n${blessing.openingLine}\n\n﴿${blessing.quran.textUthmani}﴾ [سورة ${blessing.quran.surahName} : ${toArabicNumerals(blessing.quran.ayahNumber)}]\n\n— تطبيق «الحمد»`;
+  const verse = blessing.quran.textUthmani;
+  const verseLetters = letterCount(verse);
+  const verseInSky = verseLetters <= SKY_VERSE_LIMIT;
+  const skyVerseSize = verseLetters <= 60 ? '1.5625rem' : '1.375rem';
+  const verseRef = `سورة ${blessing.quran.surahName} · ${toArabicNumerals(blessing.quran.ayahNumber)}`;
+
+  const totalSeconds = (blessing.istisharSteps || []).reduce((sum, s) => sum + (s.durationSec || 0), 0);
+  const durationLabel = totalSeconds > 0 ? `${toArabicNumerals(totalSeconds)} ثانية` : null;
+
+  const todayLine = entries.find((e) => e.date === today && e.blessingId === blessing.id)?.text?.trim();
+
+  const scholar = blessing.scholarQuote;
+  const scholarName =
+    scholar?.scholar && !GENERIC_SCHOLAR_PREFIXES.some((p) => scholar.scholar.startsWith(p))
+      ? [scholar.scholar, scholar.work].filter(Boolean).join('، ')
+      : null;
+  const scholarIsParaphrase = scholar?.attributionType === 'paraphrase';
+
+  const copyText = async (kind: 'blessing' | 'inspiration') => {
+    const text =
+      kind === 'blessing'
+        ? `«${blessing.title}»\n${blessing.openingLine}\n\n﴿${verse}﴾ [سورة ${blessing.quran.surahName} : ${toArabicNumerals(blessing.quran.ayahNumber)}]\n\n— تطبيق «الحمد»`
+        : `${inspiration.type === 'quran' ? `﴿${inspiration.text}﴾` : `«${inspiration.text}»`}\n(${toArabicNumerals(inspiration.source)})\n— تطبيق «الحمد»`;
+    if (copyTimer.current) clearTimeout(copyTimer.current);
     try {
-      await navigator.clipboard.writeText(formatted);
-      setCopiedBlessing(true);
-      setTimeout(() => setCopiedBlessing(false), 2200);
-    } catch {}
+      await navigator.clipboard.writeText(text);
+      setCopyFailed(false);
+      setCopied(kind);
+    } catch {
+      setCopied(null);
+      setCopyFailed(true);
+    }
+    copyTimer.current = setTimeout(() => {
+      setCopied(null);
+      setCopyFailed(false);
+    }, 2200);
   };
 
-  const handleCopyInspirationText = async () => {
-    const formatted = `${inspiration.type === 'quran' ? `﴿${inspiration.text}﴾` : `«${inspiration.text}»`}\n(${inspiration.source})\n— تطبيق «الحمد»`;
-    try {
-      await navigator.clipboard.writeText(formatted);
-      setCopiedInspiration(true);
-      setTimeout(() => setCopiedInspiration(false), 2200);
-    } catch {}
-  };
+  const ctaButton = (id?: string) => (
+    <button
+      id={id}
+      type="button"
+      onClick={onStartReflection}
+      className="w-full h-14 px-5 rounded-2xl flex items-center justify-between active:scale-[0.98] transition-transform cursor-pointer"
+      style={{ background: 'var(--scene-cta-bg)', color: 'var(--scene-cta-fg)' }}
+    >
+      <span className="text-lg font-semibold">استشعر النعمة</span>
+      {durationLabel && <span className="text-[0.8125rem]" style={{ color: 'var(--scene-cta-sub)' }}>{durationLabel}</span>}
+    </button>
+  );
+
+  const doneBlock = (
+    <div className="flex flex-col">
+      <div className="flex items-center gap-2 text-sm font-medium" style={{ color: 'var(--accent-text)' }}>
+        <CheckCircle2 size={18} strokeWidth={1.5} aria-hidden="true" />
+        <span>حمدتَ الله اليوم على هذه النعمة</span>
+      </div>
+      {todayLine && (
+        <>
+          <span className="mt-3.5 text-xs" style={{ color: 'var(--text-muted)' }}>سطرك اليوم</span>
+          <p className="mt-0.5 font-serif text-xl leading-[1.75]" style={{ color: 'var(--text-primary)', textWrap: 'pretty' }}>
+            {todayLine}
+          </p>
+        </>
+      )}
+      <div className="mt-1 -mr-3 flex items-center gap-1">
+        <button
+          type="button"
+          onClick={() => tadabburRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+          className="h-11 px-3 text-sm cursor-pointer"
+          style={{ color: 'var(--accent-text)' }}
+        >
+          اقرأ التدبّر
+        </button>
+        <span className="w-px h-3.5" style={{ background: 'var(--border-hairline)' }} aria-hidden="true" />
+        <button
+          id="btn-start-reflection"
+          type="button"
+          onClick={onStartReflection}
+          className="h-11 px-3 text-sm cursor-pointer"
+          style={{ color: 'var(--text-muted)' }}
+        >
+          أعد الاستشعار
+        </button>
+      </div>
+    </div>
+  );
+
+  const kicker = (
+    <div className="flex items-center gap-2.5">
+      <span className="text-[0.8125rem] font-medium shrink-0" style={{ color: 'var(--accent-text)' }}>
+        {isWelcome ? 'نعمتك الأولى' : 'نعمة اليوم'}
+      </span>
+      <span className="flex-1 h-px" style={{ background: 'var(--border-hairline)' }} aria-hidden="true" />
+      <span className="text-xs shrink-0" style={{ color: 'var(--text-muted)' }}>{blessing.categoryLabel}</span>
+    </div>
+  );
+
+  const quietButton = 'flex-1 h-11 rounded-[14px] border flex items-center justify-center gap-2 text-sm font-medium cursor-pointer transition-colors';
 
   return (
-    <div className="w-full pb-28 pt-2 px-4 sm:px-6 max-w-lg md:max-w-2xl lg:max-w-3xl mx-auto space-y-6 animate-fade-in" dir="rtl">
-      {/* 1. Header Greeting + Hijri Date */}
-      <div className="flex flex-col items-start space-y-1 px-1">
-        <span className="text-sm font-medium text-[#AEAECB]">السلام عليكم</span>
-        <h2 className="text-xl sm:text-2xl font-bold font-ibm text-[#EDEDF5]">
-          {hijriToday}
-        </h2>
-      </div>
+    <div className="w-full min-h-screen pb-28 animate-fade-in" dir="rtl" style={{ background: 'var(--scene-base)' }}>
+      {/* The scene. The mobile top bar sits over its sky (pt-16); on wider screens the desktop bar sits above it. */}
+      <BlessingScene motif={motif} settled={isCompletedToday} isLight={isLight}>
+        <div className="w-full max-w-lg md:max-w-2xl mx-auto px-7 pt-[4.5rem] md:pt-8 flex flex-col items-center text-center">
+          <span className="text-xs" style={{ color: 'var(--text-muted)' }}>{dayHeader}</span>
 
-      {/* 2. «حديث اليوم» / «آية اليوم» Expandable Card */}
-      <GlassCard
-        id="card-daily-inspiration"
-        className="relative overflow-hidden group hover:border-[#E4C368]/30 transition-all duration-300"
-        padding={showInspiration ? 'p-5 sm:p-6' : 'py-3.5 px-4 sm:px-5'}
-      >
-        <div
-          onClick={() => setShowInspiration(!showInspiration)}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              setShowInspiration(!showInspiration);
-            }
-          }}
-          aria-expanded={showInspiration}
-          className="flex items-center justify-between gap-3 cursor-pointer select-none"
-        >
-          <div className="flex items-center gap-2.5 min-w-0 flex-1">
-            <span className="w-2 h-2 rounded-full bg-[#E4C368] shadow-[0_0_6px_rgba(228,195,104,0.8)] shrink-0" />
-            <span className="text-xs sm:text-sm font-semibold text-[#E4C368] shrink-0">
-              {inspiration.type === 'hadith' ? 'حديث اليوم' : 'آية اليوم'}
-            </span>
-            {!showInspiration && (
-              <span className="text-xs sm:text-sm text-[#AEAECB] truncate font-serif opacity-85">
-                — {inspiration.type === 'quran' ? `﴿${inspiration.text}﴾` : `«${inspiration.text}»`}
-              </span>
-            )}
-          </div>
-
-          <div className="flex items-center gap-1.5 shrink-0">
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleCopyInspirationText();
-              }}
-              className="w-8 h-8 rounded-full bg-[#15152A]/80 hover:bg-[#25232E] border border-[#2E2E4A] text-[#AEAECB] hover:text-[#EDEDF5] flex items-center justify-center transition-colors cursor-pointer"
-              title="نسخ النص"
-              aria-label="نسخ نص حديث اليوم"
-            >
-              {copiedInspiration ? <Check size={14} className="text-[#E4C368]" /> : <Copy size={14} />}
-            </button>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setShareModalData({ open: true, type: 'ayah' });
-              }}
-              className="w-8 h-8 rounded-full bg-[#15152A]/80 hover:bg-[#25232E] border border-[#2E2E4A] text-[#AEAECB] hover:text-[#EDEDF5] flex items-center justify-center transition-colors cursor-pointer"
-              title="مشاركة كبطاقة"
-              aria-label="مشاركة حديث اليوم"
-            >
-              <Share2 size={15} />
-            </button>
-            <span
-              className="w-8 h-8 rounded-full bg-[#15152A]/60 border border-[#2E2E4A] text-[#AEAECB] group-hover:text-[#E4C368] flex items-center justify-center transition-colors"
-              aria-hidden="true"
-            >
-              {showInspiration ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-            </span>
-          </div>
-        </div>
-
-        {/* Expanded Content */}
-        {showInspiration && (
-          <div className="mt-4 pt-3 border-t border-[#2E2E4A]/60 animate-fade-in">
-            <p className={`text-lg sm:text-xl md:text-2xl leading-[2.1] text-center px-2 font-medium ${inspiration.type === 'quran' ? 'font-quran ayah-text text-[#E4C368]' : 'font-serif text-[#EDEDF5]'}`}>
-              {inspiration.type === 'quran' ? `﴿${inspiration.text}﴾` : `«${inspiration.text}»`}
-            </p>
-
-            <div className="mt-3 text-center">
-              <span className="text-xs text-[#AEAECB] font-medium tracking-wide">
-                {inspiration.source}
-              </span>
-            </div>
-          </div>
-        )}
-      </GlassCard>
-
-      {/* 3. Divider with "نعمة اليوم" Badge */}
-      <div className="relative flex items-center justify-center my-6">
-        <div
-          className="absolute inset-x-0 h-[1px]"
-          style={{ background: 'linear-gradient(to right, transparent, var(--border-hairline), transparent)' }}
-        />
-        <span className="relative z-10 px-4 py-1 rounded-full text-xs font-medium text-[#AEAECB] bg-[#1E1E38] border border-[#2E2E4A]">
-          نعمة اليوم
-        </span>
-      </div>
-
-      {/* 4. Blessing of the Day Main Card */}
-      <div className="relative">
-        {/* Ambient backdrop: Spotlight Cone in Layl, Two soft #E6DAC8 blobs in Nahar */}
-        <div
-          className="absolute -top-10 inset-x-6 h-44 blur-2xl pointer-events-none rounded-full opacity-60"
-          style={{ backgroundColor: 'var(--bg-deepest)' }}
-          aria-hidden="true"
-        />
-
-        <GlassCard
-          id="card-today-blessing"
-          className="relative overflow-hidden flex flex-col items-center text-center pt-7 pb-7 px-6"
-          borderAccent={true}
-        >
-          {/* Top Bar of Blessing Card: Category Pill on Right + Copy & Share Actions on Left */}
-          <div className="w-full flex items-center justify-between mb-5">
-            <span
-              className="px-4 py-1.5 rounded-full text-xs font-semibold border shadow-sm"
-              style={{
-                borderColor: 'var(--accent-stroke)',
-                color: 'var(--accent-text)',
-                backgroundColor: 'var(--bg-raised)'
-              }}
-            >
-              {blessing.categoryLabel}
-            </span>
-
-            {/* Quick Copy & Share Icon-Only Buttons */}
-            <div className="flex items-center gap-1.5">
-              <button
-                onClick={handleCopyBlessingText}
-                className="w-9 h-9 rounded-full bg-[#15152A]/80 hover:bg-[#25232E] border border-[#2E2E4A] text-[#AEAECB] hover:text-[#EDEDF5] flex items-center justify-center transition-all cursor-pointer active:scale-95"
-                title="نسخ نص النعمة"
-                aria-label="نسخ نص النعمة"
+          {verseInSky ? (
+            <div className="mt-7 flex flex-col items-center">
+              <p
+                className="font-quran ayah-text leading-[2.05]"
+                style={{ color: 'var(--ayah-color)', fontSize: skyVerseSize, textWrap: 'balance' }}
               >
-                {copiedBlessing ? <Check size={15} className="text-[#E4C368]" /> : <Copy size={15} />}
-              </button>
-
-              <button
-                onClick={() => setShareModalData({ open: true, type: 'ayah' })}
-                className="w-9 h-9 rounded-full bg-[#15152A]/80 hover:bg-[#25232E] border border-[#2E2E4A] text-[#AEAECB] hover:text-[#EDEDF5] flex items-center justify-center transition-all cursor-pointer active:scale-95"
-                title="مشاركة النعمة"
-                aria-label="مشاركة النعمة"
-              >
-                <Share2 size={15} />
-              </button>
-            </div>
-          </div>
-
-          {/* Blessing Title */}
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-[#EDEDF5] tracking-tight mb-3 leading-[1.45]">
-            {blessing.title}
-          </h1>
-
-          {/* Opening Line */}
-          <p className="text-sm sm:text-base text-[#C7C4D8] leading-[1.9] max-w-md mx-auto mb-6">
-            {blessing.openingLine}
-          </p>
-
-          {/* Sacred Quran Ayah Block (Sunken surface, Amiri Quran font, Gold in Layl / Ink #2A1F19 in Nahar) */}
-          <div
-            className="w-full rounded-2xl p-5 sm:p-6 mb-6 border"
-            style={{
-              backgroundColor: 'var(--bg-sunken)',
-              borderColor: 'var(--ayah-border)'
-            }}
-          >
-            <p
-              className="font-quran ayah-text text-xl sm:text-2xl leading-[2.15] text-center"
-              style={{ color: 'var(--ayah-color)' }}
-            >
-              ﴿{blessing.quran.textUthmani}﴾
-            </p>
-            <div className="mt-3 text-center">
-              <span className="text-xs sm:text-sm text-[#AEAECB]">
-                سورة {blessing.quran.surahName} : {toArabicNumerals(blessing.quran.ayahNumber)}
-              </span>
-            </div>
-          </div>
-
-          {/* Collapsible «تدبّر النعمة» (Tadabbur section) */}
-          <div className="w-full border-t border-[#2E2E4A]/80 pt-4 mb-6">
-            <button
-              onClick={() => setShowTadabbur(!showTadabbur)}
-              className="w-full flex items-center justify-between py-2.5 text-base font-bold text-[#EDEDF5] hover:text-[#E4C368] transition-colors cursor-pointer"
-            >
-              <div className="flex items-center gap-2">
-                <Sparkles size={18} className="text-[#C8A951]" />
-                <span>تدبّر النعمة</span>
-              </div>
-              {showTadabbur ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-            </button>
-
-            {showTadabbur && (
-              <div className="mt-4 space-y-5 text-right animate-fade-in bg-black/20 p-5 sm:p-6 rounded-2xl border border-[#2E2E4A]/60">
-                {/* Hadith */}
-                {blessing.hadith && blessing.hadith.text && (
-                  <div className="space-y-2">
-                    <span className="text-sm font-bold text-[#C8A951] block">الحديث الشريف:</span>
-                    <p className="font-serif text-xl sm:text-2xl text-[#EDEDF5] leading-[1.95]">
-                      «{blessing.hadith.text}»
-                    </p>
-                    <span className="text-xs sm:text-sm text-[#AEAECB] block pt-0.5">
-                      {blessing.hadith.source} {blessing.hadith.grade ? `(${blessing.hadith.grade})` : ''}
-                    </span>
-                  </div>
-                )}
-
-                {/* Tadabbur Text */}
-                {blessing.tadabbur && (
-                  <div className={`space-y-2 ${blessing.hadith?.text ? 'border-t border-[#2E2E4A]/50 pt-4' : ''}`}>
-                    <span className="text-sm font-bold text-[#C8A951] block">وقفات في أثر النعمة:</span>
-                    <p className="text-base sm:text-lg text-[#C7C4D8] leading-[1.95]">
-                      {blessing.tadabbur}
-                    </p>
-                  </div>
-                )}
-
-                {/* Scholar Quote */}
-                {blessing.scholarQuote && blessing.scholarQuote.text && (
-                  <div className="space-y-2 border-t border-[#2E2E4A]/50 pt-4">
-                    <p className="font-serif text-lg sm:text-xl text-[#C7C4D8] italic leading-[1.95]">
-                      "{blessing.scholarQuote.text}"
-                    </p>
-                    {showScholarName && (
-                      <span className="text-xs sm:text-sm font-medium text-[#C8A951] block">
-                        — {blessing.scholarQuote.scholar} {blessing.scholarQuote.work ? `(${blessing.scholarQuote.work})` : ''}
-                      </span>
-                    )}
-                  </div>
-                )}
-
-                {/* Share Tadabbur Button */}
-                <div className="pt-2 flex justify-end">
-                  <button
-                    type="button"
-                    onClick={() => setShareModalData({ open: true, type: 'tadabbur' })}
-                    className="h-9 px-3.5 rounded-xl bg-[#15152A]/90 hover:bg-[#25232E] border border-[#2E2E4A] hover:border-[#E4C368]/50 text-[#E4C368] flex items-center gap-1.5 text-xs font-semibold transition-colors cursor-pointer"
-                    title="مشاركة التدبّر"
-                    aria-label="مشاركة"
-                  >
-                    <Share2 size={14} />
-                    <span>مشاركة</span>
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Primary CTA Button: «استشعر النعمة» */}
-          {isCompletedToday ? (
-            <div className="w-full flex flex-col items-center gap-2">
-              <div className="w-full flex items-center justify-center gap-2 py-4 px-6 rounded-2xl bg-[#1E1E38] border border-[#2E2E4A] text-[#E4C368] font-semibold text-base">
-                <CheckCircle2 size={20} className="text-[#E4C368]" />
-                <span>حمدتَ اللهَ اليوم على هذه النعمة</span>
-              </div>
-              <button
-                onClick={onStartReflection}
-                className="flex items-center gap-1.5 text-sm font-medium text-[#AEAECB] hover:text-[#EDEDF5] py-2 transition-colors cursor-pointer"
-              >
-                <RotateCcw size={15} />
-                <span>أعد الاستشعار</span>
-              </button>
+                ﴿{verse}﴾
+              </p>
+              <span className="mt-1 text-xs" style={{ color: 'var(--text-muted)' }}>{verseRef}</span>
             </div>
           ) : (
-            <button
-              id="btn-start-reflection"
-              onClick={onStartReflection}
-              className="w-full py-4 px-8 rounded-2xl bg-[#6C63FF] hover:bg-[#594DFF] active:scale-[0.98] text-white font-bold text-lg shadow-lg shadow-[#6C63FF]/25 transition-all duration-200 cursor-pointer"
-            >
-              استشعر النعمة
-            </button>
+            <div id="card-today-blessing" className="mt-7 flex flex-col items-center">
+              <span className="text-[0.8125rem] font-medium" style={{ color: 'var(--accent-text)' }}>
+                {isWelcome ? 'نعمتك الأولى' : 'نعمة اليوم'}
+                <span className="font-normal" style={{ color: 'var(--text-muted)' }}> · {blessing.categoryLabel}</span>
+              </span>
+              <h1 className="mt-2 font-serif font-bold text-[2.5rem] leading-[1.35]" style={{ color: 'var(--text-primary)' }}>
+                {blessing.title}
+              </h1>
+              <p className="mt-2 font-serif text-[1.1875rem] leading-[1.7]" style={{ color: 'var(--text-secondary)', textWrap: 'balance' }}>
+                {blessing.openingLine}
+              </p>
+            </div>
           )}
-        </GlassCard>
+        </div>
+      </BlessingScene>
+
+      <div className="w-full max-w-lg md:max-w-2xl mx-auto px-7 -mt-2 relative z-10 flex flex-col">
+        {verseInSky ? (
+          <>
+            <div id="card-today-blessing" className="flex flex-col">
+              {kicker}
+              <h1 className="mt-2 font-serif font-bold text-[3.125rem] leading-[1.3]" style={{ color: 'var(--text-primary)' }}>
+                {blessing.title}
+              </h1>
+              {!isCompletedToday && (
+                <p className="mt-1 font-serif text-xl leading-[1.7]" style={{ color: 'var(--text-secondary)', textWrap: 'pretty' }}>
+                  {blessing.openingLine}
+                </p>
+              )}
+            </div>
+            <div className="mt-[1.125rem]">{isCompletedToday ? doneBlock : ctaButton('btn-start-reflection')}</div>
+          </>
+        ) : (
+          <>
+            {isCompletedToday ? doneBlock : ctaButton('btn-start-reflection')}
+            <section className="mt-10 flex flex-col gap-3.5" aria-label="آية اليوم">
+              <div className="flex items-center gap-2.5">
+                <h2 className="text-[0.8125rem] font-medium shrink-0" style={{ color: 'var(--accent-text)' }}>آية اليوم</h2>
+                <span className="w-[5px] h-[5px] rounded-full shrink-0" style={{ background: 'var(--accent-stroke)' }} aria-hidden="true" />
+                <span className="flex-1 h-px" style={{ background: 'var(--border-hairline)' }} aria-hidden="true" />
+                <span className="text-xs shrink-0" style={{ color: 'var(--text-muted)' }}>{verseRef}</span>
+              </div>
+              <p className="font-quran ayah-text text-[1.375rem] leading-[2.1] text-center" style={{ color: 'var(--ayah-color)', textWrap: 'pretty' }}>
+                ﴿{verse}﴾
+              </p>
+            </section>
+          </>
+        )}
+
+        {isWelcome && !isCompletedToday && (
+          <span className="mt-2.5 text-center text-xs" style={{ color: 'var(--text-muted)' }}>ومن الغد، نعمةٌ جديدة كل يوم.</span>
+        )}
+
+        {blessing.tadabbur && (
+          <section ref={tadabburRef} className="mt-11 flex flex-col gap-3.5 scroll-mt-6">
+            <SectionHead>تدبّر</SectionHead>
+            <p className="text-base leading-[1.95]" style={{ color: 'var(--text-secondary)', textWrap: 'pretty' }}>
+              {withQuranFragments(blessing.tadabbur)}
+            </p>
+          </section>
+        )}
+
+        {blessing.hadith?.text && (
+          <section className="mt-10 flex flex-col gap-3">
+            <SectionHead>من السنّة</SectionHead>
+            <p className="font-serif text-xl leading-[1.9]" style={{ color: 'var(--text-primary)', textWrap: 'pretty' }}>«{blessing.hadith.text}»</p>
+            {blessing.hadith.source && (
+              <span className="-mt-1.5 text-xs" style={{ color: 'var(--text-muted)' }}>{blessing.hadith.source}</span>
+            )}
+          </section>
+        )}
+
+        {scholar?.text && (
+          <section className="mt-10 flex flex-col gap-3">
+            <SectionHead>فائدة</SectionHead>
+            <p className="font-serif text-lg leading-[1.9]" style={{ color: 'var(--text-secondary)', textWrap: 'pretty' }}>{scholar.text}</p>
+            {(scholarName || scholarIsParaphrase) && (
+              <span className="-mt-1.5 text-xs" style={{ color: 'var(--text-muted)' }}>
+                {[scholarName, scholarIsParaphrase ? 'بالمعنى' : null].filter(Boolean).join(' · ')}
+              </span>
+            )}
+          </section>
+        )}
+
+        <div className="mt-8 flex gap-2.5">
+          <button
+            type="button"
+            onClick={() => setShareOpen(true)}
+            className={quietButton}
+            style={{ borderColor: 'var(--border-hairline)', color: 'var(--text-secondary)' }}
+          >
+            <Share2 size={17} strokeWidth={1.5} aria-hidden="true" />
+            مشاركة كبطاقة
+          </button>
+          <button
+            type="button"
+            onClick={() => copyText('blessing')}
+            className={quietButton}
+            style={{ borderColor: 'var(--border-hairline)', color: copied === 'blessing' ? 'var(--accent-text)' : 'var(--text-secondary)' }}
+          >
+            {copied === 'blessing' ? <Check size={17} strokeWidth={1.5} aria-hidden="true" /> : <Copy size={17} strokeWidth={1.5} aria-hidden="true" />}
+            {copied === 'blessing' ? 'نُسخ النص' : 'نسخ النص'}
+          </button>
+        </div>
+        {copyFailed && (
+          <span role="status" className="mt-2 text-xs text-center" style={{ color: 'var(--danger)' }}>
+            تعذّر النسخ على هذا الجهاز.
+          </span>
+        )}
+
+        <section id="card-daily-inspiration" className="mt-12 pt-7 border-t flex flex-col gap-3" style={{ borderColor: 'var(--border-hairline)' }}>
+          <div className="flex items-center justify-between">
+            <h2 className="text-[0.8125rem] font-medium" style={{ color: 'var(--text-muted)' }}>
+              {inspiration.type === 'quran' ? 'آية اليوم' : 'حديث اليوم'}
+            </h2>
+            <button
+              type="button"
+              onClick={() => copyText('inspiration')}
+              className="w-11 h-11 -ml-3 flex items-center justify-center cursor-pointer"
+              style={{ color: copied === 'inspiration' ? 'var(--accent-text)' : 'var(--text-muted)' }}
+              aria-label={inspiration.type === 'quran' ? 'نسخ آية اليوم' : 'نسخ حديث اليوم'}
+            >
+              {copied === 'inspiration' ? <Check size={18} strokeWidth={1.5} /> : <Copy size={18} strokeWidth={1.5} />}
+            </button>
+          </div>
+          {inspiration.type === 'quran' ? (
+            <p className="font-quran ayah-text text-[1.3125rem] leading-[2.05]" style={{ color: 'var(--ayah-color)', textWrap: 'pretty' }}>﴿{inspiration.text}﴾</p>
+          ) : (
+            <p className="font-serif text-[1.1875rem] leading-[1.9]" style={{ color: 'var(--text-primary)', textWrap: 'pretty' }}>«{inspiration.text}»</p>
+          )}
+          <span className="-mt-1.5 text-xs" style={{ color: 'var(--text-muted)' }}>{toArabicNumerals(inspiration.source)}</span>
+        </section>
+
+        {!isCompletedToday && (
+          <div className="mt-12 flex flex-col gap-3.5">
+            <svg aria-hidden="true" width="200" height="64" viewBox="0 0 200 64" className="self-center">
+              <line x1="100" y1="0" x2="100" y2="44" style={{ stroke: 'var(--scene-thread)', strokeOpacity: 0.6 }} />
+              <ellipse cx="100" cy="47" rx="14" ry="3.2" fill="none" style={{ stroke: 'var(--scene-ripple)', strokeOpacity: 0.8 }} />
+              <ellipse cx="100" cy="47" rx="34" ry="7.7" fill="none" style={{ stroke: 'var(--scene-ripple)', strokeOpacity: 0.45 }} />
+              <ellipse cx="100" cy="47" rx="62" ry="14" fill="none" style={{ stroke: 'var(--scene-light)', strokeOpacity: 0.15 }} />
+              <circle cx="100" cy="47" r="3" style={{ fill: 'var(--scene-ripple)' }} />
+            </svg>
+            <span className="text-center font-serif text-xl" style={{ color: 'var(--text-secondary)' }}>والآن، استشعرها.</span>
+            {ctaButton()}
+          </div>
+        )}
       </div>
 
-      {/* Share Modal */}
-      {shareModalData.open && (
-        <ShareCardModal
-          blessing={blessing}
-          type={shareModalData.type}
-          onClose={() => setShareModalData({ open: false, type: 'ayah' })}
-        />
+      {shareOpen && (
+        <ShareCardModal blessing={blessing} type="ayah" onClose={() => setShareOpen(false)} />
       )}
     </div>
   );

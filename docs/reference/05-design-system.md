@@ -1,6 +1,6 @@
 # Design system
 
-> **Changed since this was written** (commit `d3dfd92`, 17 November 2026): `.animate-fade-in` and `.animate-scale-up` no longer keep their end state (no `forwards`), so they leave no transform on the element and dialogs inside a screen are positioned against the viewport. The rest of this file is unchanged.
+> **Changed since this was written:** on 25 November 2026 `src/index.css` gained the `--scene-*` variables for Home's scene (section 3.1); line numbers below that point after them are now off by about 60. Earlier (commit `d3dfd92`, 17 November 2026): `.animate-fade-in` and `.animate-scale-up` no longer keep their end state (no `forwards`), so they leave no transform on the element and dialogs inside a screen are positioned against the viewport. The rest of this file is unchanged.
 
 State of the code at commit `68e723a` (`main`, 2026-11-16). Line references are `path:line` against that commit.
 
@@ -155,6 +155,24 @@ Notes:
 
 - The dark `--ayah-border` is terracotta (`185, 87, 59` is `#B9573B`) at 14 % although terracotta is otherwise the light theme's accent. The dark design sheet uses the same value for the verse block, so the code matches the sheet.
 - `--bg-glass` and `--bg-raised` are opaque. `GlassCard` still applies `backdrop-blur-xl` (`src/components/common/GlassCard.tsx:32`), which has nothing to blur through.
+
+### 3.1 Scene variables («المشهد», added 25 November 2026)
+
+Read only by `src/components/common/BlessingScene.tsx` and `src/components/screens/HomeScreen.tsx`. They are declared with the theme tokens, so every mode is covered without remap rules. "—" means the mode keeps the dark value.
+
+| Variable | Dark | Light | High contrast, dark | Night reading | Role |
+|---|---|---|---|---|---|
+| `--scene-base` | `#0B0B1C` | `#F4EDE3` | `#070712` | `#0B0806` | Home's page background; the ground fades into it |
+| `--scene-sky-1/2/3` | `#07071A` `#121231` `#1C1C40` | `#E9DDCB` `#F1E7D8` `#F8EFE2` | — | `#050302` `#0E0A07` `#1A130D` | Sky gradient, top to horizon |
+| `--scene-water-1/2` | `#15153A` `#0F0F28` | `#EADFCF` `#EFE6D9` | — | `#17110C` `#0E0B08` | Water under the horizon |
+| `--scene-light` | `#EDEDF5` | `#2A1F19` | `#FFFFFF` | `#E8DAC8` | Stars, water lines, outer rings |
+| `--scene-band`, `--scene-band-opacity` | `#EDEDF5`, 0.05 | `#FFFFFF`, 0.32 | — | `#E8DAC8`, 0.05 | Light band on the horizon |
+| `--scene-ripple` | `#E4C368` | `#B9573B` | `#F2D27A` | `#D89A4E` | Inner rings, the drop, the crescent |
+| `--scene-thread` | `#C8A951` | `#B9573B` | `#E4C368` | `#C4853B` | The thread from the sky |
+| `--scene-glow`, `--scene-glow-opacity` | `#E4C368`, 0.22 | `#D4704F`, 0.16 | — | `#D89A4E`, 0.22 | Glow around the drop and the crescent |
+| `--scene-dune-1/2/3` | `#17173D` `#12122F` `#0E0E25` | `#E5D7C1` `#DDCDB4` `#D6C4A9` | — | `#1E160F` `#17110B` `#110D08` | Dunes of the night scene |
+| `--scene-dawn-1…5`, `--scene-sun`, `--scene-sunline`, `--scene-land-1/2` | night blue to rose and amber | cream to apricot | — | espresso to amber | The dawn scene |
+| `--scene-cta-bg/fg/sub` | `#EDEDF5` / `#111126` / `#4A4A66` | `#B9573B` / `#FFFFFF` / `#FFFFFF` | `#FFFFFF` / `#070712` / `#2E2E4A` | `#E8DAC8` / `#0B0806` / `#5A4A3A` | Home's «استشعر النعمة» button. In dark it is moonlight on ink (about 15:1) instead of the violet `--cta-bg`; the rest of the app keeps violet |
 
 ## 4. Tailwind v4 configuration
 

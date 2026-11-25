@@ -1,6 +1,6 @@
 # Layout and shared components
 
-> **Changed since this was written** (commits `d3dfd92` to `b8db9cc`, 17 November 2026): dialogs rendered inside a screen are now positioned against the viewport. The five tabs are unchanged; the journey tab now opens the journey for everyone. With the import of blessings 41–100: the share image fits the whole verse instead of cutting it at four lines, and waits for its fonts (the `ShareCardModal` section is updated); the charts have ten categories, and the chart area is 288 px high (`h-72`) instead of 240.
+> **Changed since this was written:** on 25 November 2026, for Home's new scene: `TopBar` takes an `overlay` prop (transparent and not sticky; `App` sets it on the home tab only); `SpotlightTour` also re-reads its target's position on scroll, so a highlight follows the smooth scroll; and a new shared component, `BlessingScene`, is described at the end of this file. Earlier (commits `d3dfd92` to `b8db9cc`, 17 November 2026): dialogs rendered inside a screen are now positioned against the viewport. The five tabs are unchanged; the journey tab now opens the journey for everyone. With the import of blessings 41–100: the share image fits the whole verse instead of cutting it at four lines, and waits for its fonts (the `ShareCardModal` section is updated); the charts have ten categories, and the chart area is 288 px high (`h-72`) instead of 240.
 
 State of the code at commit `68e723a` (`main`, 2026-11-16). Line references are `path:line` against that commit.
 
@@ -20,6 +20,7 @@ This file covers the eight components in `src/components/common/` and the three 
 | `src/components/common/SpotlightTour.tsx` | 128 | Four-step first-run tour over the Home screen | `src/App.tsx:18` |
 | `src/components/common/CompletionParticles.tsx` | 132 | Celebration overlay of rising particles | `src/App.tsx:19`, `screens/ReflectionModal.tsx:7` |
 | `src/components/common/ShareCardModal.tsx` | 761 | Share dialog: copies formatted text, renders a PNG on a canvas, shares | `journey/JourneyPathScreen.tsx:38`, `journey/JourneyStationFlow.tsx:7`, `screens/HomeScreen.tsx:7`, `screens/ReflectionModal.tsx:8` |
+| `src/components/common/BlessingScene.tsx` | 206 | Home's scene: sky, thread and ground (ripples, dawn or night); `sceneMotifFor` | `screens/HomeScreen.tsx` |
 | `src/components/common/ReflectionCategoryCharts.tsx` | 627 | Category analytics with three Recharts views | `journey/JourneyPathScreen.tsx:44`, `screens/ConsistencyScreen.tsx:13` |
 
 Every component is imported at least once. Exports and props that nothing uses:
@@ -776,3 +777,22 @@ A category without an entry falls back to `#E4C368` (`:170`, `:198`). Interfaces
 - `journeyState.stages.find` (`:153`) is not guarded, unlike `journeyState?.completed` (`:147`).
 - The analytics logic is inside the component and cannot be called from a test without rendering it.
 - Recharts is part of the 1.03 MB main application chunk. Its importers are this component, `journey/JourneyWeeklyProgressChart.tsx` and `screens/ConsistencyScreen.tsx`.
+
+---
+
+## BlessingScene
+
+Added 25 November 2026. `src/components/common/BlessingScene.tsx`, used by `HomeScreen` only.
+
+**Exports.** `BlessingScene` (named), `sceneMotifFor(blessingId)`, type `SceneMotif` (`'ripples' | 'dawn' | 'night'`).
+
+**Props.** `motif`; `settled` (today's reflection is done: wider, fainter rings); `isLight` (no stars, softer outer rings); `children` (the sky's content: the date and the verse, or the title on long-verse days).
+
+**Structure.** A sky (`div` with a CSS gradient, stars drawn in an SVG at percentage positions, the children, then the thread as a 1 px gradient `span`) above a ground drawn in SVG at full width: water with a horizon band and seven rings centred at 50 % (`ripples`), a horizon rim with lines of light and a dot on it (`dawn`), or three dune layers stretched to the width with a crescent hanging from the thread in the sky (`night`). The water uses px heights and percentage x positions, so rings keep their shape on any width.
+
+**Colours.** Only `--scene-*` variables ([05](05-design-system.md), section 3.1), applied through `style` on SVG elements and stops, so every theme and mode works without remap rules. Gradient and mask ids come from `useId`.
+
+**Mapping.** `sceneMotifFor` lists four blessings for `dawn` and seven for `night` by id; every other blessing gets `ripples`. More scenes (earth, trees, the home…) can be added as further motifs with their own ids.
+
+**Accessibility.** Everything it draws is `aria-hidden`; the text is in the children.
+

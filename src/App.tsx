@@ -137,6 +137,7 @@ const MainAppContent: React.FC = () => {
           onOpenSettings={() => setActiveTab('settings')}
           isSettingsActive={activeTab === 'settings'}
           onOpenAbout={() => setIsAboutOpen(true)}
+          overlay={activeTab === 'home'}
         />
       </div>
 
