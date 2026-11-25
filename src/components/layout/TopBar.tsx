@@ -6,6 +6,8 @@ interface TopBarProps {
   onOpenSettings: () => void;
   isSettingsActive?: boolean;
   onOpenAbout: () => void;
+  /** Home only: the bar sits transparent over the scene's sky and scrolls away with it */
+  overlay?: boolean;
   className?: string;
 }
 
@@ -13,11 +15,15 @@ export const TopBar: React.FC<TopBarProps> = ({
   onOpenSettings,
   isSettingsActive = false,
   onOpenAbout,
+  overlay = false,
   className = ''
 }) => {
+  const placement = overlay
+    ? 'absolute top-0 inset-x-0 bg-transparent border-b border-transparent'
+    : 'sticky top-0 backdrop-blur-md bg-[#15152A]/85 border-b border-[#2E2E4A]/50';
   return (
     <header
-      className={`sticky top-0 z-30 w-full px-5 py-3.5 flex items-center justify-between backdrop-blur-md bg-[#15152A]/85 border-b border-[#2E2E4A]/50 transition-colors ${className}`}
+      className={`${placement} z-30 w-full px-5 py-3.5 flex items-center justify-between transition-colors ${className}`}
       dir="rtl"
     >
       {/* Right item: «ح» avatar button (Opens About modal) */}

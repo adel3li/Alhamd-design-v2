@@ -1,6 +1,6 @@
 # Core screens
 
-> **Changed since this was written** (commit `d3dfd92`, 17 November 2026): Home formats a verse of the day as a verse (the code now tests for `'quran'`); new users start with empty history; day keys are local; dialogs opened from these screens are positioned against the viewport; `ContentReviewModal` has no status badge and reads its count from the data; the links to it read «عن المحتوى والتوثيق»; `ReflectionModal` splits text without a regex lookbehind; finishing the welcome reflection starts the daily rotation the next day. In `403f633` the consistency screen lost its statistics card (total, consecutive days, seven-day chart) and the month percentage; the Hijri calendar and the reminder remain. In `b7b2e94` onboarding says 80 seconds. In `755170f` `ReflectionModal` records three consent-gated events. With the import of blessings 41–100 the data set has 100 blessings and ten categories, so every "40" and "eight categories" below now reads 100 and ten; a blessing without a hadith (41–100) shows no hadith block on Home and no divider above its reflection; and the first card of `ContentReviewModal` now says the verses are taken from the Tanzil Project and links to tanzil.net, in place of the sentence about the King Fahd Complex ([04-content-and-data.md](04-content-and-data.md), section 1.7).
+> **Changed since this was written:** on 25 November 2026 Home was rewritten as «المشهد»; its section below describes the new file. Earlier (commit `d3dfd92`, 17 November 2026): Home formats a verse of the day as a verse (the code now tests for `'quran'`); new users start with empty history; day keys are local; dialogs opened from these screens are positioned against the viewport; `ContentReviewModal` has no status badge and reads its count from the data; the links to it read «عن المحتوى والتوثيق»; `ReflectionModal` splits text without a regex lookbehind; finishing the welcome reflection starts the daily rotation the next day. In `403f633` the consistency screen lost its statistics card (total, consecutive days, seven-day chart) and the month percentage; the Hijri calendar and the reminder remain. In `b7b2e94` onboarding says 80 seconds. In `755170f` `ReflectionModal` records three consent-gated events. With the import of blessings 41–100 the data set has 100 blessings and ten categories, so every "40" and "eight categories" below now reads 100 and ten; a blessing without a hadith (41–100) shows no hadith block on Home and no divider above its reflection; and the first card of `ContentReviewModal` now says the verses are taken from the Tanzil Project and links to tanzil.net, in place of the sentence about the King Fahd Complex ([04-content-and-data.md](04-content-and-data.md), section 1.7).
 
 State of the code at commit `68e723a`. Line references are `path:line` against that commit. Inside a file's own section, a bare `:NN` points into that file.
 
@@ -38,116 +38,48 @@ Related documents: [01-overview-and-architecture.md](01-overview-and-architectur
 
 ## HomeScreen.tsx
 
-**Purpose.** The Home tab. It shows a greeting with today's Hijri date, a collapsible card with the daily inspiration (a verse or a hadith), and the blessing-of-the-day card with its verse, collapsible reflection notes, copy and share actions, and the button that opens the reflection flow.
+> **Rewritten** (25 November 2026) as «المشهد», the scene design chosen from the explorations on the design canvas. Only Home changed; the reflection flow, the share dialog and every other screen are as before. The previous version is in Git history at `bb2504c`. Line numbers below are not given, because the file is new.
 
-**Mounted from.** `src/App.tsx:139`–`156`, when `activeTab === 'home'`.
+**Purpose.** The Home tab. Today's blessing stands in a scene drawn behind it: the verse is written in the sky, the brand thread comes down from it, and its dot touches the scene. Under the scene are the title, the opening line and the one action, «استشعر النعمة». Scrolling continues into the reading: the tadabbur, the hadith, the scholar's remark, sharing, and the verse or hadith of the day.
 
-**Exports.** `HomeScreen` (named, `React.FC<HomeScreenProps>`, `:20`). `HomeScreenProps` is not exported.
+**Mounted from.** `src/App.tsx`, when `activeTab === 'home'`. On the home tab only, `App` passes `overlay` to `TopBar`, so the mobile bar is transparent over the sky and scrolls away with it (see [06](06-layout-and-shared-components.md), TopBar).
 
-**Props.**
+**Props.** Unchanged: `blessing`, `inspiration`, `isCompletedToday`, `onStartReflection`, and the three that are still declared and unused, `tasbihCount`, `onOpenTasbih`, `onOpenHisn` (M-05).
 
-| Name | Type | Required | What it does |
-|---|---|---|---|
-| `blessing` | `Blessing` | yes | Content of the main card; also passed to `ShareCardModal`. `App` passes `todayBlessing` (`src/App.tsx:141`) |
-| `inspiration` | `InspirationItem` | yes | Content of the inspiration card. `App` passes `todayInspiration` (`src/App.tsx:142`) |
-| `isCompletedToday` | `boolean` | yes | Chooses between the start button and the "done" banner (`:311`) |
-| `onStartReflection` | `() => void` | yes | Called by the start button (`:328`) and by «أعد الاستشعار» (`:318`). `App` sets `isReflecting` to true (`src/App.tsx:145`) |
-| `tasbihCount` | `number` | yes (declared) | **Unused.** Declared at `:14`, not destructured at `:20`–`25`. `App` passes it (`src/App.tsx:144`) |
-| `onOpenTasbih` | `() => void` | yes (declared) | **Unused.** Declared at `:16`. `App` passes a handler (`src/App.tsx:146`–`149`) |
-| `onOpenHisn` | `(category?: HisnCategoryId) => void` | no | **Unused.** Declared at `:17`. `App` passes a handler (`src/App.tsx:150`–`154`) |
+**Store.** `useStore()` for `entries` (today's journal line), `todayRole` (the welcome day) and `theme` (stars and ripple strength differ in the light theme). `useLocalDay()` from `src/lib/dates.ts` gives the day key; the date line is `getFormattedHijriDayHeader` of that day, for example «الأربعاء ١٠ رجب». No storage keys are read or written here.
 
-**Store / persistence.** No `useStore()` call, no storage keys, no window events. `ShareCardModal`, which this file renders, calls `useStore()` itself (`src/components/common/ShareCardModal.tsx:18`). Three DOM ids are looked up by the spotlight tour: `card-daily-inspiration` (`:71`), `card-today-blessing` (`:171`) and `btn-start-reflection` (`:327`), see `src/components/common/SpotlightTour.tsx:21`, `26`, `31`.
+**Local state.** `copied` (`'blessing' | 'inspiration' | null`), `copyFailed`, `shareOpen`. One timer resets the copy feedback after 2.2 s and is cleared on unmount.
 
-**Local state, refs, memos.**
+**The scene.** `BlessingScene` (`src/components/common/BlessingScene.tsx`, see [06](06-layout-and-shared-components.md)) draws the sky and the ground; Home passes the sky's content as children. `sceneMotifFor(blessing.id)` picks the scene:
 
-| State | Initial | Drives |
+| Motif | Blessings | What touches the scene |
 |---|---|---|
-| `showTadabbur` (`:26`) | `false` | The «تدبّر النعمة» section |
-| `showInspiration` (`:27`) | `false` | Expanded or collapsed inspiration card, and its padding (`:73`) |
-| `copiedBlessing` (`:28`) | `false` | Copy icon becomes a check mark for 2.2 s |
-| `copiedInspiration` (`:29`) | `false` | Same, for the inspiration card |
-| `shareModalData` (`:30`) | `{ open: false, type: 'ayah' }` | Whether `ShareCardModal` is shown and its starting content mode |
+| `dawn` | `islam`, `blessing_041`, `blessing_119`, `blessing_209` | The first light on the horizon |
+| `night` | `blessing_014`, `blessing_018`, `blessing_053`, `blessing_059`, `blessing_068`, `blessing_105`, `blessing_373` | A crescent hanging from the thread over dunes |
+| `ripples` | Every other blessing | A drop on still water; rings spread from it |
 
-Computed on every render, not memoised: `hijriToday = getFormattedHijriDate()` (`:35`), and `showScholarName` (`:38`–`39`), which is true when `blessing.scholarQuote.scholar` is non-empty and does not start with «مستفاد», «مأثور» or «إشارة». In the shipped content 19 of 40 blessings have such a generic attribution, so their name line is hidden.
+After today's reflection (`isCompletedToday`) the ripples are drawn wider and fainter (`settled`).
 
-**Effects, timers, browser APIs.**
+**Long verses.** Letters are counted without harakat, Qur'anic marks and spaces. Up to 60 letters the verse is written in the sky at 25 px; up to 95 at 22 px (four lines at most on a 390 px screen). Above 95 letters (43 of the 400 blessings; the longest is المائدة ٦ with 281) the sky shows the kicker, the title and the opening line instead, and the verse is shown whole in a «آية اليوم» section directly under the button. The verse is never shortened and the button stays above the fold.
 
-- No `useEffect`.
-- `navigator.clipboard.writeText` in `handleCopyBlessingText` (`:44`) and `handleCopyInspirationText` (`:53`). Both are wrapped in `try { … } catch {}`, so a failure produces no feedback.
-- `setTimeout(…, 2200)` resets the "copied" flag (`:46`, `:55`). The timers are not cleared on unmount.
-- `Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura')` through `getFormattedHijriDate` (`src/lib/hijri.ts:14`).
-- No external URLs.
+**UI structure.** Top to bottom:
 
-Text placed on the clipboard for the blessing (`:42`):
+1. The sky: the date line; the verse with «سورة {name} · {ayah}» (Arabic-Indic digits), or, for a long verse, the title block. The thread runs from it down into the ground.
+2. The ground: water with rings, the dawn horizon, or dunes.
+3. The title block (`id="card-today-blessing"`): the kicker «نعمة اليوم» (on the welcome day «نعمتك الأولى»), a rule, the category; `h1` with the title; the opening line.
+4. Not done today: the button (`id="btn-start-reflection"`), with the reflection's length from `istisharSteps` («٨٠ ثانية»). On the welcome day a line under it says «ومن الغد، نعمةٌ جديدة كل يوم.». Done today: «حمدتَ الله اليوم على هذه النعمة», today's journal line for this blessing if there is one («سطرك اليوم»), and two text buttons: «اقرأ التدبّر» (scrolls to the tadabbur) and «أعد الاستشعار» (`id="btn-start-reflection"`, so a replayed tour still finds its target).
+5. «تدبّر»: `blessing.tadabbur`, never collapsed. Qur'an fragments inside it (﴿…﴾) are set in the Qur'an face and colour.
+6. «من السنّة»: the hadith in «» and its source. The grade is not shown, because no grade is verified (C-07).
+7. «فائدة»: the scholar's text without quotation marks, followed by the name and work when the attribution is a real name (not «مستفاد / مأثور / إشارة»), and «بالمعنى» when `attributionType` is `paraphrase` (C-07).
+8. «مشاركة كبطاقة» (opens `ShareCardModal` with `type: 'ayah'`, unchanged) and «نسخ النص». A copy that fails shows «تعذّر النسخ على هذا الجهاز.».
+9. The verse or hadith of the day (`id="card-daily-inspiration"`): labelled «آية اليوم» or «حديث اليوم» by its type, a verse in ﴿﴾ and the Qur'an face, a hadith in «», the source with Arabic-Indic digits, and a copy button labelled for the type. It has no share button (U-05).
+10. Not done today: a small echo of the scene, «والآن، استشعرها.» and the button again.
 
-```
-«{title}»
-{openingLine}
+**Clipboard text.** The blessing: title, opening line, verse and reference, «— تطبيق «الحمد»». The inspiration: the text in ﴿﴾ or «», the source in Arabic-Indic digits, the same sign-off.
 
-﴿{quran.textUthmani}﴾ [سورة {surahName} : {ayahNumber, Arabic-Indic digits}]
+**Styling.** Every colour is a CSS variable: the shared `--text-*`, `--accent-*`, `--border-hairline`, `--ayah-color`, `--danger`, and the scene's `--scene-*` ([05](05-design-system.md)). The page background is `--scene-base`. No hard-coded hex colour, so dark, light, high contrast and night reading need no remap rules. Text sizes are in rem and follow the text-size setting.
 
-— تطبيق «الحمد»
-```
-
-and for the inspiration (`:51`):
-
-```
-«{text}»
-({source})
-— تطبيق «الحمد»
-```
-
-The source code would use `﴿{text}﴾` when `inspiration.type === 'ayah'`, but that value never occurs (see Notes).
-
-**UI structure and behaviour.** Top to bottom:
-
-1. **Greeting** (`:62`–`67`). «السلام عليكم» and an `h2` with the Hijri date, for example «٧ جمادى الآخرة ١٤٤٨ هـ» (observed).
-2. **Inspiration card**, `GlassCard` with id `card-daily-inspiration` (`:70`–`148`).
-   - The header row (`:75`–`132`) is a `div` with `role="button"`, `tabIndex={0}` and `aria-expanded`. A click, Enter or Space toggles `showInspiration`.
-   - It shows a glowing gold dot, the label «حديث اليوم» when `type === 'hadith'` and «آية اليوم» otherwise (`:91`), and, while collapsed, a one-line truncated preview of the text (`:93`–`97`).
-   - Three controls sit at the end of the row: a copy button (`title` «نسخ النص», `aria-label` «نسخ نص حديث اليوم», `:101`–`112`), a share button (`title` «مشاركة كبطاقة», `aria-label` «مشاركة حديث اليوم», `:113`–`124`), and a decorative chevron (`aria-hidden`, `:125`–`130`). Both buttons call `stopPropagation` so a mouse click does not toggle the card.
-   - Expanded (`:135`–`147`): the text, centred, then `inspiration.source` as printed in the data.
-3. **Divider** with the pill «نعمة اليوم» (`:151`–`159`).
-4. **Blessing card**, `GlassCard` with id `card-today-blessing` and `borderAccent` (`:170`–`334`), over a blurred backdrop (`:164`–`168`).
-   - Top row (`:176`–`208`): category pill (`blessing.categoryLabel`), a copy button (`aria-label` «نسخ نص النعمة») and a share button (`aria-label` «مشاركة النعمة») that opens `ShareCardModal` with `type: 'ayah'`.
-   - `h1` with `blessing.title` (`:211`), then `blessing.openingLine` (`:216`).
-   - Verse block (`:221`–`239`): `﴿{textUthmani}﴾` in the Quran font, then «سورة {surahName} : {ayahNumber}».
-   - «تدبّر النعمة» toggle (`:243`–`252`). When open (`:254`–`307`) it shows, each only if present: «الحديث الشريف:» with `«{hadith.text}»` and `{hadith.source} ({hadith.grade})`; «وقفات في أثر النعمة:» with `blessing.tadabbur`; the scholar quote in straight double quotes and italics, followed by `— {scholar} ({work})` when `showScholarName`; and a «مشاركة» button that opens `ShareCardModal` with `type: 'tadabbur'`.
-   - Call to action (`:311`–`333`). Not completed: button «استشعر النعمة» with id `btn-start-reflection`. Completed: a banner «حمدتَ اللهَ اليوم على هذه النعمة» with a check icon and a text button «أعد الاستشعار», which reopens the same flow.
-5. **`ShareCardModal`** (`:338`–`344`) while `shareModalData.open`. Closing resets the state to `{ open: false, type: 'ayah' }`.
-
-**Helpers / sub-components defined in the file.** `handleCopyBlessingText` (`:41`) and `handleCopyInspirationText` (`:50`). No sub-components.
-
-**Styling.**
-
-- Root: `w-full pb-28 pt-2 px-4 sm:px-6 max-w-lg md:max-w-2xl lg:max-w-3xl mx-auto space-y-6 animate-fade-in` (`:60`).
-- Classes from `src/index.css`: `animate-fade-in` (`:60`, `:136`, `:255`), `font-ibm` (`:64`), `font-serif`, `font-quran` and `ayah-text` (`:137`, `:229`).
-- Custom properties: `--border-hairline` (`:154`), `--bg-deepest` (`:166`), `--accent-stroke`, `--accent-text`, `--bg-raised` (`:180`–`182`), `--bg-sunken`, `--ayah-border` (`:224`–`225`), `--ayah-color` (`:230`). `GlassCard` adds `--bg-glass`, `--card-shadow` and the border colour (`src/components/common/GlassCard.tsx:27`–`29`).
-- Hard-coded colours: `#AEAECB`, `#EDEDF5`, `#C7C4D8`, `#E4C368`, `#C8A951`, `#15152A`, `#1E1E38`, `#25232E`, `#2E2E4A`, `#6C63FF`, `#594DFF`, `black/20`, and the glow `rgba(228,195,104,0.8)` (`:89`).
-- Animations are CSS only: `animate-fade-in`, colour transitions, `active:scale-95` and `active:scale-[0.98]`. The file does not import `motion`.
-- Classes without a light-theme remap: `bg-[#15152A]/60` on the chevron (`:126`; observed as `rgba(21, 21, 42, 0.6)` in light mode) and `border-[#2E2E4A]/60` (`:136`, `:255`).
-- The blessing card passes `pt-7 pb-7 px-6` in `className` (`:172`) while `GlassCard` also applies its default `p-5 sm:p-6` (`src/components/common/GlassCard.tsx:19`). Which wins at `sm` and above was not verified.
-
-**Accessibility.**
-
-- Present: `aria-expanded` on the inspiration header; `aria-label` on the four icon buttons; `aria-hidden` on decorative elements (`:127`, `:167`).
-- The inspiration header nests two `<button>` elements inside an element with `role="button"`. Its `onKeyDown` (`:79`–`84`) does not check the event target and calls `preventDefault`. **Observed:** with focus on the nested share button, Enter and Space toggled the card (`aria-expanded` became `true`) and the share dialog did not open. The nested copy button is affected the same way, so both are mouse-only.
-- The two `aria-label`s on the inspiration card always say «حديث اليوم», including on days when the card shows a verse (`:109`, `:121`; observed on a verse day).
-- The «تدبّر النعمة» toggle has no `aria-expanded` (`:243`; observed `null`).
-- Heading order: the date is an `h2` (`:64`) that precedes the page's `h1` (`:211`).
-- The icon buttons in the inspiration header are 32 px (`w-8 h-8`).
-
-**Notes and quirks.**
-
-- **Verse styling is unreachable.** `InspirationItem.type` is `'quran' | 'hadith'` (`src/types.ts:89`, data in `src/data/inspirations.ts:2`). This file tests for `'ayah'` at `:51`, `:95`, `:137` and `:138`. The label at `:91` works because it tests for `'hadith'`. **Observed** on a verse day: label «آية اليوم», text wrapped in `«…»`, classes `font-serif text-[#EDEDF5]` instead of `font-quran ayah-text text-[#E4C368]`. The copied text has the same problem.
-- **The inspiration share button shares the blessing.** It opens `ShareCardModal` with `blessing` and `type: 'ayah'` (`:117`); the modal has no inspiration input (`src/components/common/ShareCardModal.tsx:7`–`11`). **Observed:** the dialog opened from the inspiration card showed «نعمة الإسلام» and its verse.
-- **Share dialog is confined to the Home column** (intro item 3). **Observed:** opened at scroll position 0, the overlay box was `y = 65, height = 970` in an 844 px viewport, below the top bar and under the bottom tab bar; opened after scrolling 167 px, the dialog's top edge was 14 px above the viewport.
-- The three unused props mean Home has no shortcut to the Tasbih counter or Hisn Al-Muslim, although `App` wires handlers for both (`src/App.tsx:146`–`154`).
-- `inspiration.source` is printed as stored, with Western digits for verses («النحل : 53», `src/data/inspirations.ts:41`), while the blessing's verse reference is converted to Arabic-Indic digits (`:236`).
-- The scholar text is shown inside quotation marks (`:283`), but every `scholarQuote` in the content is a paraphrase (`attributionType: "paraphrase"` on 40 of 40 blessings in `src/data/blessings_ar.json`). The hadith grade is printed as stored (`:264`) although `gradeVerified` is `false` on all 40.
-- `showScholarName` reads `blessing.scholarQuote.scholar` without a guard (`:38`), while the JSX guards `blessing.scholarQuote` (`:280`). If the object were missing, the component would throw before reaching the guard.
-- After today's reflection is completed the element `btn-start-reflection` no longer exists, so a replayed tour has no target for its second step; the tour then clears its highlight rectangle (`src/components/common/SpotlightTour.tsx:44`–`54`).
-- `App` always passes the `islam` blessing in the current code, because `welcomeSeen` never becomes true; see [02-state-and-persistence.md](02-state-and-persistence.md), section 1.5. The comment at `:37` refers to a rule "A4" in a specification that is not in the repository.
+**Accessibility.** One `h1` (the title), `h2` for each section; the date is plain text. All controls are `button` elements of at least 44 px; the copy buttons have labels that name what they copy. The scene is `aria-hidden`.
 
 ---
 

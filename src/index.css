@@ -26,6 +26,36 @@
     --ayah-border: rgba(185, 87, 59, 0.14);
     --card-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
     --raised-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+
+    /* «المشهد»: the scene behind today's blessing on Home (BlessingScene.tsx) */
+    --scene-base: #0B0B1C;
+    --scene-sky-1: #07071A;
+    --scene-sky-2: #121231;
+    --scene-sky-3: #1C1C40;
+    --scene-water-1: #15153A;
+    --scene-water-2: #0F0F28;
+    --scene-light: #EDEDF5;
+    --scene-band: #EDEDF5;
+    --scene-band-opacity: 0.05;
+    --scene-ripple: #E4C368;
+    --scene-thread: #C8A951;
+    --scene-glow: #E4C368;
+    --scene-glow-opacity: 0.22;
+    --scene-dune-1: #17173D;
+    --scene-dune-2: #12122F;
+    --scene-dune-3: #0E0E25;
+    --scene-dawn-1: #07071A;
+    --scene-dawn-2: #15153A;
+    --scene-dawn-3: #2A2550;
+    --scene-dawn-4: #5B4060;
+    --scene-dawn-5: #A9715E;
+    --scene-sun: rgba(244, 207, 138, 0.42);
+    --scene-sunline: #F6D9A8;
+    --scene-land-1: #1A1834;
+    --scene-land-2: #0F0F24;
+    --scene-cta-bg: #EDEDF5;
+    --scene-cta-fg: #111126;
+    --scene-cta-sub: #4A4A66;
   }
 
   .theme-light {
@@ -49,6 +79,35 @@
     --ayah-border: rgba(185, 87, 59, 0.35);
     --card-shadow: 0 12px 32px rgba(42, 31, 25, 0.08);
     --raised-shadow: 0 16px 40px rgba(42, 31, 25, 0.12);
+
+    --scene-base: #F4EDE3;
+    --scene-sky-1: #E9DDCB;
+    --scene-sky-2: #F1E7D8;
+    --scene-sky-3: #F8EFE2;
+    --scene-water-1: #EADFCF;
+    --scene-water-2: #EFE6D9;
+    --scene-light: #2A1F19;
+    --scene-band: #FFFFFF;
+    --scene-band-opacity: 0.32;
+    --scene-ripple: #B9573B;
+    --scene-thread: #B9573B;
+    --scene-glow: #D4704F;
+    --scene-glow-opacity: 0.16;
+    --scene-dune-1: #E5D7C1;
+    --scene-dune-2: #DDCDB4;
+    --scene-dune-3: #D6C4A9;
+    --scene-dawn-1: #E7DCCB;
+    --scene-dawn-2: #EEDFCB;
+    --scene-dawn-3: #F1D9BE;
+    --scene-dawn-4: #EDC6A0;
+    --scene-dawn-5: #E7AE80;
+    --scene-sun: rgba(246, 201, 148, 0.55);
+    --scene-sunline: #FFF4E2;
+    --scene-land-1: #E9DDCB;
+    --scene-land-2: #EFE6D9;
+    --scene-cta-bg: #B9573B;
+    --scene-cta-fg: #FFFFFF;
+    --scene-cta-sub: #FFFFFF;
   }
 
   body {
@@ -290,6 +349,13 @@ html {
 
 /* High Contrast in Dark Mode (Layl) */
 html.high-contrast:not(.theme-light) {
+  --scene-base: #070712;
+  --scene-light: #FFFFFF;
+  --scene-ripple: #F2D27A;
+  --scene-thread: #E4C368;
+  --scene-cta-bg: #FFFFFF;
+  --scene-cta-fg: #070712;
+  --scene-cta-sub: #2E2E4A;
   --bg-ground: #0B0B18;
   --bg-deep: #070712;
   --bg-deepest: #04040B;
@@ -420,6 +486,34 @@ html.night-reading {
   --ayah-border: rgba(216, 154, 78, 0.22);
   --card-shadow: 0 12px 32px rgba(0, 0, 0, 0.65);
   --raised-shadow: 0 16px 40px rgba(0, 0, 0, 0.75);
+
+  /* «المشهد» in warm espresso and candlelight */
+  --scene-base: #0B0806;
+  --scene-sky-1: #050302;
+  --scene-sky-2: #0E0A07;
+  --scene-sky-3: #1A130D;
+  --scene-water-1: #17110C;
+  --scene-water-2: #0E0B08;
+  --scene-light: #E8DAC8;
+  --scene-band: #E8DAC8;
+  --scene-ripple: #D89A4E;
+  --scene-thread: #C4853B;
+  --scene-glow: #D89A4E;
+  --scene-dune-1: #1E160F;
+  --scene-dune-2: #17110B;
+  --scene-dune-3: #110D08;
+  --scene-dawn-1: #050302;
+  --scene-dawn-2: #120D0A;
+  --scene-dawn-3: #2A1B12;
+  --scene-dawn-4: #5A3518;
+  --scene-dawn-5: #9C5F2E;
+  --scene-sun: rgba(240, 194, 122, 0.36);
+  --scene-sunline: #F0C27A;
+  --scene-land-1: #1A130D;
+  --scene-land-2: #0E0B08;
+  --scene-cta-bg: #E8DAC8;
+  --scene-cta-fg: #0B0806;
+  --scene-cta-sub: #5A4A3A;
 }
 
 /* Subtle warm amber blue-light filter overlay across the viewport */
